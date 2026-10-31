@@ -164,7 +164,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cb90fc98ab735233
+source_hash: a51a22d3ffbd0d84
 ---
 
 ## Cài đặt
@@ -242,6 +242,12 @@ kiến trúc khác, và đó là lý do bước build chạy ngay trên máy tri
 chuyển trên Ampere và các kiến trúc mới hơn. Giá trị `"same_compute_capability"` ánh
 xạ về `NONE` và kèm cảnh báo: engine chỉ được tối ưu cho GPU hiện tại, và bản xuất
 nói đúng như vậy thay vì tuyên bố một tính khả chuyển mà nó không hề áp dụng.
+
+Extra `tensorrt` cài TensorRT 10.16. Trên TensorRT 11, vốn đã bỏ cờ mạng
+`EXPLICIT_BATCH`, bước xuất tạo network mà không có cờ này. Bước đó là phần duy
+nhất được kiểm tra trên TensorRT 11, và chỉ kiểm tra với một module TensorRT giả
+lập (mock): chưa có lần build engine FP32, FP16 hay INT8 nào chạy ở đó, và các cờ
+builder FP16 và INT8 vẫn có thể thất bại trên nó.
 
 Chỉ trục batch được đưa vào profile. Một bản build với các chiều không gian động
 không nằm trong hợp đồng này, và đó là lý do FCOS bị chặn: nó cần chiều cao và chiều

@@ -22,7 +22,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tareas canónicas
-    value: 20
+    value: 22
   - label: Niveles de soporte
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -59,12 +59,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Tareas
 
-Una tarea es lo que devuelve un modelo. LibreYOLO tiene veinte nombres
+Una tarea es lo que devuelve un modelo. LibreYOLO tiene veintidós nombres
 canónicos de tarea, y cada uno da nombre al campo del objeto `Results` que
 transporta su salida.
 
@@ -90,6 +90,8 @@ transporta su salida.
 | `mesh` | Un cuerpo 3D con pose por persona detectada |
 | `detect3d` | Boxes 3D en coordenadas de cámara, con una clase y una confianza |
 | `act` | Un bloque de acciones de robot predichas a partir de los frames de cámara y el estado del robot |
+| `generate` | Una imagen RGB generada a partir de un prompt de texto, con el prompt, la semilla y los parámetros de la llamada que la reproducen |
+| `generate3d` | Un objeto como splats gaussianos 3D, generado a partir de una sola imagen suya |
 
 Esos son los nombres que aparecen en los metadatos de los checkpoints y en los
 nombres de archivo. Se aceptan los alias habituales allá donde se pasa una tarea,
@@ -186,9 +188,10 @@ que publica pesos entrenados con un dataset distinto del suyo por defecto añade
 el nombre del dataset como un sufijo adicional, y esa variante sigue formando
 parte del nombre del repositorio desde el que se descarga el archivo.
 
-Tres niveles quedan fuera de este esquema. Las familias de segmentación
-promptable, las familias de visión y lenguaje y los detectores de vocabulario
-abierto no están registrados en la fábrica de checkpoints y no emiten ningún
+Varios niveles quedan fuera de este esquema. Las familias de segmentación
+promptable, las familias de visión y lenguaje, los detectores de vocabulario
+abierto y las familias de generación `LibreGen` no están registrados en la
+fábrica de checkpoints y no emiten ningún
 archivo `Libre<FAMILY><size>.pt`. Su prefijo nombra en su lugar un snapshot
 descargado de Hugging Face o un checkpoint promptable, y ahí se conserva a
 propósito el uso de mayúsculas de la marca original.

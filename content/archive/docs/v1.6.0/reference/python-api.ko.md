@@ -1,0 +1,209 @@
+---
+title: 파이썬 API
+seo_title: LibreYOLO Python API 참조
+description: >-
+  LibreYOLO가 패키지 수준에서 내보내는 이름을 설명합니다. 팩토리, 계열 클래스, Results 페이로드, 백엔드, 검증기, 추적기,
+  데이터 헬퍼를 다룹니다.
+lead: >-
+  LibreYOLO의 공개 Python 인터페이스는 libreyolo/__init__.py의 __all__ 목록입니다. 패키지 수준 내보내기는
+  from libreyolo import <name>을 사용하며, 아래 추적 및 학습 프로토콜은 명시된 하위 모듈을 사용합니다.
+keywords:
+  - libreyolo 파이썬 API
+  - libreyolo 가져오기
+  - 리브레YOLO 팩토리
+  - 리브레샘
+  - 리브레VLM
+  - 리브레오픈보캡
+  - 리브르앙상블
+  - libreyolo __all__
+last_verified: 1.6.0
+verification: >-
+  v1.6.0에서 libreyolo/__init__.py, libreyolo/models/__init__.py,
+  libreyolo/models/base/model.py, libreyolo/models/base/inference.py,
+  libreyolo/models/sam/model.py, libreyolo/models/vlm/__init__.py,
+  libreyolo/models/openvocab/__init__.py 및 libreyolo/ensemble/model.py에서 이름과 서명
+  읽기.
+snippets:
+  usage:
+    - label: 하나의 팩토리를 통해 아무 것이나 적재하십시오
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreYOLO9t.pt")
+
+        # 단일 이미지 소스는 하나의 결과를 반환합니다; 목록 또는 디렉토리
+        # 그들의 목록을 반환합니다.
+        result = model(SAMPLE_IMAGE)
+
+        print(result.boxes.xyxy)
+        print(result.names)
+    - label: 계열 클래스를 직접 가져오기
+      language: python
+      code: |
+        from libreyolo import LibreYOLO9, SAMPLE_IMAGE
+
+        model = LibreYOLO9("LibreYOLO9t.pt", size="t")
+        result = model(SAMPLE_IMAGE)
+
+        print(len(result))
+  factories:
+    - label: 진입점
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, LibreEnsemble
+
+
+        # 무게를 맡는 팩토리가 무자극 계열들 위에 있습니다.
+
+        detector = LibreYOLO("LibreYOLO9t.pt")
+
+
+        # 하나의 예측 표면 뒤에 두 개 이상의 탐지기.
+
+        ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
+
+
+        # 나머지 세 팩토리에는 추가 설치가 필요합니다:
+
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import
+        LibreSAM
+
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
+        LibreVLM
+
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
+        LibreOpenVocab
+
+        print(type(detector).__name__, ens.fusion)
+source_hash: 7dc6a5ef1b3ba9ea
+---
+
+## 진입점
+
+팩토리는 모델을 로드하거나 API 클라이언트를 설정합니다. 아키텍처가 아니라 호출 규약에 따라 구분합니다.
+
+| 팩토리 | 많음 | 호출 시 프롬프트 | 추가 필요 |
+|---|---|---|---|
+| `LibreYOLO` | 체크포인트나 파일 확장자를 냄새 맡으며 프롬프트 없는 계열들 | | |
+| `LibreSAM` | 프롬프트 가능한 세그멘터, 크기 별칭으로 | 포인트, 박스, 또는 개념 텍스트 | `sam` |
+| `LibreVLM` | 별칭에 의한 생성적 시각-언어 탐지기 | 수업 어휘 또는 자유 형식 프롬프트 | `vlm` |
+| `LibreOpenVocab` | 텍스트 조건 탐지기, 별칭으로 | 수업 어휘 | `openvocab` |
+| `LibreEnsemble` | 두 개 이상의 탐지기가 하나의 표면으로 융합됨 | | |
+
+<code-tabs name="factories" />
+
+`LibreYOLO`는 체크포인트 파일과 내보낸 파일을 받습니다. 다른 팩토리는 모델 별칭을 받으며, `LibreVLM`과 `LibreVLA`는 자체 저장 체크포인트 디렉터리도 다시 로드합니다.
+
+```python
+LibreYOLO(
+    model_path: str,
+    size: str | None = None,
+    reg_max: int = 16,
+    nb_classes: int | None = None,
+    device: str = "auto",
+    task: str | None = None,
+    compute_units: str = "all",
+)
+```
+
+`model_path`는 `.pt` 체크포인트, ONNX `.onnx` 파일, ExecuTorch `.pte`, MNN `.mnn`, TensorRT `.engine`, OpenVINO, Paddle 또는 ncnn 디렉터리, 또는 Triton HTTP 혹은 HTTPS 모델 URL을 허용합니다. `size`와 `nb_classes`는 생략될 경우 체크포인트에서 읽어옵니다. `compute_units`는 CoreML `.mlpackage` 로드에서만 읽어오며 `all`, `cpu_only`, `cpu_and_gpu`, `cpu_and_ne` 중 하나입니다. `task`는 `libreyolo.tasks.TASKS`의 모든 정식 작업 이름을 사용할 수 있습니다.
+
+<code-tabs name="usage" />
+
+`LibreGround`는 지시문을 이미지 점에 매핑하고, `LibreVLA`는 로봇 동작 청크를 예측하며, `LibreLLM`은 호환되는 원격 언어 모델 엔드포인트를 호출합니다. [그라운딩 API](/docs/reference/ground-api), [정책 API](/docs/reference/vla-api), [언어 모델 클라이언트](/docs/reference/llm-api)를 참조하십시오.
+
+`LibreYOLO("hf://owner/repo@revision/filename")`는 Hub 체크포인트를 로드합니다. `model.push_to_hub(repo_id, private=False)`는 체크포인트와 카드를 게시합니다. [Hub 참조](/docs/reference/hugging-face)는 파일 선택과 인증 방식을 정의합니다.
+
+## 계열 수업
+
+팩토리가 반환할 수 있는 모든 클래스는 이름으로도 내보내지므로, 체크포인트를 미리 알고 있다면 클래스를 직접 구성할 수 있습니다. 생성자는 `BaseModel.__init__`를 따릅니다:
+
+```python
+Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
+```
+
+생성자 기본값은 계열마다 다르므로 직접 생성하기 전에 시그니처를 확인합니다. YOLO9과 그 변형은 `size` 뒤에 `reg_max: int = 16`을 삽입합니다.
+
+검출 및 다중 작업 계열: `LibreYOLO9`, `LibreYOLO9E2E`, `LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`, `LibreYOLO3`, `LibreYOLO2`, `LibreYOLO1`, `LibreRTDETR`, `LibreRTDETRv2`, `LibreRTDETRv4`, `LibreRFDETR`, `LibreDFINE`, `LibreDOMEDETR`, `LibreDEIM`, `LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`, `LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`, `LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`, `LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`, `LibreRTMDet`, `LibreFOMO`.
+
+밀집 예측 계열: `LibreMiDaS`, `LibreDepthAnythingV2`, `LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`, `LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`, `LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`, `LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`, `LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`, `LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
+
+분류 및 임베딩 계열: `LibreViT`, `LibreMobileNetV4`, `LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`, `LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`, `LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
+
+다른 작업: `LibreHRNet`과 `LibreDEKR` (포즈), `LibreL2CS` (시선), `LibrePPOCR` (OCR), `LibreFaceEmbedder` (임베드), 그리고 3D 탐지기 `LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D`, `Libre3DMOOD` (detect3d).
+
+형제 계층은 그들의 계열 클래스도 내보냅니다: `LibreSAM1`, `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`; `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`, `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (`LibreModus`로도 표기됨); `LibreGround`를 통해 제공되는 `LibreShowUI`, `LibreGroundFlorence2`, `LibreGroundQwen3VL`; `LibreVLA`를 통해 제공되는 `LibreSmolVLA`, `LibreACT`, `LibreDiffusionPolicy`.
+
+## 예측 표면
+
+모델을 호출하면 추론이 실행됩니다. `predict`는 `__call__`의 별칭이므로 두 개는 서로 교환할 수 있습니다.
+
+```python
+model(
+    source=None,
+    *,
+    conf=0.25,
+    iou=0.45,
+    imgsz=None,
+    device=None,
+    classes=None,
+    max_det=300,
+    augment=False,
+    save=False,
+    batch=1,
+    stream=False,
+    stream_buffer=False,
+    vid_stride=1,
+    show=False,
+    output_path=None,
+    color_format="auto",
+    tiling=False,
+    overlap_ratio=0.2,
+    output_file_format=None,
+    cuda_graph=False,
+    **kwargs,
+)
+```
+
+단일 이미지 소스는 하나의 `Results`를 반환합니다. 리스트, 튜플 또는 디렉토리는 그것들의 리스트를 반환하며, `stream=True`는 제너레이터를 반환합니다. 모델 객체의 다른 메서드는 [모델 API 페이지](/docs/reference/model-api)에서 문서화되어 있습니다.
+
+## 결과 페이로드
+
+`Results`와 페이로드 클래스는 패키지 수준에서 내보냅니다. `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`입니다. 각각은 [Results 타입](/docs/reference/results-types)에 설명되어 있습니다.
+
+`Boxes3D`, `AlbedoMap`, `Actions`는 3D 직육면체, 고유 알베도, 동작 청크를 추가합니다. [결과 타입](/docs/reference/results-types)을 참조하십시오.
+
+## 백엔드
+
+내보낸 아티팩트는 파일 확장자를 통해 `LibreYOLO()`로 로드되므로, 백엔드 클래스는 거의 수동으로 생성되지 않습니다. 이러한 클래스들은 백엔드를 명시적으로 선택해야 하는 경우를 위해 내보내집니다: `OnnxBackend`, `OpenVINOBackend`, `PaddleBackend`, `TensorRTBackend`, `TritonBackend`, `NcnnBackend`, `CoreMLBackend`, 그리고 `create_triton_config`. `BaseExporter`는 `model.export()` 뒤에 있는 내보내기 레지스트리입니다.
+
+## 검증자
+
+`model.val()`는 작업별로 올바른 검증자에게 전송되므로, 다음은 직접 사용 및 서브클래싱을 위해 내보내집니다: `DetectionValidator`, `SegmentationValidator`, `PoseValidator`, `SemanticValidator`, `PanopticValidator`, `DepthValidator`, `NormalValidator`, `EdgeValidator`, 그리고 공유된 `ValidationConfig`.
+
+## 추적
+
+`model.track()`는 이름으로 트래커를 선택합니다. 트래커 클래스와 그 구성 데이터 클래스도 내보내집니다: `ByteTracker`와 `TrackConfig`, `BoTSortTracker`와 `BoTSortConfig`, 그리고 `OCSortTracker`와 `OCSortConfig`.
+
+`libreyolo.tracking.Tracker`는 사용자 정의 추적기 인스턴스용 `reset()`과 `update(results, image=None)`을 정의합니다.
+
+## 데이터 도우미
+
+`DATASETS_DIR`는 해결된 데이터셋 루트이며, `load_data_config`는 데이터셋 YAML을 읽고, `check_dataset`는 이를 검증합니다. [데이터셋 형식](/docs/reference/dataset-formats)에 명시된 작업별 로더들은 패키지 수준이 아닌 `libreyolo.data`에 위치합니다.
+
+## 갤러리와 증류
+
+`Gallery`와 `FaceGallery`는 `embed` 작업을 위해 등록된 정체 벡터를 보유하고 `Identities` 페이로드를 생성합니다. `Distiller`와 `get_distill_config`는 교사-학생 학습을 진행합니다.
+
+`libreyolo.training.TrainFitnessCallback`은 사용자 정의 체크포인트 선택용 `fitness(metrics)`를 정의합니다. [적합도 콜백](/docs/train/fitness-callbacks)을 참조하십시오.
+
+## 자산
+
+`SAMPLE_IMAGE`는 패키지와 함께 번들된 이미지에 대한 절대 경로이므로, 이 문서의 모든 코드 조각은 먼저 그림을 다운로드하지 않고도 실행됩니다.
+
+## 지연 가져오기와 이름이 바뀐 클래스
+
+대부분의 형제 계층 이름, 백엔드, 검증기 및 데이터 도우미는 모듈 수준 `__getattr__`를 통해 해결되므로, `libreyolo`를 가져와도 그들의 종속성은 가져오지 않습니다. 필요한 추가 항목이 없으면 가져오기는 여전히 명확한 메시지와 함께 실패합니다.
+
+두 개의 클래스 이름이 변경되었으며, 이전 철자는 여전히 해결됩니다. `DeprecationWarning`: `LibreYOLORTDETR`는 이제 `LibreRTDETR`이고, `LibreYOLORFDETR`는 이제 `LibreRFDETR`입니다.

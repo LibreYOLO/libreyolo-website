@@ -118,7 +118,7 @@ snippets:
         # Ключі yaml є назвами полів TrainConfig. Явні kwargs мають пріоритет.
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Задання аргументів
@@ -222,6 +222,13 @@ Autobatch є функцією CUDA. На CPU або MPS він записує о
 а SegFormer використовує `head_lr_mult`, щоб швидкість голови декодування була вдесятеро
 вищою за швидкість бекбона. Ці параметри належать підкласу конфігурації сімейства,
 а не базовому класу.
+
+`clip_max_norm` обрізає L2-норму градієнта до цього значення перед кожним кроком
+оптимізатора, а `0` вимикає обрізання. YOLOv9, YOLOv9-E2E і YOLOv9-P2 типово
+задають його як `10`. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR,
+RT-DETRv2, RT-DETRv4, RF-DETR, DINOv2, GTR і EC типово задають його як `0.1`. У
+CLI це `clip_max_norm=` або `--clip-max-norm`; сімейства, які його там
+приймають, наведено в [`libreyolo train`](/docs/cli/train).
 
 ## EMA
 

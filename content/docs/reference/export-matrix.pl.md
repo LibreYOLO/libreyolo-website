@@ -71,7 +71,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## Kształt macierzy
@@ -145,6 +145,11 @@ Te zadania są zablokowane dla każdej rodziny bez jawnego wpisu.
 
 | Zadanie | Przyczyna |
 |---|---|
+| `albedo` | Eksport albedo nie ma kontraktu środowiska uruchomieniowego backendu dla liniowego RGB |
+| `act` | Pętla próbkowania polityki nie ma eksportowalnego grafu ani kontraktu środowiska uruchomieniowego backendu |
+| `generate` | Generowanie obrazów uruchamia pętlę próbkowania na kilku sieciach, która nie ma eksportowalnego grafu ani kontraktu środowiska uruchomieniowego backendu |
+| `generate3d` | Generowanie 3D uruchamia pętlę próbkowania na kilku sieciach, która nie ma eksportowalnego grafu ani kontraktu środowiska uruchomieniowego backendu |
+| `detect3d` | Wyjścia grafu detekcji 3D, metadane kamery i kontrakt środowiska uruchomieniowego nie są zdefiniowane |
 | `ocr` | Dwie sieci z dynamicznym przycinaniem dla każdego regionu nie mieszczą się w kontrakcie eksportu pojedynczego grafu |
 | `point` | Rodzina nie jest podłączona do wspólnego kontraktu mapy cieplnej punktów i dekodowania maksimów backendu |
 | `semantic` | Rodzina nie jest podłączona do wspólnego kontraktu gęstych logitów i argmax backendu |
@@ -167,7 +172,7 @@ podłączona rodzina semantic.
 | `hrnet` | Wszystko poza ONNX, TorchScript, OpenVINO i TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Każdy format; eksport modelu sterowanego podpowiedziami wykracza poza kontrakt środowiska uruchomieniowego v1 |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Każdy format; eksport środowiska uruchomieniowego z otwartym słownikiem wykracza poza zakres v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Każdy format; eksport generatywnego VLM wykracza poza zakres v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Każdy format; eksport generatywnego VLM wykracza poza zakres v1 |
 
 PicoSAM3 jest wyjątkiem na poziomie modeli sterowanych podpowiedziami:
 eksportuje surową sieć ROI o rozmiarze 96 pikseli do ONNX.

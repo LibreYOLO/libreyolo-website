@@ -42,32 +42,49 @@ snippets:
         print(rgba.shape)
     - label: Gabungkan ke latar belakang baru
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         rgba = result.cutout()
+
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
+
         backdrop = np.full_like(rgba[..., :3], 255)          # putih
-        composited = (rgba[..., :3] * alpha + backdrop * (1 - alpha)).astype(np.uint8)
+
+        composited = (rgba[..., :3] * alpha + backdrop * (1 -
+        alpha)).astype(np.uint8)
+
         print(composited.shape)
   val:
     - label: Validasi dan baca kunci metrik
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
 
-        # Sebuah direktori yang memuat direktori gambar/ dan matte dapat digunakan sebagai pengganti
+
+        # Sebuah direktori yang memuat direktori gambar/ dan matte dapat
+        digunakan sebagai pengganti
+
         # sebuah dataset YAML.
+
         metrics = model.val(data="my-matte-dataset/")
 
+
         print(metrics["metrics/MAE"])        # lebih rendah lebih baik
-        print(metrics["metrics/Smeasure"])   # kebugaran, lebih tinggi lebih baik
+
+        print(metrics["metrics/Smeasure"])   # kebugaran, lebih tinggi lebih
+        baik
   export:
     - label: Ekspor
       language: python
@@ -78,16 +95,22 @@ snippets:
         model.export(format="torchscript")
     - label: Jalankan berkas yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Pabrik menentukan rute berdasarkan akhiran berkas, sehingga artefak yang diekspor dapat dimuat
+
+        # Pabrik menentukan rute berdasarkan akhiran berkas, sehingga artefak
+        yang diekspor dapat dimuat
+
         # seperti checkpoint lainnya dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreBiRefNetl-matte.torchscript")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## Definisi
@@ -123,6 +146,12 @@ lisensi di repositori Hugging Face dari checkpoint tertentu adalah
 yang berwibawa.
 
 [BEN2](/docs/models/ben2) menambahkan penghapusan latar belakang dengan ukuran tetap 1024. [ViTMatte](/docs/models/vitmatte) menerima gambar dan `trimap=` tiga tingkat yang menandai piksel latar belakang, tidak diketahui, dan latar depan.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) diberi prompt teks:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` mengembalikan gabungan
+alpha matte dari setiap instance yang cocok dengan frasa itu. Model ini adalah
+model vision-language yang memerlukan extra `vlm`, dan `val()` serta `export()`-nya
+memunculkan error.
 
 ## Prediksi
 

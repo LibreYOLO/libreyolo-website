@@ -123,7 +123,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## Cài đặt
@@ -181,9 +181,10 @@ từ.
 
 `delegate` chấp nhận `"xnnpack"` và không nhận gì khác trong phiên bản này.
 
-Các bản xuất cho tác vụ phân loại mang thêm hai khóa metadata, `crop_pct` và
-`interpolation`, để runtime tái tạo được chính sách resize và center-crop của họ
-mô hình đó.
+Các bản xuất cho tác vụ phân loại mang tiền xử lý đánh giá của mô hình dưới dạng
+metadata, gồm `crop_pct` và `interpolation`, cùng `norm_mean`, `norm_std` và
+`resize_mode` đối với những họ mô hình có đặt chúng, để runtime tái tạo đúng
+resize và center crop của mô hình.
 
 Các mục bị chặn nêu đích danh lỗi cụ thể chứ không chỉ ghi một hạng mục chung.
 D-FINE ở tác vụ phát hiện đối tượng và phân đoạn chạm phải một thao tác đọc

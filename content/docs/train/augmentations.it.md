@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## Impostare i parametri
@@ -139,10 +139,10 @@ YOLO-NAS è una forma a sé: nessun mosaic, una trasformazione affine per campio
 sempre attiva e MixUp applicato in modo indipendente invece che gated. Il suo
 valore di `mosaic_scale` è riusato come intervallo di scala dell'affine.
 
-SegFormer e NAFNet eseguono ciascuno una pipeline specifica per il task, la cui
-casualità è fissata nella famiglia invece di essere configurabile. Per SegFormer
-i parametri attivi sono gli attributi di classe `semantic_scale_jitter` e
-`semantic_hsv_prob`, non `mosaic_scale` e `hsv_prob`. Il crop e i flip di NAFNet
+SegFormer, LingBot-Vision e NAFNet eseguono ciascuno una pipeline specifica per il
+task, la cui casualità è fissata nella famiglia invece di essere configurabile.
+Per SegFormer e LingBot-Vision i parametri attivi sono gli attributi di classe
+`semantic_scale_jitter` e `semantic_hsv_prob`, non `mosaic_scale` e `hsv_prob`. Il crop e i flip di NAFNet
 sono operazioni accoppiate su input e target con probabilità fissa a 0.5.
 
 ## Quale famiglia rispetta quale parametro
@@ -189,6 +189,21 @@ pipeline mosaic disattiva mosaic e MixUp per le epoche finali. Sulle pipeline in
 stile DETR ferma le augmentation fotometriche, di zoom-out e di crop e dà forma
 alla coda dello schedule. Sulle pipeline di classificazione disattiva auto-augmentation, erasing, MixUp e CutMix; ritagli e ribaltamenti restano attivi.
 
+`perspective` aggiunge una deformazione proiettiva sopra a rotazione, scala,
+shear e traslazione. Ogni angolo del canvas si sposta verso l'interno di una
+quantità casuale fino a `min(perspective * 100, 0.2)` volte metà lato del canvas,
+per asse, quindi `perspective=0.001` sposta un angolo al massimo del 5 percento
+del lato a qualsiasi risoluzione, e ogni valore da `0.002` in su raggiunge lo
+stesso massimo. Il valore predefinito `0` mantiene la deformazione affine, e un
+valore negativo solleva `ValueError` quando viene deformato il primo campione.
+YOLOv9 e le sue varianti E2E e P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet,
+PicoDet, RT-DETR e RT-DETRv2 la applicano.
+
+Il MixUp nella pipeline mosaic di YOLOv9, attraverso cui si addestrano YOLOv9 e le
+sue varianti, YOLOv7, RT-DETR e RT-DETRv2, estrae il rapporto di miscelazione da
+Beta(1, 1), uniforme su [0, 1]. Il wrapper mosaic di YOLOX, usato da YOLOX, RTMDet
+e PicoDet, miscela a un valore fisso di 0.5.
+
 ## Il pacchetto di classificazione
 
 Quattro parametri guidano la pipeline di classificazione e nient'altro. Le
@@ -223,14 +238,15 @@ hanno un flag sulla CLI.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Probabilità di augmentation copy-paste sulle istanze, solo `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` riusa lo stesso campione specchiato, `"mixup"` preleva un secondo campione |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Probabilità di rotazione casuale di 90 gradi |
-| YOLOv9 | `max_labels` | Limite di ground truth per immagine nelle trasformazioni di addestramento, default 100 |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Limite di ground truth per immagine nelle trasformazioni di addestramento, default 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste per `task="segment"`, solo modalità `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilità di crop-resize casuale |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilità di jitter sul percorso pose e di affine che tiene conto dei keypoint |
 
-`max_labels` è quello che perde dati in silenzio. I box oltre il limite vengono
-scartati senza errore, quindi con immagini dense come la fotografia aerea va
-alzato.
+`max_labels` è quello che perde dati. I box oltre il limite vengono scartati con
+un avviso unico invece che con un errore, quindi con immagini dense come la
+fotografia aerea va alzato. La memoria dell'assegnazione delle etichette segue
+l'immagine più densa del batch, non il limite.
 
 Mosaic e MixUp sono disattivati per l'addestramento con box orientati
 indipendentemente dai parametri, perché l'augmentation che tiene conto degli

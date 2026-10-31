@@ -13,7 +13,7 @@ meta:
     value: data
     mono: true
   - label: Output
-    value: "Checkpoints, metrics and logs under runs/train/<name>; YOLO9 uses yolo9_exp"
+    value: "Checkpoints, metrics and logs under runs/train/<name>; without name=, the family's own run name, such as yolo9_exp"
 snippets:
   examples:
     - label: Basic
@@ -62,9 +62,9 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | Argument | Default | Meaning |
 |---|---|---|
 | `epochs` | `300` | Training epochs |
-| `batch` | `16` | Batch size per device |
+| `batch` | `16` | Batch size. With several GPUs it is the global batch, split evenly across them |
 | `imgsz` | `640` | Training image size: `640` (square) or `480x640` (HxW) |
-| `device` | `auto` | Device: `0`, `cpu`, `mps`, `auto` |
+| `device` | `auto` | Device: `0`, `cpu`, `mps`, `auto`. A GPU list such as `0,1` or `[0,1]` trains on those GPUs |
 | `workers` | `4` | Dataloader workers |
 | `cache` | `false` | Cache images to speed dataloading: `ram`, `disk`, `true`, `false` |
 | `seed` | `0` | Random seed |
@@ -93,6 +93,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | `momentum` | `0.937` | SGD momentum, and the first-moment coefficient for the Adam optimizers |
 | `weight_decay` | `0.0005` | L2 regularization |
 | `nesterov` | `true` | Nesterov momentum |
+| `clip_max_norm` | | Clip the gradient L2 norm to this value before each optimizer step; `0` disables clipping. Unset, the family's value applies |
 
 ### Scheduler
 
@@ -143,7 +144,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | Argument | Default | Meaning |
 |---|---|---|
 | `project` | `runs/train` | Output directory root |
-| `name` | `exp` | Experiment name |
+| `name` | | Experiment name. Unset, the run takes the name the family's `train()` uses, such as `yolo9_exp` or `dfine_exp` |
 | `exist_ok` | `false` | Reuse existing output directory |
 | `save_period` | `10` | Save checkpoint every N epochs |
 | `log_interval` | `10` | Log loss every N batches |
@@ -168,7 +169,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `epochs=50` and
 | `average_best` | `0` | Uniform-average the N best checkpoints by the watched metric into weights/average.pt at the end of training (0 = off) |
 | `export_check` | `False` | Export ONNX before epoch 1 and fail the run if export breaks (default: off) |
 | `precise_bn` | `0` | Recompute BatchNorm running stats from this many train images after the last epoch (0 = off) |
-| `aux_weight` | | YOLO9 only: PGI auxiliary-branch loss weight for fine-tuning. `0.25` when unset; `0` trains the main head only |
+| `aux_weight` | | YOLO9 only: PGI auxiliary-branch loss weight. A value attaches a new branch at that weight and `0` trains the main head only. Unset, the branch is attached at `0.25` only when the weights carry PGI tensors or the run trains from scratch |
 | `fliplr` | `None` | Horizontal flip probability (ecosystem alias of flip_prob) |
 | `flipud` | `0.0` | Vertical flip probability |
 | `auto_augment` | `None` | Classification auto-augment policy: randaugment, autoaugment, augmix (default: none) |
@@ -212,9 +213,9 @@ pass-through pipelines with no mosaic, no mixup and no affine warp, so
 and `mixup_scale` reach nothing there. EC shares that pipeline but does read
 `hsv_prob`, `degrees` and `translate` when its task is pose. The
 classification families ignore that set except `mixup`, which is batch MixUp
-for them, and they read `flip_prob`. SegFormer and NAFNet ignore the whole set
-and `flip_prob` with it, because their flip runs at a fixed probability rather
-than a configurable one. YOLO-NAS ignores `mosaic` alone, since it augments with an
+for them, and they read `flip_prob`. SegFormer, LingBot-Vision and NAFNet ignore
+the whole set and `flip_prob` with it, because their flip runs at a fixed
+probability rather than a configurable one. YOLO-NAS ignores `mosaic` alone, since it augments with an
 always-on per-sample affine instead. RF-DETR ignores three more on top of that
 list: `optimizer`, `momentum` and `nesterov`.
 
@@ -233,6 +234,22 @@ validation during training off, final epoch included, and the run writes no
 `lora=true` is accepted by RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 and
 v4, EC, GTR and ConvNeXt. Any other family exits with `config_unsupported` rather
 than training without it.
+
+`clip_max_norm` is accepted by the families whose training config declares it:
+YOLOv9, YOLOv9-E2E and YOLOv9-P2, where it defaults to `10`, and D-FINE,
+Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4, RF-DETR,
+DINOv2 and GTR, where it defaults to `0.1`. Any other family exits with
+`config_unsupported`, and a negative or non-finite value exits with
+`config_type_error`.
+
+`device=0,1` builds the model on the first listed GPU and passes the list to
+`train()`, which starts one process per GPU. See
+[multi-GPU training](/docs/train/multi-gpu).
+
+RF-DETR has no detect-to-segment transfer. `task=segment` with an RF-DETR
+segment checkpoint loads that checkpoint whatever its filename, because the
+checkpoint metadata decides the task, while a detection checkpoint stops with an
+error instead of training an untrained mask head.
 
 `pretrained=false` combined with `resume` is refused for the families that
 support scratch training, since the two ask for opposite things.

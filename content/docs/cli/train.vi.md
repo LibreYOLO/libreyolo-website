@@ -25,7 +25,9 @@ meta:
     value: data
     mono: true
   - label: Đầu ra
-    value: 'Checkpoint, chỉ số và log nằm dưới runs/train/<name>; YOLO9 dùng yolo9_exp'
+    value: >-
+      Checkpoint, chỉ số và log nằm dưới runs/train/<name>; khi không có name=,
+      dùng tên lần chạy riêng của family, chẳng hạn yolo9_exp
 snippets:
   examples:
     - label: Cơ bản
@@ -51,7 +53,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 30b2c16d339f5f50
+source_hash: 5916562e70ea1d8a
 ---
 ## Cú pháp
 
@@ -80,9 +82,9 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | Tham số | Mặc định | Ý nghĩa |
 |---|---|---|
 | `epochs` | `300` | Số epoch huấn luyện |
-| `batch` | `16` | Kích thước batch trên mỗi thiết bị |
+| `batch` | `16` | Kích thước batch. Với nhiều GPU, đây là batch toàn cục, được chia đều cho các GPU |
 | `imgsz` | `640` | Kích thước ảnh huấn luyện: `640` (vuông) hoặc `480x640` (HxW) |
-| `device` | `auto` | Thiết bị: `0`, `cpu`, `mps`, `auto` |
+| `device` | `auto` | Thiết bị: `0`, `cpu`, `mps`, `auto`. Một danh sách GPU như `0,1` hoặc `[0,1]` sẽ huấn luyện trên các GPU đó |
 | `workers` | `4` | Số worker của dataloader |
 | `cache` | `false` | Cache ảnh để tăng tốc nạp dữ liệu: `ram`, `disk`, `true`, `false` |
 | `seed` | `0` | Seed ngẫu nhiên |
@@ -111,6 +113,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | `momentum` | `0.937` | Momentum của SGD, và hệ số moment bậc nhất cho các optimizer Adam |
 | `weight_decay` | `0.0005` | Điều chuẩn L2 |
 | `nesterov` | `true` | Momentum Nesterov |
+| `clip_max_norm` | | Cắt chuẩn L2 của gradient về giá trị này trước mỗi bước optimizer; `0` tắt việc cắt. Khi không đặt, giá trị của family được áp dụng |
 
 ### Scheduler
 
@@ -161,7 +164,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | Tham số | Mặc định | Ý nghĩa |
 |---|---|---|
 | `project` | `runs/train` | Thư mục gốc cho đầu ra |
-| `name` | `exp` | Tên thí nghiệm |
+| `name` | | Tên thí nghiệm. Khi không đặt, lần chạy lấy tên mà `train()` của family dùng, chẳng hạn `yolo9_exp` hoặc `dfine_exp` |
 | `exist_ok` | `false` | Dùng lại thư mục đầu ra đã có |
 | `save_period` | `10` | Lưu checkpoint sau mỗi N epoch |
 | `log_interval` | `10` | Ghi log loss sau mỗi N batch |
@@ -186,7 +189,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | `average_best` | `0` | Lấy trung bình đều N checkpoint tốt nhất theo chỉ số theo dõi vào weights/average.pt khi kết thúc huấn luyện (0 = tắt) |
 | `export_check` | `False` | Xuất ONNX trước epoch 1 và dừng lần chạy nếu xuất lỗi (mặc định: tắt) |
 | `precise_bn` | `0` | Tính lại thống kê chạy BatchNorm từ số ảnh huấn luyện này sau epoch cuối (0 = tắt) |
-| `aux_weight` | | Chỉ YOLO9: trọng số loss của nhánh phụ PGI khi tinh chỉnh. `0.25` khi không đặt; `0` chỉ huấn luyện head chính |
+| `aux_weight` | | Chỉ YOLO9: trọng số loss của nhánh phụ PGI. Một giá trị sẽ gắn một nhánh mới với trọng số đó và `0` chỉ huấn luyện head chính. Khi không đặt, nhánh chỉ được gắn với `0.25` khi trọng số có chứa tensor PGI hoặc lần chạy huấn luyện từ đầu |
 | `fliplr` | `None` | Xác suất lật ngang (tên thay thế của flip_prob trong hệ sinh thái) |
 | `flipud` | `0.0` | Xác suất lật dọc |
 | `auto_augment` | `None` | Chính sách auto-augment phân loại: randaugment, autoaugment, augmix (mặc định: không có) |
@@ -231,8 +234,8 @@ luyện qua các pipeline pass-through không có mosaic, không mixup và khôn
 `mosaic_scale` và `mixup_scale` không tác động tới đâu cả ở đó. EC dùng chung
 pipeline đó nhưng vẫn đọc `hsv_prob`, `degrees` và `translate` khi task của nó
 là pose. Các family phân loại bỏ qua nhóm đó trừ `mixup`, vốn là batch MixUp
-đối với chúng, và có đọc `flip_prob`. SegFormer và NAFNet bỏ qua toàn bộ nhóm đó
-cùng với `flip_prob`, vì phép lật của chúng chạy ở một xác suất cố định chứ không
+đối với chúng, và có đọc `flip_prob`. SegFormer, LingBot-Vision và NAFNet bỏ qua
+toàn bộ nhóm đó cùng với `flip_prob`, vì phép lật của chúng chạy ở một xác suất cố định chứ không
 cấu hình được. YOLO-NAS chỉ bỏ qua riêng `mosaic`, vì thay vào đó nó tăng cường
 bằng một phép affine trên từng mẫu luôn bật. RF-DETR bỏ qua thêm ba tham số nữa
 ngoài danh sách đó: `optimizer`, `momentum` và `nesterov`.
@@ -252,6 +255,22 @@ ra `best.pt`.
 `lora=true` được RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 và v4, EC, GTR và
 ConvNeXt chấp nhận. Mọi family khác sẽ thoát với `config_unsupported` thay vì
 huấn luyện mà không có nó.
+
+`clip_max_norm` được chấp nhận ở những family có khai báo nó trong cấu hình huấn
+luyện: YOLOv9, YOLOv9-E2E và YOLOv9-P2, nơi mặc định là `10`, cùng D-FINE,
+Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4, RF-DETR,
+DINOv2 và GTR, nơi mặc định là `0.1`. Mọi family khác sẽ thoát với
+`config_unsupported`, và một giá trị âm hoặc không hữu hạn sẽ thoát với
+`config_type_error`.
+
+`device=0,1` dựng mô hình trên GPU đầu tiên trong danh sách và truyền danh sách
+đó cho `train()`, hàm này khởi chạy một tiến trình cho mỗi GPU. Xem
+[huấn luyện multi-GPU](/docs/train/multi-gpu).
+
+RF-DETR không có chuyển đổi từ detect sang segment. `task=segment` với một
+checkpoint segment của RF-DETR sẽ nạp checkpoint đó bất kể tên tệp của nó, vì
+metadata của checkpoint quyết định task, còn một checkpoint phát hiện đối tượng
+sẽ dừng với một lỗi thay vì huấn luyện một mask head chưa được huấn luyện.
 
 `pretrained=false` kết hợp với `resume` bị từ chối ở những family có hỗ trợ huấn
 luyện từ đầu, vì hai thứ này yêu cầu những điều trái ngược nhau.

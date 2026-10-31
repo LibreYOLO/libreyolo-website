@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: a0446a47e0f89b27
+source_hash: 587851b0988347c3
 ---
 
 ## 概要
@@ -59,6 +59,7 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | `imgsz` | | 图像尺寸：`640`（正方形）或 `480x640`（HxW，高 × 宽）。不设置时用模型自身的输入尺寸 |
 | `conf` | `0.001` | 置信度阈值 |
 | `iou` | `0.6` | NMS 的 IoU 阈值 |
+| `agnostic_nms` | `false` | 类别无关的 NMS：在重叠超过 `iou` 的检测框中，不论类别，只保留得分最高的那个。仅适用于检测和分割 |
 | `max_det` | `300` | NMS 之后每张图像保留的最大预测数 |
 | `eval_max_det` | | COCO 评估器的上限。不设置时采用 pycocotools 的 AP@100 惯例 |
 | `faster_coco_eval` | `true` | 装了 faster-coco-eval 时用它的 C++ 后端算 COCO 指标；否则回退到 pycocotools |

@@ -124,7 +124,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## Instalação
@@ -179,9 +179,10 @@ durante a validação, e um device diferente de CPU é rejeitado.
 
 `delegate` aceita `"xnnpack"` e nada mais nesta versão.
 
-As exportações de classificação carregam duas chaves extras de metadados, `crop_pct` e
-`interpolation`, para que o runtime consiga reproduzir a política de resize e center-crop
-da família.
+As exportações de classificação carregam o pré-processamento de avaliação do
+modelo como metadados, `crop_pct` e `interpolation`, mais `norm_mean`,
+`norm_std` e `resize_mode` para as famílias que os definem, para que o runtime
+reproduza o resize e o center crop do modelo.
 
 As entradas bloqueadas nomeiam a falha concreta em vez de uma categoria. A detecção e a
 segmentação com D-FINE esbarram em uma leitura de `ContextVar` não suportada na deformable

@@ -1,0 +1,13 @@
+{
+    "name": "Faster R-CNN",
+    "org": "PyTorch",
+    "paper_title": "Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks",
+    "paper_url": "https://arxiv.org/abs/1506.01497",
+    "code_url": "https://github.com/pytorch/vision",
+    "license": "BSD-3-Clause",
+    "code_license": "BSD-3-Clause",
+    "license_interpretation": "BSD-3-Clause is a permissive license, so this code can be used in commercial and closed-source products with no obligation on your own application code. It asks only that you keep the copyright notice and disclaimer with any copy you redistribute, and it carries no patent grant. The four published checkpoints used for parity testing are not distributed in the LibreYOLO source tree: torchvision's own documentation notes that a pretrained model's terms may depend on its training data, so each Hugging Face mirror ships the BSD text on that implied basis and repeats the caveat rather than issuing an explicit checkpoint-specific grant.",
+    "bibtex": "@inproceedings{renNIPS15fasterrcnn,\n    Author = {Shaoqing Ren and Kaiming He and Ross Girshick and Jian Sun},\n    Title = {Faster {R-CNN}: Towards Real-Time Object Detection\n             with Region Proposal Networks},\n    Booktitle = {Advances in Neural Information Processing Systems ({NIPS})},\n    Year = {2015}\n}",
+    "bibtex_source_url": "https://github.com/rbgirshick/py-faster-rcnn#citing-faster-r-cnn",
+    "bibtex_verified": "2026-08-08, copied verbatim from the \"Citing Faster R-CNN\" section of the py-faster-rcnn README on branch master, maintained by Ross Girshick, a paper co-author. Cross-checked against the arXiv API for 1506.01497: four authors in the same order, identical title, published at NeurIPS (NIPS) 2015 as the entry states. Do not hand-edit; a wrong citation misattributes someone's work."
+}

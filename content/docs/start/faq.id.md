@@ -15,7 +15,7 @@ keywords:
   - cli libreyolo
   - libreyolo offline
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## Model mana yang sebaiknya digunakan pertama kali?
@@ -87,10 +87,13 @@ header halaman model memberi tahu hal ini sebelum dicoba. Lihat
 
 Dictionary dengan kunci nama metrik. Kunci deteksi mencakup `metrics/precision`,
 `metrics/recall`, `metrics/mAP50`, dan `metrics/mAP50-95`, dan hasil deteksi
-serta segmentasi juga membawa hasil per gambar di `metrics.box`. Task lain
-mengembalikan kunci yang relevan, seperti `metrics/accuracy_top1` untuk
+serta segmentasi juga membawa hasil per gambar dan kurva presisi, recall, serta F1
+per kelas di `metrics.box`. Hasil deteksi, segmentasi, dan classification membawa
+`metrics.confusion_matrix`, dan classification menambahkan `metrics.top1` serta
+`metrics.top5`. Task lain mengembalikan kunci yang relevan, seperti `metrics/accuracy_top1` untuk
 classification atau `metrics/PQ`, `metrics/SQ`, dan `metrics/RQ` untuk
-panoptic segmentation.
+panoptic segmentation. Lihat
+[Validasi dan metrik](/docs/train/validation).
 
 ## Bagaimana menjalankan folder, video, atau webcam?
 

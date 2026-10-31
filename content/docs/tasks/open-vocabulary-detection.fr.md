@@ -19,7 +19,7 @@ keywords:
   - owlv2
   - omdet turbo
   - détection prompt texte
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -68,7 +68,7 @@ snippets:
         # des tokens de la phrase décodée. Tous deux valent 0.25 par défaut
         # lorsqu'ils sont omis. Seul Grounding DINO accepte text_threshold.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Définition
@@ -144,7 +144,7 @@ convertit leur sortie dans les mêmes `Results`. Il partage l'interface
 de cette page sont des détecteurs discriminatifs qui émettent directement des
 scores, tandis que le niveau VLM les génère.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) et [North Micro Vision](/docs/models/northmicrovision) élargissent les choix de détection `LibreVLM`. [Molmo2](/docs/models/molmo2) renvoie des points. Utilisez [LibreGround](/docs/reference/ground-api) pour les requêtes transformant une instruction en clic plutôt qu'un vocabulaire de détection.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) et [WeVisOne-VL](/docs/models/wevisone-vl) élargissent les choix de détection `LibreVLM`. [Molmo2](/docs/models/molmo2) renvoie des points. Utilisez [LibreGround](/docs/reference/ground-api) pour les requêtes transformant une instruction en clic plutôt qu'un vocabulaire de détection.
 
 ## Prédire
 

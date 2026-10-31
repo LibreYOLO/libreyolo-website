@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Task kanonis
-    value: 20
+    value: 22
   - label: Tier dukungan
     value: 'Unggulan, Inti, Didukung, Hanya inferensi, Museum, Tingkat saudara'
 snippets:
@@ -54,12 +54,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Task
 
-Task adalah yang dikembalikan model. LibreYOLO memiliki dua puluh nama task
+Task adalah yang dikembalikan model. LibreYOLO memiliki dua puluh dua nama task
 kanonis, dan setiap nama menunjuk kolom pada objek `Results` yang membawa
 output-nya.
 
@@ -85,6 +85,8 @@ output-nya.
 | `mesh` | Tubuh 3D berpose per orang terdeteksi |
 | `detect3d` | Kotak 3D dalam koordinat kamera, dengan kelas dan confidence |
 | `act` | Potongan aksi robot yang diprediksi dari frame kamera dan status robot |
+| `generate` | Gambar RGB yang dihasilkan dari prompt teks, beserta prompt, seed, dan parameter pemanggilan yang mereproduksinya |
+| `generate3d` | Satu objek sebagai splat Gaussian 3D, dihasilkan dari satu gambarnya |
 
 Nama tersebut muncul dalam metadata checkpoint dan nama berkas. Alias yang umum
 diterima di semua tempat yang menerima task dan dinormalisasi sebelum proses
@@ -178,9 +180,9 @@ pelatihan pada dataset selain default menambahkan nama dataset sebagai suffix
 lanjutan, dan varian tersebut tetap menjadi bagian nama repositori tempat berkas
 diunduh.
 
-Tiga tier berada di luar skema ini. Family promptable segmentation, family
-vision-language, dan detektor open-vocabulary tidak terdaftar ke factory
-checkpoint dan tidak menghasilkan berkas `Libre<FAMILY><size>.pt`. Prefix mereka
+Beberapa tier berada di luar skema ini. Family promptable segmentation, family
+vision-language, detektor open-vocabulary, dan family generasi `LibreGen` tidak
+terdaftar ke factory checkpoint dan tidak menghasilkan berkas `Libre<FAMILY><size>.pt`. Prefix mereka
 menamai snapshot Hugging Face yang diunduh atau checkpoint promptable, dan
 kapitalisasi merek upstream sengaja dipertahankan di sana.
 

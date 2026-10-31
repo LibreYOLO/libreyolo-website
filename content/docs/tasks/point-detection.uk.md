@@ -17,7 +17,7 @@ keywords:
   - локалізація точок FOMO
   - підрахунок об'єктів на зображенні
   - точкова локалізація
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Передбачити точки й підрахувати їх
@@ -160,7 +160,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Визначення
@@ -196,7 +196,7 @@ source_hash: 5c3cfe7a606cd7aa
 тому затримка на зображення помітно вища, ніж у спеціалізованого детектора. Її ваги
 дозволено використовувати лише в некомерційних цілях; ліцензію наведено на сторінці моделі.
 
-[Molmo2](/docs/models/molmo2) і [Moondream](/docs/models/moondream) надають точки, обумовлені текстом. [LibreGround](/docs/reference/ground-api) використовує інструкцію, щоб вибрати не більше одного клацання на запит за допомогою ShowUI, Florence-2 або Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) і [WeVisOne-VL](/docs/models/wevisone-vl) надають точки, обумовлені текстом. [LibreGround](/docs/reference/ground-api) використовує інструкцію, щоб вибрати не більше одного клацання на запит за допомогою ShowUI, Florence-2 або Qwen3-VL.
 
 ## Передбачення
 

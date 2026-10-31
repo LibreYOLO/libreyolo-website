@@ -19,63 +19,70 @@ keywords:
   - nccl gloo backend
   - multi gpu windows
 last_verified: 1.6.0
-
 snippets:
   train:
-  - label: Python
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
 
-      # Эта защита поддерживается; обычные скрипты работают и без неё.
-      # Сохраните её для колбэков и логгеров, которым нужен стандартный pickle.
-      if __name__ == "__main__":
-          model = LibreYOLO("LibreYOLO9s.pt")
-          model.train(
-              data="my-dataset.yaml",
-              epochs=100,
-              batch=32,     # глобальный батч: 16 изображений на GPU при двух GPU
-              device="0,1",
-          )
+
+        # Эта защита поддерживается; обычные скрипты работают и без неё.
+
+        # Сохраните её для колбэков и логгеров, которым нужен стандартный
+        pickle.
+
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9s.pt")
+            model.train(
+                data="my-dataset.yaml",
+                epochs=100,
+                batch=32,     # глобальный батч: 16 изображений на GPU при двух GPU
+                device="0,1",
+            )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
-  - label: train.py
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: train.py
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
 
-      if __name__ == "__main__":
-          model = LibreYOLO("LibreYOLO9s.pt")
-          model.train(data="my-dataset.yaml", epochs=100, batch=32)
-  - label: Запуск
-    language: bash
-    code: |
-      torchrun --nproc_per_node=2 train.py
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9s.pt")
+            model.train(data="my-dataset.yaml", epochs=100, batch=32)
+    - label: Запуск
+      language: bash
+      code: |
+        torchrun --nproc_per_node=2 train.py
   syncbn:
-  - label: Python
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
 
-      if __name__ == "__main__":
-          model = LibreYOLO("LibreRTDETRr18.pt")
-          model.train(
-              data="my-dataset.yaml",
-              batch=32,
-              device="0,1",
-              sync_bn=True,
-          )
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreRTDETRr18.pt")
+            model.train(
+                data="my-dataset.yaml",
+                batch=32,
+                device="0,1",
+                sync_bn=True,
+            )
   autobatch:
-  - label: Python
-    language: python
-    code: |
-      from libreyolo import LibreYOLO
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
 
-      if __name__ == "__main__":
-          model = LibreYOLO("LibreYOLO9s.pt")
-          # Замеряется один раз на GPU 0, результат кратен world size.
-          model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-
-source_hash: e339072d5d8e71ea
+        if __name__ == "__main__":
+            model = LibreYOLO("LibreYOLO9s.pt")
+            # Замеряется один раз на GPU 0, результат кратен world size.
+            model.train(data="my-dataset.yaml", batch=-1, device="0,1")
+source_hash: 18d4cbb626aee47d
 ---
 
 ## Запуск на двух GPU
@@ -89,6 +96,9 @@ source_hash: e339072d5d8e71ea
 `device` принимает `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` и
 `"auto"`. Порождение процессов запускается только для списка из нескольких
 индексов CUDA.
+
+`libreyolo train device=0,1` или `device=[0,1]` строит модель на первом GPU из
+списка и передаёт список в `train()`, который порождает воркеры так же.
 
 ## Автоматический запуск и защита main
 

@@ -50,7 +50,7 @@ snippets:
         # Zeilen als einfache Dictionaries und anschließend als JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## Das Results-Objekt
@@ -96,6 +96,8 @@ einer Familie bestimmt den gefüllten Slot.
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, mit Galerie |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` ist ein Lese- und Schreibalias für `result.normal_map`.
 
@@ -332,3 +334,54 @@ an `summary` weiter und gibt den JSON-String zurück.
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` stellt einen float32-Aktionsblock `(T, D)` dar. `first` liefert die erste Zeile; Slicing wählt Zeitschritte. Die Werte bleiben in den Einheiten des Policy-Datensatzes. `names` beschreibt die Aktionsdimensionen, `fps` die Steuerrate und `instruction` den bedingenden Text.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+enthält ein synthetisiertes Bild, `(H, W, 3)` uint8 RGB. `array` liefert die
+numpy-Ansicht und `image` ein `PIL.Image`. `prompt` ist der Text, der das Bild
+erzeugt hat, und `seed` die Ganzzahl, die es mit demselben Modell und denselben
+Einstellungen reproduziert; `params` hält den Rest des Aufrufs fest: `model`,
+`imgsz` und jede wirksame Familieneinstellung. `save(path)` schreibt das Bild,
+und ein PNG speichert zusätzlich `to_dict()`, also Form, Prompt, Seed und
+Parameter, als JSON in einem Text-Chunk `libreyolo`.
+
+Bei einem generierten Ergebnis sind `Results.boxes` und `Results.path` `None`,
+`orig_shape` ist das eigene `(H, W)` des Bildes, und `len(result)` ist 1.
+`Results.save(path)` schreibt das Bild, `plot()` gibt es als PIL-Bild zurück,
+und `summary()` liefert eine Zeile mit dem Eintrag der Nutzlast.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+enthält ein generiertes 3D-Objekt als Gaussian Splats, im eigenen Koordinatensystem
+des Objekts: z nach oben, zentriert im Würfel `[-0.5, 0.5]^3`. Jede Zeile ist ein
+Gaussian.
+
+| Member | Liefert |
+|---|---|
+| `xyz` | `(N, 3)` Positionen im Objektsystem |
+| `scales` | `(N, 3)` Standardabweichungen entlang der lokalen Achsen, linear, nicht logarithmisch |
+| `rotations` | `(N, 4)` Einheitsquaternionen `(w, x, y, z)`, lokale Achsen ins Objektsystem |
+| `opacities` | `(N,)` in `[0, 1]` |
+| `sh` | `(N, K, 3)` Farbkoeffizienten der sphärischen Harmonischen, Grad 0 zuerst |
+| `colors` | `(N, 3)` RGB in `[0, 1]`, aus dem Term vom Grad 0 |
+| `camera` | Die abgeleitete Eingabeansicht: `yaw` und `pitch` in Radiant, `radius` in Objekteinheiten, vertikales `fov` in Grad und der Zuschnitt `margin` |
+| `seed`, `params` | Der Seed und die Aufrufeinstellungen, die das Objekt reproduzieren |
+| `input_image` | Das RGB-Bild, das das Modell nach seiner eigenen Vorverarbeitung sah |
+
+`len(gaussians)` ist `N`, und `gaussians[gaussians.opacities > 0.1]` gibt ein
+neues `Gaussians` mit den gewählten Zeilen zurück. `save(path)` schreibt anhand
+der Dateiendung. `.ply` ist das Standardlayout des 3D Gaussian Splatting, mit
+logarithmischen Skalen und Logit-Opazitäten, y-up gedreht, wie Splat-Viewer es
+erwarten, und einer Kopfzeile `comment libreyolo`, die Seed, Kamera und
+Parameter als JSON enthält. Eine Nutzlast mit Farbe höherer Ordnung (`K > 1`)
+löst für `.ply` `NotImplementedError` aus. `.splat` ist das kompakte Web-Format,
+32 Bytes pro Gaussian. `render(size=512, background=(0, 0, 0))` gibt ein
+Punkt-Rendering aus der abgeleiteten Eingabeansicht als `PIL.Image` zurück, einen
+schnellen Blick statt einer Gaussian-Rasterisierung.
+
+Bei einem generierten 3D-Ergebnis ist `Results.boxes` `None`; `path`,
+`orig_shape` und `orig_img` beschreiben das Quellbild, und `len(result)` ist 1.
+`Results.save(path)` schreibt das Objekt, `plot()` gibt dieses Punkt-Rendering
+zurück, und `summary()` liefert eine Zeile mit dem Eintrag der Nutzlast.

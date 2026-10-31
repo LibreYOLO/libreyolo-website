@@ -50,7 +50,7 @@ snippets:
         # Wiersze jako zwykłe słowniki, a następnie jako JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## Obiekt Results
@@ -96,6 +96,8 @@ pole zależne od swojego zadania.
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, z galerią |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` jest aliasem do odczytu i zapisu dla `result.normal_map`.
 
@@ -323,3 +325,54 @@ ciąg JSON.
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` reprezentuje fragment akcji float32 `(T, D)`. `first` zwraca pierwszy wiersz; wycinanie wybiera kroki czasowe. Wartości pozostają w jednostkach zbioru danych polityki. `names` opisuje wymiary akcji, `fps` częstotliwość sterowania, a `instruction` tekst warunkujący.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+przechowuje jeden zsyntetyzowany obraz, `(H, W, 3)` uint8 RGB. `array` zwraca
+widok numpy, a `image` obiekt `PIL.Image`. `prompt` to tekst, który wytworzył
+obraz, a `seed` to liczba całkowita, która odtwarza go przy tym samym modelu i
+ustawieniach; `params` zapisuje resztę wywołania: `model`, `imgsz` i każde
+ustawienie rodziny, które obowiązywało. `save(path)` zapisuje obraz, a PNG
+zapisuje też `to_dict()`, czyli kształt, prompt, seed i params, jako JSON w
+tekstowym fragmencie `libreyolo`.
+
+W wygenerowanym wyniku `Results.boxes` i `Results.path` mają wartość `None`,
+`orig_shape` to własne `(H, W)` obrazu, a `len(result)` wynosi 1.
+`Results.save(path)` zapisuje obraz, `plot()` zwraca go jako obraz PIL, a
+`summary()` zwraca jeden wiersz z rekordem danych.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+przechowuje jeden wygenerowany obiekt 3D jako gaussiany (splaty) we własnym
+układzie obiektu: z do góry, wyśrodkowany w sześcianie `[-0.5, 0.5]^3`. Każdy
+wiersz to jeden gaussian.
+
+| Składowa | Zwraca |
+|---|---|
+| `xyz` | `(N, 3)` pozycje w układzie obiektu |
+| `scales` | `(N, 3)` odchylenia standardowe wzdłuż osi lokalnych, liniowe, nie logarytmiczne |
+| `rotations` | `(N, 4)` kwaterniony jednostkowe `(w, x, y, z)`, osie lokalne do układu obiektu |
+| `opacities` | `(N,)` w `[0, 1]` |
+| `sh` | `(N, K, 3)` współczynniki koloru w harmonikach sferycznych, najpierw stopień 0 |
+| `colors` | `(N, 3)` RGB w `[0, 1]`, z wyrazu stopnia 0 |
+| `camera` | Wywnioskowany widok wejściowy: `yaw` i `pitch` w radianach, `radius` w jednostkach obiektu, pionowe `fov` w stopniach oraz `margin` przycięcia |
+| `seed`, `params` | Seed i ustawienia wywołania, które odtwarzają obiekt |
+| `input_image` | Obraz RGB, który model zobaczył po własnym przetwarzaniu wstępnym |
+
+`len(gaussians)` to `N`, a `gaussians[gaussians.opacities > 0.1]` zwraca nowy
+obiekt `Gaussians` z wybranymi wierszami. `save(path)` zapisuje według
+rozszerzenia. `.ply` to standardowy układ 3D Gaussian Splatting, z
+logarytmicznymi skalami i logitowymi nieprzezroczystościami, obrócony y do góry,
+jak oczekują przeglądarki splatów, oraz z wierszem nagłówka `comment libreyolo`
+zawierającym seed, kamerę i params jako JSON. Dane z kolorem wyższego rzędu
+(`K > 1`) zgłaszają `NotImplementedError` dla `.ply`. `.splat` to zwarty format
+webowy, 32 bajty na gaussian. `render(size=512, background=(0, 0, 0))` zwraca
+rzut punktowy z wywnioskowanego widoku wejściowego jako `PIL.Image`, szybki
+podgląd, a nie rasteryzację gaussianów.
+
+W wygenerowanym wyniku 3D `Results.boxes` ma wartość `None`; `path`,
+`orig_shape` i `orig_img` opisują obraz źródłowy, a `len(result)` wynosi 1.
+`Results.save(path)` zapisuje obiekt, `plot()` zwraca ten rzut punktowy, a
+`summary()` zwraca jeden wiersz z rekordem danych.

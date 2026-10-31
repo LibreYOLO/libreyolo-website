@@ -44,7 +44,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## Cú pháp
@@ -134,10 +134,14 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | Đầu ra JSON ra stdout |
 | `quiet` | `false` | Tắt stderr |
 
-Khi không có `family`, đầu ra chỉ là danh mục định dạng. Khi có, mỗi định dạng
-được bổ sung mức hỗ trợ cho họ mô hình và tác vụ đó, lý do đằng sau mức đó, và
-mọi ràng buộc gắn với nó. Một họ mô hình không xác định, hoặc một tác vụ mà họ
-mô hình đó không hỗ trợ, là lỗi cách dùng.
+Khi không có `family`, đầu ra chỉ là danh mục định dạng, và các trường FP16 và
+INT8 mô tả chính định dạng đó. Khi có, mỗi định dạng được bổ sung mức hỗ trợ cho
+họ mô hình và tác vụ đó, lý do đằng sau mức đó, và mọi ràng buộc gắn với nó, còn
+các trường FP16 và INT8 cho biết `export()` chấp nhận gì với tổ hợp đó: cả hai
+đều là false trên một định dạng bị chặn hoặc một họ mô hình chỉ xuất FP32, và
+INT8 chỉ là true ở những nơi việc xuất INT8 của định dạng bao phủ họ mô hình và
+tác vụ đó. Một họ mô hình không xác định, hoặc một tác vụ mà họ mô hình đó không
+hỗ trợ, là lỗi cách dùng.
 
 Các bí danh định dạng xuất hiện bên cạnh tên chuẩn của chúng: `engine` cho
 `tensorrt`, `litert` cho `tflite`.

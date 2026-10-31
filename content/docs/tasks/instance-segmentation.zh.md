@@ -117,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## 定义
@@ -155,8 +155,10 @@ source_hash: 577cd3c8c2d5d6fe
 [SAM 3](/docs/models/sam-3)、[MobileSAM](/docs/models/mobilesam)、
 [EdgeTAM](/docs/models/edgetam) 和 [PicoSAM3](/docs/models/picosam3) 都是这样
 工作的，[SenseNova-Vision](/docs/models/sensenova-vision) 也一样，它的分割属于
-指代式（referring）：接受一段指名某一个物体的短语。它们通过各自的工厂和 extra
-加载，每个模型页上都写着确切的调用方式。
+指代式（referring）：接受一段指名某一个物体的短语。
+[WeVisOne-VL](/docs/models/wevisone-vl) 会对 `names=` 里给出的每个短语做分割，
+返回检测框加二值掩码。它们通过各自的工厂和 extra 加载，每个模型页上都写着确切的
+调用方式。
 
 ## 预测
 
@@ -165,7 +167,7 @@ source_hash: 577cd3c8c2d5d6fe
 <code-tabs name="predict" />
 
 `conf` 和 `max_det` 塑造输出的方式和检测任务一样，掩码会随它们所属的检测框一起
-被过滤。数据源、流式处理和结果处理见[预测](/docs/predict)。
+被过滤，包括被 `agnostic_nms=True` 过滤。数据源、流式处理和结果处理见[预测](/docs/predict)。
 
 ## 数据集格式
 
@@ -217,8 +219,9 @@ names:
 
 ## 验证
 
-`val()` 返回一个由 `metrics/` 键构成的普通字典。检测框和掩码分开评分，都走 COCO
-评估，掩码的数字是主要的那一组。
+`val()` 返回一个由 `metrics/` 键构成的字典。检测框和掩码分开评分，都走 COCO
+评估，掩码的数字是主要的那一组。只有五个字段的纯检测框标注行会按它的矩形掩码评分，
+分割训练读取的也是这个掩码。
 
 <code-tabs name="val" />
 
@@ -239,6 +242,8 @@ names:
 点：`metrics/precision(M)` 保存的值与 `metrics/mAP50-95(M)` 相同，
 `metrics/recall(M)` 保存的值与 100 个检测下的掩码 AR 相同，`(B)` 对检测框的行为
 也一样。把其中一对画成图，等于把同一个数字报了两遍。
+
+结果还带有 `confusion_matrix` 以及 `box` 上逐类别的查准率、查全率和 F1 曲线，两者都是由检测框而不是掩码算出来的；见[验证与指标](/docs/train/validation#confusion-matrix)。这个任务支持 `val(agnostic_nms=True)`。
 
 ## 导出
 

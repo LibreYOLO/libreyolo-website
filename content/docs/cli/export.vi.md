@@ -47,7 +47,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 ## Cú pháp
 
@@ -126,7 +126,8 @@ thoát với `config_conflict`.
 
 Mức hỗ trợ được tính theo từng họ mô hình và từng tác vụ, không phải toàn cục.
 `libreyolo formats family=<family> task=<task>` in ra mức hỗ trợ của từng định
-dạng cho tổ hợp đó, kèm lý do và mọi ràng buộc đi kèm. Xem
+dạng cho tổ hợp đó, kèm lý do, mọi ràng buộc đi kèm, và việc `export()` có
+chấp nhận FP16 và INT8 ở đó hay không. Xem
 [`libreyolo formats`](/docs/cli/utilities) để biết các tham số.
 
 Một số định dạng cần cài thêm gói tùy chọn và một số cần cả toolchain. Thiếu một

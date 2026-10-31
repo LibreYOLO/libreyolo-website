@@ -1,25 +1,59 @@
 ---
-title: Mettre à niveau vers la version 1.6.0
-seo_title: Mettre à niveau LibreYOLO 1.5.0 vers 1.6.0
+title: Mettre à niveau vers la version 1.7.0
+seo_title: Mettre à niveau LibreYOLO 1.6.0 vers 1.7.0
 description: >-
-  Étapes de migration du prétraitement, des valeurs d'entraînement par défaut,
-  des répertoires d'exécution, des ressources épinglées, de QAT et des chargeurs
-  de données dans LibreYOLO 1.6.0.
+  Étapes de migration des checkpoints, des noms de modules et des recettes
+  d'entraînement YOLO9, des dossiers d'exécution de la CLI, de la matrice de
+  confusion et des nouvelles erreurs dans LibreYOLO 1.7.0.
 lead: >-
-  La version 1.6.0 modifie le prétraitement, les valeurs d'entraînement par
-  défaut et la gestion des checkpoints. Revalidez les références enregistrées et
-  définissez explicitement les anciennes valeurs par défaut pour reproduire une
-  exécution antérieure.
+  La version 1.7.0 continue de charger les anciens checkpoints YOLO9 avec les
+  mêmes boîtes flottantes. Elle modifie l'entraînement de la famille YOLO9, les
+  noms que le code voit à l'intérieur du réseau, et quelques contrats de
+  validation et de prédiction.
 keywords:
   - mise à niveau libreyolo
-  - migration libreyolo 1.5.0
-  - suppression allow_experimental
+  - migration libreyolo 1.6.0
   - changements incompatibles libreyolo
-  - yolox bn eps
-  - faster coco eval défaut
-last_verified: 1.6.0
-source_hash: e9c7cb5271aa4a81
+  - noms de modules yolo9
+  - clip_max_norm
+  - matrice de confusion
+last_verified: 1.7.0
+source_hash: 895bcd7425f0052f
 ---
+
+## De 1.6.0 à 1.7.0
+
+- Les checkpoints YOLO9, YOLO9-E2E et YOLO9-P2 enregistrés par la version 1.7.0 utilisent de nouveaux noms de tenseurs et ne se chargent pas en 1.6.x : la version 1.6.x charge ceux de YOLO9 et YOLO9-P2 avec un avertissement de clés manquantes et ne prédit aucune boîte, et lève une erreur d'incohérence `model_family` pour ceux de YOLO9-E2E. Mettez à niveau chaque environnement qui les lit. Les checkpoints flottants, quantifiés et d'entraînement écrits par les versions précédentes se chargent en 1.7.0, et les exports ONNX ne sont pas affectés.
+
+- Le code qui accède à `model.model` d'un modèle de la famille YOLO9 voit les noms de modules de MultimediaTechLab/YOLO, sans alias. `DDetect` devient `YOLO9Head` (`anchor_convs` / `class_convs`), `RepConvN` devient `RepConv`, `RepNBottleneck` devient `Bottleneck`, `DFL` devient `Anchor2Vec` (`anchor2vec`), `nc` devient `num_classes`, et les sous-couches des blocs deviennent `conv1`/`conv2`/`bottleneck`. Dans YOLO9-E2E, `YOLO9E2EDetect` devient `YOLO9E2EHead` et `one2one_cv2` / `one2one_cv3` deviennent `one_to_one_anchor_convs` / `one_to_one_class_convs`. `LibreYOLO9Model.fuse()`, `RepConvN.fuse_convs()`, `Conv.forward_without_bn()`, `Concat` et `yolo9.utils.decode_boxes` sont supprimés. Le [changelog](/docs/changelog) liste chaque renommage.
+
+- Les noms de nœuds ONNX suivent les nouveaux noms de modules dans la tête, le backbone et le neck, par exemple `/head/anchor_convs.0/...`. Mettez à jour les outils qui s'appuient sur les noms de nœuds, comme les configurations de nœuds de fin Hailo. Les entrées, les sorties et les noms de sortie du modèle ne changent pas.
+
+- Un fine-tuning YOLO9 à partir de poids sans tenseurs PGI, ce qui inclut les `LibreYOLO9{t,s,m,c}.pt` publiés, n'entraîne que la tête principale, comme en 1.5.0 ; la version 1.6.0 attachait une branche PGI initialisée aléatoirement avec `aux_weight=0.25`. Les poids qui contiennent des tenseurs PGI, et les runs à partir de zéro, s'entraînent toujours avec PGI. Passez `aux_weight=0.25` pour attacher malgré tout une nouvelle branche, ou `aux_weight=0` pour la désactiver de force.
+
+- Lorsque PGI est attaché, YOLO9-m et YOLO9-c construisent la branche auxiliaire de MultimediaTechLab : 12.8M (m) et 25.7M (c) de paramètres réservés à l'entraînement avec 80 classes, contre 7.5M et 10.2M auparavant, si bien que l'entraînement PGI de ces tailles demande plus de mémoire et de temps par pas. Un checkpoint d'entraînement m/c de la version 1.6.0 reprend et fait son fine-tuning avec la branche sur laquelle il a été entraîné. L'inférence et YOLO9-t/s ne changent pas.
+
+- YOLO9, YOLO9-E2E et YOLO9-P2 écrêtent la norme L2 du gradient à 10, et leur assignateur d'entraînement évalue les ancres en fp32, si bien que les positifs choisis sous AMP fp16 peuvent différer. Passez `clip_max_norm=0` pour retrouver l'écrêtage de la version 1.6.0 ; un run démarré en 1.6.0 et repris en 1.7.0 écrête aussi, sauf si vous le passez. L'assignation en fp32 n'a aucun interrupteur.
+
+- Un `perspective` non nul déforme par déplacement des coins dans chaque famille qui utilise la transformation affine partagée (YOLO9 et ses variantes E2E et P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR et RT-DETRv2), y compris les runs repris depuis un checkpoint 1.6.0 qui le définissait. Les valeurs de `0.002` et plus donnent la même déformation maximale, et les valeurs négatives lèvent `ValueError`. Aucun réglage ne reproduit la déformation de la version 1.6.0 ; la valeur par défaut `perspective=0` ne change pas.
+
+- Le pipeline mosaic de YOLO9 tire le ratio de mixup selon Beta(1, 1) au lieu de Beta(32, 32), sans réglage pour l'ancienne valeur. L'entraînement YOLOv7 par défaut change, car YOLOv7 active mixup par défaut. YOLO9, YOLO9-E2E, YOLO9-P2, RT-DETR et RT-DETRv2 ne changent que lorsque mixup est activé.
+
+- `libreyolo train` sans `name=` écrit les runs EC, D-FINE, SegFormer et LingBot-Vision dans `runs/train/ec_exp`, `dfine_exp`, `segformer_exp` et `lingbotvision_exp` au lieu de `runs/train/exp`, les sondes V-JEPA 2 dans `runs/train/train`, et les runs YOLO9-P2 dans `runs/train/yolo9_exp`. Passez `name=exp` pour l'ancien chemin, ou `name=yolo9_p2_exp` pour YOLO9-P2.
+
+- `libreyolo train` démarre D-FINE, SegFormer et LingBot-Vision à partir de leurs propres recettes. Pour D-FINE, cela donne 132 époques, `lr0=2e-4`, `weight_decay=1e-4`, 2 époques de warmup et aucune augmentation mosaic, mixup, HSV ou affine. Pour envoyer les valeurs que la version 1.6.0 envoyait, passez `epochs=300 optimizer=sgd lr0=0.01 weight_decay=5e-4 warmup_epochs=5 mosaic=1.0 mixup=1.0 hsv_prob=1.0 degrees=10 translate=0.1 shear=2.0`.
+
+- `libreyolo.validation.ConfusionMatrix` indexe `matrix[predicted, true]` (c'était `[actual, predicted]`), compte les détections à `conf_thres=0.25` (c'était 0.15), prend `names=` et `task=` uniquement en arguments nommés, et son `matrix` ne peut plus être réassigné. Transposez le code qui indexait l'ancienne matrice, et passez `conf_thres=0.15` pour retrouver les anciens comptes. `plots=True` écrit les comptes dans `confusion_matrix.png` et le graphique normalisé dans `confusion_matrix_normalized.png`.
+
+- `predict(agnostic_nms=True)` supprime les boîtes qui se chevauchent entre classes au lieu d'émettre un avertissement. Les tâches sans boîtes lèvent `ValueError`, `LibreEnsemble` et HRNet lèvent `NotImplementedError`, et le niveau SAM rejette le mot-clé avec `TypeError` ; retirez l'argument de ces appels.
+
+- Un `interpolation` de classifieur inconnu lève `ValueError`, y compris les modes torchvision `LANCZOS`, `BOX`, `HAMMING` et `NEAREST_EXACT`. Utilisez `bilinear`, `bicubic`, `nearest` ou `bilinear_no_antialias`.
+
+- Relancez la validation avant de comparer avec les chiffres de la version 1.6.0 pour `val(single_cls=True)` sur un modèle entraîné sur plusieurs classes, les datasets de segmentation qui mélangent des lignes avec boîtes seules et avec polygones, et RTMDet-Ins, qui conserve jusqu'à `max_det=300` masques par image par défaut ; passez `max_det=100` pour le réglage de MMDetection.
+
+- Sans `libreyolo[rfdetr]`, les appels CLI avec un nom de modèle RF-DETR ou DINOv2 se terminent avec le code d'erreur JSON `model_load_failed` au lieu de `model_not_found`, et le message nomme `pip install libreyolo[rfdetr]`.
+
+Consultez le [changelog](/docs/changelog) pour la version complète.
 
 ## De 1.5.0 à 1.6.0
 

@@ -96,7 +96,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
-source_hash: 58ad5305c9dd458c
+source_hash: d6ec02dfdb1a69a8
 ---
 
 ## Definizione
@@ -119,7 +119,7 @@ geometria.
 
 ## Modelli
 
-Due famiglie servono `ocr`.
+Tre famiglie servono `ocr`.
 
 [PP-OCRv5](/docs/models/pp-ocrv5) è la pipeline dedicata: un rilevatore a
 binarizzazione differenziabile trova i quadrilateri di testo e un riconoscitore
@@ -133,6 +133,13 @@ parole come testo con tag dallo stesso checkpoint da 7B che serve gli altri sei
 task, caricato con `LibreVLM("sensenova-vision", task="ocr")`. Richiede l'extra
 `sensenova` e i suoi pesi sono limitati all'uso non commerciale; la licenza è
 sulla sua pagina.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) genera anch'esso la sua risposta come
+testo con tag, caricato con `LibreVLM("wevisone-vl", task="ocr")`. La sua
+istruzione rilasciata chiede ogni parola in formato box, e ogni box torna come un
+quadrilatero allineato agli assi con la sua trascrizione. `.conf` e `.det_conf`
+sono una costante 1.0, perché il modello non emette nessun punteggio. Richiede
+l'extra `vlm`, e i suoi pesi sono Apache-2.0.
 
 ## Predizione
 
@@ -181,9 +188,9 @@ OCR restituisce `Results.ocr` invece di rilevamenti. Vedi
 
 ## Addestramento
 
-Nessuna delle due famiglie OCR ha un'implementazione dell'addestramento:
-`train()` solleva `NotImplementedError` su entrambe, e il supporto OCR copre
-solo predizione e validazione. La pagina di PP-OCRv5 indica il codice di
+Nessuna famiglia OCR ha un'implementazione dell'addestramento:
+`train()` solleva `NotImplementedError` su tutte e tre. La validazione copre
+PP-OCRv5; `val()` solleva un errore sulle due famiglie vision-language. La pagina di PP-OCRv5 indica il codice di
 addestramento upstream sotto Apache-2.0 e lo script di conversione che riporta
 in LibreYOLO un checkpoint sottoposto a fine-tuning.
 
@@ -213,6 +220,6 @@ le dà 0.
 
 Per questo task non è disponibile nessun formato di esportazione. PP-OCRv5 è
 fatto di due reti che lavorano insieme e non di un unico grafo tracciabile, e
-`export()` solleva un errore per ogni formato su entrambe le famiglie. Per
+`export()` solleva un errore per ogni formato su tutte e tre le famiglie. Per
 mettere in produzione fuori da LibreYOLO, fai fine-tuning upstream e usa il
 percorso di deployment upstream.

@@ -20,7 +20,7 @@ keywords:
   - Erkennung kleiner Objekte
   - Programmable Gradient Information
   - GELAN
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -147,7 +147,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: "624f3e70d2937683"
+source_hash: c322dd68d42cdf24
 ---
 
 ## Installation
@@ -190,9 +190,11 @@ Das Stride-4-Modell besitzt keinen eigenen veröffentlichten COCO-Checkpoint. `T
 
 Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
 
-Neue Fine-Tunings der Standarderkennung aktivieren einen nur beim Training verwendeten PGI-Zweig mit `aux_weight=0.25`. `max_labels=300`; das SGD-Momentum steigt während drei Warmup-Epochen von 0.8 auf 0.937. Alte Checkpoints mit einem Head werden mit diesem Graphen fortgesetzt. Vorhersage und Export verwenden den Haupt-Head. `letterbox_pad=None` übernimmt den Checkpoint-Eintrag: Nicht markierte Gewichte verwenden `topleft`, neue offizielle Konvertierungen speichern `center`.
+Das Basismodell kann neben seinem Haupt-Head einen PGI-Hilfszweig trainieren. Der Zweig wird nur beim Training verwendet: Vorhersage und Export nutzen den Haupt-Head. Ein Lauf hängt ihn an, wenn die Startgewichte PGI-Tensoren enthalten oder das Training von Grund auf neu beginnt. Die veröffentlichten Basis-Checkpoints enthalten keine, daher trainiert ein Fine-Tuning von ihnen nur den Haupt-Head und protokolliert das. `aux_weight=0.25` hängt trotzdem einen neuen Zweig mit diesem Loss-Gewicht an, `aux_weight=0` hält ihn ausgeschaltet. Ein fortgesetzter Lauf behält das PGI-Setup seines Checkpoints. Bei den Größen `m` und `c` ist der Zweig der aus dem Upstream: ein zweites Backbone auf dem Eingabebild, dessen Stufen `CBFuse` mit `CBLinear`-Abgriffen des Haupt-Backbones aufsummiert, und ein eigener Head, bei 80 Klassen 12.8M und 25.7M Parameter, die nur im Training existieren. Das End-to-End-Modell und das Stride-4-Modell haben keinen PGI-Zweig.
 
-Mosaic in YOLO9 und YOLOX bevorzugt annotierte Partnerbilder bei höchstens 20 Ziehungen; YOLO9-MixUp verwendet dieselbe Regel. Siehe [Ereignishistogramme](/docs/train/event-histograms) für Eingabeprofile ohne RGB.
+Alle drei Varianten beschneiden die L2-Norm des Gradienten vor jedem Optimizer-Schritt auf 10; `clip_max_norm=0` schaltet das Clipping ab. Die Label-Zuweisung bewertet Anchors in fp32, auch unter float16-Autocast. `max_labels=300` begrenzt die pro Trainingsbild behaltenen Boxen, darüber hinausgehende Boxen werden mit einer einmaligen Warnung verworfen; der Speicherbedarf der Zuweisung folgt den tatsächlichen Boxen jedes Bildes, nicht der Obergrenze. Das SGD-Momentum steigt während drei Epochen von 0.8 auf 0.937. `letterbox_pad=None` übernimmt den Checkpoint-Eintrag: Nicht markierte Gewichte verwenden `topleft`, neue offizielle Konvertierungen speichern `center`.
+
+Mosaic in YOLO9 und YOLOX bevorzugt annotierte Partnerbilder bei höchstens 20 Ziehungen; YOLO9-MixUp verwendet dieselbe Regel. MixUp ist standardmäßig aus (`mixup_prob=0`). Ist es an, wird das Mischverhältnis aus Beta(1, 1) gezogen, gleichverteilt auf [0, 1], wie in MultimediaTechLab/YOLO. Siehe [Ereignishistogramme](/docs/train/event-histograms) für Eingabeprofile ohne RGB.
 
 ## Validierung
 
@@ -225,6 +227,13 @@ Alle für diese Familie veröffentlichten Gewichtsdateien.
 ## Lizenzierung
 
 <provenance-box>
+
+Der Code aller drei Varianten ist aus
+[MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) beim Commit
+`c4cb5f6f` (MIT) portiert. Der One-to-One-Prädiktor des End-to-End-Modells folgt
+dem Design von [DATE](https://github.com/YiqunChen1999/date) von Yiqun Chen
+(Apache-2.0), für LibreYOLO implementiert, ohne dass DATE-Code kopiert wurde. Die
+Stride-4-Ebene ist LibreYOLO-Code.
 
 Der Luftbild-Checkpoint mit Stride 4 sagt die VisDrone-Klassen vorher. Verwende die vom Herausgeber im Gewichtsrepository deklarierte Lizenz.
 

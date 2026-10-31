@@ -12,8 +12,12 @@ keywords:
   - libreyolo formats 命令
   - 导出一致性阈值
   - 导出 NotImplementedError
-last_verified: "1.6.0"
-verification: "格式、等级、兜底顺序、任务和家族的屏蔽以及 NCNN 屏蔽名单读自 libreyolo/export/support.py；别名和共享参数读自 libreyolo/export/exporter.py；等级定义读自 docs/adr/0011-export-support-tiers.md；一致性阈值读自 docs/export_support.md，全部基于 v1.6.0。逐个组合的单元格没有抄录在这里；用下面的代码片段去查。"
+last_verified: 1.6.0
+verification: >-
+  格式、等级、兜底顺序、任务和家族的屏蔽以及 NCNN 屏蔽名单读自 libreyolo/export/support.py；别名和共享参数读自
+  libreyolo/export/exporter.py；等级定义读自
+  docs/adr/0011-export-support-tiers.md；一致性阈值读自 docs/export_support.md，全部基于
+  v1.6.0。逐个组合的单元格没有抄录在这里；用下面的代码片段去查。
 snippets:
   usage:
     - label: 查询矩阵，不需要模型
@@ -52,7 +56,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## 矩阵的形状
@@ -117,6 +121,11 @@ validated 和 available 的组合都会直接往下走，不需要额外确认�
 
 | 任务 | 原因 |
 |---|---|
+| `albedo` | 反照率导出没有线性 RGB 的后端运行时契约 |
+| `act` | 策略采样循环没有可导出的计算图，也没有后端运行时契约 |
+| `generate` | 图像生成会在多个网络上跑采样循环，没有可导出的计算图，也没有后端运行时契约 |
+| `generate3d` | 3D 生成会在多个网络上跑采样循环，没有可导出的计算图，也没有后端运行时契约 |
+| `detect3d` | 3D 检测的图输出、相机元数据和运行时契约都没有定义 |
 | `ocr` | 两个网络加上按区域动态裁剪，不符合单图导出契约 |
 | `point` | 该家族没有接入共享的点热图和后端峰值解码契约 |
 | `semantic` | 该家族没有接入共享的稠密 logits 和后端 argmax 契约 |
@@ -138,7 +147,7 @@ validated 和 available 的组合都会直接往下走，不需要额外确认�
 | `hrnet` | ONNX、TorchScript、OpenVINO 和 TensorRT 之外的一切 |
 | `sam`、`sam2`、`sam3`、`edgetam`、`mobilesam` | 所有格式；可提示模型的导出不在 v1 运行时契约的范围内 |
 | `grounding_dino`、`owlv2`、`omdet_turbo`、`ov_deim` | 所有格式；开放词汇的运行时导出不在 v1 的范围内 |
-| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything` | 所有格式；生成式 VLM 的导出不在 v1 的范围内 |
+| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything`、`northmicrovision`、`gemma4`、`moondream`、`sensenovavision`、`libremodus`、`wevisonevl` | 所有格式；生成式 VLM 的导出不在 v1 的范围内 |
 
 PicoSAM3 是可提示这一档里的例外：它会把自己那个原始的 96 像素 ROI 网络导出成 ONNX。
 

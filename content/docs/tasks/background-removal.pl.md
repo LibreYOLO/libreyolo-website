@@ -107,7 +107,7 @@ snippets:
 
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## Definicja
@@ -143,6 +143,11 @@ Obie rodziny mają inne licencje wag. Podano je na stronach modeli, a
 rozstrzygająca jest licencja w repozytorium Hugging Face konkretnego checkpointu.
 
 [BEN2](/docs/models/ben2) dodaje usuwanie tła przy stałym rozmiarze 1024. [ViTMatte](/docs/models/vitmatte) przyjmuje obraz i trójpoziomowe `trimap=` oznaczające piksele tła, nieznane i pierwszego planu.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) przyjmuje podpowiedź tekstową:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` zwraca sumę masek alfa
+każdej instancji pasującej do frazy. Jest to model wizyjno-językowy, który
+wymaga dodatku `vlm`, a jego `val()` i `export()` zgłaszają błąd.
 
 ## Predykcja
 

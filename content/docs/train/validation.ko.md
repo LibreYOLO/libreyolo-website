@@ -17,6 +17,8 @@ keywords:
   - 미우
   - 전면적 품질
   - Top1 정확도
+  - 혼동 행렬 yolo
+  - agnostic nms
 last_verified: 1.6.0
 snippets:
   val:
@@ -60,7 +62,33 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: da1e3ccfd1efba73
+  confusion:
+    - label: 혼동 행렬
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        cm = metrics.confusion_matrix
+        print(cm.matrix.shape)      # (81, 81): 클래스 80개와 background
+        print(cm.class_accuracy())  # 클래스 이름: 찾아낸 객체 중 해당 클래스로 분류된 비율
+        tp, fp = cm.tp_fp()
+  curves:
+    - label: 클래스별 곡선
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        box = metrics.box
+        print(box.px.shape, box.f1_curve.shape)  # (1000,)과 (classes, 1000)
+        for index, f1 in zip(box.ap_class_index, box.f1):
+            print(model.names[int(index)], round(float(f1), 3))
+source_hash: a5704354163337cf
 ---
 
 ## 검증을 실행
@@ -69,11 +97,15 @@ source_hash: da1e3ccfd1efba73
 
 <code-tabs name="val" />
 
-반환 값은 `dict[str, float]`입니다. 모든 키는 문자 그대로이므로 위치가 아니라 이름으로 읽으십시오.
+반환 값은 메트릭 키와 숫자로 이루어진 평면 `dict`입니다. 모든 키는 문자 그대로이므로 위치가 아니라 이름으로 읽으십시오. 탐지, 분할, 분류에서는 클래스별 결과를 속성으로 함께 담는 `dict` 하위 클래스이며, 아래에서 설명합니다.
 
 주요 인수는 `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `workers`, `device`, `augment`, `save_json` 및 `verbose`입니다. `conf`는 `0.001`로 기본 설정되며, `iou`는 `0.6`로 기본 설정되는데, 둘 다 예측 기본값보다 훨씬 느슨합니다. 이는 mAP 스윕이 낮은 신뢰도의 꼬리값을 필요로 하기 때문입니다. `imgsz`는 고정 숫자 대신 모델 자체 입력 크기를 기본값으로 사용합니다. `split`는 `val`, `test` 또는 `train`만 허용하며 그 외는 허용하지 않습니다. `data`가 없으면 학습된 체크포인트는 학습에 사용한 데이터셋으로 검증하며, 공개된 가중치에는 데이터셋이 없으므로 `data=`가 필요합니다.
 
-검증 구성의 다른 모든 필드는 키워드 인수로 전달되며, 여기에는 `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache` 및 `save_plots`가 포함됩니다.
+검증 구성의 다른 모든 필드는 키워드 인수로 전달되며, 여기에는 `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`, `save_plots`, `single_cls`, `agnostic_nms`가 포함됩니다. CUDA에서 `half=True`이면 검증은 `amp_dtype`의 오토캐스트 아래에서 실행되고, bfloat16 출력은 후처리 전에 float32로 변환됩니다. `amp_dtype="bfloat16"`으로 학습할 때도 검증은 같은 방식으로 실행됩니다.
+
+`agnostic_nms=True`는 `iou`를 넘어 겹치는 박스 중 클래스와 관계없이 점수가 가장 높은 것 하나만 유지합니다. 이 단계는 계열이 끝낸 탐지 결과에 대해 `classes=` 뒤에 실행되므로, mAP, 혼동 행렬, 곡선, 이미지별 개수가 모두 같은 박스를 채점합니다. 탐지와 분할을 지원하며, 다른 작업은 `ValueError`를 발생시킵니다. 예측 쪽은 [임계값과 필터링](/docs/predict/thresholds)에 있습니다.
+
+`single_cls=True`는 탐지를 단일 클래스로 채점합니다. 정답은 클래스 0으로 합쳐지고, 모델의 탐지는 모델 자체 레이블 공간의 `classes=`로 걸러진 뒤 0으로 다시 레이블되므로, 여러 클래스로 학습한 체크포인트도 단일 클래스 탐지기로 채점됩니다.
 
 ## 작업별 메트릭 키
 
@@ -111,13 +143,51 @@ metrics/precision(B)  metrics/recall(B)  metrics/mAP50(B)  metrics/mAP50-95(B)
 
 OBB의 `metrics/precision`와 `metrics/recall`는 별칭이 아닙니다: 이들은 실제 정밀도와 IoU 0.50에서의 재현율로, 가장 느슨한 작동 지점에서 취한 값입니다(모든 `conf`를 통과한 예측, 기본값 `0.001`). `(OBB)`로 끝나는 복사본들은 작업별 이름 아래 같은 네 가지 값을 반복하며, 위의 `(B)`와 `(M)`와 동일한 규칙을 따릅니다.
 
-`accuracy_top5`는 실제로 top-`min(5, num_classes)`이므로, 세 가지 클래스 데이터셋에서는 top-3가 되며, 이는 모든 샘플이 만족하므로 1.0으로 읽습니다.
+`accuracy_top5`는 실제로 top-`min(5, num_classes)`이므로, 세 가지 클래스 데이터셋에서는 top-3가 되며, 이는 모든 샘플이 만족하므로 1.0으로 읽습니다. 분류 결과는 이 두 값을 `confusion_matrix` 옆에 `top1`, `top5` 속성으로도 제공합니다.
 
 점 작업의 스윕 키는 거리 임계값으로 작성되므로, 기본값으로는 `metrics/mAP@[0.01:0.10]`를 읽고 단일 임계값 키는 `metrics/mAP@0.01`를 읽습니다. `dist_thresholds`를 전달하면 두 문자열이 모두 변경됩니다.
 
 대부분의 작업은 또한 `fitness` 키를 반환하며, 단일 숫자 최적 체크포인트 선택에서 기본적으로 사용됩니다. 탐지, 분할 및 OBB는 이를 포함하지 않으며; 그들의 계열는 `metrics/mAP50-95`에서 선택되며, 해당 딕셔너리는 반환합니다. 포즈는 `fitness`나 `metrics/mAP50-95`를 반환하지 않으며; 트레이너는 대신 `best_metric_key`를 `metrics/keypoints_mAP50-95`로 설정합니다.
 
 ImageFolder 분류는 검증 정답에 있는 클래스의 평균을 구한 매크로 `metrics/precision`, `metrics/recall`, `metrics/f1`을 추가합니다. 기본 적합도는 top-1을 유지합니다. 탐지는 IoU 0.50에서 micro-F1을 최대화하는 임계값을 선택하여 `metrics/best_conf`, `metrics/best_conf_f1`도 반환하며, 클래스 이름을 키로 하는 임계값은 `metrics.box.best_conf_per_class`에 넣습니다. 점수가 같은 탐지는 함께 처리하며, 동률이면 더 높은 임계값을 선택합니다. 양수 F1이 없으면 0.0을 반환합니다. 분할은 이 임계값 키를 제공하지 않습니다.
+
+## 혼동 행렬
+
+탐지, 분할, 분류 결과는 `results.confusion_matrix`를 담습니다. 이는 플롯을 기록하든 하지 않든 모든 검증에서 계산되며, `matrix`는 `matrix[predicted, true]`로 인덱싱하는 정수 배열입니다.
+
+<code-tabs name="confusion" />
+
+탐지와 분할에서는 신뢰도 0.25, 또는 `conf`가 더 높으면 `conf` 이상의 예측을 IoU 0.5에서 IoU가 높은 순서로 클래스에 관계없이 정답 박스와 일대일로 짝지웁니다. 짝은 예측 클래스와 실제 클래스 기준으로 집계되므로, 위치는 맞지만 클래스가 틀린 박스는 대각선 밖에 놓입니다. 행렬에는 `background` 행과 열이 추가로 있습니다. 짝이 없는 정답은 `background` 행에, 짝이 없는 예측은 `background` 열에 집계됩니다. 분할은 마스크가 아니라 박스를 짝지웁니다. `classes=`를 쓰면 다른 클래스의 정답은 제외됩니다.
+
+COCO crowd 영역(`iscrowd=1`)은 mAP가 적용하는 규칙을 따릅니다. 같은 클래스의 정답과 짝이 되지 않았고 같은 클래스 crowd 영역 안에 절반 이상(예측 자신의 면적에 대한 교집합 기준) 놓인 예측은 집계되지 않고 무시됩니다. `box.image_metrics`와 `visualize=True` 이미지도 같은 임계값과 같은 crowd 규칙을 사용합니다. YOLO 형식 레이블에는 crowd 영역이 없습니다.
+
+분류에서는 각 이미지를 top-1 클래스와 레이블 기준으로 한 번 집계하며 `background`는 없습니다.
+
+| 메서드 | 반환값 |
+|---|---|
+| `summary(normalize=False)` | 예측 클래스마다 `{"Predicted": name, <true class>: value}` 형태의 딕셔너리 하나. `normalize`를 쓰면 각 실제 클래스의 비율 |
+| `to_csv()`, `to_json()` | 요약을 CSV 또는 JSON 텍스트로 |
+| `to_df()` | 요약을 Polars DataFrame으로. `pip install polars` 필요 |
+| `tp_fp()` | 클래스별 참양성(대각선)과 거짓양성(예측 행의 나머지) |
+| `nonzero()` | 채워진 셀을 정렬된 `(predicted, true, count)` 배열로 |
+| `class_accuracy()` | 클래스마다 그 인스턴스 중 해당 클래스로 분류된 비율. 탐지에서는 찾아낸 객체만 대상 |
+| `plot(normalize=True, save_dir="")` | `confusion_matrix_normalized.png`를, `normalize=False`이면 `confusion_matrix.png`를 기록하고 경로를 반환 |
+
+클래스가 2,000개를 넘으면 조밀 분류 행렬을 만들지 않습니다. `matrix`, `summary()`, `to_*()` 내보내기, `plot()`은 예외를 발생시키지만 `tp_fp()`, `nonzero()`, `class_accuracy()`는 계속 동작합니다.
+
+이 클래스는 `libreyolo.validation.ConfusionMatrix`이며 `ConfusionMatrix(nc, iou_thres=0.5, conf_thres=0.25, *, names=None, task="detect")`로 만들고, `task`는 `"detect"` 또는 `"classify"`입니다.
+
+## 클래스별 정밀도, 재현율, F1
+
+탐지와 분할 결과는 IoU 0.5에서 매칭한 신뢰도 임계값별 클래스의 정밀도, 재현율, F1을 담습니다.
+
+<code-tabs name="curves" />
+
+`box.px`는 `[0, 1]`에 걸쳐 균등하게 배치된 1000개의 신뢰도를 담습니다. `box.p_curve`, `box.r_curve`, `box.f1_curve`는 `(classes, 1000)` 배열이며, `box.ap_class_index`의 항목마다 한 행입니다. `box.ap_class_index`는 분할에 정답이 있는 클래스 인덱스를 오름차순으로 나열한 것입니다. `box.p`, `box.r`, `box.f1`은 그 클래스들에 대한 평균 F1을 최대화하는 신뢰도에서의 클래스별 값입니다. 분할도 이 모두를 박스로 계산합니다. 실행에서 곡선이 만들어지지 않았다면 빈 배열입니다.
+
+## 이미지별 바운딩 박스 지표
+
+탐지 및 분할 결과는 딕셔너리 호환성을 유지하며 `results.box.image_metrics`도 제공합니다. 각 파일 이름은 시각화를 끈 경우에도 시각화 매칭 규칙으로 계산한 `precision`, `recall`, `f1`, `tp`, `fp`, `fn`에 매핑됩니다. 분할도 여기서는 바운딩 박스를 셉니다. 기본 파일 이름이 중복되면 첫 번째 이후부터 전체 경로를 사용합니다. 분모가 0이면 0.0을 반환합니다. 이 기록은 분산 랭크 사이에서 수집하지 않습니다.
 
 ## 속도 키
 
@@ -192,7 +262,7 @@ FOMO는 아무것도 바꾸지 않는 예외입니다: 그 검증자는 항상 �
 
 `save_json=True`는 탐지를 위해 `predictions.json`를 작성하고, 분할을 위해 `predictions_bbox.json`와 `predictions_masks.json`를 작성합니다. OBB는 이를 지원하지 않으며 그렇게 말합니다.
 
-`save_plots=True`는 `plots/` 하위 디렉토리에 작성합니다. 탐지에서는 OpenCV가 설치된 경우 `box_metrics.png`, 클래스별 AP 및 리콜 차트, 정밀도-재현율 및 신뢰도 곡선, 혼동 행렬, 주석이 달린 샘플 이미지를 가져옵니다. 분할(segmentation)은 각 항목의 마스크 측 사본을 추가하며, 포즈(pose)는 자체 메트릭 및 곡선 세트를 가져옵니다. 다른 검증기는 플롯을 구현하지 않습니다. 분류, 의미론적, 파노라마, 깊이, 노멀, 엣지, 복원, 매트, OCR, OBB 및 포인트는 모두 해당 위치에 아무것도 작성하지 않습니다. 플로팅 실패는 경고만 하며 실행을 절대 중단하지 않습니다.
+`save_plots=True` 또는 그 별칭 `plots=True`는 `plots/` 하위 디렉토리에 작성하며 matplotlib이 필요한데, `pip install "libreyolo[plots]"`가 이를 설치합니다. 탐지에서는 `box_metrics.png`, 클래스별 AP 및 리콜 차트, 정밀도-재현율 및 신뢰도 곡선, `f1_conf_box.png`의 클래스별 F1 곡선, 개수로 된 `confusion_matrix.png`와 각 실제 클래스의 비율로 된 `confusion_matrix_normalized.png`의 혼동 행렬, 그리고 OpenCV가 설치된 경우 주석이 달린 샘플 이미지를 가져옵니다. 분할(segmentation)은 지표 차트, 클래스별 차트, 정밀도-재현율 및 신뢰도 곡선의 마스크 측 사본을 추가하며, F1 곡선과 혼동 행렬은 박스 수준으로 유지됩니다. 포즈(pose)는 자체 메트릭 및 곡선 세트를 가져옵니다. 분류는 클래스가 2,000개를 넘는 경우를 제외하고 두 혼동 행렬 파일을 기록합니다. 다른 검증기는 플롯을 구현하지 않습니다. 의미론적, 파노라마, 깊이, 노멀, 엣지, 복원, 매트, OCR, OBB 및 포인트는 모두 해당 위치에 아무것도 작성하지 않습니다. 플로팅 실패는 경고만 하며 실행을 절대 중단하지 않습니다.
 
 `visualize=True`는 탐지와 분할에서 클래스를 고려한 바운딩 박스 TP/FP/FN 이미지를, ImageFolder 분류에서는 레이블과 top-1을 비교하는 이미지를 `visualize/errors/`와 `visualize/correct/`에 저장합니다. 매칭은 IoU 0.5와 신뢰도 `max(0.25, conf)`를 사용합니다. 기본값은 `visualize=False`, `show_labels=True`, `show_conf=True`입니다. 지원하지 않는 작업과 V-JEPA 2 클립 검증은 시각화를 거부합니다.
 
@@ -207,7 +277,3 @@ FOMO는 아무것도 바꾸지 않는 예외입니다: 그 검증자는 항상 �
 ## 관련된
 
 - [데이터셋](/docs/train/datasets)은 분할 키와 포맷 검증기를 읽습니다.
-
-## 이미지별 바운딩 박스 지표
-
-탐지 및 분할 결과는 딕셔너리 호환성을 유지하며 `results.box.image_metrics`도 제공합니다. 각 파일 이름은 시각화를 끈 경우에도 시각화 매칭 규칙으로 계산한 `precision`, `recall`, `f1`, `tp`, `fp`, `fn`에 매핑됩니다. 분할도 여기서는 바운딩 박스를 셉니다. 기본 파일 이름이 중복되면 첫 번째 이후부터 전체 경로를 사용합니다. 분모가 0이면 0.0을 반환합니다. 이 기록은 분산 랭크 사이에서 수집하지 않습니다.

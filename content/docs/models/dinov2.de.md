@@ -21,7 +21,7 @@ keywords:
   - bild embeddings
   - feature extraktion
   - meta ai dinov2
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Semantisch
@@ -159,7 +159,7 @@ snippets:
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
 
         result = model(SAMPLE_IMAGE)
-source_hash: "c89a9662d03fe6f7"
+source_hash: d6fa949f75a548c8
 ---
 
 ## Installation
@@ -171,6 +171,9 @@ Daher ist dasselbe Zusatzpaket erforderlich.
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Ohne dieses Paket bricht das Laden eines DINOv2-Checkpoints oder Modellnamens mit
+einem Fehler ab, der diese Installationszeile nennt.
 
 ## Vorhersage
 

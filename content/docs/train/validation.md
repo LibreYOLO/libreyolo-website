@@ -13,6 +13,8 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
+  - confusion matrix
+  - class-agnostic nms
 last_verified: "1.6.0"
 snippets:
   val:
@@ -56,6 +58,32 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
+  confusion:
+    - label: Confusion matrix
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        cm = metrics.confusion_matrix
+        print(cm.matrix.shape)      # (81, 81): 80 classes plus background
+        print(cm.class_accuracy())  # class name: share of found objects given that class
+        tp, fp = cm.tp_fp()
+  curves:
+    - label: Per-class curves
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        box = metrics.box
+        print(box.px.shape, box.f1_curve.shape)  # (1000,) and (classes, 1000)
+        for index, f1 in zip(box.ap_class_index, box.f1):
+            print(model.names[int(index)], round(float(f1), 3))
 ---
 
 ## Run a validation
@@ -64,8 +92,10 @@ snippets:
 
 <code-tabs name="val" />
 
-The return value is a `dict[str, float]`. Every key is literal, so read it
-by name rather than by position.
+The return value is a flat `dict` of metric keys to numbers. Every key is
+literal, so read it by name rather than by position. For detect, segment and
+classify it is a `dict` subclass that also carries per-class results as
+attributes, described below.
 
 The main arguments are `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 `workers`, `device`, `augment`, `save_json` and `verbose`. `conf` defaults to
@@ -76,8 +106,23 @@ and nothing else. Without `data`, a trained checkpoint validates on the dataset
 it was trained on; released weights carry none and need `data=`.
 
 Any other field of the validation config passes through as a keyword argument,
-including `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`
-and `save_plots`.
+including `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`,
+`save_plots`, `single_cls` and `agnostic_nms`. With `half=True` on CUDA,
+validation runs under autocast in `amp_dtype`, and bfloat16 outputs are cast to
+float32 before postprocessing; training with `amp_dtype="bfloat16"` validates
+the same way.
+
+`agnostic_nms=True` keeps only the highest-scoring box among boxes that overlap
+above `iou`, whatever their classes. It runs on the family's finished
+detections, after `classes=`, so mAP, the confusion matrix, the curves and the
+per-image counts all score the same boxes. It covers detect and segment, and
+any other task raises `ValueError`. The predict side is in
+[Thresholds and filtering](/docs/predict/thresholds).
+
+`single_cls=True` scores detection as one class. The ground truth is collapsed
+to class 0, and the model's detections are kept to `classes=` in the model's
+own label space, then relabelled 0, so a checkpoint trained on several classes
+is scored as a one-class detector.
 
 ## Metric keys per task
 
@@ -129,6 +174,8 @@ convention as `(B)` and `(M)` above.
 
 `accuracy_top5` is really top-`min(5, num_classes)`, so on a three-class dataset
 it is top-3, which every sample satisfies and which therefore reads 1.0.
+Classification results also expose the two values as the attributes `top1` and
+`top5`, next to `confusion_matrix`.
 
 The point task's sweep key is built from the distance thresholds, so with the
 defaults it reads `metrics/mAP@[0.01:0.10]` and the single-threshold key reads
@@ -141,6 +188,69 @@ return. Pose returns neither `fitness` nor `metrics/mAP50-95`; its trainers
 set `best_metric_key` to `metrics/keypoints_mAP50-95` instead.
 
 ImageFolder classification adds macro `metrics/precision`, `metrics/recall` and `metrics/f1`, averaged over classes present in validation targets. Top-1 remains default fitness. Detection also returns `metrics/best_conf` and `metrics/best_conf_f1`, choosing the micro-F1-optimal threshold at IoU 0.50, and puts class-name-keyed thresholds on `metrics.box.best_conf_per_class`. Equal-score detections stay grouped; ties choose the higher threshold. No positive F1 yields 0.0. Segmentation does not expose these threshold keys.
+
+## Confusion matrix
+
+Detect, segment and classify results carry `results.confusion_matrix`. It is
+computed on every validation, whether or not plots are written, and its
+`matrix` is an integer array indexed `matrix[predicted, true]`.
+
+<code-tabs name="confusion" />
+
+For detect and segment, predictions at confidence 0.25, or `conf` if higher,
+are paired one to one with ground-truth boxes of any class at IoU 0.5, highest
+IoU first. A pair counts at its predicted and true class, so a well-placed box
+with the wrong class lands off the diagonal. The matrix has an extra
+`background` row and column: an unpaired ground truth counts in the
+`background` row, an unpaired prediction in the `background` column.
+Segmentation pairs boxes, not masks. With `classes=`, ground truth of the other
+classes is left out.
+
+COCO crowd regions (`iscrowd=1`) follow the rule mAP applies. A prediction that
+no ground truth of its class matched, lying at least half inside a same-class
+crowd region (intersection over the prediction's own area), is ignored rather
+than counted. `box.image_metrics` and the `visualize=True` images use the same
+thresholds and the same crowd rule. YOLO-format labels have no crowd regions.
+
+For classify, each image counts once, at its top-1 class against its label,
+and there is no `background`.
+
+| Method | Returns |
+|---|---|
+| `summary(normalize=False)` | One dict per predicted class, `{"Predicted": name, <true class>: value}`; with `normalize`, shares of each true class |
+| `to_csv()`, `to_json()` | The summary as CSV or JSON text |
+| `to_df()` | The summary as a Polars DataFrame; needs `pip install polars` |
+| `tp_fp()` | Per-class true positives (the diagonal) and false positives (the rest of the predicted row) |
+| `nonzero()` | The filled cells as aligned `(predicted, true, count)` arrays |
+| `class_accuracy()` | Per class, the share of its instances given that class; for detection, of its found objects only |
+| `plot(normalize=True, save_dir="")` | Writes `confusion_matrix_normalized.png`, or `confusion_matrix.png` with `normalize=False`, and returns the path |
+
+Above 2,000 classes the dense classification matrix is not built: `matrix`,
+`summary()`, the `to_*()` exports and `plot()` raise, while `tp_fp()`,
+`nonzero()` and `class_accuracy()` still work.
+
+The class is `libreyolo.validation.ConfusionMatrix`, built as
+`ConfusionMatrix(nc, iou_thres=0.5, conf_thres=0.25, *, names=None, task="detect")`,
+where `task` is `"detect"` or `"classify"`.
+
+## Per-class precision, recall and F1
+
+Detect and segment results carry each class's precision, recall and F1 across
+confidence thresholds, matched at IoU 0.5.
+
+<code-tabs name="curves" />
+
+`box.px` holds the 1000 confidences, evenly spaced over `[0, 1]`.
+`box.p_curve`, `box.r_curve` and `box.f1_curve` are `(classes, 1000)` arrays,
+one row per entry of `box.ap_class_index`, the class indices that have ground
+truth in the split, in ascending order. `box.p`, `box.r` and `box.f1` are the
+per-class values at the confidence that maximizes the mean F1 over those
+classes. Segmentation computes all of them from boxes. They are empty arrays
+when the run produced no curves.
+
+## Per-image box metrics
+
+Detection and segmentation results stay dictionary-compatible and also expose `results.box.image_metrics`. Each filename maps to `precision`, `recall`, `f1`, `tp`, `fp` and `fn` using the visualization matching rule even when visualization is off. Segmentation counts boxes here. Duplicate basenames use full paths after the first occurrence. Zero denominators yield 0.0. These records are not gathered across distributed ranks.
 
 ## Speed keys
 
@@ -245,11 +355,17 @@ incremented suffix unless `exist_ok=True`.
 `predictions_bbox.json` plus `predictions_masks.json` for segmentation. OBB does
 not support it and says so.
 
-`save_plots=True` writes into a `plots/` subdirectory. Detection gets
-`box_metrics.png`, per-class AP and recall charts, precision-recall and
-confidence curves, a confusion matrix, and annotated sample images when OpenCV is
-installed. Segmentation adds the mask-side copies of each, and pose gets its own
-metric and curve set. The other validators do not implement plots; classification,
+`save_plots=True`, or its alias `plots=True`, writes into a `plots/`
+subdirectory and needs matplotlib, which `pip install "libreyolo[plots]"`
+installs. Detection gets `box_metrics.png`, per-class AP and recall charts,
+precision-recall and confidence curves, the per-class F1 curves in
+`f1_conf_box.png`, the confusion matrix as counts in `confusion_matrix.png` and
+as shares of each true class in `confusion_matrix_normalized.png`, and annotated
+sample images when OpenCV is installed. Segmentation adds mask-side copies of
+the metric chart, the per-class charts and the precision-recall and confidence
+curves; the F1 curves and the confusion matrix stay box-level. Pose gets its own
+metric and curve set. Classification writes the two confusion matrix files,
+except above 2,000 classes. The other validators do not implement plots;
 semantic, panoptic, depth, normal, edge, restore, matte, OCR, OBB and point all
 write nothing there. A plotting failure warns and never aborts the run.
 
@@ -273,7 +389,3 @@ where the numbers go.
 ## Related
 
 - [Datasets](/docs/train/datasets) for the split keys and formats validators read.
-
-## Per-image box metrics
-
-Detection and segmentation results stay dictionary-compatible and also expose `results.box.image_metrics`. Each filename maps to `precision`, `recall`, `f1`, `tp`, `fp` and `fn` using the visualization matching rule even when visualization is off. Segmentation counts boxes here. Duplicate basenames use full paths after the first occurrence. Zero denominators yield 0.0. These records are not gathered across distributed ranks.

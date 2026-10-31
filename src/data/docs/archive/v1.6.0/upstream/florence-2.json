@@ -1,0 +1,12 @@
+{
+  "name": "Florence-2",
+  "org": "Microsoft",
+  "paper_title": "Florence-2: Advancing a Unified Representation for a Variety of Vision Tasks",
+  "paper_url": "https://arxiv.org/abs/2311.06242",
+  "code_url": "https://huggingface.co/microsoft/Florence-2-large",
+  "license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products, provided the copyright notice and license text travel with any copy you redistribute. LibreYOLO downloads the florence-community re-upload of the checkpoint (florence-community/Florence-2-base and florence-community/Florence-2-large) rather than the original microsoft/Florence-2-* repositories, because those ship with custom remote code that no longer loads on current transformers releases. florence-community republishes the same weights through the native Florence2ForConditionalGeneration class, also under MIT, so nothing about the license changes.",
+  "bibtex": "@article{xiao2023florence,\n  title={Florence-2: Advancing a unified representation for a variety of vision tasks},\n  author={Xiao, Bin and Wu, Haiping and Xu, Weijian and Dai, Xiyang and Hu, Houdong and Lu, Yumao and Zeng, Michael and Liu, Ce and Yuan, Lu},\n  journal={arXiv preprint arXiv:2311.06242},\n  year={2023}\n}",
+  "bibtex_source_url": "https://huggingface.co/microsoft/Florence-2-large#bibtex",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the microsoft/Florence-2-large model card (the florence-community re-upload used by LibreYOLO carries the identical block). Cross-checked against the arXiv API for 2311.06242: the same nine authors in the same order, matching title, dated 2023-11-10, no journal-ref, so the @article form the authors publish still matches the record."
+}

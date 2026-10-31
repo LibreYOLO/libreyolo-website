@@ -43,7 +43,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: a0446a47e0f89b27
+source_hash: 587851b0988347c3
 ---
 
 ## Synopsis
@@ -67,6 +67,7 @@ Argumente sind `key=value`-Paare, und die POSIX-Form funktioniert ebenfalls,
 | `imgsz` | | Bildgröße: `640` (quadratisch) oder `480x640` (Höhe x Breite). Ohne Angabe die eigene Eingabegröße des Modells |
 | `conf` | `0.001` | Confidence-Schwellenwert |
 | `iou` | `0.6` | NMS-IoU-Schwellenwert |
+| `agnostic_nms` | `false` | Klassenunabhängige NMS: Von Boxen, die sich oberhalb von `iou` überlappen, bleibt nur die mit dem höchsten Score, unabhängig von ihren Klassen. Nur Detect und Segment |
 | `max_det` | `300` | Maximale Anzahl Vorhersagen pro Bild nach der NMS |
 | `eval_max_det` | | Obergrenze des COCO-Evaluators. Ohne Angabe die AP@100-Konvention von pycocotools |
 | `faster_coco_eval` | `true` | Nutzt das C++-Backend faster-coco-eval für die COCO-Metriken, wenn installiert; sonst fällt es auf pycocotools zurück |

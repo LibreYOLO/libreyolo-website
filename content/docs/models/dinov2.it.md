@@ -155,7 +155,7 @@ snippets:
         # task, qui LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## Installazione
@@ -167,6 +167,9 @@ richiede lo stesso extra.
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Senza di esso, caricare un checkpoint o un nome di modello DINOv2 si ferma con un
+errore che indica questa riga di installazione.
 
 ## Predizione
 

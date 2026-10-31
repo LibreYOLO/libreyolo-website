@@ -121,7 +121,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## Installation
@@ -171,7 +171,8 @@ SegFormer-Veröffentlichung: AdamW mit einer Basislernrate für das Backbone und
 einer zehnmal höheren Rate für den Decode-Head, Weight Decay überall außer
 LayerNorm und der Positionsfaltung im Mix-FFN sowie ein linearer Abfallplan mit
 Warmup. Die vollständige Konvergenz der größeren Größen b3 bis b5 wurde nicht
-validiert.
+validiert. `libreyolo train` startet mit demselben Rezept, und ohne `name=`
+landen die Läufe in `runs/train/segformer_exp`.
 
 Unter [Training](/docs/train) findest du Datensätze, Datenaugmentierung,
 Multi-GPU und Logger.

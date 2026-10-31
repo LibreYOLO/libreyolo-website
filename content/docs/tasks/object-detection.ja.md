@@ -79,12 +79,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val()はオブジェクトではなく通常のdictを返す
+        # metrics/キーのdictで、クラスごとの結果を属性として保持
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -112,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## 定義
@@ -131,7 +132,7 @@ source_hash: 01ee5ee9eea3b569
 
 Darknet系統の[YOLOv1](/docs/models/yolov1)、[YOLOv2](/docs/models/yolov2)、[YOLOv3](/docs/models/yolov3)、[YOLOv4](/docs/models/yolov4)は、固定された展示物として維持されています。推論、検証、エクスポートは機能しますが、学習はできません。
 
-別のグループはチェックポイントではなく実行時にクラスリストを受け取るため、学習時に見たことのない名前も検出できます。[Grounding DINO](/docs/models/grounding-dino)、[OWLv2](/docs/models/owlv2)、[OMDet-Turbo](/docs/models/omdet-turbo)、[OV-DEIM](/docs/models/ov-deim)に加え、Vision-Languageファミリーの[Florence-2](/docs/models/florence-2)、[Kosmos-2](/docs/models/kosmos-2)、[Qwen3-VL](/docs/models/qwen3-vl)、[SmolVLM2](/docs/models/smolvlm2)、[InternVL3](/docs/models/internvl3)、[LFM2-VL](/docs/models/lfm2-vl)、[Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream)、[North Micro Vision](/docs/models/northmicrovision)、[LocateAnything](/docs/models/locate-anything)、[SenseNova-Vision](/docs/models/sensenova-vision)、[LibreMODUS](/docs/models/libremodus)です。これらは固有のファクトリと追加パッケージを通して読み込まれます。正確な呼び出しは各モデルページに記載されています。
+別のグループはチェックポイントではなく実行時にクラスリストを受け取るため、学習時に見たことのない名前も検出できます。[Grounding DINO](/docs/models/grounding-dino)、[OWLv2](/docs/models/owlv2)、[OMDet-Turbo](/docs/models/omdet-turbo)、[OV-DEIM](/docs/models/ov-deim)に加え、Vision-Languageファミリーの[Florence-2](/docs/models/florence-2)、[Kosmos-2](/docs/models/kosmos-2)、[Qwen3-VL](/docs/models/qwen3-vl)、[SmolVLM2](/docs/models/smolvlm2)、[InternVL3](/docs/models/internvl3)、[LFM2-VL](/docs/models/lfm2-vl)、[Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream)、[North Micro Vision](/docs/models/northmicrovision)、[LocateAnything](/docs/models/locate-anything)、[SenseNova-Vision](/docs/models/sensenova-vision)、[WeVisOne-VL](/docs/models/wevisone-vl)、[LibreMODUS](/docs/models/libremodus)です。これらは固有のファクトリと追加パッケージを通して読み込まれます。正確な呼び出しは各モデルページに記載されています。
 
 [PP-YOLOE](/docs/models/ppyoloe)と[TinyFormer](/docs/models/tinyformer)も物体検出の学習に対応します。
 
@@ -141,7 +142,7 @@ Darknet系統の[YOLOv1](/docs/models/yolov1)、[YOLOv2](/docs/models/yolov2)、
 
 <code-tabs name="predict" />
 
-`conf`は信頼度のしきい値、`max_det`は行数の上限です。`iou`はNMSのしきい値なので、NMSを実行するファミリーだけに影響します。RF-DETRとエンドツーエンドYOLOv9ヘッドは固定された予測集合をデコードするため、これを無視します。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+`conf`は信頼度のしきい値、`max_det`は行数の上限です。`iou`はNMSのしきい値なので、NMSを実行するファミリーだけに影響します。RF-DETRとエンドツーエンドYOLOv9ヘッドは固定された予測集合をデコードするため、これを無視します。`agnostic_nms=True`は`iou`でクラスに依存しない抑制ステップを追加し、これはこの2つにも適用されます。[しきい値とフィルタリング](/docs/predict/thresholds#agnostic_nms)を参照してください。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## データセット形式
 
@@ -189,13 +190,15 @@ names:
 
 ## 検証
 
-`val()`は、データセットYAMLの`val`で指定した分割に対してCOCO評価で計算した`metrics/`キーを持つ通常の辞書を返します。
+`val()`は、データセットYAMLの`val`で指定した分割に対してCOCO評価で計算した`metrics/`キーを持つ辞書を返し、クラスごとの結果を属性として付加します。
 
 <code-tabs name="val" />
 
 `metrics/mAP50-95`はIoUしきい値0.50から0.95までで平均した平均適合率で、主要な数値です。`metrics/mAP50`と`metrics/mAP75`は単一しきい値版です。`metrics/mAP_small`、`metrics/mAP_medium`、`metrics/mAP_large`は同じ平均を物体面積別に分けます。`metrics/AR1`、`metrics/AR10`、`metrics/AR100`、`metrics/AR_small`、`metrics/AR_medium`、`metrics/AR_large`は対応する平均再現率です。`metrics/AR_max_det`と`metrics/max_det`には実行時に使った検出上限が記録されます。
 
 このタスクの`metrics/precision`と`metrics/recall`は注意して解釈してください。後方互換性のために維持された別名であり、ある運用点の値ではありません。`metrics/precision`は`metrics/mAP50-95`と同じ値を、`metrics/recall`は`metrics/AR100`と同じ値を保持します。適合率と再現率のペアとして描画すると同じ数値を二重に報告することになります。モデルがマスクも予測する場合でも検出キーを同じように読めるよう、4つのキーはボックスを表す`(B)`接尾辞付きでも繰り返されます。`metrics/mAP50-95(B)`、`metrics/mAP50(B)`、`metrics/precision(B)`、`metrics/recall(B)`です。
+
+結果には、`background`の行と列を持ち`matrix[predicted, true]`でインデックスする`confusion_matrix`と、`box`上の信頼度ごとのクラス別の適合率、再現率、F1も含まれます：`box.px`、`box.p_curve`、`box.r_curve`、`box.f1_curve`で、`box.ap_class_index`のクラスごとに1行です。[検証と指標](/docs/train/validation#confusion-matrix)で、`val(agnostic_nms=True)`とあわせて両方を説明しています。
 
 ## エクスポート
 

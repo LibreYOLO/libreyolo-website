@@ -83,12 +83,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val()는 객체가 아니라 일반 딕셔너리를 반환합니다.
+        # metrics/ 키의 딕셔너리이며, 클래스별 결과는 속성으로 제공됩니다.
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -116,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## 정의
@@ -135,7 +136,7 @@ source_hash: 01ee5ee9eea3b569
 
 다크넷 계열, [YOLOv1](/docs/models/yolov1), [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) 및 [YOLOv4](/docs/models/yolov4)는 냉동된 전시물처럼 유지됩니다: 예측, 검증 및 내보내기는 가능하지만, 학습은 되지 않습니다.
 
-별도의 그룹은 체크포인트에서 가져오는 대신 실행 시점에 클래스 목록을 가져오므로 학습에서 한 번도 본 적 없는 이름도 탐지합니다: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) 및 [OV-DEIM](/docs/models/ov-deim), 그리고 비전-언어 계열 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) 및 [LibreMODUS](/docs/models/libremodus). 이들은 자체 팩토리과 추가 항목을 통해 로드되며; 각 모델 페이지는 정확한 호출을 포함합니다.
+별도의 그룹은 체크포인트에서 가져오는 대신 실행 시점에 클래스 목록을 가져오므로 학습에서 한 번도 본 적 없는 이름도 탐지합니다: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) 및 [OV-DEIM](/docs/models/ov-deim), 그리고 비전-언어 계열 [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision), [WeVisOne-VL](/docs/models/wevisone-vl) 및 [LibreMODUS](/docs/models/libremodus). 이들은 자체 팩토리과 추가 항목을 통해 로드되며; 각 모델 페이지는 정확한 호출을 포함합니다.
 
 [PP-YOLOE](/docs/models/ppyoloe)와 [TinyFormer](/docs/models/tinyformer)도 탐지 학습을 지원합니다.
 
@@ -145,7 +146,7 @@ source_hash: 01ee5ee9eea3b569
 
 <code-tabs name="predict" />
 
-`conf`는 신뢰도 임계값을 설정하고 `max_det`는 행의 수를 제한합니다. `iou`는 NMS 임계값으로, NMS를 실행하는 계열에만 영향을 미칩니다. RF-DETR와 end-to-end YOLOv9 헤드는 고정된 예측을 디코딩하고 이를 무시합니다. 소스, 스트리밍 및 결과 처리는 [prediction](/docs/predict)를 참조하십시오.
+`conf`는 신뢰도 임계값을 설정하고 `max_det`는 행의 수를 제한합니다. `iou`는 NMS 임계값으로, NMS를 실행하는 계열에만 영향을 미칩니다. RF-DETR와 end-to-end YOLOv9 헤드는 고정된 예측을 디코딩하고 이를 무시합니다. `agnostic_nms=True`는 `iou`에서 클래스를 구분하지 않는 억제 단계를 추가하며, 이 둘에도 적용됩니다. [임계값과 필터링](/docs/predict/thresholds#agnostic_nms)을 참조하십시오. 소스, 스트리밍 및 결과 처리는 [prediction](/docs/predict)를 참조하십시오.
 
 ## 데이터셋 형식
 
@@ -193,13 +194,15 @@ names:
 
 ## 검증
 
-`val()`는 데이터셋 YAML에서 `val`로 명명된 분할에 대해 COCO 평가로 계산된 `metrics/` 키의 일반 딕셔너리를 반환합니다.
+`val()`는 데이터셋 YAML에서 `val`로 명명된 분할에 대해 COCO 평가로 계산된 `metrics/` 키의 딕셔너리를 반환하며, 클래스별 결과가 속성으로 붙어 있습니다.
 
 <code-tabs name="val" />
 
 `metrics/mAP50-95`는 IoU 임계값 0.50에서 0.95까지 평균한 평균 정밀도를 의미하며, 주요 지표입니다. `metrics/mAP50`와 `metrics/mAP75`는 단일 임계값 버전입니다. `metrics/mAP_small`, `metrics/mAP_medium`, `metrics/mAP_large`는 동일한 평균을 객체 크기별로 나눈 것이며, `metrics/AR1`, `metrics/AR10`, `metrics/AR100`, `metrics/AR_small`, `metrics/AR_medium`, `metrics/AR_large`는 매칭 평균 재현율 수치입니다. `metrics/AR_max_det`와 `metrics/max_det`는 실행에서 사용된 검출 상한값을 기록합니다.
 
 이 작업에서 `metrics/precision`와 `metrics/recall`을 주의 깊게 읽으십시오. 이들은 이전 호환성을 위해 유지되며 별칭일 뿐, 작동 포인트가 아닙니다: `metrics/precision`는 `metrics/mAP50-95`와 동일한 값을 가지며, `metrics/recall`는 `metrics/AR100`와 동일한 값을 가집니다. 이를 정밀도-재현율 쌍으로 표시하면 하나의 숫자가 두 번 보고됩니다. 또한 `(B)` 접미사 아래 네 개의 키가 상자용으로 반복되어, 마스크도 예측하는 모델에서 탐지 키가 동일하게 읽히도록 합니다: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`, `metrics/precision(B)` 및 `metrics/recall(B)`.
+
+결과는 `background` 행과 열이 있고 `matrix[predicted, true]`로 인덱싱하는 `confusion_matrix`와, `box`에서 신뢰도에 따른 클래스별 정밀도, 재현율, F1도 담습니다: `box.px`, `box.p_curve`, `box.r_curve`, `box.f1_curve`이며, `box.ap_class_index`의 클래스마다 한 행입니다. [검증과 지표](/docs/train/validation#confusion-matrix)가 `val(agnostic_nms=True)`와 함께 이 둘을 다룹니다.
 
 ## 내보내기
 

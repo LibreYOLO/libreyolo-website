@@ -146,7 +146,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Definizione
@@ -194,9 +194,10 @@ restituisce la maschera. [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2),
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
 [EdgeTAM](/docs/models/edgetam) e [PicoSAM3](/docs/models/picosam3) funzionano
 così, come pure [SenseNova-Vision](/docs/models/sensenova-vision), la cui
-segmentazione è referring: prende una frase che nomina un solo oggetto. Si
-caricano tramite la propria factory e i propri extra, e la pagina di ogni
-modello riporta la chiamata esatta.
+segmentazione è referring: prende una frase che nomina un solo oggetto.
+[WeVisOne-VL](/docs/models/wevisone-vl) segmenta ogni frase data in `names=` e
+restituisce box più maschere binarie. Si caricano tramite la propria factory e i
+propri extra, e la pagina di ogni modello riporta la chiamata esatta.
 
 ## Predizione
 
@@ -206,8 +207,8 @@ cache locale.
 <code-tabs name="predict" />
 
 `conf` e `max_det` modellano l'output nello stesso modo in cui lo fanno per il
-rilevamento, e le maschere vengono filtrate insieme ai box a cui appartengono.
-Vedi [predizione](/docs/predict) per le sorgenti, lo streaming e la gestione dei
+rilevamento, e le maschere vengono filtrate insieme ai box a cui appartengono, anche da
+`agnostic_nms=True`. Vedi [predizione](/docs/predict) per le sorgenti, lo streaming e la gestione dei
 risultati.
 
 ## Formato del dataset
@@ -268,9 +269,11 @@ addestrata, ed è il passaggio di `task=segment` ad autorizzare lo scambio. Vedi
 
 ## Validazione
 
-`val()` restituisce un semplice dizionario di chiavi `metrics/`. Box e maschere
-vengono valutati separatamente, entrambi con la valutazione COCO, e i numeri
-delle maschere sono quelli principali.
+`val()` restituisce un dizionario di chiavi `metrics/`. Box e maschere vengono
+valutati separatamente, entrambi con la valutazione COCO, e i numeri delle
+maschere sono quelli principali. Una riga di etichetta di soli box a cinque campi
+viene valutata come la sua maschera rettangolare, quella che l'addestramento di
+segment ne ricava.
 
 <code-tabs name="val" />
 
@@ -296,6 +299,11 @@ retrocompatibilità e sono alias, non un punto di lavoro:
 `metrics/recall(M)` lo stesso valore dell'AR delle maschere a 100 rilevamenti,
 con `(B)` che si comporta allo stesso modo per i box. Tracciare una coppia di
 queste chiavi significa riportare due volte lo stesso numero.
+
+Il risultato porta anche `confusion_matrix` e le curve di precisione, recall e F1
+per classe su `box`, entrambe calcolate dai box e non dalle maschere; vedi
+[Validazione e metriche](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` è supportato in questo task.
 
 ## Esportazione
 

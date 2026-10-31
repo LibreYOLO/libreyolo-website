@@ -114,7 +114,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## 安装
@@ -133,7 +133,7 @@ pip install libreyolo
 
 返回的 `Results` 对象和每个家族返回的都是同一个，所以换成另一个检测器只是一行的
 改动。`-seg` 文件名自己就能解析到 RTMDet-Ins 任务，此时 `result.masks` 会在检测框
-之外带上实例掩码。`conf` 设置置信度阈值，`iou` 设置 NMS 阈值。数据源、流式处理和
+之外带上实例掩码。`conf` 设置置信度阈值，`iou` 设置 NMS 阈值。`max_det` 对两个任务都按给定值生效，默认每张图最多 300 个检测框或掩码；MMDetection 的 RTMDet-Ins 测试配置保持 100，`max_det=100` 可以复现。数据源、流式处理和
 结果处理见[预测](/docs/predict)。
 
 ## 变体

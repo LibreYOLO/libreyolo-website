@@ -58,8 +58,8 @@ snippets:
         model.set_classes(["remote control", "school bus"])
 
 
-        # conf memfilter berdasarkan skor bounding box, text_threshold berdasarkan skor
-        token
+        # conf memfilter berdasarkan skor bounding box, text_threshold
+        berdasarkan skor token
 
         # frasa hasil decode. Default keduanya 0.25 jika tidak ditetapkan. Hanya
         Grounding
@@ -67,7 +67,7 @@ snippets:
         # DINO yang menerima text_threshold; lainnya memunculkan error.
 
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Definisi
@@ -138,7 +138,7 @@ Perbedaannya adalah penghasil bounding box: family halaman ini berupa detektor
 diskriminatif yang langsung menghasilkan skor, sedangkan tier VLM melakukan
 generasi.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), dan [North Micro Vision](/docs/models/northmicrovision) memperluas pilihan deteksi `LibreVLM`. [Molmo2](/docs/models/molmo2) mengembalikan titik. Gunakan [LibreGround](/docs/reference/ground-api) untuk kueri instruksi-ke-klik, bukan kosakata deteksi.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision), dan [WeVisOne-VL](/docs/models/wevisone-vl) memperluas pilihan deteksi `LibreVLM`. [Molmo2](/docs/models/molmo2) mengembalikan titik. Gunakan [LibreGround](/docs/reference/ground-api) untuk kueri instruksi-ke-klik, bukan kosakata deteksi.
 
 ## Prediksi
 

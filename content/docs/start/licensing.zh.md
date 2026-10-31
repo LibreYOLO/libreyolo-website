@@ -9,8 +9,8 @@ keywords:
   - 模型权重 非商用
   - 检查点许可证
   - apache-2.0 目标检测
-last_verified: "1.6.0"
-source_hash: 03e83b82bd2da258
+last_verified: 1.6.0
+source_hash: 3204f1f80370c85a
 ---
 
 ## LibreYOLO 自己的代码
@@ -20,8 +20,10 @@ source_hash: 03e83b82bd2da258
 保留版权行和许可证文本，义务到此为止。
 
 这份许可到代码为止。
-[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) 文件
-说得很直白：
+[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) 里只有
+MIT 文本，而
+[`NOTICE`](https://github.com/LibreYOLO/libreyolo/blob/release/NOTICE) 开头关于权重的
+说明说得很直白：
 
 > 那些许可证各不相同，也并非都是宽松许可：部分已发布的权重是非商用的，或者受到其他
 > 限制，本 MIT 许可证并不延伸到它们身上。选一个模型，就是选它的许可证。
@@ -44,7 +46,7 @@ BSD-3-Clause 覆盖所有派生自 torchvision 的部分：Faster R-CNN、Mask R
 RetinaNet、SSD300、AlexNet、VGG、FCN 和 DeepLabv3。
 
 MIT 覆盖的是更小的一组，包括旷视（Megvii）的 NAFNet、Xingyi Zhou 的 CenterNet，以及由
-原作者 Kin-Yiu Wong 和 Hao-Tang Tsui 在 MultimediaTechLab 重新发布的 YOLOv7。YOLOv1
+原作者 Kin-Yiu Wong 和 Hao-Tang Tsui 在 MultimediaTechLab 重新发布的 YOLOv7 和 YOLOv9。YOLOv9 的构建模块、YOLO9-E2E 和 YOLO9-P2 共用的检测 head 塔、PGI 分支以及 YOLOv9 的 mixup 混合都移植自这个 MIT 版本。YOLOv1
 到 YOLOv4 这几个家族复现的是 Darknet 项目里的架构，作者是 Joseph Redmon，YOLOv4 那部分
 则是 Alexey Bochkovskiy。Darknet 属于公有领域，所以它们完全不带任何义务。
 
@@ -91,7 +93,7 @@ SAM 3 使用 Meta 自定义 SAM License 下的受限上游快照。MiDaS s/l 和
 在每张模型卡上说明这个依据是推定出来的、而不是逐个检查点授予的，并重复 torchvision 自己的
 提醒：预训练模型的条款可能来自训练数据。
 
-ConvNeXt V2 和 LeVJEPA 预训练权重采用 CC-BY-NC-4.0。Moondream 3 使用 BSL 1.1，Dome-DETR 镜像仅限学术研究，EdgeCrafter `obj2coco` 变体和 DetAny3D 的权重带有限制性条款。各模型页面在代码许可旁列出这些声明。原始 EdgeCrafter COCO 检查点保留记录的 Apache-2.0 授权。MiDaS 镜像保留发布者的 MIT 授权。
+ConvNeXt V2 和 LeVJEPA 预训练权重采用 CC-BY-NC-4.0。Moondream 3 使用 BSL 1.1，Dome-DETR 镜像仅限学术研究，EdgeCrafter `obj2coco` 变体和 DetAny3D 的权重带有限制性条款。SANA-Sprint 自带的 Gemma 2 文本编码器仍适用 Google 的 Gemma 使用条款，Speridlabs Idol 从 `LibreYOLO/LibreDINOv3vith16plus` 镜像读取的 DINOv3 编码器仍适用 Meta 的 DINOv3 许可证。各模型页面在代码许可旁列出这些声明。原始 EdgeCrafter COCO 检查点保留记录的 Apache-2.0 授权。MiDaS 镜像保留发布者的 MIT 授权。
 
 权重摘要以检查点发布者声明的许可证为准。训练数据集名称不能确定额外的检查点许可。
 

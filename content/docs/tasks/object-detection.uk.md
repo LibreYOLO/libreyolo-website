@@ -84,17 +84,26 @@ snippets:
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() повертає звичайний словник, а не об'єкт.
+
+        # Словник ключів metrics/ із результатами для кожного класу як
+        атрибутами.
+
         metrics = model.val(data="coco128.yaml")
 
+
         print(metrics["metrics/mAP50-95"])
+
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
+
         print(metrics["metrics/AR100"])
+
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -122,7 +131,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## Визначення
@@ -186,7 +195,8 @@ RF-DETR потребує власного набору залежностей
 [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) і
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) і
 [LibreMODUS](/docs/models/libremodus). Вони завантажуються через власну фабрику
 та набори залежностей; точний виклик наведено на сторінці кожної моделі.
 
@@ -202,7 +212,10 @@ RF-DETR потребує власного набору залежностей
 `conf` задає поріг упевненості, а `max_det` обмежує кількість рядків. `iou` є
 порогом NMS, тому впливає лише на сімейства, які виконують NMS; RF-DETR і
 наскрізна голова YOLOv9 декодують фіксований набір передбачень та ігнорують
-його. Джерела, потокове оброблення й роботу з результатами описано в розділі
+його. `agnostic_nms=True` додає крок придушення без урахування класів із порогом
+`iou`, який застосовується і до цих двох; див.
+[пороги та фільтрування](/docs/predict/thresholds#agnostic_nms). Джерела,
+потокове оброблення й роботу з результатами описано в розділі
 [передбачення](/docs/predict).
 
 ## Формат датасету
@@ -266,8 +279,9 @@ names:
 
 ## Валідація
 
-`val()` повертає звичайний словник ключів `metrics/`, обчислених оцінюванням
-COCO на розбитті, яке названо `val` у YAML датасету.
+`val()` повертає словник ключів `metrics/`, обчислених оцінюванням COCO на
+розбитті, яке названо `val` у YAML датасету, з результатами для кожного класу,
+доданими як атрибути.
 
 <code-tabs name="val" />
 
@@ -288,6 +302,13 @@ COCO на розбитті, яке названо `val` у YAML датасету
 суфіксом `(B)` для рамок, щоб ключ виявлення однаково читався в моделі, яка
 також передбачає маски: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`,
 `metrics/precision(B)` і `metrics/recall(B)`.
+
+Результат також несе `confusion_matrix` з індексацією `matrix[predicted, true]`
+і рядком та стовпцем `background`, а також точність, повноту й F1 для кожного
+класу за різних значень впевненості в `box`: `box.px`, `box.p_curve`,
+`box.r_curve`, `box.f1_curve`, по одному рядку на клас у `box.ap_class_index`.
+Обидва описано в розділі [Валідація та метрики](/docs/train/validation#confusion-matrix),
+разом із `val(agnostic_nms=True)`.
 
 ## Експорт
 

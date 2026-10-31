@@ -144,7 +144,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Definisi
@@ -189,9 +189,10 @@ kotak atau frase memilih objek, dan model mengembalikan masknya.
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
 [EdgeTAM](/docs/models/edgetam) dan [PicoSAM3](/docs/models/picosam3) bekerja seperti ini
 , begitu juga dengan [SenseNova-Vision](/docs/models/sensenova-vision), yang
-segmentasinya dirujuk: itu mengambil frase yang menamai satu objek. Mereka memuat
-melalui pabrik mereka sendiri dan tambahan, dan setiap halaman model membawa panggilan
-yang tepat.
+segmentasinya dirujuk: itu mengambil frase yang menamai satu objek.
+[WeVisOne-VL](/docs/models/wevisone-vl) menyegmentasi setiap frasa yang diberikan di
+`names=` dan mengembalikan kotak beserta mask biner. Mereka memuat melalui pabrik
+mereka sendiri dan tambahan, dan setiap halaman model membawa panggilan yang tepat.
 
 ## Prediksi
 
@@ -200,7 +201,8 @@ Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan dalam cache
 <code-tabs name="predict" />
 
 `conf` dan `max_det` membentuk output dengan cara yang sama seperti mereka melakukan deteksi, dan
-topeng disaring bersama kotak yang mereka miliki. Lihat
+topeng disaring bersama kotak yang mereka miliki, termasuk oleh
+`agnostic_nms=True`. Lihat
 [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
 ## Format dataset
@@ -258,9 +260,10 @@ multi-GPU dan pencatat.
 
 ## Validasi
 
-`val()` mengembalikan kamus biasa dari kunci `metrics/`. Kotak dan mask adalah
+`val()` mengembalikan kamus dari kunci `metrics/`. Kotak dan mask adalah
 dinilai secara terpisah, keduanya dengan evaluasi COCO, dan nomor mask adalah
-utama.
+utama. Baris label kotak-saja lima field dinilai sebagai mask persegi panjangnya,
+yaitu segmen yang dibaca pelatihan dari baris itu.
 
 <code-tabs name="val" />
 
@@ -283,6 +286,11 @@ mundur dan merupakan alias, bukan titik operasi: `metrics/precision(M)`
 memiliki nilai yang sama dengan `metrics/mAP50-95(M)`, dan `metrics/recall(M)` memiliki
 nilai yang sama dengan mask AR pada 100 deteksi, dengan `(B)` berperilaku sama untuk kotak.
 Memetakan sepasang dari mereka melaporkan satu angka dua kali.
+
+Hasilnya juga membawa `confusion_matrix` dan kurva presisi, recall, serta F1 per kelas
+pada `box`, keduanya dihitung dari kotak, bukan mask; lihat
+[Validasi dan metrik](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` didukung pada task ini.
 
 ## Ekspor
 

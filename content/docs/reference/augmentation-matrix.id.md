@@ -41,7 +41,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## Knob
@@ -60,7 +60,7 @@ memetakan ejaan pendek ke field tersebut, sehingga `mosaic` menetapkan `mosaic_p
 | `mosaic_scale` | Rentang skala acak untuk affine warp |
 | `mixup_scale` | Rentang skala jitter yang diterapkan pada gambar pasangan MixUp |
 | `shear` | Rentang shear acak untuk affine warp, dalam derajat |
-| `perspective` | Magnitudo projective warp untuk affine warp |
+| `perspective` | Kekuatan projective warp yang ditambahkan ke affine warp: sudut kanvas bergeser ke dalam hingga `min(perspective * 100, 0.2)` kali setengah sisi kanvas, per sumbu; `0` menonaktifkan |
 | `flipud` | Probabilitas pembalikan vertikal |
 | `no_aug_epochs` | Epoch terakhir yang dilatih dengan augmentasi kuat dinonaktifkan |
 | `auto_augment` | Kebijakan AutoAugment classification: randaugment, autoaugment, atau augmix |
@@ -125,13 +125,13 @@ Pipeline gaya DETR adalah transformasi pass-through tanpa mosaic. Distorsi fotom
 | Arketipe | Family |
 |---|---|
 | Gaya YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| Gaya DETR | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Classification | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Semantic | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| Gaya DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Classification | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Semantic | `segformer`, `unet`, `lingbotvision` |
 | Restore | `nafnet` |
 
-Dua puluh lima family dicakup. Family di luar list ini mengembalikan kumpulan
+Tiga puluh satu family dicakup. Family di luar list ini mengembalikan kumpulan
 ignored kosong, sehingga tidak ada peringatan yang dikeluarkan.
 
 ## Deviasi
@@ -143,6 +143,8 @@ ignored kosong, sehingga tidak ada peringatan yang dikeluarkan.
 | `rtdetr` | `flipud` diabaikan |
 | `rtdetrv2` | `flipud` diabaikan |
 | `fomo` | `perspective` dan `flipud` diabaikan |
+| `ppyoloe` | `flipud` diabaikan: resep sumbernya memakai rotasi 90 derajat acak sebagai gantinya |
+| `gtr` | `mosaic_prob` dan `mixup_prob` digunakan, selama `mosaic_epochs` epoch pertama; `degrees`, `translate`, dan `mosaic_scale` membentuk affine yang mengikuti mosaic |
 | `ec` | `hsv_prob`, `degrees`, dan `translate` digunakan, hanya untuk `task="pose"`; detect dan segment menggunakan resep fotometrik tetap |
 | `dinov2` | Paket classification digunakan, hanya untuk `task="classify"` |
 

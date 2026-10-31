@@ -1,11 +1,11 @@
 {
   "_comment": "GENERATED FILE. Rebuild with scripts/build-registry/rebuild.sh; reviewed provenance lives in upstream/*.json.",
-  "libreyolo_version": "1.6.0",
+  "libreyolo_version": "1.7.0",
   "source": {
-    "library_commit": "809009bc294daa6e75e0976ab7cfdd0057d17d79",
+    "library_commit": "db21de793cae434b4794372f30478b86b81c4ce0",
     "hf_org": "https://huggingface.co/LibreYOLO",
     "benchmarks": "vision-analysis generated/verified-results.v1.json",
-    "hf_repositories": 387,
+    "hf_repositories": 388,
     "hf_verified_assets": 349
   },
   "tiers": {
@@ -182,6 +182,10 @@
     "edge": {
       "label": "Edges",
       "slug": "edge-detection"
+    },
+    "generate": {
+      "label": "Image generation",
+      "slug": "image-generation"
     },
     "generate3d": {
       "label": "3D generation",
@@ -2854,6 +2858,332 @@
         "bibtex_verified": "2026-09-27, copied verbatim from the Citation section of the upstream README on branch main; the block is identical at the pinned source revision 782e737efe2e6437ac537fbdcee089673d3376c1. Cross-checked against the arXiv API for 2609.26590 (v2, updated 2026-09-23): identical title and all ten authors in the same order (Zhe Feng, Longfei Liu, Wei Liu, Kai Chen, Jiangang Kong, Wei Zhou, Yifeng Qian, Dexiong Chen, Xuanlong Yu, Xi Shen). arXiv records no journal reference, so the preprint form with year 2026 still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
       }
     },
+    "speridlabs_idol": {
+      "key": "speridlabs_idol",
+      "slug": "speridlabs-idol",
+      "registry_keys": [
+        "speridlabs_idol"
+      ],
+      "display": "Speridlabs Idol",
+      "prefix": "LibreSperidlabsIdol",
+      "prefixes": {
+        "speridlabs_idol": "LibreSperidlabsIdol"
+      },
+      "tier": "s",
+      "tasks": [
+        "generate3d"
+      ],
+      "sizes_label": null,
+      "added_in": "1.7.0",
+      "task_added_in": {
+        "speridlabs_idol": "1.7.0"
+      },
+      "weights_hosted": false,
+      "extra": "gen",
+      "trainable": false,
+      "unsupported_train_params": {
+        "speridlabs_idol": []
+      },
+      "trainable_per_key": {
+        "speridlabs_idol": false
+      },
+      "capabilities": {
+        "train": false,
+        "val": false
+      },
+      "checkpoints": [],
+      "export": {
+        "generate3d": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": {
+        "name": "Speridlabs Idol",
+        "org": "Speridlabs",
+        "paper_title": "Idol: Single Image to 3D Gaussian Splats",
+        "paper_url": "https://speridlabs.com/research/idol",
+        "code_url": "https://github.com/speridlabs/idol-sdk",
+        "license": "Apache-2.0",
+        "code_license": "MIT and Apache-2.0",
+        "weights_license": "Apache-2.0",
+        "license_interpretation": "Apache-2.0 is a permissive license, so the Speridlabs Idol code and weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and notices, and the license grants a patent license. LibreYOLO's adapter is MIT; the Idol networks it ports from the Speridlabs SDK keep Apache-2.0, alongside the MIT code from TripoSplat that Idol builds on, with their notices in libreyolo/models/gen/speridlabs_idol/NOTICE. Idol's own weights download from Speridlabs' Hugging Face repository, speridlabs/idol, and the FLUX.2 VAE from black-forest-labs/FLUX.2-klein-4B, both Apache-2.0. The DINOv3 image encoder is the exception: it is Meta's, under the DINOv3 License, a custom agreement that is not OSI-approved. It permits redistribution with a copy of the agreement and passes through trade-control and end-use restrictions (military, weapons, espionage and nuclear uses among them). LibreYOLO mirrors that encoder in bfloat16 at LibreYOLO/LibreDINOv3vith16plus together with the agreement, so nothing is gated; read the agreement before shipping a product on it.",
+        "bibtex": "@misc{canada2026idol,\n  title  = {Idol: Single Image to 3D Gaussian Splats},\n  author = {Ca{\\~n}ada, Alejandro and Garabito, Chema},\n  year   = {2026},\n  url    = {https://speridlabs.com/research/idol}\n}",
+        "bibtex_source_url": "https://speridlabs.com/research/idol#citation",
+        "bibtex_verified": "2026-10-31, copied verbatim from the 'Cite this work' block (section id citation) of the Speridlabs research page. The Idol SDK README and the speridlabs/idol model card publish no BibTeX. The arXiv API returns no record for this title, so there is no preprint to cross-check against; the two authors, in the same order (Alejandro Cañada, Chema Garabito), match the credits in the SDK port's NOTICE at idol-sdk commit 4702a7f00850e34b6e83a2170cc123c3e9570744. Do not hand-edit; a wrong citation misattributes someone's work."
+      }
+    },
+    "flux2_klein": {
+      "key": "flux2_klein",
+      "slug": "flux2-klein",
+      "registry_keys": [
+        "flux2_klein"
+      ],
+      "display": "FLUX.2 klein",
+      "prefix": "LibreFlux2Klein",
+      "prefixes": {
+        "flux2_klein": "LibreFlux2Klein"
+      },
+      "tier": "s",
+      "tasks": [
+        "generate"
+      ],
+      "sizes_label": "4b at 1024 px",
+      "added_in": "1.7.0",
+      "task_added_in": {
+        "flux2_klein": "1.7.0"
+      },
+      "weights_hosted": false,
+      "extra": "gen",
+      "trainable": false,
+      "unsupported_train_params": {
+        "flux2_klein": []
+      },
+      "trainable_per_key": {
+        "flux2_klein": false
+      },
+      "capabilities": {
+        "train": false,
+        "val": false
+      },
+      "checkpoints": [],
+      "export": {
+        "generate": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": {
+        "name": "FLUX.2 klein 4B",
+        "org": "Black Forest Labs",
+        "paper_title": "FLUX.2: Frontier Visual Intelligence",
+        "paper_url": "https://bfl.ai/blog/flux-2",
+        "code_url": "https://github.com/black-forest-labs/flux2",
+        "license": "Apache-2.0",
+        "weights_license": "Apache-2.0",
+        "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. Black Forest Labs declares Apache-2.0 on the Hugging Face repository LibreYOLO downloads, black-forest-labs/FLUX.2-klein-4B, in its license tag and LICENSE.md, and its model card calls the model fully open under Apache 2.0. The license is not uniform across FLUX.2: Black Forest Labs releases the klein 9B models and FLUX.2 dev under its FLUX Non-Commercial License, and LibreYOLO does not load those. LibreYOLO's adapter is its own MIT code that calls the Apache-2.0 diffusers Flux2KleinPipeline; no upstream source is ported. The weights are not redistributed: they download from that repository at revision e7b7dc27f91deacad38e78976d1f2b499d76a294, component folders only.",
+        "bibtex": "@misc{flux-2-2025,\n    author={Black Forest Labs},\n    title={{FLUX.2: Frontier Visual Intelligence}},\n    year={2025},\n    howpublished={\\url{https://bfl.ai/blog/flux-2}},\n}",
+        "bibtex_source_url": "https://github.com/black-forest-labs/flux2#citation",
+        "bibtex_verified": "2026-10-31, copied verbatim from the Citation section of the black-forest-labs/flux2 README on branch main (commit 50fe5162777813d869182b139e83b10743caef15), which asks users of the repository's code or models, FLUX.2 klein 4B among them, to cite this entry. FLUX.2 was released without a paper: the entry cites Black Forest Labs' launch post, and neither the FLUX.2-klein-4B model card nor the klein blog post publishes a BibTeX of its own. The arXiv API returns no FLUX.2 record from Black Forest Labs (a search under that author name finds only FLUX.1 Kontext, 2506.15742), so there is no preprint to cross-check against. Checked instead against the page the entry's howpublished URL points to, https://bfl.ai/blog/flux-2: its title is 'FLUX.2: Frontier Visual Intelligence' and it is dated 2025-11-25, matching the entry's title, author and year. Do not hand-edit; a wrong citation misattributes someone's work."
+      }
+    },
+    "sana_sprint": {
+      "key": "sana_sprint",
+      "slug": "sana-sprint",
+      "registry_keys": [
+        "sana_sprint"
+      ],
+      "display": "SANA-Sprint",
+      "prefix": "LibreSanaSprint",
+      "prefixes": {
+        "sana_sprint": "LibreSanaSprint"
+      },
+      "tier": "s",
+      "tasks": [
+        "generate"
+      ],
+      "sizes_label": null,
+      "added_in": "1.7.0",
+      "task_added_in": {
+        "sana_sprint": "1.7.0"
+      },
+      "weights_hosted": false,
+      "extra": "gen",
+      "trainable": false,
+      "unsupported_train_params": {
+        "sana_sprint": []
+      },
+      "trainable_per_key": {
+        "sana_sprint": false
+      },
+      "capabilities": {
+        "train": false,
+        "val": false
+      },
+      "checkpoints": [],
+      "export": {
+        "generate": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": {
+        "name": "SANA-Sprint 0.6B",
+        "org": "NVIDIA",
+        "paper_title": "SANA-Sprint: One-Step Diffusion with Continuous-Time Consistency Distillation",
+        "paper_url": "https://arxiv.org/abs/2503.09641",
+        "code_url": "https://github.com/NVlabs/Sana",
+        "license": "Apache-2.0; Gemma Terms of Use for the Gemma 2 text encoder",
+        "weights_license": "Apache-2.0; Gemma Terms of Use for the Gemma 2 text encoder",
+        "license_interpretation": "SANA-Sprint weights are Apache-2.0. The bundled Gemma 2 text encoder is under the Gemma Terms of Use (https://ai.google.dev/gemma/terms) and the Gemma Prohibited Use Policy. Apache-2.0 is a permissive license, so the SANA-Sprint transformer and autoencoder can be used in commercial and closed-source products; it asks you to keep its license text and attribution notices with any copy you redistribute, and it grants a patent license. NVIDIA declares it on the Hugging Face repository LibreYOLO downloads, Efficient-Large-Model/Sana_Sprint_0.6B_1024px_diffusers, in its license tag and LICENSE file, and the model card names the Gemma terms for Gemma-2-2B-IT alongside it. The Gemma Terms of Use are Google's own agreement, not an OSI-approved license: redistributing the encoder means passing the Prohibited Use Policy's restrictions on to your users as an enforceable provision, with a copy of the terms. LibreYOLO's loader prints the notice above the first time it loads the model in a session. Read both documents before shipping a product on this model. LibreYOLO's adapter is its own MIT code that calls the Apache-2.0 diffusers SanaSprintPipeline; no upstream source is ported. The weights are not redistributed: they download from that repository at revision aa76e7f4f4928f378716b6716a2130fba3caf5b1.",
+        "bibtex": "@misc{chen2025sana-sprint,\n      title={SANA-Sprint: One-Step Diffusion with Continuous-Time Consistency Distillation},\n      author={Junsong Chen and Shuchen Xue and Yuyang Zhao and Jincheng Yu and Sayak Paul and Junyu Chen and Han Cai and Song Han and Enze Xie},\n      year={2025},\n      eprint={2503.09641},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2503.09641},\n    }",
+        "bibtex_source_url": "https://nvlabs.github.io/Sana/Sprint/#BibTeX",
+        "bibtex_verified": "2026-10-31, copied verbatim from the BibTeX section (id BibTeX) of the SANA-Sprint project page, which GitHub Pages serves from branch page of NVlabs/Sana (Sprint/index.html, last changed in commit bf906641a9d1ab9a2e485c91184a1767fa7f4fe3). The model card publishes no BibTeX, and the repository's CITATION.cff cites the original SANA paper, not SANA-Sprint. The README's BibTeX section on branch main (commit 890e5000edb08ffbdaab3e5b0d6fbe25a8b2b3b7) holds the same entry under the key chen2025sanasprint, but since commit 6554c8d90d46f3336ec911f3b46dc88ad3a292a0 (2026-05-16) its author field reads 'Jincheng Yu graves', a stray word absent from the arXiv record and from every earlier README version, so the project page's copy is reproduced instead. Cross-checked against the arXiv API for 2503.09641: the same nine authors in the same order, identical title, first submitted 2025-03-12 (v4 updated 2025-09-29), comment 'In submission', no journal-ref, so the @misc form still matches the record. The entry gives primaryClass cs.CV while arXiv lists cs.GR as the primary category; left as the authors wrote it. Do not hand-edit; a wrong citation misattributes someone's work."
+      }
+    },
+    "wevisonevl": {
+      "key": "wevisonevl",
+      "slug": "wevisone-vl",
+      "registry_keys": [
+        "wevisonevl"
+      ],
+      "display": "WeVisOne-VL",
+      "prefix": "LibreWeVisOneVL",
+      "prefixes": {
+        "wevisonevl": "LibreWeVisOneVL"
+      },
+      "tier": "s",
+      "tasks": [
+        "detect",
+        "point",
+        "segment",
+        "matte",
+        "ocr"
+      ],
+      "sizes_label": "2b, 4b at 1440 px",
+      "added_in": "1.7.0",
+      "task_added_in": {
+        "wevisonevl": "1.7.0"
+      },
+      "weights_hosted": false,
+      "extra": "vlm",
+      "trainable": false,
+      "unsupported_train_params": {
+        "wevisonevl": []
+      },
+      "trainable_per_key": {
+        "wevisonevl": false
+      },
+      "capabilities": {
+        "train": false,
+        "val": false
+      },
+      "checkpoints": [],
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "point": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "matte": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "ocr": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": {
+        "name": "WeVisOne-VL",
+        "org": "Tencent (WeChat Vision)",
+        "paper_title": "WeVisOne-VL: Unified Visual Perception from Objects to Pixels",
+        "paper_url": "https://arxiv.org/abs/2610.31329",
+        "code_url": "https://github.com/Tencent/WeVisOne-VL",
+        "license": "Apache-2.0",
+        "code_license": "MIT and Apache-2.0",
+        "weights_license": "Apache-2.0",
+        "license_interpretation": "Apache-2.0 is a permissive license, so the WeVisOne-VL code and weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and notices, and the license grants a patent license. Tencent declares Apache-2.0 on both Hugging Face repositories LibreYOLO downloads, tencent/WeVisOne-VL-2B and tencent/WeVisOne-VL-4B, in the license tag and LICENSE file. Each LICENSE prefixes the Apache-2.0 text with a Tencent preamble that adds no restrictions, and names the model it builds upon, Qwen3-VL-2B-Instruct or Qwen3-VL-4B-Instruct (Apache-2.0, Copyright 2024 Alibaba Cloud). LibreYOLO's wrapper is MIT; the pixel decoder, feature bridge, prompts and response parser it ports from the Tencent/WeVisOne-VL repository keep Apache-2.0, with their notices in libreyolo/models/wevisone/NOTICE. The Qwen3-VL backbone runs from transformers, so no Qwen code is copied. The weights are not redistributed: they download from Tencent at pinned revisions, 798ffc7c87ad6104410812b589e240ba32d92315 for 2B and 4a7bed92750ac9d8b8a124cede14759036932dc2 for 4B.",
+        "bibtex": "@article{liang2026wevisone,\n  title={WeVisOne-VL: Unified Visual Perception from Objects to Pixels},\n  author={Liang, Tianming and Pan, Junyi and Li, Yuxi and Fu, Canmiao and Huang, Zhipeng and Sun, Chong and Li, Chen and Lyu, Jing},\n  journal={arXiv preprint arXiv:2610.31329},\n  year={2026}\n}",
+        "bibtex_source_url": "https://github.com/Tencent/WeVisOne-VL#-citation",
+        "bibtex_verified": "2026-10-31, copied verbatim from the Citation section of the Tencent/WeVisOne-VL README on branch main (commit 9a6bcd85404505df0d05cfb5d97512ccacf35dee, the commit LibreYOLO's port is pinned to). README_zh-CN.md carries the identical entry; neither model card publishes one, and the repository has no CITATION.cff. Cross-checked against the arXiv API for 2610.31329: the same eight authors in the same order (Liang, Pan, Li, Fu, Huang, Sun, Li, Lyu), identical title, first submitted 2026-10-22 (v2 updated 2026-10-24), no journal-ref, so the @article form with an arXiv preprint journal still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
+      }
+    },
     "yolo9": {
       "key": "yolo9",
       "slug": "yolov9",
@@ -3029,7 +3359,7 @@
         "paper_url": "https://arxiv.org/abs/2402.13616",
         "code_url": "https://github.com/MultimediaTechLab/YOLO",
         "license": "MIT",
-        "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products. The one standing obligation is to keep the license text and the copyright notice, Kin-Yiu Wong and Hao-Tang Tsui, with any copy you redistribute. It places no condition on your own application code, and a model you train yourself on your own data is yours. Two things are worth knowing beyond that. The port follows the authors' MIT re-release of YOLOv9, not the GPL-3.0 repository that carries the same model, so the permissive terms come from the source LibreYOLO actually derives from. And one checkpoint in this family is not MIT: the stride-4 model trained on VisDrone2019-DET inherits that dataset's CC BY-NC-SA 3.0 terms, which rule out commercial use and require share-alike on anything derived from it.",
+        "license_interpretation": "MIT is a permissive license, so these weights can be used in commercial and closed-source products. The one standing obligation is to keep the license text and the copyright notice, Kin-Yiu Wong and Hao-Tang Tsui, with any copy you redistribute. It places no condition on your own application code, and a model you train yourself on your own data is yours. Two things are worth knowing beyond that. The code is ported from the authors' MIT re-release of YOLOv9, MultimediaTechLab/YOLO at commit c4cb5f6f, not the GPL-3.0 repository that carries the same model, so the permissive terms come from the source LibreYOLO actually derives from. And one checkpoint in this family is not MIT: the weight repository of the stride-4 VisDrone model, LibreYOLO9P2s-visdrone.pt, declares CC BY-NC-SA 3.0, which rules out commercial use and requires share-alike on derivatives.",
         "bibtex": "@inproceedings{wang2024yolov9,\n      title={{YOLOv9}: Learning What You Want to Learn Using Programmable Gradient Information},\n      author={Wang, Chien-Yao and Yeh, I-Hau and Liao, Hong-Yuan Mark},\n      year={2024},\n      booktitle={Proceedings of the European Conference on Computer Vision (ECCV)},\n}",
         "bibtex_source_url": "https://github.com/MultimediaTechLab/YOLO#citations",
         "bibtex_verified": "2026-08-08, copied verbatim from the Citations section of the upstream README on branch main, the entry keyed wang2024yolov9. Cross-checked against the arXiv API for 2402.13616: same title, and the same three authors in the same order, Chien-Yao Wang, I-Hau Yeh and Hong-Yuan Mark Liao, submitted 2024-02-21. arXiv carries no journal reference for it, so the ECCV 2024 venue is the authors' own claim in their citation block. Do not hand-edit; a wrong citation misattributes someone's work."
@@ -10688,7 +11018,106 @@
         "val": false
       },
       "checkpoints": [],
-      "export": {},
+      "export": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "segment": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "panoptic": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "pose": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "point": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "depth": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "ocr": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
       "benchmarks": {},
       "va_embed": null,
       "upstream": {
@@ -10742,59 +11171,50 @@
         "val": false
       },
       "checkpoints": [],
-      "export": {},
-      "benchmarks": {},
-      "va_embed": null,
-      "upstream": {
-        "name": "MODUS",
-        "org": "EPFL Visual Intelligence and Learning Lab (VILAB)",
-        "paper_title": "MODUS: Decoder-only Any-to-Any Modeling of Diverse Modalities",
-        "paper_url": "https://arxiv.org/abs/2607.25948",
-        "code_url": "https://github.com/EPFL-VILAB/Modus",
-        "license": "Apache-2.0 (code); research-only per the upstream model card (weights)",
-        "code_license": "Apache-2.0",
-        "license_interpretation": "Apache-2.0 covers the EPFL-VILAB/Modus source repository that LibreYOLO's adapter follows; LibreYOLO's own port is MIT, permissive and usable in commercial and closed-source products, requiring only that license text and attribution travel with any copy you redistribute. The MODUS-14B-A7B checkpoint is a separate artifact under a separate license: its Hugging Face model card currently declares license: other, describes it as bagel-derived, and requests research-only use, terms that bind you directly rather than through LibreYOLO. LibreYOLO does not bundle, mirror, or redistribute this checkpoint in any form, quantized or otherwise; loading it always downloads the required files directly from EPFL-VILAB/MODUS at a pinned revision, which needs the user's own authenticated Hugging Face account and acceptance of the current upstream terms, or a checkpoint_path to a snapshot the user already obtained. One upstream file, modeling/bagel/modeling_utils.py, carries an incompatible CC BY-NC 4.0 license inherited from Meta's DiT and is not copied, adapted, or paraphrased anywhere in this port; the small permissive routines LibreYOLO needed were re-derived independently from Hugging Face Transformers (Apache-2.0) and OpenAI's guided-diffusion (MIT) instead. Training is not offered for this family.",
-        "bibtex": "@article{ye2026modus,\n  title   = {MODUS: Decoder-only Any-to-Any Modeling of Diverse Modalities},\n  author  = {Ye, Mingqiao and An, Zhaochong and Gao, Zhitong and Liu, Xian\n             and Fleuret, Fran\\c{c}ois and Li, Chuan and Zadeh, Amir\n             and Belongie, Serge and Dehghan, Afshin and Allardice, Jesse\n             and Mizrahi, David and Kar, O\\u{g}uzhan Fatih and Bachmann, Roman\n             and Zamir, Amir},\n  journal = {arXiv preprint arXiv:2607.25948},\n  year    = {2026},\n}",
-        "bibtex_source_url": "https://github.com/EPFL-VILAB/Modus#citation",
-        "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2607.25948: fourteen authors in the same order, identical title, comment 'Accepted at ICML 2026'. The authors' own README citation block still gives it as @article with the arXiv preprint as the venue, unchanged since the ICML acceptance; reproduced here as published rather than reclassified to @inproceedings. Do not hand-edit; a wrong citation misattributes someone's work."
-      }
-    },
-    "speridlabs_idol": {
-      "key": "speridlabs_idol",
-      "slug": "speridlabs-idol",
-      "registry_keys": [
-        "speridlabs_idol"
-      ],
-      "display": "Speridlabs Idol",
-      "prefix": "LibreSperidlabsIdol",
-      "prefixes": {
-        "speridlabs_idol": "LibreSperidlabsIdol"
-      },
-      "tier": "s",
-      "tasks": [
-        "generate3d"
-      ],
-      "sizes_label": null,
-      "added_in": "1.7.0",
-      "task_added_in": {
-        "speridlabs_idol": "1.7.0"
-      },
-      "weights_hosted": false,
-      "extra": "gen",
-      "trainable": false,
-      "unsupported_train_params": {
-        "speridlabs_idol": []
-      },
-      "trainable_per_key": {
-        "speridlabs_idol": false
-      },
-      "capabilities": {
-        "train": false,
-        "val": false
-      },
-      "checkpoints": [],
       "export": {
-        "generate3d": {
+        "detect": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "depth": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "normal": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        },
+        "edge": {
           "onnx": "blocked",
           "torchscript": "blocked",
           "executorch": "blocked",
@@ -10812,18 +11232,17 @@
       "benchmarks": {},
       "va_embed": null,
       "upstream": {
-        "name": "Speridlabs Idol",
-        "org": "Speridlabs",
-        "paper_title": "Idol: Single Image to 3D Gaussian Splats",
-        "paper_url": "https://speridlabs.com/research/idol",
-        "code_url": "https://github.com/speridlabs/idol-sdk",
-        "license": "Apache-2.0",
-        "code_license": "MIT and Apache-2.0",
-        "weights_license": "Apache-2.0",
-        "license_interpretation": "Apache-2.0 is a permissive license, so the Speridlabs Idol code and weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and notices, and the license grants a patent license. LibreYOLO's adapter is MIT; the Idol networks it ports from the Speridlabs SDK keep Apache-2.0, alongside the MIT code from TripoSplat that Idol builds on, with their notices in libreyolo/models/gen/speridlabs_idol/NOTICE. Idol's own weights download from Speridlabs' Hugging Face repository, speridlabs/idol, and the FLUX.2 VAE from black-forest-labs/FLUX.2-klein-4B, both Apache-2.0. The DINOv3 image encoder is the exception: it is Meta's, under the DINOv3 License, a custom agreement that is not OSI-approved. It permits redistribution with a copy of the agreement and passes through trade-control and end-use restrictions (military, weapons, espionage and nuclear uses among them). LibreYOLO mirrors that encoder in bfloat16 at LibreYOLO/LibreDINOv3vith16plus together with the agreement, so nothing is gated; read the agreement before shipping a product on it.",
-        "bibtex": "@misc{canada2026idol,\n  title  = {Idol: Single Image to 3D Gaussian Splats},\n  author = {Ca{\\~n}ada, Alejandro and Garabito, Chema},\n  year   = {2026},\n  url    = {https://speridlabs.com/research/idol}\n}",
-        "bibtex_source_url": "https://speridlabs.com/research/idol#citation",
-        "bibtex_verified": "2026-10-31, copied verbatim from the 'Cite this work' block (section id citation) of the Speridlabs research page. The Idol SDK README and the speridlabs/idol model card publish no BibTeX. The arXiv API returns no record for this title, so there is no preprint to cross-check against; the two authors, in the same order (Alejandro Cañada, Chema Garabito), match the credits in the SDK port's NOTICE at idol-sdk commit 4702a7f00850e34b6e83a2170cc123c3e9570744. Do not hand-edit; a wrong citation misattributes someone's work."
+        "name": "MODUS",
+        "org": "EPFL Visual Intelligence and Learning Lab (VILAB)",
+        "paper_title": "MODUS: Decoder-only Any-to-Any Modeling of Diverse Modalities",
+        "paper_url": "https://arxiv.org/abs/2607.25948",
+        "code_url": "https://github.com/EPFL-VILAB/Modus",
+        "license": "Apache-2.0 (code); research-only per the upstream model card (weights)",
+        "code_license": "Apache-2.0",
+        "license_interpretation": "Apache-2.0 covers the EPFL-VILAB/Modus source repository that LibreYOLO's adapter follows; LibreYOLO's own port is MIT, permissive and usable in commercial and closed-source products, requiring only that license text and attribution travel with any copy you redistribute. The MODUS-14B-A7B checkpoint is a separate artifact under a separate license: its Hugging Face model card currently declares license: other, describes it as bagel-derived, and requests research-only use, terms that bind you directly rather than through LibreYOLO. LibreYOLO does not bundle, mirror, or redistribute this checkpoint in any form, quantized or otherwise; loading it always downloads the required files directly from EPFL-VILAB/MODUS at a pinned revision, which needs the user's own authenticated Hugging Face account and acceptance of the current upstream terms, or a checkpoint_path to a snapshot the user already obtained. One upstream file, modeling/bagel/modeling_utils.py, carries an incompatible CC BY-NC 4.0 license inherited from Meta's DiT and is not copied, adapted, or paraphrased anywhere in this port; the small permissive routines LibreYOLO needed were re-derived independently from Hugging Face Transformers (Apache-2.0) and OpenAI's guided-diffusion (MIT) instead. Training is not offered for this family.",
+        "bibtex": "@article{ye2026modus,\n  title   = {MODUS: Decoder-only Any-to-Any Modeling of Diverse Modalities},\n  author  = {Ye, Mingqiao and An, Zhaochong and Gao, Zhitong and Liu, Xian\n             and Fleuret, Fran\\c{c}ois and Li, Chuan and Zadeh, Amir\n             and Belongie, Serge and Dehghan, Afshin and Allardice, Jesse\n             and Mizrahi, David and Kar, O\\u{g}uzhan Fatih and Bachmann, Roman\n             and Zamir, Amir},\n  journal = {arXiv preprint arXiv:2607.25948},\n  year    = {2026},\n}",
+        "bibtex_source_url": "https://github.com/EPFL-VILAB/Modus#citation",
+        "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2607.25948: fourteen authors in the same order, identical title, comment 'Accepted at ICML 2026'. The authors' own README citation block still gives it as @article with the arXiv preprint as the venue, unchanged since the ICML acceptance; reproduced here as published rather than reclassified to @inproceedings. Do not hand-edit; a wrong citation misattributes someone's work."
       }
     }
   },
@@ -10903,8 +11322,8 @@
   ],
   "_generated_by": "scripts/build-registry (prototype). Mechanical fields are extracted from docs/export_support.md, each family model.py, models/registry.py, the LibreYOLO HF org listing and the vision-analysis results. Upstream metadata is merged from src/data/docs/upstream/<slug>.json after per-family human verification.",
   "library": {
-    "families": 118,
-    "tasks": 20,
+    "families": 122,
+    "tasks": 22,
     "task_names": [
       "detect",
       "segment",
@@ -10925,7 +11344,9 @@
       "embed",
       "mesh",
       "detect3d",
-      "act"
+      "act",
+      "generate",
+      "generate3d"
     ],
     "export_formats": 12
   }

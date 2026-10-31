@@ -126,7 +126,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Instalación
@@ -148,8 +148,10 @@ El objeto `Results` devuelto es el mismo que devuelven todas las familias, así
 que cambiar a otro detector es un cambio de una línea. Un nombre de archivo con
 `-seg` se resuelve por sí solo a la tarea RTMDet-Ins, y entonces `result.masks`
 lleva las máscaras de instancia junto a los boxes. `conf` fija el umbral de
-confianza e `iou` el umbral de NMS. Consulta [predicción](/docs/predict) para
-fuentes, streaming y manejo de resultados.
+confianza e `iou` el umbral de NMS. `max_det` se aplica tal cual a ambas tareas,
+hasta 300 boxes o máscaras por imagen por defecto; la configuración de test de
+RTMDet-Ins de MMDetection mantiene 100, que `max_det=100` reproduce. Consulta
+[predicción](/docs/predict) para fuentes, streaming y manejo de resultados.
 
 ## Variantes
 

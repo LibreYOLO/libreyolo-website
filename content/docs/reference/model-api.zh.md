@@ -46,7 +46,7 @@ snippets:
         # stream=True 返回一个生成器，每帧或每张图像一个 Results
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## 构造
@@ -73,6 +73,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -99,6 +100,7 @@ model(
 | `device` | `None` | 覆盖本次调用的设备 |
 | `classes` | `None` | 只保留这些类别 ID |
 | `max_det` | `300` | 每张图像的最大检测数 |
+| `agnostic_nms` | `False` | 在重叠超过 `iou` 的检测框之间，无论类别如何，只保留得分最高的那一个。适用于检测、分割、姿态和旋转框 |
 | `augment` | `False` | 测试时增强 |
 | `save` | `False` | 写出带标注的图像或视频 |
 | `batch` | `1` | 目录与列表源每次前向传播处理的图像数 |
@@ -186,7 +188,11 @@ model.val(
 
 返回一个指标字典，键取决于任务；检测返回 `metrics/precision`、`metrics/recall`、`metrics/mAP50` 和 `metrics/mAP50-95`。`imgsz` 接受表示正方形的整数或一个 `(height, width)` 元组，默认使用模型的原生输入尺寸。`data=None` 时在检查点训练配置里保存的数据集上验证，没有保存数据集时抛错，已发布的权重就是这种情况。`project`、`name` 和 `exist_ok` 把输出目录设为 `project/name`，除非 `exist_ok=True`，否则自动递增。`plots` 是 `save_plots` 的别名。`allow_download_scripts` 控制数据集 YAML 可能在 `download` 字段里携带的内嵌 Python。
 
+对于检测和分割，这个字典是一个 `dict` 子类，还带有 `box`（逐图像指标，以及逐类别的查准率、查全率和 F1 曲线）和 `confusion_matrix`；对于分类，它带有 `top1`、`top5` 和 `confusion_matrix`。见[验证与指标](/docs/train/validation)。
+
 `faster_coco_eval` 通过 `**kwargs` 接受，默认为 `True`，包没安装时回退到 pycocotools。实际运行的后端记录在 `model.last_eval_backend` 上。
+
+`agnostic_nms=True` 同样通过 `**kwargs` 传入，在打分之前以 `iou` 为阈值应用与类别无关的 NMS。它覆盖检测和分割，在任何其他任务上会抛出 `ValueError`。
 
 对 `obb` 和 `pose` 任务，带增强的验证会抛错。
 

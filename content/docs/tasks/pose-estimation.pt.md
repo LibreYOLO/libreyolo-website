@@ -142,7 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## Definição
@@ -202,7 +202,9 @@ e um significado diferente por índice. O que a terceira coluna de keypoints
 guarda também é uma propriedade do checkpoint: o EdgeCrafter escreve uma
 constante ali em vez de uma pontuação por ponto, e ele não tem cabeça de caixas
 nenhuma, então cada uma de suas caixas de pose é a extensão delimitadora dos
-próprios keypoints daquela instância. Veja
+próprios keypoints daquela instância. `agnostic_nms=True` suprime caixas
+sobrepostas entre classes e descarta os keypoints de cada instância suprimida
+junto com a sua caixa; o HRNet levanta `NotImplementedError` para ele. Veja
 [predição](/docs/predict) para fontes, streaming e tratamento de resultados.
 
 ## Formato do dataset
@@ -288,6 +290,7 @@ recall médio correspondentes são `metrics/keypoints_AR50-95`,
 `metrics/keypoints_AR50`, `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` e
 `metrics/keypoints_AR_L`. Toda chave desta tarefa tem o prefixo `keypoints_`,
 então as chaves de `mAP` de caixa que um detector retorna não aparecem.
+`val(agnostic_nms=True)` levanta `ValueError` nesta tarefa.
 
 ## Exportação
 

@@ -18,7 +18,13 @@ keywords:
   - soglia parità esportazione
   - NotImplementedError export
 last_verified: 1.6.0
-verification: Formati, livelli, ordine di fallback, blocchi per task e per famiglia e blocchi NCNN letti da libreyolo/export/support.py; alias e argomenti condivisi da libreyolo/export/exporter.py; definizioni dei livelli da docs/adr/0011-export-support-tiers.md; soglie di parità da docs/export_support.md, tutto alla v1.6.0. Le celle delle singole combinazioni non sono trascritte qui; interrogale con lo snippet qui sotto.
+verification: >-
+  Formati, livelli, ordine di fallback, blocchi per task e per famiglia e
+  blocchi NCNN letti da libreyolo/export/support.py; alias e argomenti condivisi
+  da libreyolo/export/exporter.py; definizioni dei livelli da
+  docs/adr/0011-export-support-tiers.md; soglie di parità da
+  docs/export_support.md, tutto alla v1.6.0. Le celle delle singole combinazioni
+  non sono trascritte qui; interrogale con lo snippet qui sotto.
 snippets:
   usage:
     - label: 'Consultare la matrice, senza bisogno di un modello'
@@ -66,7 +72,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## Forma della matrice
@@ -141,6 +147,11 @@ Questi task sono bloccati per qualsiasi famiglia priva di una voce esplicita.
 
 | Task | Motivo |
 |---|---|
+| `albedo` | L'esportazione dell'albedo non ha un contratto di runtime del backend per RGB lineare |
+| `act` | Il ciclo di campionamento della policy non ha un grafo esportabile né un contratto di runtime del backend |
+| `generate` | La generazione di immagini esegue un ciclo di campionamento su più reti, che non ha un grafo esportabile né un contratto di runtime del backend |
+| `generate3d` | La generazione 3D esegue un ciclo di campionamento su più reti, che non ha un grafo esportabile né un contratto di runtime del backend |
+| `detect3d` | Gli output del grafo di rilevamento 3D, i metadati della camera e il contratto di runtime non sono definiti |
 | `ocr` | Due reti con ritaglio dinamico per regione non rientrano nel contratto di esportazione a grafo singolo |
 | `point` | La famiglia non è collegata alla heatmap di punti condivisa né al contratto di decodifica dei picchi nel backend |
 | `semantic` | La famiglia non è collegata ai logit densi condivisi né al contratto di argmax nel backend |
@@ -163,7 +174,7 @@ esempio, una famiglia semantic già collegata riesce comunque a esportare.
 | `hrnet` | Tutto ciò che non sia ONNX, TorchScript, OpenVINO e TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Tutti i formati; l'esportazione di modelli promptable è fuori dallo scopo del contratto di runtime v1 |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Tutti i formati; l'esportazione a runtime a vocabolario aperto è fuori dallo scopo della v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Tutti i formati; l'esportazione di VLM generativi è fuori dallo scopo della v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Tutti i formati; l'esportazione di VLM generativi è fuori dallo scopo della v1 |
 
 PicoSAM3 è l'eccezione nel livello promptable: esporta in ONNX la sua rete ROI
 grezza da 96 pixel.

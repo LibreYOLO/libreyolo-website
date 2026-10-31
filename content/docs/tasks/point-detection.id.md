@@ -2,8 +2,8 @@
 title: Deteksi titik
 seo_title: Deteksi titik dan penghitungan di LibreYOLO
 description: >-
-  Lokalisasi objek sebagai satu titik, bukan bounding box, di LibreYOLO. Prediksi
-  centroid, hitung objek, latih FOMO, dan baca metrik point.
+  Lokalisasi objek sebagai satu titik, bukan bounding box, di LibreYOLO.
+  Prediksi centroid, hitung objek, latih FOMO, dan baca metrik point.
 lead: >-
   Deteksi titik mengembalikan satu lokasi x, y per objek sebagai pengganti
   bounding box. LibreYOLO menyediakannya sebagai task point, dan prediksi memuat
@@ -20,30 +20,46 @@ snippets:
   predict:
     - label: Prediksi titik dan hitung objek
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Bobot LibreFOMO tidak diunduh otomatis. Ambil checkpoint dari
-        # https://huggingface.co/LibreYOLO dahulu dan muat berdasarkan path lokal.
+
+        # https://huggingface.co/LibreYOLO dahulu dan muat berdasarkan path
+        lokal.
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         points = result.points
+
         print(len(points))     # jumlah objek
+
         print(points.xy)       # (N, 2) pusat dalam piksel gambar asli
+
         print(points.cls, points.conf)
     - label: Koordinat ternormalisasi dan jumlah per kelas
       language: python
-      code: |
+      code: >
         from collections import Counter
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         points = result.points.numpy()
-        print(points.xyn)                          # pusat yang sama dalam [0, 1]
+
+        print(points.xyn)                          # pusat yang sama dalam [0,
+        1]
+
         print(Counter(points.cls.astype(int).tolist()))
   train:
     - label: Latih FOMO pada dataset YOLO
@@ -55,15 +71,22 @@ snippets:
         model.train(data="my-dataset.yaml", epochs=40, batch=32, lr0=3e-4)
     - label: Prediksi dengan checkpoint hasil pelatihan
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         results = model.train(data="my-dataset.yaml", epochs=40)
 
+
         # train() memuat ulang checkpoint terbaik ke objek yang sama, sehingga
-        # model memprediksi dengan bobot hasil pelatihan saat pemanggilan selesai.
+
+        # model memprediksi dengan bobot hasil pelatihan saat pemanggilan
+        selesai.
+
         print(results["best_checkpoint"])
+
         print(model(SAMPLE_IMAGE).points.xy)
   val:
     - label: Validasi dan baca kunci metrik
@@ -81,16 +104,23 @@ snippets:
         print(metrics["metrics/MAE"], metrics["metrics/RMSE"])   # error jumlah
     - label: Ubah ambang batas jarak
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("./LibreFOMOs-point.pt")
 
+
         # Batas sweep menjadi bagian teks kunci, sehingga sweep kustom
+
         # mengubah nama kunci mAP yang dihasilkannya.
-        metrics = model.val(data="my-dataset.yaml", dist_thresholds=[0.02, 0.05])
+
+        metrics = model.val(data="my-dataset.yaml", dist_thresholds=[0.02,
+        0.05])
+
 
         print(metrics["metrics/mAP@0.02"])
+
         print(metrics["metrics/mAP@[0.02:0.05]"])
   export:
     - label: Ekspor
@@ -102,16 +132,22 @@ snippets:
         model.export(format="onnx")
     - label: Jalankan berkas hasil ekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Factory merutekan berdasarkan akhiran berkas, sehingga artefak hasil
-        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang sama.
+
+        # ekspor dimuat seperti checkpoint dan mengembalikan objek Results yang
+        sama.
+
         model = LibreYOLO("./LibreFOMOs-point.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Definisi
@@ -149,7 +185,7 @@ checkpoint prompted-generation yang sama untuk enam task lainnya, dimuat dengan
 latensi per gambar jauh lebih tinggi daripada detector khusus. Bobotnya
 nonkomersial; lisensinya tersedia pada halaman model.
 
-[Molmo2](/docs/models/molmo2) dan [Moondream](/docs/models/moondream) menyediakan titik yang dikondisikan oleh teks. [LibreGround](/docs/reference/ground-api) memakai instruksi untuk memilih maksimal satu klik per kueri dengan ShowUI, Florence-2, atau Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream), dan [WeVisOne-VL](/docs/models/wevisone-vl) menyediakan titik yang dikondisikan oleh teks. [LibreGround](/docs/reference/ground-api) memakai instruksi untuk memilih maksimal satu klik per kueri dengan ShowUI, Florence-2, atau Qwen3-VL.
 
 ## Prediksi
 

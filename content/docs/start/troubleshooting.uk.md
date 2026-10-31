@@ -16,7 +16,7 @@ keywords:
   - LibreYOLO NotImplementedError
   - усунення несправностей LibreYOLO
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 Помилки згруповано за текстом повідомлення. Якщо вашого повідомлення тут
@@ -34,6 +34,16 @@ source_hash: f2faaab56a2f0415
 буде показано точну команду pip, яка його вмикає, тож зіставляти пакет із
 додатковою залежністю самостійно не потрібно. `libreyolo models --json`
 виводить ті самі відомості як об'єкт.
+
+RF-DETR і DINOv2 потребують `libreyolo[rfdetr]`, і їхнє повідомлення називає цю
+додаткову залежність. Без неї `LibreYOLO("LibreRFDETRn.pt")`, назви ваг DINOv2 і
+`libreyolo predict model=rfdetr-n` зупиняються з рядком встановлення, а CLI
+завершується з `model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 На [сторінці встановлення](/docs/install) перелічено всі додаткові залежності
 та їхнє призначення.
@@ -109,13 +119,18 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 контрольній точці, створює неіснуючий URL. Точні опубліковані імена файлів
 наведено в таблиці контрольних точок кожної сторінки моделі.
 
-## Навчання зависає або перезапускається у Windows чи macOS
+## train() або val() викликано на верхньому рівні скрипту
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 Windows не має `fork`, а Python у macOS типово його не використовує, тому
-робочі процеси завантажувача даних запускаються
-повторним імпортом вашого скрипту. Без захисної умови
-`if __name__ == "__main__":` кожен процес повторно запускає виклик навчання,
-що призводить до взаємного блокування або нескінченного створення процесів.
+робочі процеси завантажувача даних запускаються повторним імпортом вашого
+скрипту. Методи запуску `spawn` і `forkserver` роблять те саме на будь-якій
+платформі. Без захисної умови `if __name__ == "__main__":` кожен процес знову
+запускав би ваш виклик `train()` або `val()`, тому кожен зупиняється на цьому
+виклику, виводить цей рядок із назвою виклику, а скрипт завершується з помилкою.
 
 ```python
 def main():

@@ -76,6 +76,15 @@ the real dimensions. A reader that understands the rectangular fields must
 prefer them over the scalar. Families with a fixed rectangular contract, such
 as HRNet pose, reject incompatible runtime sizes.
 
+Classification checkpoints may add `interpolation`, the model's resize filter:
+`"bilinear"`, `"bicubic"`, `"nearest"` or `"bilinear_no_antialias"`. `save()`,
+`best.pt` and `last.pt` write it and loading restores it, so training, `val()`,
+`predict()`, INT8 calibration and export keep the filter the checkpoint was
+saved with. A checkpoint without the key keeps the family default, and any
+other value is invalid. The first three resize with Pillow, which antialiases
+when it downscales; `"bilinear_no_antialias"` is plain bilinear with half-pixel
+centers and no antialiasing.
+
 The schema is deliberately flat, and `model` is deliberately a state dict.
 
 <code-tabs name="usage" />
@@ -182,9 +191,9 @@ one already-extracted crop and contains no detector. HRNet runtime exports
 require that value.
 
 Classification exports may add `crop_pct`, a float center-crop ratio whose
-pre-crop resize target is `round(imgsz / crop_pct)` and which defaults to
-`0.875` when absent, and `interpolation`, `"bilinear"` or `"bicubic"`,
-defaulting to `"bilinear"`.
+pre-crop resize target is `floor(imgsz / crop_pct)` and which defaults to
+`0.875` when absent, and `interpolation`, one of the four checkpoint values
+above, defaulting to `"bilinear"` when absent; readers reject any other value.
 
 ExecuTorch exports write the flat metadata to a required `<program>.pte.json`
 sidecar. The v1 contract is CPU, FP32, batch 1 and a fixed input canvas, and

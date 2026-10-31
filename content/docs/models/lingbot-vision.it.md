@@ -111,7 +111,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Installazione
@@ -153,7 +153,8 @@ il linear probe del report upstream: il backbone ViT è congelato e si addestra
 solo la testa densa 1x1, esattamente come sono stati prodotti i pesi ospitati
 da LibreYOLO qui sopra. Passa `freeze_backbone=False` per fare invece
 fine-tuning dell'intera rete, e aspettati di dover abbassare `lr0` di
-conseguenza.
+conseguenza. `libreyolo train` parte dalla stessa ricetta, e senza `name=` le sue
+esecuzioni vanno in `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

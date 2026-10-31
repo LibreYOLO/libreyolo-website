@@ -48,7 +48,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## Sinossi
@@ -76,6 +76,7 @@ parola del task viene rimossa prima del parsing.
 | `imgsz` | | Dimensione dell'immagine di input: `640` (quadrata) o `480x640` (altezza x larghezza). Se non impostata, la dimensione di input propria del modello |
 | `classes` | | Filtra per ID di classe, ad es. `[0,2,5]`. È accettato anche un intero singolo |
 | `max_det` | `300` | Numero massimo di rilevamenti per immagine |
+| `agnostic_nms` | `false` | NMS agnostica rispetto alla classe: tra i box che si sovrappongono oltre `iou`, tiene solo quello con il punteggio più alto, qualunque sia la classe. Detect, segment, pose e OBB |
 | `half` | `false` | Inferenza in FP16 (solo CUDA, richiede il supporto del modello) |
 | `save` | `false` | Salva le immagini annotate |
 | `batch` | `1` | Immagini per passaggio in avanti per le sorgenti di tipo directory. Sopra 1 esegue una vera inferenza in batch sui modelli che la supportano |

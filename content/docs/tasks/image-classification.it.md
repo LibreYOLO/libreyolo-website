@@ -96,11 +96,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() restituisce un semplice dict, non un oggetto.
+        # Un dict di chiavi metrics/, più top1, top5 e confusion_matrix.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -134,7 +135,7 @@ snippets:
 
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 90aed355e0ddf5e3
+source_hash: 7934244e90056e77
 ---
 
 ## Definizione
@@ -224,9 +225,11 @@ adattarsi a quel numero, mentre il backbone viene trasferito invariato. Vedi
 
 ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 e DINOv2 supportano la ponderazione della loss con `cls_pw` o `class_weights`. Per la classificazione, `scale` controlla l'area del ritaglio e `crop_pct` il ritaglio di valutazione. Vedi [augmentation](/docs/train/augmentations).
 
+Il filtro di ridimensionamento fa parte del modello. Imposta `model.interpolation` su `"bilinear"`, `"bicubic"`, `"nearest"` o `"bilinear_no_antialias"` prima dell'addestramento: addestramento, `val()`, `predict()`, calibrazione INT8 ed esportazione lo usano tutti, e `save()`, `best.pt` e `last.pt` lo registrano, quindi un ricaricamento lo mantiene. Qualsiasi altro nome solleva `ValueError`. `"bilinear_no_antialias"` ridimensiona con un bilineare semplice e senza antialiasing ovunque, `RandomResizedCrop` compreso, per i modelli che gireranno dietro un ridimensionamento a runtime senza antialiasing. MobileNetV4, ResNet, ConvNeXt, ConvNeXt V2, EfficientNetV2, DeiT, Swin e ViT usano bicubic di default; AlexNet e VGG bilinear.
+
 ## Validazione
 
-`val()` restituisce un semplice dizionario di chiavi `metrics/`, calcolate sullo
+`val()` restituisce un dizionario di chiavi `metrics/`, calcolate sullo
 split `val/` della radice del dataset.
 
 <code-tabs name="val" />
@@ -239,6 +242,8 @@ alto, e diventa tanto meno informativa quante meno classi ha il dataset. Il
 dizionario contiene anche `fitness`, una copia del valore top-1.
 
 La validazione ImageFolder restituisce anche le metriche macro `metrics/precision`, `metrics/recall` e `metrics/f1`, calcolate come media sulle classi presenti nei target di validazione. Le classi mai predette contribuiscono con precisione zero. La fitness predefinita resta l'accuratezza top-1. Validazione e calibrazione usano la trasformazione di valutazione del modello.
+
+Il risultato è una sottoclasse di `dict` con tre attributi: `top1` e `top5` contengono i due valori di accuratezza, e `confusion_matrix` conta ogni immagine alla sua classe top-1 rispetto alla sua etichetta, indicizzata `matrix[predicted, true]`. `plots=True` la scrive come conteggi in `confusion_matrix.png` e come quote di ogni etichetta in `confusion_matrix_normalized.png`. Sopra le 2.000 classi la matrice densa e i suoi grafici non sono disponibili, e `nonzero()`, `tp_fp()` e `class_accuracy()` leggono invece i conteggi; vedi [Validazione e metriche](/docs/train/validation#confusion-matrix).
 
 ## Esportazione
 

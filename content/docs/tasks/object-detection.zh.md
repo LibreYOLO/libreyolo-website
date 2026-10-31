@@ -81,12 +81,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() 返回的是一个普通 dict，不是对象
+        # 一个由 metrics/ 键组成的 dict，逐类别结果作为属性
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -114,7 +115,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## 定义
@@ -162,7 +163,8 @@ Darknet 一脉的 [YOLOv1](/docs/models/yolov1)、
 [Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream)、
 [North Micro Vision](/docs/models/northmicrovision)、
 [LocateAnything](/docs/models/locate-anything)、
-[SenseNova-Vision](/docs/models/sensenova-vision) 和
+[SenseNova-Vision](/docs/models/sensenova-vision)、
+[WeVisOne-VL](/docs/models/wevisone-vl) 和
 [LibreMODUS](/docs/models/libremodus)。这些通过它们自己的工厂函数和 extra 加载；
 每个模型页上都写着确切的调用方式。
 
@@ -176,7 +178,7 @@ Darknet 一脉的 [YOLOv1](/docs/models/yolov1)、
 
 `conf` 设置置信度阈值，`max_det` 限制输出的行数上限。`iou` 是 NMS 阈值，所以它只对
 会跑 NMS 的家族有影响；RF-DETR 和端到端的 YOLOv9 head 解码的是一组固定数量的预测，
-会忽略它。输入源、流式处理和结果处理见[预测](/docs/predict)。
+会忽略它。`agnostic_nms=True` 会在 `iou` 处增加一个与类别无关的抑制步骤，这两者也适用；见[阈值与过滤](/docs/predict/thresholds#agnostic_nms)。输入源、流式处理和结果处理见[预测](/docs/predict)。
 
 ## 数据集格式
 
@@ -232,8 +234,8 @@ names:
 
 ## 验证
 
-`val()` 返回一个由 `metrics/` 键组成的普通字典，是在数据集 YAML 里 `val` 指定的划分
-上用 COCO 评测算出来的。
+`val()` 返回一个由 `metrics/` 键组成的字典，是在数据集 YAML 里 `val` 指定的划分
+上用 COCO 评测算出来的，逐类别结果作为属性附在上面。
 
 <code-tabs name="val" />
 
@@ -250,6 +252,8 @@ names:
 来画图，等于把同一个数报了两遍。还有四个键会在 `(B)` 后缀下再重复一遍，`B` 表示
 box，这样在同时也预测掩码的模型上，检测的键读起来是一样的：`metrics/mAP50-95(B)`、
 `metrics/mAP50(B)`、`metrics/precision(B)` 和 `metrics/recall(B)`。
+
+结果还带有 `confusion_matrix`，索引为 `matrix[predicted, true]`，带有 `background` 行和列，以及 `box` 上跨置信度的逐类别查准率、查全率和 F1：`box.px`、`box.p_curve`、`box.r_curve`、`box.f1_curve`，`box.ap_class_index` 中的每个类别一行。[验证与指标](/docs/train/validation#confusion-matrix)对两者以及 `val(agnostic_nms=True)` 都有说明。
 
 ## 导出
 

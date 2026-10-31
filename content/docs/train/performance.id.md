@@ -69,7 +69,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: c8d7adb6aabcbc80
+source_hash: 766f7d68cb2233ad
 ---
 
 ## Ukur sebelum mengubah apa pun
@@ -122,6 +122,10 @@ di bawah CUDA autocast. `amp_dtype` memilih `float16` atau `bfloat16`.
 <code-tabs name="amp" />
 
 Float16 memakai gradient scaler; bfloat16 menonaktifkannya. Deteksi D-FINE, DEIM, RT-DETRv4, dan YOLO-NAS memakai `amp=True` secara default. Dome-DETR, PP-YOLOE, dan YOLO-NAS OBB mempertahankan default FP32. Berikan `amp=False` untuk meminta FP32 secara eksplisit.
+
+YOLOv9, YOLOv9-E2E, dan YOLOv9-P2 menilai anchor untuk penetapan label dalam fp32 pada
+kedua dtype, karena sigmoid dari logit kelas float16 yang sangat negatif mengalami
+underflow ke nol dan akan membuat batch tanpa anchor positif.
 
 Semantik argumen, termasuk perilaku permintaan bfloat16 pada hardware tanpa
 dukungan bfloat16, tersedia di [Hyperparameter](/docs/train/hyperparameters).

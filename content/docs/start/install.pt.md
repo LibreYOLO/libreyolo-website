@@ -68,7 +68,7 @@ snippets:
         # resoluções de entrada. Famílias cujo extra está faltando são
         # listadas com o comando pip que as habilita.
         libreyolo models
-source_hash: 3ad6bb09bf2f5434
+source_hash: a4a8cf3926eeb9bb
 ---
 
 ## Instalação
@@ -99,6 +99,7 @@ a mesma com ou sem o extra.
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 ou superior |
 | `marigold` | Dependências fixadas de difusão, aceleração e Transformers |
 | `molmo2` | `transformers==4.57.1`, `einops` e `accelerate` |
+| `gen` | `diffusers>=0.38.0`, `transformers>=5.1.0` e `accelerate>=1.7.0`, para o LibreGen e o Speridlabs Idol |
 | `rfdetr` | `transformers`, que fornece o backbone do RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, que fornece os encoders ViT-L/16 e EfficientNet-Lite3 do MiDaS |
@@ -166,11 +167,11 @@ precisam de extra. Só as URLs de páginas do YouTube precisam.
 
 ### O extra agregado
 
-`libreyolo[all]` instala os extras de modelos, exportação, rastreamento e logging em um comando. Alguns ficam de fora deliberadamente. `neptune` é excluído porque o `neptune-scale` estável exige protobuf abaixo de 7, enquanto o caminho TFLite exige protobuf 7. `executorch` é excluído porque ExecuTorch restringe a versão de PyTorch com que funciona, e `coreai` porque `coreai-torch` fixa PyTorch em 2.11.x e levaria todo o ambiente para essa versão. `fast-eval`, `hub-kernels`, `clip-convert` e `siglip2-convert` também ficam de fora. Instale qualquer um deles pelo nome. `all` inclui `hf` e `llm`; `fiftyone`, `vla`, `marigold` e `molmo2` permanecem separados. FiftyOne traz OpenCV headless, que se sobrepõe ao pacote base `cv2`.
+`libreyolo[all]` instala os extras de modelos, exportação, rastreamento e logging em um comando. Alguns ficam de fora deliberadamente. `neptune` é excluído porque o `neptune-scale` estável exige protobuf abaixo de 7, enquanto o caminho TFLite exige protobuf 7. `executorch` é excluído porque ExecuTorch restringe a versão de PyTorch com que funciona, e `coreai` porque `coreai-torch` fixa PyTorch em 2.11.x e levaria todo o ambiente para essa versão. `fast-eval`, `hub-kernels`, `clip-convert` e `siglip2-convert` também ficam de fora. Instale qualquer um deles pelo nome. `all` inclui `hf`, `llm` e `gen`; `fiftyone`, `vla`, `marigold` e `molmo2` permanecem separados. FiftyOne traz OpenCV headless, que se sobrepõe ao pacote base `cv2`.
 
 A instalação base exige Python 3.10 ou superior e adiciona `cloudpickle>=3.0.0` para DDP gerenciado pelo coordenador.
 
-Use um ambiente separado para Molmo2: sua versão fixada de Transformers 4.57.1 conflita com os stacks mais recentes de VLM, Hub e Marigold. Marigold fixa diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 e Transformers 5.4.0, além de bitsandbytes 0.49.2 em Linux/Windows. A inferência padrão de quatro bits do Marigold exige CUDA. North Micro Vision exige Transformers 5.16 ou superior; Gemma 4 exige 5.10 ou superior, acima do mínimo compartilhado de VLM.
+Use um ambiente separado para Molmo2: sua versão fixada de Transformers 4.57.1 conflita com os stacks mais recentes de VLM, Hub e Marigold, e o `libreyolo[gen]` não pode ser instalado junto com o `libreyolo[molmo2]`. Marigold fixa diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 e Transformers 5.4.0, além de bitsandbytes 0.49.2 em Linux/Windows. A inferência padrão de quatro bits do Marigold exige CUDA. North Micro Vision exige Transformers 5.16 ou superior; Gemma 4 exige 5.10 ou superior, acima do mínimo compartilhado de VLM.
 
 ## Restrições de plataforma
 

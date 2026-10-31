@@ -153,7 +153,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Definizione
@@ -194,7 +194,7 @@ quindi aspettati una latenza per immagine nettamente più alta rispetto a un
 rilevatore dedicato. I suoi pesi sono non commerciali; la licenza è sulla sua
 pagina.
 
-[Molmo2](/docs/models/molmo2) e [Moondream](/docs/models/moondream) forniscono punti condizionati dal testo. [LibreGround](/docs/reference/ground-api) usa un'istruzione per selezionare al massimo un clic per query con ShowUI, Florence-2 o Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) e [WeVisOne-VL](/docs/models/wevisone-vl) forniscono punti condizionati dal testo. [LibreGround](/docs/reference/ground-api) usa un'istruzione per selezionare al massimo un clic per query con ShowUI, Florence-2 o Qwen3-VL.
 
 ## Predizione
 

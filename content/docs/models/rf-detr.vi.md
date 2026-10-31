@@ -210,7 +210,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 3238696a4e1ab6c2
+source_hash: 1b6651371762ad63
 ---
 ## Cài đặt
 
@@ -219,6 +219,8 @@ RF-DETR cần extra riêng, extra này cài thêm `transformers` cho backbone.
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Nếu không có extra này, việc nạp một checkpoint hoặc tên mô hình RF-DETR, từ Python hay từ CLI, sẽ dừng với một lỗi nêu đích danh dòng cài đặt này.
 
 ## Dự đoán
 
@@ -257,6 +259,8 @@ xuống vì detector transformer phân kỳ ở learning rate mà mô hình YOLO
 được. Giữ `imgsz` ở độ phân giải gốc của checkpoint trừ khi có lý do thay đổi.
 Đầu vào phải chia hết cho kích thước patch của backbone nhân số cửa sổ; LibreYOLO
 kiểm tra điều này trước khi chạy và nêu các kích thước hợp lệ gần nhất.
+
+Tinh chỉnh segment bắt đầu từ một checkpoint segment, vì RF-DETR không có chuyển đổi từ detect sang segment. `libreyolo train model=LibreRFDETRn-seg.pt task=segment` nạp checkpoint đó, còn một checkpoint phát hiện đối tượng với `task=segment` sẽ dừng với một lỗi.
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 

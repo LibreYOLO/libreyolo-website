@@ -77,7 +77,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 7dc6a5ef1b3ba9ea
+source_hash: 93a9e4b50df2bc1c
 ---
 
 ## Точки входа
@@ -90,11 +90,12 @@ source_hash: 7dc6a5ef1b3ba9ea
 | `LibreSAM` | Сегментаторы с промптами, по алиасу размера | Точки, рамки или текст концепта | `sam` |
 | `LibreVLM` | Генеративные vision-language детекторы, по алиасу | Словарь классов или произвольный промпт | `vlm` |
 | `LibreOpenVocab` | Детекторы, обусловленные текстом, по алиасу | Словарь классов | `openvocab` |
+| `LibreGen` | Генеративные модели, по алиасу или локальному каталогу модели | Текстовый промпт (текст в изображение) или изображение (изображение в 3D) | `gen` |
 | `LibreEnsemble` | Два детектора или больше, объединённые в одну поверхность | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO` принимает файлы чекпойнтов и экспортированные артефакты. Родственные фабрики принимают псевдонимы моделей; `LibreVLM` и `LibreVLA` также повторно загружают собственные сохранённые каталоги чекпойнтов.
+`LibreYOLO` принимает файлы чекпойнтов и экспортированные артефакты. Родственные фабрики принимают псевдонимы моделей; `LibreVLM` и `LibreVLA` также повторно загружают собственные сохранённые каталоги чекпойнтов, а `LibreGen` загружает локальный каталог модели в формате оригинала поддерживаемого семейства.
 
 ```python
 LibreYOLO(
@@ -167,9 +168,10 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
 `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
 `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (также пишется
-`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` и `LibreGroundQwen3VL`,
+`LibreModus`), `LibreWeVisOneVL`; `LibreShowUI`, `LibreGroundFlorence2` и `LibreGroundQwen3VL`,
 доступные через `LibreGround`; `LibreSmolVLA`, `LibreACT` и
-`LibreDiffusionPolicy`, доступные через `LibreVLA`.
+`LibreDiffusionPolicy`, доступные через `LibreVLA`; `LibreFlux2Klein`, `LibreSanaSprint` и
+`LibreSperidlabsIdol`, доступные через `LibreGen`.
 
 ## Поверхность предсказания
 
@@ -186,6 +188,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -208,11 +211,19 @@ model(
 методы объекта модели описаны на
 [странице API модели](/docs/reference/model-api).
 
+`agnostic_nms=True` запускает NMS без учёта классов: из рамок, перекрывающихся
+сильнее `iou`, остаётся только рамка с наибольшей оценкой, независимо от их
+классов. Он работает на готовых детекциях семейства, после фильтра `classes`, и
+охватывает задачи детекции, сегментации, позы и OBB, а для повёрнутых рамок
+использует повёрнутый IoU. На любой другой задаче он вызывает `ValueError`.
+
 ## Полезная нагрузка Results
 
 `Results` и классы его данных экспортируются на уровне пакета: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. Каждый описан в разделе [типов Results](/docs/reference/results-types).
 
 `Boxes3D`, `AlbedoMap` и `Actions` добавляют 3D-кубоиды, внутреннее альбедо и фрагменты действий. См. [типы результатов](/docs/reference/results-types).
+
+`GeneratedImage` и `Gaussians` несут результат `LibreGen`: сгенерированное изображение в `Results.generated` и сгенерированный 3D-объект в `Results.gaussians`.
 
 ## Бэкенды
 

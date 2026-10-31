@@ -4,11 +4,12 @@ families:
   - dinov2
 seo_title: 'DINOv2 trong LibreYOLO: phân đoạn ngữ nghĩa, phân loại và embedding'
 description: >-
-  Dùng DINOv2 trong LibreYOLO để phân đoạn ngữ nghĩa, phân loại và tạo embedding toàn ảnh trên backbone
-  DINOv2-with-Registers. Toàn bộ dùng Apache-2.0.
+  Dùng DINOv2 trong LibreYOLO để phân đoạn ngữ nghĩa, phân loại và tạo embedding
+  toàn ảnh trên backbone DINOv2-with-Registers. Toàn bộ dùng Apache-2.0.
 lead: >-
-  DINOv2 là vision transformer tự giám sát được Meta AI huấn luyện để tạo đặc trưng ảnh đa dụng mà không cần
-  nhãn. LibreYOLO bọc backbone DINOv2-with-Registers cho ba tác vụ: phân đoạn ngữ nghĩa, phân loại và tạo
+  DINOv2 là vision transformer tự giám sát được Meta AI huấn luyện để tạo đặc
+  trưng ảnh đa dụng mà không cần nhãn. LibreYOLO bọc backbone
+  DINOv2-with-Registers cho ba tác vụ: phân đoạn ngữ nghĩa, phân loại và tạo
   embedding toàn ảnh.
 keywords:
   - DINOv2
@@ -150,7 +151,7 @@ snippets:
         # đặt tên tệp theo tác vụ, ở đây là LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 ## Cài đặt
 
@@ -159,6 +160,8 @@ LibreDINOv2 chỉ đăng ký khi đã cài `transformers`, cùng dependency tùy
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Nếu không có extra này, việc nạp một checkpoint hoặc tên mô hình DINOv2 sẽ dừng với một lỗi nêu đích danh dòng cài đặt này.
 
 ## Dự đoán
 

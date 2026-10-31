@@ -117,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Instalação
@@ -138,8 +138,10 @@ O objeto `Results` retornado é o mesmo que todas as famílias retornam, então
 trocar por outro detector é uma mudança de uma linha. Um nome de arquivo com
 `-seg` já resolve sozinho para a tarefa do RTMDet-Ins, e aí `result.masks`
 carrega as máscaras de instância junto com as caixas. `conf` define o limiar de
-confiança e `iou`, o limiar do NMS. Veja [predição](/docs/predict) para fontes,
-streaming e tratamento de resultados.
+confiança e `iou`, o limiar do NMS. `max_det` vale como informado para as duas tarefas, até 300 caixas
+ou máscaras por imagem por padrão; a configuração de teste do RTMDet-Ins no
+MMDetection mantém 100, que `max_det=100` reproduz. Veja
+[predição](/docs/predict) para fontes, streaming e tratamento de resultados.
 
 ## Variantes
 

@@ -47,7 +47,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## Синопсис
@@ -128,8 +128,9 @@ JSON-выводе и в строке лога всегда стоит `tensorrt`
 
 Поддержка определяется для каждого семейства и каждой задачи, а не глобально.
 `libreyolo formats family=<family> task=<task>` печатает уровень поддержки
-каждого формата для этой комбинации, с причиной и приложенным ограничением.
-Аргументы описаны в [`libreyolo formats`](/docs/cli/utilities).
+каждого формата для этой комбинации, с причиной, приложенным ограничением и
+указанием, принимает ли там `export()` FP16 и INT8. Аргументы описаны в
+[`libreyolo formats`](/docs/cli/utilities).
 
 Некоторым форматам нужна дополнительная установка, некоторым — тулчейн.
 Отсутствующая Python-зависимость завершается с `export_dep_missing`; точность,

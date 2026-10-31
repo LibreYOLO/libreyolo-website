@@ -35,7 +35,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## ノブ
@@ -53,7 +53,7 @@ source_hash: f0d31511715e3cc4
 | `mosaic_scale` | アフィン変換におけるランダムスケール範囲 |
 | `mixup_scale` | MixUp相手の画像に適用するジッタースケール範囲 |
 | `shear` | アフィン変換におけるランダムせん断範囲（度） |
-| `perspective` | アフィン変換における射影変換の大きさ |
+| `perspective` | アフィン変換に加える射影変換の強さ：キャンバスの角が、軸ごとにキャンバス辺長の半分の`min(perspective * 100, 0.2)`倍まで内側に動く。`0`で無効 |
 | `flipud` | 垂直反転の確率 |
 | `no_aug_epochs` | 強いデータ拡張を無効にして学習する最後のエポック数 |
 | `auto_augment` | 分類用AutoAugmentポリシー：randaugment、autoaugment、augmix |
@@ -109,13 +109,13 @@ DETR系パイプラインはモザイクを使わない変換です。測光的�
 | 構成 | ファミリー |
 |---|---|
 | YOLOX形式 | `yolox`、`yolo7`、`yolo9`、`yolo9_e2e`、`yolo9_p2`、`rtmdet`、`picodet`、`rtdetr`、`rtdetrv2`、`fomo` |
-| YOLO-NAS | `yolonas` |
-| DETR形式 | `dfine`、`domedetr`、`deim`、`deimv2`、`rtdetrv4`、`rfdetr`、`ec`、`dinov2` |
-| 分類 | `resnet`、`convnext`、`mobilenetv4`、`efficientnetv2` |
-| セマンティック | `segformer` |
+| YOLO-NAS | `yolonas`、`ppyoloe` |
+| DETR形式 | `dfine`、`gtr`、`domedetr`、`deim`、`deimv2`、`tinyformer`、`rtdetrv4`、`rfdetr`、`ec`、`dinov2` |
+| 分類 | `resnet`、`convnext`、`convnextv2`、`mobilenetv4`、`efficientnetv2` |
+| セマンティック | `segformer`、`unet`、`lingbotvision` |
 | 復元 | `nafnet` |
 
-25のファミリーが対象です。この一覧にないファミリーでは無視される集合が空で返されるため、警告は表示されません。
+31のファミリーが対象です。この一覧にないファミリーでは無視される集合が空で返されるため、警告は表示されません。
 
 ## 差異
 
@@ -126,6 +126,8 @@ DETR系パイプラインはモザイクを使わない変換です。測光的�
 | `rtdetr` | `flipud`を無視 |
 | `rtdetrv2` | `flipud`を無視 |
 | `fomo` | `perspective`と`flipud`を無視 |
+| `ppyoloe` | `flipud`を無視。元のレシピはランダムな90度回転を代わりに使う |
+| `gtr` | `mosaic_prob`と`mixup_prob`を、最初の`mosaic_epochs`エポックの間使用。`degrees`、`translate`、`mosaic_scale`は、モザイクの後に続くアフィン変換の形を決める |
 | `ec` | `task="pose"`の場合だけ`hsv_prob`、`degrees`、`translate`を使用。detectとsegmentでは固定の測光レシピを使用 |
 | `dinov2` | `task="classify"`の場合だけ分類パックを使用 |
 

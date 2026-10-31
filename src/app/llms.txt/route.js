@@ -60,22 +60,18 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Home](${SITE_URL}/): the YOLO library, task explorer, quickstart and guidance for moving from Ultralytics
 - [Model Zoo](${SITE_URL}/models): model families and pretrained weights; check each checkpoint's license
 - [Benchmarks](${SITE_URL}/benchmarks): measured COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware
-- [Dataset Zoo](${SITE_URL}/datasets): datasets for training and evaluating models, hosted on Hugging Face
 - [Commercial Guide](${SITE_URL}/commercial): how to use LibreYOLO in proprietary, closed-source commercial applications under the MIT license
 - [Sponsors](${SITE_URL}/sponsors): the LibreYOLO Sponsorship Program, how the project accepts money, what it funds, and what sponsors receive
-- [Research & Science](${SITE_URL}/science): native explainability, feature maps, and a codebase designed for discovery
 - [Articles](${SITE_URL}/articles): tutorials, comparisons, and news about MIT-licensed object detection
-- [LibreVLM](${SITE_URL}/docs/librevlm): vision-language model documentation
-- [Experimental tasks](${SITE_URL}/docs/experimental): research previews and experimental model documentation
-- [Cursor Hackathon track](${SITE_URL}/cursor-hackathon): setup tutorial and working examples for the LibreYOLO track
 
 ## Documentation versions
 Earlier releases stay reachable for anyone pinned to them. They are frozen, no
 longer updated, and canonicalised to the matching page under ${SITE_URL}/docs.
-Prefer /docs unless you are pinned to an older version. v1.5.0 is a full docs
-tree; v1.1.0 to v1.4.0 are single pages.
+Prefer /docs unless you are pinned to an older version. v1.6.0 and v1.5.0 are
+full docs trees; v1.1.0 to v1.4.0 are single pages.
 
-- [v1.6.0](${SITE_URL}/docs): current documentation tree
+- [v1.7.0](${SITE_URL}/docs): current documentation tree
+- [v1.6.0 (frozen)](${SITE_URL}/docs/v1.6.0): the full 1.6.0 docs tree, one page per topic at the same paths as /docs (for example ${SITE_URL}/docs/v1.6.0/models/rf-detr, or append .md for markdown)
 - [v1.5.0 (frozen)](${SITE_URL}/docs/v1.5.0): the full 1.5.0 docs tree, one page per topic at the same paths as /docs (for example ${SITE_URL}/docs/v1.5.0/models/rf-detr, or append .md for markdown)
 - [v1.4.0 (frozen)](${SITE_URL}/docs/v1.4.0)
 - [v1.3.1 (frozen)](${SITE_URL}/docs/v1.3.1)

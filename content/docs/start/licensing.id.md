@@ -16,7 +16,7 @@ keywords:
   - lisensi checkpoint model
   - deteksi objek apache-2.0
 last_verified: 1.6.0
-source_hash: 03e83b82bd2da258
+source_hash: 3204f1f80370c85a
 ---
 
 ## Kode LibreYOLO sendiri
@@ -27,8 +27,10 @@ digunakan dalam produk komersial atau closed-sumber. Pertahankan baris copyright
 dan teks lisensi bersama setiap salinan yang didistribusikan ulang, dan kewajiban
 berakhir di sana.
 
-Izin tersebut berhenti pada kode. Berkas
-[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE)
+Izin tersebut berhenti pada kode.
+[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) hanya
+berisi teks MIT, dan catatan tentang bobot di bagian atas
+[`NOTICE`](https://github.com/LibreYOLO/libreyolo/blob/release/NOTICE)
 menyatakannya dengan jelas:
 
 > Lisensi tersebut beragam dan tidak semuanya permisif: beberapa bobot yang diterbitkan
@@ -57,8 +59,10 @@ BSD-3-Clause mencakup semua turunan torchvision: Faster R-CNN, Mask R-CNN,
 FCOS, RetinaNet, SSD300, AlexNet, VGG, FCN, dan DeepLabv3.
 
 MIT mencakup kelompok lebih kecil, termasuk NAFNet dari Megvii, CenterNet dari
-Xingyi Zhou, dan YOLOv7 sebagaimana dirilis ulang oleh penulisnya, Kin-Yiu Wong
-dan Hao-Tang Tsui, di MultimediaTechLab. Family YOLOv1 hingga YOLOv4
+Xingyi Zhou, serta YOLOv7 dan YOLOv9 sebagaimana dirilis ulang oleh penulisnya, Kin-Yiu Wong
+dan Hao-Tang Tsui, di MultimediaTechLab. Blok penyusun YOLOv9, menara head deteksi
+yang dipakai bersama oleh YOLO9-E2E dan YOLO9-P2, cabang PGI, dan blend mixup
+YOLOv9 di-port dari rilis MIT itu. Family YOLOv1 hingga YOLOv4
 mereproduksi arsitektur dari project Darknet oleh Joseph Redmon dan, untuk
 YOLOv4, Alexey Bochkovskiy. Darknet berada di domain publik, sehingga tidak
 menimbulkan kewajiban.
@@ -111,7 +115,7 @@ setiap model card bahwa dasarnya tersirat, bukan diberikan per checkpoint, dan
 mengulangi peringatan torchvision bahwa ketentuan model pretrained dapat berasal
 dari data pelatihan.
 
-Bobot pretrained ConvNeXt V2 dan LeVJEPA berlisensi CC-BY-NC-4.0. Moondream 3 memakai BSL 1.1, mirror Dome-DETR terbatas untuk riset akademik, dan varian EdgeCrafter `obj2coco` serta DetAny3D memiliki ketentuan bobot yang membatasi penggunaan. Halaman model menyatakan deklarasi tersebut di samping lisensi kode. Checkpoint COCO EdgeCrafter asli mempertahankan izin Apache-2.0 yang tercatat. Mirror MiDaS mempertahankan izin MIT dari penerbit.
+Bobot pretrained ConvNeXt V2 dan LeVJEPA berlisensi CC-BY-NC-4.0. Moondream 3 memakai BSL 1.1, mirror Dome-DETR terbatas untuk riset akademik, dan varian EdgeCrafter `obj2coco` serta DetAny3D memiliki ketentuan bobot yang membatasi penggunaan. Text encoder Gemma 2 bawaan SANA-Sprint tetap berada di bawah Gemma Terms of Use milik Google, dan encoder DINOv3 yang dibaca Speridlabs Idol dari mirror `LibreYOLO/LibreDINOv3vith16plus` tetap berada di bawah DINOv3 License milik Meta. Halaman model menyatakan deklarasi tersebut di samping lisensi kode. Checkpoint COCO EdgeCrafter asli mempertahankan izin Apache-2.0 yang tercatat. Mirror MiDaS mempertahankan izin MIT dari penerbit.
 
 Ringkasan bobot mengikuti lisensi yang dinyatakan penerbit checkpoint. Nama dataset pelatihan tidak menetapkan lisensi checkpoint tambahan.
 

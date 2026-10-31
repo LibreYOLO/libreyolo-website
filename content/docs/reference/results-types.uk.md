@@ -50,7 +50,7 @@ snippets:
         # Рядки як звичайні словники, а потім як JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## Об'єкт Results
@@ -96,6 +96,8 @@ source_hash: 173c542fb675892e
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, з галереєю |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` є доступним для читання й запису псевдонімом
 `result.normal_map`.
@@ -328,3 +330,54 @@ L2-нормалізовані вектори із задачі `embed`, які �
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` представляє фрагмент дій float32 `(T, D)`. `first` повертає перший рядок; зріз вибирає часові кроки. Значення залишаються в одиницях датасету політики. `names` описує виміри дій, `fps` частоту керування, а `instruction` текст умови.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+містить одне синтезоване зображення, `(H, W, 3)` uint8 RGB. `array` повертає
+представлення numpy, а `image` повертає `PIL.Image`. `prompt` є текстом, що
+створив зображення, а `seed` цілим числом, яке відтворює його з тією самою
+моделлю та налаштуваннями; `params` фіксує решту виклику: `model`, `imgsz` і всі
+чинні налаштування сімейства. `save(path)` записує зображення, а PNG також
+зберігає `to_dict()`, тобто форму, запит, seed і params, як JSON у текстовому
+блоці `libreyolo`.
+
+У згенерованому результаті `Results.boxes` і `Results.path` мають значення
+`None`, `orig_shape` є власним `(H, W)` зображення, а `len(result)` дорівнює 1.
+`Results.save(path)` записує зображення, `plot()` повертає його як зображення
+PIL, а `summary()` повертає один рядок із записом корисних даних.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+містить один згенерований 3D-об'єкт як гауссові сплати у власній системі
+координат об'єкта: z угору, з центром у кубі `[-0.5, 0.5]^3`. Кожен рядок є
+одним гауссіаном.
+
+| Член | Повертає |
+|---|---|
+| `xyz` | `(N, 3)` позиції в системі координат об'єкта |
+| `scales` | `(N, 3)` стандартні відхилення вздовж локальних осей, лінійні, не логарифмічні |
+| `rotations` | `(N, 4)` одиничні кватерніони `(w, x, y, z)`, локальні осі в систему координат об'єкта |
+| `opacities` | `(N,)` у `[0, 1]` |
+| `sh` | `(N, K, 3)` коефіцієнти кольору у сферичних гармоніках, спершу ступінь 0 |
+| `colors` | `(N, 3)` RGB у `[0, 1]`, з члена ступеня 0 |
+| `camera` | Виведений вхідний ракурс: `yaw` і `pitch` у радіанах, `radius` в одиницях об'єкта, вертикальний `fov` у градусах і поле обрізання `margin` |
+| `seed`, `params` | Seed і налаштування виклику, що відтворюють об'єкт |
+| `input_image` | Зображення RGB, яке бачила модель після власної попередньої обробки |
+
+`len(gaussians)` дорівнює `N`, а `gaussians[gaussians.opacities > 0.1]` повертає
+новий `Gaussians` з вибраними рядками. `save(path)` записує за розширенням.
+`.ply` має стандартне компонування 3D Gaussian Splatting з логарифмічними
+масштабами та логітними непрозоростями, повернене y угору, як очікують
+переглядачі сплатів, і рядок заголовка `comment libreyolo` із seed, камерою та
+params у форматі JSON. Корисні дані з кольором вищого порядку (`K > 1`)
+спричиняють `NotImplementedError` для `.ply`. `.splat` є компактним вебформатом,
+32 байти на гауссіан. `render(size=512, background=(0, 0, 0))` повертає точковий
+рендер із виведеного вхідного ракурсу як `PIL.Image`: швидкий огляд, а не
+растеризацію гауссіанів.
+
+У згенерованому 3D-результаті `Results.boxes` має значення `None`; `path`,
+`orig_shape` і `orig_img` описують вихідне зображення, а `len(result)` дорівнює
+1. `Results.save(path)` записує об'єкт, `plot()` повертає цей точковий рендер, а
+`summary()` повертає один рядок із записом корисних даних.

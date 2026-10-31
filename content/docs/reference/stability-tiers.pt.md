@@ -44,7 +44,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Níveis de suporte a exportação
@@ -122,9 +122,9 @@ site usa para o mesmo grupo no cabeçalho de uma página de modelo.
 | `g2` | Supported | 19 | Conjunto adicional de cobertura de famílias treináveis |
 | `g3` | Inference only | 44 | Famílias sem implementação de treinamento |
 | `g4` | Museum | 5 | Famílias históricas com cobertura de inferência |
-| `s` | Sibling tier | 36 | APIs irmãs (SAM, vocabulário aberto, VLM, grounding, zero-shot) cobertas separadamente |
+| `s` | Sibling tier | 40 | APIs irmãs (SAM, vocabulário aberto, VLM, grounding, zero-shot) cobertas separadamente |
 
-São 118 famílias em seis grupos. O `g3` é o maior grupo, porque boa parte do
+São 122 famílias em seis grupos. O `g3` é o maior grupo, porque boa parte do
 registro é linhagem só de inferência, e não detectores treinados ativamente.
 
 Para um leitor escolhendo um modelo, o grupo diz onde esperar atenção de
@@ -163,7 +163,7 @@ Uma família em `g3` ou `g4` não tem implementação de treinamento, e chamar
 `train()` em uma delas levanta erro. Isso é uma propriedade do código da
 família, não do grupo dela: o grupo registra o fato, não o causa.
 
-Das 118 famílias, 37 treinam: todas as famílias de `g0`, `g1` e `g2`, mais o
+Das 122 famílias, 37 treinam: todas as famílias de `g0`, `g1` e `g2`, mais o
 Qwen3-VL via `LibreVLM` e SmolVLA, ACT e Diffusion Policy via `LibreVLA`.
 
 Para uma família que treina, se um botão individual de data augmentation chega

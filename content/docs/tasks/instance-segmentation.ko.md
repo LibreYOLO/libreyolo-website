@@ -119,7 +119,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## 정의
@@ -138,7 +138,7 @@ source_hash: 577cd3c8c2d5d6fe
 
 [EoMT](/docs/models/eomt)는 마스크를 예측하고 검증하지만 학습할 수 없으며, 내보낸 모델은 더욱 제한적입니다: `export()`는 오직 의미적 작업만 허용하며, `segment`와 `panoptic`에 대해 `NotImplementedError`를 발생시키는데, 이는 두 개의 요청-마스크 런타임 계약이 정의되지 않았기 때문입니다. 파이썬에서 인스턴스 마스크에는 내보낸 그래프가 아닌 EoMT를 사용하십시오.
 
-별도의 그룹이 클래스 목록이 아니라 프롬프트에서 세그먼트를 나눕니다: 클릭, 상자 또는 구문이 객체를 선택하면 모델이 해당 마스크를 반환합니다. [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2), [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam), [EdgeTAM](/docs/models/edgetam) 및 [PicoSAM3](/docs/models/picosam3)는 이 방식을 사용하며, [SenseNova-Vision](/docs/models/sensenova-vision)도 마찬가지로, 세그멘테이션이 참조 기반입니다: 하나의 객체를 이름으로 지정하는 구문을 받습니다. 이들은 자체 팩토리와 추가 기능을 통해 로드되며, 각 모델 페이지에는 정확한 호출 방법이 나와 있습니다.
+별도의 그룹이 클래스 목록이 아니라 프롬프트에서 세그먼트를 나눕니다: 클릭, 상자 또는 구문이 객체를 선택하면 모델이 해당 마스크를 반환합니다. [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2), [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam), [EdgeTAM](/docs/models/edgetam) 및 [PicoSAM3](/docs/models/picosam3)는 이 방식을 사용하며, [SenseNova-Vision](/docs/models/sensenova-vision)도 마찬가지로, 세그멘테이션이 참조 기반입니다: 하나의 객체를 이름으로 지정하는 구문을 받습니다. [WeVisOne-VL](/docs/models/wevisone-vl)은 `names=`에 준 각 구문을 분할하고 박스와 이진 마스크를 반환합니다. 이들은 자체 팩토리와 추가 기능을 통해 로드되며, 각 모델 페이지에는 정확한 호출 방법이 나와 있습니다.
 
 ## 예측
 
@@ -146,7 +146,7 @@ source_hash: 577cd3c8c2d5d6fe
 
 <code-tabs name="predict" />
 
-`conf`와 `max_det`는 탐지할 때와 같은 방식으로 출력을 형성하며, 마스크는 그들이 속한 박스와 함께 필터링됩니다. 소스, 스트리밍 및 결과 처리는 [prediction](/docs/predict)을 참조하십시오.
+`conf`와 `max_det`는 탐지할 때와 같은 방식으로 출력을 형성하며, 마스크는 `agnostic_nms=True`를 포함해 그들이 속한 박스와 함께 필터링됩니다. 소스, 스트리밍 및 결과 처리는 [prediction](/docs/predict)을 참조하십시오.
 
 ## 데이터셋 형식
 
@@ -192,7 +192,7 @@ names:
 
 ## 검증
 
-`val()`는 `metrics/` 키의 일반 사전을 반환합니다. 박스와 마스크는 각각 COCO 평가로 점수가 매겨지며, 마스크 숫자가 주요 수치입니다.
+`val()`는 `metrics/` 키의 사전을 반환합니다. 박스와 마스크는 각각 COCO 평가로 점수가 매겨지며, 마스크 숫자가 주요 수치입니다. 필드가 다섯 개인 박스 전용 레이블 행은 분할 학습이 그 행에서 읽는 사각형 마스크로 점수가 매겨집니다.
 
 <code-tabs name="val" />
 
@@ -201,6 +201,8 @@ names:
 마스크에는 `(M)`, 박스에는 `(B)`라는 명시적인 접미사 아래에서도 네 가지 수치가 발행되어, 비교가 계열이 어떤 번호를 기본(primary)으로 부르기로 결정했는지에 의존하지 않도록 되어 있습니다: `metrics/mAP50-95(M)`와 `metrics/mAP50-95(B)`, `metrics/mAP50(M)`와 `metrics/mAP50(B)`, `metrics/precision(M)`와 `metrics/precision(B)`, `metrics/recall(M)`와 `metrics/recall(B)`. 이 작업에는 접미사가 없는 `metrics/precision`나 `metrics/recall`는 없습니다.
 
 정밀도와 재현율 키를 주의 깊게 읽으십시오. 이들은 이전 버전과의 호환성을 위해 유지되며, 운영 포인트가 아니라 별칭입니다: `metrics/precision(M)`는 `metrics/mAP50-95(M)`와 동일한 값을 가지고 있으며, `metrics/recall(M)`는 100개의 탐지에서 mask AR과 동일한 값을 가지며, `(B)`는 박스에 대해 동일하게 작동합니다. 이 둘을 쌍으로 플로팅하면 한 숫자가 두 번 보고됩니다.
+
+결과는 `confusion_matrix`와, `box`의 클래스별 정밀도, 재현율, F1 곡선도 담으며, 둘 다 마스크가 아닌 박스로 계산됩니다. [검증과 지표](/docs/train/validation#confusion-matrix)를 참조하십시오. 이 작업은 `val(agnostic_nms=True)`를 지원합니다.
 
 ## 내보내기
 

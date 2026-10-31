@@ -21,7 +21,9 @@ meta:
     value: data
     mono: true
   - label: 출력
-    value: 'runs/train/<name> 아래의 체크포인트, 지표, 로그. YOLO9은 yolo9_exp를 사용합니다'
+    value: >-
+      runs/train/<name> 아래의 체크포인트, 지표, 로그. name=이 없으면 yolo9_exp처럼 계열 자체의 실행 이름을
+      사용합니다
 snippets:
   examples:
     - label: 기본
@@ -46,7 +48,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 30b2c16d339f5f50
+source_hash: 5916562e70ea1d8a
 ---
 
 ## 사용법
@@ -76,9 +78,9 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 인자 | 기본값 | 의미 |
 |---|---|---|
 | `epochs` | `300` | 학습 에폭 수 |
-| `batch` | `16` | 장치당 배치 크기 |
+| `batch` | `16` | 배치 크기. GPU가 여러 개이면 전역 배치이며, GPU마다 균등하게 나뉩니다 |
 | `imgsz` | `640` | 학습 이미지 크기: `640`(정사각형) 또는 `480x640`(HxW) |
-| `device` | `auto` | 장치: `0`, `cpu`, `mps`, `auto` |
+| `device` | `auto` | 장치: `0`, `cpu`, `mps`, `auto`. `0,1`이나 `[0,1]` 같은 GPU 목록을 주면 해당 GPU들에서 학습합니다 |
 | `workers` | `4` | 데이터로더 워커 수 |
 | `cache` | `false` | 데이터 로딩 속도를 높이기 위한 이미지 캐시: `ram`, `disk`, `true`, `false` |
 | `seed` | `0` | 랜덤 시드 |
@@ -107,6 +109,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `momentum` | `0.937` | SGD 모멘텀이자 Adam 계열 옵티마이저의 1차 모멘트 계수 |
 | `weight_decay` | `0.0005` | L2 정규화 |
 | `nesterov` | `true` | Nesterov 모멘텀 |
+| `clip_max_norm` | | 각 옵티마이저 스텝 전에 그래디언트 L2 노름을 이 값으로 클리핑합니다. `0`은 클리핑을 끕니다. 설정하지 않으면 계열의 값이 적용됩니다 |
 
 ### 스케줄러
 
@@ -157,7 +160,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 인자 | 기본값 | 의미 |
 |---|---|---|
 | `project` | `runs/train` | 출력 디렉터리 루트 |
-| `name` | `exp` | 실험 이름 |
+| `name` | | 실험 이름. 설정하지 않으면 `yolo9_exp`나 `dfine_exp`처럼 계열의 `train()`이 사용하는 이름을 따릅니다 |
 | `exist_ok` | `false` | 기존 출력 디렉터리를 재사용합니다 |
 | `save_period` | `10` | N 에폭마다 체크포인트를 저장합니다 |
 | `log_interval` | `10` | N 배치마다 손실을 기록합니다 |
@@ -182,7 +185,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `average_best` | `0` | 학습 종료 시 관찰 지표 기준 최적 N개 체크포인트를 동일 비중으로 평균하여 weights/average.pt에 저장(0은 비활성화) |
 | `export_check` | `False` | 에폭 1 전에 ONNX로 내보내고 실패하면 실행을 실패 처리(기본값: 비활성화) |
 | `precise_bn` | `0` | 마지막 에폭 뒤 이 수만큼의 학습 이미지로 BatchNorm 이동 통계 재계산(0은 비활성화) |
-| `aux_weight` | | YOLO9 전용: 파인튜닝용 PGI 보조 분기 손실 가중치. 설정하지 않으면 `0.25`이며, `0`은 기본 헤드만 학습합니다 |
+| `aux_weight` | | YOLO9 전용: PGI 보조 분기 손실 가중치. 값을 주면 그 가중치로 새 분기를 붙이고, `0`은 기본 헤드만 학습합니다. 설정하지 않으면 가중치에 PGI 텐서가 있거나 처음부터 학습하는 경우에만 `0.25`로 분기를 붙입니다 |
 | `fliplr` | `None` | 수평 뒤집기 확률(flip_prob의 생태계 별칭) |
 | `flipud` | `0.0` | 수직 뒤집기 확률 |
 | `auto_augment` | `None` | 분류 자동 증강 정책: randaugment, autoaugment, augmix(기본값: 없음) |
@@ -225,7 +228,7 @@ RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETRv4, DINOv2는 모자이크도 믹스업도
 효과도 내지 않습니다. EC는 같은 파이프라인을 사용하지만, 작업이 pose일 때는
 `hsv_prob`, `degrees`, `translate`를 읽습니다. 분류 계열은 `mixup`을 제외한 그
 집합을 무시하고(이들에게 `mixup`은 배치 MixUp입니다) `flip_prob`을 읽습니다.
-SegFormer와 NAFNet은 그 집합 전체를 무시하고 `flip_prob`도 함께 무시하는데, 이들의 반전이 설정 가능한
+SegFormer, LingBot-Vision, NAFNet은 그 집합 전체를 무시하고 `flip_prob`도 함께 무시하는데, 이들의 반전이 설정 가능한
 확률이 아니라 고정된 확률로 동작하기 때문입니다. YOLO-NAS는 `mosaic`만
 무시하는데, 대신 항상 켜져 있는 샘플별 어파인으로 증강하기 때문입니다. RF-DETR
 계열은 그 목록에 더해 세 가지를 더 무시합니다: `optimizer`, `momentum`,
@@ -244,6 +247,21 @@ stderr의 다른 모든 출력과 함께 그 경고도 억제됩니다.
 `lora=true`는 RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2, v4, EC,
 GTR, ConvNeXt에서 받아들여집니다. 그 밖의 계열은 LoRA 없이 학습하는 대신
 `config_unsupported`로 종료합니다.
+
+`clip_max_norm`은 학습 설정에 이 값을 선언한 계열에서 받아들여집니다: 기본값이
+`10`인 YOLOv9, YOLOv9-E2E, YOLOv9-P2와, 기본값이 `0.1`인 D-FINE, Dome-DETR,
+DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4, RF-DETR, DINOv2,
+GTR입니다. 그 밖의 계열은 `config_unsupported`로 종료하고, 음수이거나 유한하지
+않은 값은 `config_type_error`로 종료합니다.
+
+`device=0,1`은 목록의 첫 번째 GPU에서 모델을 만들고 목록을 `train()`에 넘기며,
+`train()`은 GPU마다 프로세스를 하나씩 시작합니다.
+[다중 GPU 학습](/docs/train/multi-gpu)을 참고하십시오.
+
+RF-DETR에는 탐지에서 분할로의 전이가 없습니다. RF-DETR 분할 체크포인트와 함께
+`task=segment`를 쓰면 파일 이름과 관계없이 그 체크포인트를 불러오는데, 작업을
+정하는 것은 체크포인트 메타데이터이기 때문입니다. 반면 탐지 체크포인트는 학습되지
+않은 마스크 헤드를 학습하는 대신 오류와 함께 멈춥니다.
 
 `pretrained=false`와 `resume`을 함께 쓰는 것은 처음부터 학습을 지원하는
 계열에서는 거부되는데, 둘이 서로 반대되는 것을 요구하기 때문입니다.

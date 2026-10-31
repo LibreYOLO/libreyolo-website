@@ -76,7 +76,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 7dc6a5ef1b3ba9ea
+source_hash: 93a9e4b50df2bc1c
 ---
 
 ## 진입점
@@ -89,11 +89,12 @@ source_hash: 7dc6a5ef1b3ba9ea
 | `LibreSAM` | 프롬프트 가능한 세그멘터, 크기 별칭으로 | 포인트, 박스, 또는 개념 텍스트 | `sam` |
 | `LibreVLM` | 별칭에 의한 생성적 시각-언어 탐지기 | 수업 어휘 또는 자유 형식 프롬프트 | `vlm` |
 | `LibreOpenVocab` | 텍스트 조건 탐지기, 별칭으로 | 수업 어휘 | `openvocab` |
+| `LibreGen` | 별칭 또는 로컬 모델 디렉터리로 불러오는 생성 모델 | 텍스트 프롬프트(텍스트에서 이미지) 또는 이미지(이미지에서 3D) | `gen` |
 | `LibreEnsemble` | 두 개 이상의 탐지기가 하나의 표면으로 융합됨 | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO`는 체크포인트 파일과 내보낸 파일을 받습니다. 다른 팩토리는 모델 별칭을 받으며, `LibreVLM`과 `LibreVLA`는 자체 저장 체크포인트 디렉터리도 다시 로드합니다.
+`LibreYOLO`는 체크포인트 파일과 내보낸 파일을 받습니다. 다른 팩토리는 모델 별칭을 받으며, `LibreVLM`과 `LibreVLA`는 자체 저장 체크포인트 디렉터리도 다시 로드하고, `LibreGen`은 지원되는 계열의 업스트림 형식으로 된 로컬 모델 디렉터리를 로드합니다.
 
 ```python
 LibreYOLO(
@@ -133,7 +134,7 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 
 다른 작업: `LibreHRNet`과 `LibreDEKR` (포즈), `LibreL2CS` (시선), `LibrePPOCR` (OCR), `LibreFaceEmbedder` (임베드), 그리고 3D 탐지기 `LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D`, `Libre3DMOOD` (detect3d).
 
-형제 계층은 그들의 계열 클래스도 내보냅니다: `LibreSAM1`, `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`; `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`, `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (`LibreModus`로도 표기됨); `LibreGround`를 통해 제공되는 `LibreShowUI`, `LibreGroundFlorence2`, `LibreGroundQwen3VL`; `LibreVLA`를 통해 제공되는 `LibreSmolVLA`, `LibreACT`, `LibreDiffusionPolicy`.
+형제 계층은 그들의 계열 클래스도 내보냅니다: `LibreSAM1`, `LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`; `LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`, `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (`LibreModus`로도 표기됨), `LibreWeVisOneVL`; `LibreGround`를 통해 제공되는 `LibreShowUI`, `LibreGroundFlorence2`, `LibreGroundQwen3VL`; `LibreVLA`를 통해 제공되는 `LibreSmolVLA`, `LibreACT`, `LibreDiffusionPolicy`; `LibreGen`을 통해 제공되는 `LibreFlux2Klein`, `LibreSanaSprint`, `LibreSperidlabsIdol`.
 
 ## 예측 표면
 
@@ -149,6 +150,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -168,11 +170,15 @@ model(
 
 단일 이미지 소스는 하나의 `Results`를 반환합니다. 리스트, 튜플 또는 디렉토리는 그것들의 리스트를 반환하며, `stream=True`는 제너레이터를 반환합니다. 모델 객체의 다른 메서드는 [모델 API 페이지](/docs/reference/model-api)에서 문서화되어 있습니다.
 
+`agnostic_nms=True`는 클래스를 구분하지 않는 NMS를 실행합니다. `iou`를 넘어 겹치는 박스 중 클래스와 관계없이 점수가 가장 높은 것 하나만 유지합니다. 이 단계는 계열이 끝낸 탐지 결과에 대해 `classes` 필터 뒤에 실행되며, 탐지, 분할, 자세, OBB 작업을 지원하고 회전 박스에는 회전 IoU를 사용합니다. 다른 작업에서는 `ValueError`를 발생시킵니다.
+
 ## 결과 페이로드
 
 `Results`와 페이로드 클래스는 패키지 수준에서 내보냅니다. `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`입니다. 각각은 [Results 타입](/docs/reference/results-types)에 설명되어 있습니다.
 
 `Boxes3D`, `AlbedoMap`, `Actions`는 3D 직육면체, 고유 알베도, 동작 청크를 추가합니다. [결과 타입](/docs/reference/results-types)을 참조하십시오.
+
+`GeneratedImage`와 `Gaussians`는 `LibreGen`의 출력을 담습니다. 생성된 이미지는 `Results.generated`에, 생성된 3D 객체는 `Results.gaussians`에 들어갑니다.
 
 ## 백엔드
 

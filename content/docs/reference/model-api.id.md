@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Konstruksi
@@ -85,6 +85,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -111,6 +112,7 @@ model(
 | `device` | `None` | Override device untuk pemanggilan ini |
 | `classes` | `None` | Hanya mempertahankan id kelas berikut |
 | `max_det` | `300` | Jumlah maksimum deteksi per gambar |
+| `agnostic_nms` | `False` | Hanya mempertahankan kotak dengan skor tertinggi di antara kotak yang tumpang tindih di atas `iou`, apa pun kelasnya. Detect, segment, pose, dan obb |
 | `augment` | `False` | Augmentasi saat pengujian |
 | `save` | `False` | Menulis gambar atau video beranotasi |
 | `batch` | `1` | Jumlah gambar per forward pass untuk sumber direktori dan list |
@@ -222,9 +224,18 @@ menentukan direktori keluaran sebagai `project/name`, bernomor kecuali
 `exist_ok=True`. `plots` adalah alias untuk `save_plots`. `allow_download_scripts` mengendalikan Python tertanam yang
 dapat dibawa YAML dataset dalam kolom `download`.
 
+Untuk detect dan segment, dictionary ini adalah subclass `dict` yang juga membawa
+`box` (metrik per gambar serta kurva presisi, recall, dan F1 per kelas) dan
+`confusion_matrix`; untuk classify, ia membawa `top1`, `top5`, dan
+`confusion_matrix`. Lihat [Validasi dan metrik](/docs/train/validation).
+
 `faster_coco_eval` diterima melalui `**kwargs` dengan default `True`, lalu
 kembali ke pycocotools ketika paket tidak diinstal. Backend yang dijalankan
 dilaporkan pada `model.last_eval_backend`.
+
+`agnostic_nms=True`, juga melalui `**kwargs`, menerapkan NMS class-agnostic pada
+`iou` sebelum penilaian. Ini mencakup detect dan segment, dan memunculkan
+`ValueError` pada task lain mana pun.
 
 Validasi dengan augmentasi memunculkan error untuk task `obb` dan `pose`.
 

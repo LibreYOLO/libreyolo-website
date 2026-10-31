@@ -2,11 +2,12 @@
 title: Ma trận xuất đầy đủ
 seo_title: Ma trận hỗ trợ xuất LibreYOLO và các quy tắc
 description: >-
-  Cách LibreYOLO quyết định một tổ hợp họ, tác vụ và định dạng có xuất được không: mười hai định dạng, ba
-  tầng, quy tắc dự phòng và ngưỡng tương đương.
+  Cách LibreYOLO quyết định một tổ hợp họ, tác vụ và định dạng có xuất được
+  không: mười hai định dạng, ba tầng, quy tắc dự phòng và ngưỡng tương đương.
 lead: >-
-  Hỗ trợ xuất là phép tra cứu trên bộ ba (họ, tác vụ, định dạng). Trang này mô tả hình dạng ma trận, các quy
-  tắc điền những ô không có mục rõ ràng và cách truy vấn tổ hợp bạn quan tâm.
+  Hỗ trợ xuất là phép tra cứu trên bộ ba (họ, tác vụ, định dạng). Trang này mô
+  tả hình dạng ma trận, các quy tắc điền những ô không có mục rõ ràng và cách
+  truy vấn tổ hợp bạn quan tâm.
 keywords:
   - hỗ trợ xuất libreyolo
   - ma trận xuất
@@ -16,10 +17,12 @@ keywords:
   - lỗi NotImplementedError khi xuất
 last_verified: 1.6.0
 verification: >-
-  Định dạng, tầng, thứ tự dự phòng, block tác vụ, họ và NCNN được đọc từ libreyolo/export/support.py; bí danh
-  và đối số dùng chung lấy từ libreyolo/export/exporter.py; định nghĩa tầng lấy từ
-  docs/adr/0011-export-support-tiers.md; ngưỡng tương đương lấy từ docs/export_support.md, tất cả ở v1.6.0.
-  Các ô theo tổ hợp không được chép lại tại đây; hãy truy vấn bằng snippet bên dưới.
+  Định dạng, tầng, thứ tự dự phòng, block tác vụ, họ và NCNN được đọc từ
+  libreyolo/export/support.py; bí danh và đối số dùng chung lấy từ
+  libreyolo/export/exporter.py; định nghĩa tầng lấy từ
+  docs/adr/0011-export-support-tiers.md; ngưỡng tương đương lấy từ
+  docs/export_support.md, tất cả ở v1.6.0. Các ô theo tổ hợp không được chép lại
+  tại đây; hãy truy vấn bằng snippet bên dưới.
 snippets:
   usage:
     - label: 'Truy vấn ma trận, không cần mô hình'
@@ -58,7 +61,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 ## Hình dạng ma trận
 
@@ -127,6 +130,11 @@ Các tác vụ sau bị chặn cho mọi họ không có mục rõ ràng.
 
 | Tác vụ | Lý do |
 |---|---|
+| `albedo` | Xuất albedo không có giao diện runtime backend cho linear-RGB |
+| `act` | Vòng lặp lấy mẫu của chính sách không có đồ thị xuất được hay giao diện runtime backend |
+| `generate` | Sinh ảnh chạy một vòng lặp lấy mẫu trên nhiều mạng, không có đồ thị xuất được hay giao diện runtime backend |
+| `generate3d` | Sinh 3D chạy một vòng lặp lấy mẫu trên nhiều mạng, không có đồ thị xuất được hay giao diện runtime backend |
+| `detect3d` | Đầu ra đồ thị phát hiện 3D, metadata camera và giao diện runtime chưa được định nghĩa |
 | `ocr` | Hai mạng có crop động theo vùng không phù hợp giao diện xuất một đồ thị |
 | `point` | Họ chưa được nối với heatmap điểm dùng chung và giao diện giải mã đỉnh backend |
 | `semantic` | Họ chưa được nối với dense-logits dùng chung và giao diện argmax backend |
@@ -148,7 +156,7 @@ Mục rõ ràng ghi đè các quy tắc này, nhờ đó chẳng hạn một h�
 | `hrnet` | Mọi dạng ngoài ONNX, TorchScript, OpenVINO và TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Mọi định dạng; xuất mô hình dùng prompt nằm ngoài giao diện runtime v1 |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Mọi định dạng; xuất runtime open-vocabulary nằm ngoài phạm vi v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Mọi định dạng; xuất VLM sinh nằm ngoài phạm vi v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Mọi định dạng; xuất VLM sinh nằm ngoài phạm vi v1 |
 
 PicoSAM3 là ngoại lệ trong tầng dùng prompt: mô hình xuất mạng ROI 96 pixel thô sang ONNX.
 

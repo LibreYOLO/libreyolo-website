@@ -44,7 +44,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## Schéma v1.0
@@ -91,6 +91,17 @@ lecteurs, défini sur `max(imgsz_h, imgsz_w)`, et écrivent aussi `imgsz_h` et
 rectangulaires doit les préférer au scalaire. Les familles à contrat
 rectangulaire fixe, comme HRNet pose, refusent les tailles incompatibles à
 l'exécution.
+
+Les checkpoints de classification peuvent ajouter `interpolation`, le filtre de
+redimensionnement du modèle : `"bilinear"`, `"bicubic"`, `"nearest"` ou
+`"bilinear_no_antialias"`. `save()`, `best.pt` et `last.pt` l'écrivent et le
+chargement le restaure, de sorte que l'entraînement, `val()`, `predict()`, la
+calibration INT8 et l'export conservent le filtre avec lequel le checkpoint a
+été enregistré. Un checkpoint sans cette clé garde la valeur par défaut de la
+famille, et toute autre valeur est invalide. Les trois premiers redimensionnent
+avec Pillow, qui applique l'antialiasing lors d'une réduction ;
+`"bilinear_no_antialias"` est un bilinéaire simple avec centres de demi-pixel et
+sans antialiasing.
 
 Le schéma est délibérément plat et `model` est délibérément un state dict.
 
@@ -205,9 +216,10 @@ exports HRNet exigent cette valeur.
 
 Les exports de classification peuvent ajouter `crop_pct`, un ratio flottant
 de recadrage central dont la cible de redimensionnement préalable est
-`round(imgsz / crop_pct)` et qui vaut `0.875` par défaut, ainsi que
-`interpolation`, `"bilinear"` ou `"bicubic"`, dont la valeur par défaut est
-`"bilinear"`.
+`floor(imgsz / crop_pct)` et qui vaut `0.875` par défaut, ainsi que
+`interpolation`, l'une des quatre valeurs de checkpoint ci-dessus, dont la valeur
+par défaut est `"bilinear"` en son absence ; les lecteurs rejettent toute autre
+valeur.
 
 Les exports ExecuTorch écrivent les métadonnées plates dans un fichier annexe
 `<program>.pte.json` requis. Le contrat v1 utilise CPU, FP32, un batch de 1 et

@@ -48,7 +48,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 ## Cú pháp
 
@@ -75,6 +75,7 @@ tác vụ được loại bỏ trước khi phân tích cú pháp.
 | `imgsz` | | Kích thước ảnh đầu vào: `640` (vuông) hoặc `480x640` (cao x rộng). Dùng kích thước đầu vào của chính mô hình khi không đặt |
 | `classes` | | Lọc theo ID lớp đối tượng, ví dụ `[0,2,5]`. Chấp nhận một số nguyên đơn lẻ |
 | `max_det` | `300` | Số phát hiện tối đa trên mỗi ảnh |
+| `agnostic_nms` | `false` | NMS không phân biệt lớp đối tượng: trong các box chồng lấn vượt `iou`, chỉ giữ box có điểm cao nhất bất kể lớp đối tượng của chúng. Detect, segment, pose và OBB |
 | `half` | `false` | Inference FP16 (chỉ CUDA, cần mô hình hỗ trợ) |
 | `save` | `false` | Lưu ảnh đã vẽ chú thích |
 | `batch` | `1` | Số ảnh mỗi lượt forward khi nguồn là thư mục. Lớn hơn 1 sẽ chạy inference theo batch thật sự trên các mô hình hỗ trợ |

@@ -43,7 +43,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Poziomy obsługi eksportu
@@ -120,9 +120,9 @@ przez witrynę dla tej samej grupy w nagłówku strony modelu.
 | `g2` | Obsługiwana | 19 | Dodatkowy zbiór pokrycia rodzin obsługujących trenowanie |
 | `g3` | Tylko inferencja | 44 | Rodziny bez implementacji trenowania |
 | `g4` | Muzeum | 5 | Historyczne rodziny objęte inferencją |
-| `s` | Sąsiedni poziom | 36 | Sąsiednie API (SAM, otwarty słownik, VLM, wskazywanie, zero-shot) objęte osobno |
+| `s` | Sąsiedni poziom | 40 | Sąsiednie API (SAM, otwarty słownik, VLM, wskazywanie, zero-shot) objęte osobno |
 
-Łącznie jest to 118 rodzin w sześciu grupach. `g3` jest największą grupą,
+Łącznie jest to 122 rodziny w sześciu grupach. `g3` jest największą grupą,
 ponieważ znaczną część rejestru stanowią linie tylko do inferencji, a nie
 aktywnie trenowane detektory.
 
@@ -160,7 +160,7 @@ Rodzina w `g3` lub `g4` nie ma implementacji trenowania, a wywołanie jej
 `train()` zgłasza błąd. Jest to właściwość kodu rodziny, a nie jej grupy. Grupa
 zapisuje ten fakt, zamiast go powodować.
 
-Spośród 118 rodzin trenowanie obsługuje 37: każda rodzina z `g0`, `g1` i `g2`
+Spośród 122 rodzin trenowanie obsługuje 37: każda rodzina z `g0`, `g1` i `g2`
 oraz Qwen3-VL przez `LibreVLM`, a także SmolVLA, ACT i Diffusion Policy przez
 `LibreVLA`.
 

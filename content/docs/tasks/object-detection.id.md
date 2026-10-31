@@ -101,12 +101,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() mengembalikan dict biasa, bukan objek.
+        # Dict berisi kunci metrics/, dengan hasil per kelas sebagai atribut.
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -140,7 +141,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## Definisi
@@ -191,7 +192,8 @@ ditambah keluarga vision-language
 [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) dan
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) dan
 [LibreMODUS](/docs/models/libremodus). Ini dimuat melalui pabrikannya sendiri dan
 tambahan; setiap halaman model membawa panggilan yang tepat.
 
@@ -206,8 +208,10 @@ Bobot diunduh dari Hugging Face saat penggunaan pertama dan disimpan secara loka
 `conf` mengatur ambang kepercayaan dan `max_det` membatasi jumlah baris.
 `iou` adalah ambang NMS, sehingga hanya berpengaruh pada family yang menjalankan NMS;
 RF-DETR dan YOLOv9 head ujung ke ujung mendekodekan satu set prediksi tetap dan
-abaikan itu. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan hasil
-penanganan.
+abaikan itu. `agnostic_nms=True` menambahkan langkah suppression class-agnostic pada
+`iou` yang berlaku juga untuk keduanya; lihat
+[ambang batas dan pemfilteran](/docs/predict/thresholds#agnostic_nms). Lihat
+[prediksi](/docs/predict) untuk sumber, streaming, dan hasil penanganan.
 
 ## Format dataset
 
@@ -268,8 +272,9 @@ Gunakan `classes=` untuk mempertahankan ID asli dataset yang dipilih; `single_cl
 
 ## Validasi
 
-`val()` mengembalikan kamus biasa dari kunci `metrics/`, dihitung dengan COCO
-evaluasi atas pembagian yang dinamai oleh `val` dalam YAML dataset.
+`val()` mengembalikan kamus dari kunci `metrics/`, dihitung dengan evaluasi COCO
+atas pembagian yang dinamai oleh `val` dalam YAML dataset, dengan hasil per kelas
+terlampir sebagai atribut.
 
 <code-tabs name="val" />
 
@@ -290,6 +295,13 @@ pasangan presisi-recall melaporkan satu angka dua kali. Empat kunci juga diulang
 akhiran `(B)`, untuk kotak, sehingga sebuah kunci deteksi terbaca sama pada sebuah model yang
 juga memprediksi mask: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`,
 `metrics/precision(B)` dan `metrics/recall(B)`.
+
+Hasilnya juga membawa `confusion_matrix`, diindeks `matrix[predicted, true]`
+dengan baris dan kolom `background`, serta presisi, recall, dan F1 per kelas di
+berbagai confidence pada `box`: `box.px`, `box.p_curve`, `box.r_curve`,
+`box.f1_curve`, satu baris per kelas di `box.ap_class_index`.
+[Validasi dan metrik](/docs/train/validation#confusion-matrix) membahas keduanya,
+beserta `val(agnostic_nms=True)`.
 
 ## Ekspor
 

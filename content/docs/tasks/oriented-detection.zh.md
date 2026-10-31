@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## 定义
@@ -183,7 +183,7 @@ source_hash: 8af4d1647609e5e6
 
 运行 RF-DETR 已发布的检查点之前，请先了解它们的来源。DOTA 虽然是这个任务的参考基准，但这些权重并不是在 DOTA 上训练的。四个检查点都从 RF-DETR 检测权重初始化，然后在同一个无人机视频数据集上微调，包含六个车辆类别：bike、bus、car、other_vehicle、taxi 和 truck。模型卡将它们描述为验证旋转框训练支持时生成的开发权重，说明不应把它们当作生产权重或官方基准权重。
 
-实际用起来，这意味着它们是从上往下看的车辆旋转框的一个可用起点，也可以用来验证你的流水线能端到端跑通。换成别的任何领域，就得用你自己的旋转框标注来训练；而对于 DOTA 出名的那些航拍类别，真正在那份数据上训练过的是 RT-DETRv2 的检查点。`conf` 和 `max_det` 塑造输出的方式和检测任务里一样。图像来源、流式输入和结果处理见[预测](/docs/predict)。
+实际用起来，这意味着它们是从上往下看的车辆旋转框的一个可用起点，也可以用来验证你的流水线能端到端跑通。换成别的任何领域，就得用你自己的旋转框标注来训练；而对于 DOTA 出名的那些航拍类别，真正在那份数据上训练过的是 RT-DETRv2 的检查点。`conf` 和 `max_det` 塑造输出的方式和检测任务里一样，而 `agnostic_nms=True` 会按旋转 IoU 跨类别抑制重叠的框。图像来源、流式输入和结果处理见[预测](/docs/predict)。
 
 ## 数据集格式
 
@@ -241,7 +241,7 @@ YOLO-NAS OBB 使用旋转分配与损失函数、翻转/HSV 数据增强，默�
 
 `metrics/mAP50-95` 是在 0.50 到 0.95、步长 0.05 的一系列 IoU 阈值上平均出来的平均精度均值，也是最主要的那个数字。和检测走的 COCO 路径不同，这个任务会遵循验证配置里的 `iou_thresholds`，所以这个扫描范围可以改。`metrics/mAP50` 和 `metrics/mAP75` 是单阈值的版本。`metrics/precision` 和 `metrics/recall` 是 IoU 0.50 下真正的查准率和查全率，读的是最宽松的工作点：每一个通过置信度阈值的预测都会被计入，而验证时这个阈值默认是 0.001。因此调高 `conf` 会让它们变化，而用上整条查准率-查全率曲线的 mAP 数字则原地不动。其中四个会以 `(OBB)` 后缀重复一遍，即 `metrics/mAP50-95(OBB)`、`metrics/mAP50(OBB)`、`metrics/precision(OBB)` 和 `metrics/recall(OBB)`，调用方就是靠它在同一张表里区分旋转框结果和轴对齐结果的。`metrics/mAP75` 没有带后缀的孪生项。
 
-有两个选项在这个任务上什么也不做。`save_json` 和 `save_plots` 会被接受，并打一条警告日志：旋转框的预测结果导出和验证图表尚未实现。
+有两个选项在这个任务上什么也不做。`save_json` 和 `save_plots` 会被接受，并打一条警告日志：旋转框的预测结果导出和验证图表尚未实现。`agnostic_nms=True` 在这里会抛出 `ValueError`；它只覆盖检测和分割的验证。
 
 ## 导出
 

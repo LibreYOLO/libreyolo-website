@@ -134,7 +134,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## 정의
@@ -163,7 +163,7 @@ source_hash: 3650786b0a858958
 
 <code-tabs name="predict" />
 
-키포인트 수와 순서는 라이브러리의 속성이 아니라 체크포인트의 속성이므로, 다른 스켈레톤에서 학습된 모델은 다른 `K`와 인덱스마다 다른 의미를 반환합니다. 세 번째 키포인트 열에 무엇이 들어 있는지도 체크포인트 속성입니다: EdgeCrafter는 점별 점수 대신 상수 값을 거기에 기록하며, 박스 헤드가 전혀 없기 때문에 각 포즈 박스는 해당 인스턴스 자신의 키포인트에 대한 경계 범위입니다. 소스, 스트리밍 및 결과 처리는 [prediction](/docs/predict)을 참조하십시오.
+키포인트 수와 순서는 라이브러리의 속성이 아니라 체크포인트의 속성이므로, 다른 스켈레톤에서 학습된 모델은 다른 `K`와 인덱스마다 다른 의미를 반환합니다. 세 번째 키포인트 열에 무엇이 들어 있는지도 체크포인트 속성입니다: EdgeCrafter는 점별 점수 대신 상수 값을 거기에 기록하며, 박스 헤드가 전혀 없기 때문에 각 포즈 박스는 해당 인스턴스 자신의 키포인트에 대한 경계 범위입니다. `agnostic_nms=True`는 클래스에 걸쳐 겹치는 박스를 억제하고 억제된 각 인스턴스의 키포인트를 해당 박스와 함께 제거하며, HRNet은 이에 대해 `NotImplementedError`를 발생시킵니다. 소스, 스트리밍 및 결과 처리는 [prediction](/docs/predict)을 참조하십시오.
 
 ## 데이터셋 형식
 
@@ -216,7 +216,7 @@ RF-DETR 다중 클래스 자세는 클래스 이름 또는 ID를 키로 하는 `
 
 <code-tabs name="val" />
 
-`metrics/keypoints_mAP50-95`는 헤드라인 수치로, OKS 임계값 0.50에서 0.95까지 평균된 평균 정밀도를 의미하며, 학습에서는 가장 좋은 에포크를 선택할 때 사용됩니다. `metrics/keypoints_mAP50`와 `metrics/keypoints_mAP75`는 단일 임계값 버전이며, `metrics/keypoints_mAP_M`와 `metrics/keypoints_mAP_L`는 영역별 평균을 나눈 것으로, 중간과 큰 인스턴스에 대해 나누었습니다; COCO 키포인트 평가에서는 작은 버킷은 정의하지 않습니다. 대응하는 평균 재현율 수치는 `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`, `metrics/keypoints_AR75`, `metrics/keypoints_AR_M`와 `metrics/keypoints_AR_L`입니다. 이 작업의 모든 키는 `keypoints_`로 접두사가 붙어 있으므로, 상자가 `mAP` 키를 반환하는 경우에는 나타나지 않습니다.
+`metrics/keypoints_mAP50-95`는 헤드라인 수치로, OKS 임계값 0.50에서 0.95까지 평균된 평균 정밀도를 의미하며, 학습에서는 가장 좋은 에포크를 선택할 때 사용됩니다. `metrics/keypoints_mAP50`와 `metrics/keypoints_mAP75`는 단일 임계값 버전이며, `metrics/keypoints_mAP_M`와 `metrics/keypoints_mAP_L`는 영역별 평균을 나눈 것으로, 중간과 큰 인스턴스에 대해 나누었습니다; COCO 키포인트 평가에서는 작은 버킷은 정의하지 않습니다. 대응하는 평균 재현율 수치는 `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`, `metrics/keypoints_AR75`, `metrics/keypoints_AR_M`와 `metrics/keypoints_AR_L`입니다. 이 작업의 모든 키는 `keypoints_`로 접두사가 붙어 있으므로, 상자가 `mAP` 키를 반환하는 경우에는 나타나지 않습니다. `val(agnostic_nms=True)`는 이 작업에서 `ValueError`를 발생시킵니다.
 
 ## 내보내기
 

@@ -106,7 +106,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## 설치
@@ -137,7 +137,7 @@ b0부터 b5까지 여섯 가지 크기가 있습니다. 각 단계에서 Mix Tra
 
 <code-tabs name="train" />
 
-기본 설정에서는 SegFormer 논문의 ADE20K 레시피를 따릅니다. AdamW를 백본 기본 학습률로 사용하고 디코딩 헤드는 그 10배 학습률로 학습합니다. LayerNorm과 Mix-FFN 위치 합성곱을 제외한 모든 곳에 weight decay를 적용하며 워밍업이 있는 선형 감쇠 일정을 사용합니다. b3부터 b5까지 큰 크기의 수렴은 처음부터 끝까지 검증하지 않았습니다.
+기본 설정에서는 SegFormer 논문의 ADE20K 레시피를 따릅니다. AdamW를 백본 기본 학습률로 사용하고 디코딩 헤드는 그 10배 학습률로 학습합니다. LayerNorm과 Mix-FFN 위치 합성곱을 제외한 모든 곳에 weight decay를 적용하며 워밍업이 있는 선형 감쇠 일정을 사용합니다. b3부터 b5까지 큰 크기의 수렴은 처음부터 끝까지 검증하지 않았습니다. `libreyolo train`도 같은 레시피로 시작하며, `name=`이 없으면 실행 결과는 `runs/train/segformer_exp`에 저장됩니다.
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 

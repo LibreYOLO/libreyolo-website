@@ -39,7 +39,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## 書式
@@ -110,7 +110,7 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | stdoutにJSONを出力 |
 | `quiet` | `false` | stderrを抑制 |
 
-`family`を指定しない場合、出力は形式の一覧だけです。指定すると、各形式にそのファミリーとタスクでの対応レベル、その理由、および付随する制約が加わります。未知のファミリー、またはそのファミリーが対応していないタスクは、使用方法のエラーになります。
+`family`を指定しない場合、出力は形式の一覧だけで、FP16とINT8のフィールドは形式そのものについて示します。指定すると、各形式にそのファミリーとタスクでの対応レベル、その理由、および付随する制約が加わり、FP16とINT8のフィールドは、その組み合わせで`export()`が受け付ける内容を示します。ブロックされた形式や、FP32のみをエクスポートするファミリーでは、どちらもfalseです。INT8がtrueになるのは、その形式のINT8エクスポートがそのファミリーとタスクをカバーしている場合だけです。未知のファミリー、またはそのファミリーが対応していないタスクは、使用方法のエラーになります。
 
 形式のエイリアスは正規名の隣に表示されます：`tensorrt`には`engine`、`tflite`には`litert`。
 

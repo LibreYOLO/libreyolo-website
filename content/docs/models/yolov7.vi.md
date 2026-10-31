@@ -104,7 +104,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 361e81de5614a571
+source_hash: 7104f0fd056896b9
 ---
 
 ## Cài đặt
@@ -151,6 +151,10 @@ epoch cuối không tăng cường dữ liệu như YOLOX, được điều ch�
 anchor. Có một điểm khác biệt: YOLOX thêm bước tinh chỉnh hồi quy box L1 trong
 các epoch cuối đó, còn v7 bỏ qua vì loss SimOTA của v7 không có nhánh L1 độ lệch
 thô để tinh chỉnh.
+
+Mosaic và MixUp đều bật theo mặc định (`mosaic_prob=1.0`, `mixup_prob=1.0`). Các
+mẫu đi qua pipeline mosaic của YOLOv9, trong đó MixUp lấy tỉ lệ trộn từ Beta(1, 1),
+đồng đều trên [0, 1], giống như MultimediaTechLab/YOLO.
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 

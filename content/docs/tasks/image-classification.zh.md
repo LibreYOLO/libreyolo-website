@@ -12,7 +12,7 @@ keywords:
   - top-1 准确率
   - 零样本图像分类
   - MIT 许可 图像分类库
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -90,11 +90,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() 返回一个普通的 dict，不是对象
+        # 一个由 metrics/ 键组成的 dict，外加 top1、top5 和 confusion_matrix
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -122,7 +123,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 90aed355e0ddf5e3
+source_hash: 7934244e90056e77
 ---
 
 ## 定义
@@ -197,9 +198,11 @@ dataset/
 
 ResNet、ConvNeXt、ConvNeXt V2、MobileNetV4、EfficientNetV2 和 DINOv2 支持 `cls_pw` 或 `class_weights` 损失加权。分类中的 `scale` 控制裁剪面积，`crop_pct` 控制评估裁剪。见[数据增强](/docs/train/augmentations)。
 
+缩放滤波器是模型的一部分。训练之前把 `model.interpolation` 设为 `"bilinear"`、`"bicubic"`、`"nearest"` 或 `"bilinear_no_antialias"`：训练、`val()`、`predict()`、INT8 校准和导出都会使用它，`save()`、`best.pt` 和 `last.pt` 会记录它，所以重新加载后它仍然保留。任何其他名称都会抛出 `ValueError`。`"bilinear_no_antialias"` 在所有地方，包括 `RandomResizedCrop`，都使用普通的双线性缩放且不做抗锯齿，适用于会在不做抗锯齿的运行时缩放之后运行的模型。MobileNetV4、ResNet、ConvNeXt、ConvNeXt V2、EfficientNetV2、DeiT、Swin 和 ViT 默认使用 bicubic；AlexNet 和 VGG 默认使用 bilinear。
+
 ## 验证
 
-`val()` 返回一个由 `metrics/` 键组成的普通字典，在数据集根目录的 `val/` 划分上
+`val()` 返回一个由 `metrics/` 键组成的字典，在数据集根目录的 `val/` 划分上
 计算。
 
 <code-tabs name="val" />
@@ -210,6 +213,8 @@ ResNet、ConvNeXt、ConvNeXt V2、MobileNetV4、EfficientNetV2 和 DINOv2 支持
 `fitness`，它是 top-1 值的一份副本。
 
 ImageFolder 验证还返回宏平均 `metrics/precision`、`metrics/recall` 和 `metrics/f1`，对验证目标中出现的类别取平均。未被预测到的类别查准率计为零。默认适应度仍为 top-1 精度。验证和校准使用模型的评估变换。
+
+结果是一个 `dict` 子类，带有三个属性：`top1` 和 `top5` 保存两个精度值，`confusion_matrix` 把每张图像按其 top-1 类别与它的标签对照计数，索引为 `matrix[predicted, true]`。`plots=True` 会把计数写入 `confusion_matrix.png`，把各标签占比写入 `confusion_matrix_normalized.png`。超过 2,000 个类别时，稠密矩阵及其图不可用，改由 `nonzero()`、`tp_fp()` 和 `class_accuracy()` 读取计数；见[验证与指标](/docs/train/validation#confusion-matrix)。
 
 ## 导出
 

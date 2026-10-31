@@ -102,7 +102,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 361e81de5614a571
+source_hash: 7104f0fd056896b9
 ---
 
 ## 安装
@@ -143,6 +143,8 @@ LibreYOLO 只提供一种尺寸 `b`。上游只发布了一个 YOLOv7 模型，�
 YOLOX 相同的 SimOTA 分配和最后 15 轮不做数据增强的阶段，只是适配到了基于锚框的
 head 上。唯一的区别：YOLOX 在收尾那几轮里加了一个 L1 检测框回归精修，v7 跳过了
 它，因为 v7 的 SimOTA 损失函数里没有可供精修的原始偏移量 L1 分支。
+
+Mosaic 和 MixUp 默认都开启（`mosaic_prob=1.0`、`mixup_prob=1.0`）。样本走 YOLOv9 的 mosaic 流水线，其中 MixUp 的混合比例从 Beta(1, 1) 中抽取，即在 [0, 1] 上均匀分布，与 MultimediaTechLab/YOLO 一致。
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 

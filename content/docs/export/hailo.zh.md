@@ -156,10 +156,14 @@ snippets:
         # LibreYOLO 的计算图用的是 "/head/..." 前缀，而不是那些为其他导出
         # 写的配置里的 "model.N" 前缀，直接抄来的配置对不上，
         # 如果解析失败，请在自己的图里确认这些名字
+        # anchor_convs 是检测框分支，class_convs 是类别分支
         END_NODES = [
-            "/head/cv2.0/cv2.0.2/Conv", "/head/cv3.0/cv3.0.2/Conv",
-            "/head/cv2.1/cv2.1.2/Conv", "/head/cv3.1/cv3.1.2/Conv",
-            "/head/cv2.2/cv2.2.2/Conv", "/head/cv3.2/cv3.2.2/Conv",
+            "/head/anchor_convs.0/anchor_convs.0.2/Conv",
+            "/head/class_convs.0/class_convs.0.2/Conv",
+            "/head/anchor_convs.1/anchor_convs.1.2/Conv",
+            "/head/class_convs.1/class_convs.1.2/Conv",
+            "/head/anchor_convs.2/anchor_convs.2.2/Conv",
+            "/head/class_convs.2/class_convs.2.2/Conv",
         ]
         runner.translate_onnx_model(ONNX, end_node_names=END_NODES)
   device:
@@ -169,7 +173,7 @@ snippets:
         sudo apt install dkms hailo-all
         hailortcli fw-control identify       # 检查设备，同时给出架构名
         hailortcli run libreyoloxs.hef       # 冒烟测试与吞吐量
-source_hash: 33b077f1c23d5535
+source_hash: 67cc64bf2d25e1b4
 ---
 
 ## 安装

@@ -18,7 +18,7 @@ keywords:
   - 图像 embedding 提取
   - 以图搜图 特征向量
   - Meta AI
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 语义分割
@@ -146,7 +146,7 @@ snippets:
         # LibreDINOv2s-sem.onnx
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## 安装
@@ -157,6 +157,8 @@ LibreDINOv2 只在装了 `transformers` 之后才会注册，也就是 RF-DETR �
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+没有它的话，加载 DINOv2 检查点或模型名称会报错中止，错误信息里会给出这行安装命令。
 
 ## 预测
 

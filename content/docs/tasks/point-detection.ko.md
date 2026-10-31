@@ -117,7 +117,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: "5c3cfe7a606cd7aa"
+source_hash: dd636077cf280d26
 ---
 
 ## 정의
@@ -136,7 +136,7 @@ source_hash: "5c3cfe7a606cd7aa"
 
 [SenseNova-Vision](/docs/models/sensenova-vision)은 여섯 가지 다른 작업에 사용하는 동일한 프롬프트 생성 체크포인트를 통해 `point`에 도달하며, `LibreVLM("sensenova-vision", task="point")`로 로드됩니다. `sensenova` 추가가 필요하며, 모든 예측은 7B 모델에 대한 생성 패스이므로, 목적에 맞게 제작된 탐지기보다 이미지당 지연 시간이 눈에 띄게 높을 것으로 예상됩니다. 그 가중치는 비상업적이며, 라이선스는 해당 페이지에 있습니다.
 
-[Molmo2](/docs/models/molmo2)와 [Moondream](/docs/models/moondream)은 텍스트 조건부 점을 제공합니다. [LibreGround](/docs/reference/ground-api)는 ShowUI, Florence-2 또는 Qwen3-VL로 지시문을 해석하여 쿼리당 최대 한 개의 클릭 위치를 선택합니다.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream), [WeVisOne-VL](/docs/models/wevisone-vl)은 텍스트 조건부 점을 제공합니다. [LibreGround](/docs/reference/ground-api)는 ShowUI, Florence-2 또는 Qwen3-VL로 지시문을 해석하여 쿼리당 최대 한 개의 클릭 위치를 선택합니다.
 
 ## 예측
 

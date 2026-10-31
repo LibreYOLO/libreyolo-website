@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 
 ## Instalacja
@@ -210,7 +210,11 @@ Dla obu zadań trenowanie rozpoczyna się od opublikowanego checkpointu.
 <code-tabs name="train" />
 
 Przy ustawieniach domyślnych moduł trenujący wykonuje 132 epoki z `lr0=2e-4`,
-`amp=True` i `amp_dtype="float16"`, batchem 16 i early stopping po 50 epokach bez poprawy. Wagi detekcji
+`amp=True` i `amp_dtype="float16"`, batchem 16 i early stopping po 50 epokach bez poprawy. `libreyolo train`
+zaczyna od tej samej receptury dla obu zadań: AdamW z płaskim harmonogramem
+cosinusowym, `weight_decay=1e-4`, 2 epoki rozgrzewki, obcinanie normy gradientu
+do 0.1 oraz brak augmentacji mosaic, MixUp, HSV i afinicznej. Bez `name=` jego
+przebiegi trafiają do `runs/train/dfine_exp`. Wagi detekcji
 są prawidłowym punktem wyjścia do trenowania segmentacji, ale wyłącznie jako
 jawny transfer. Głowica masek zaczyna bez wytrenowania i w przeciwnym razie
 zwracałaby bezwartościowe maski. Podanie `task=segment` w CLI autoryzuje ten

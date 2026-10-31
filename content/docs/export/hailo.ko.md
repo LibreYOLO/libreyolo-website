@@ -159,10 +159,14 @@ snippets:
         # LibreYOLO 그래프는 다른 내보내기용 구성에 나타나는 "model.N"
         # 접두사가 아니라 "/head/..." 접두사를 사용합니다. 복사한 구성은
         # 일치하지 않습니다. 파싱에 실패하면 자체 그래프에서 이름을 확인합니다.
+        # anchor_convs는 박스 타워이고 class_convs는 클래스 타워입니다.
         END_NODES = [
-            "/head/cv2.0/cv2.0.2/Conv", "/head/cv3.0/cv3.0.2/Conv",
-            "/head/cv2.1/cv2.1.2/Conv", "/head/cv3.1/cv3.1.2/Conv",
-            "/head/cv2.2/cv2.2.2/Conv", "/head/cv3.2/cv3.2.2/Conv",
+            "/head/anchor_convs.0/anchor_convs.0.2/Conv",
+            "/head/class_convs.0/class_convs.0.2/Conv",
+            "/head/anchor_convs.1/anchor_convs.1.2/Conv",
+            "/head/class_convs.1/class_convs.1.2/Conv",
+            "/head/anchor_convs.2/anchor_convs.2.2/Conv",
+            "/head/class_convs.2/class_convs.2.2/Conv",
         ]
         runner.translate_onnx_model(ONNX, end_node_names=END_NODES)
   device:
@@ -172,7 +176,7 @@ snippets:
         sudo apt install dkms hailo-all
         hailortcli fw-control identify       # 디바이스를 확인하고 아키텍처 이름을 표시합니다
         hailortcli run libreyoloxs.hef       # 스모크 테스트 및 처리량
-source_hash: 33b077f1c23d5535
+source_hash: 67cc64bf2d25e1b4
 ---
 
 ## 설치

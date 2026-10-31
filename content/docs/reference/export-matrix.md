@@ -122,6 +122,11 @@ These tasks are blocked for any family with no explicit entry.
 
 | Task | Reason |
 |---|---|
+| `albedo` | Albedo export has no linear-RGB backend runtime contract |
+| `act` | The policy sampling loop has no exportable graph or backend runtime contract |
+| `generate` | Image generation runs a sampling loop over several networks, which has no exportable graph or backend runtime contract |
+| `generate3d` | 3D generation runs a sampling loop over several networks, which has no exportable graph or backend runtime contract |
+| `detect3d` | 3D detection graph outputs, camera metadata and runtime contract are not defined |
 | `ocr` | Two networks with dynamic per-region cropping do not fit the single-graph export contract |
 | `point` | The family is not wired to the shared point heatmap and backend peak-decoding contract |
 | `semantic` | The family is not wired to the shared dense-logits and backend argmax contract |
@@ -144,7 +149,7 @@ semantic family still exports.
 | `hrnet` | Anything outside ONNX, TorchScript, OpenVINO and TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Every format; promptable model export is out of scope for the v1 runtime contract |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Every format; open-vocabulary runtime export is out of scope for v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Every format; generative VLM export is out of scope for v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Every format; generative VLM export is out of scope for v1 |
 
 PicoSAM3 is the exception in the promptable tier: it exports its raw 96 pixel
 ROI network to ONNX.

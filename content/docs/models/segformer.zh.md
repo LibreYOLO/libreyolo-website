@@ -103,7 +103,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## 安装
@@ -145,7 +145,7 @@ all-MLP 解码 head 设计。
 不做改动的话，训练器遵循 SegFormer 论文的 ADE20K 配方：AdamW，骨干用一个基础
 学习率，解码 head 用它的 10 倍学习率训练，除 LayerNorm 和 Mix-FFN 位置卷积之外
 处处施加权重衰减，再配一个带预热的线性衰减调度。更大的几个尺寸，b3 到 b5，收敛性
-尚未端到端验证。
+尚未端到端验证。`libreyolo train` 使用同一套起始配方，不传 `name=` 时，它的运行结果写入 `runs/train/segformer_exp`。
 
 数据集、数据增强、多卡训练和日志器见[训练](/docs/train)。
 

@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 
 ## Installazione
@@ -204,7 +204,7 @@ L'addestramento parte da un checkpoint pubblicato, per entrambi i task.
 
 <code-tabs name="train" />
 
-Senza modifiche, il trainer esegue 132 epoche con `lr0=2e-4`, `amp=True` e `amp_dtype="float16"`, un batch di 16 e early stopping dopo 50 epoche senza miglioramenti. I pesi di rilevamento sono un punto di partenza valido per l'addestramento della segmentazione, ma solo con un trasferimento esplicito: la testa delle maschere parte senza addestramento e altrimenti restituirebbe maschere prive di significato. Passare `task=segment` alla CLI autorizza il trasferimento. Il percorso Python è più limitato: occorre costruire direttamente `LibreDFINE` con `allow_detect_to_segment_transfer=True`, perché la factory `LibreYOLO()` non accetta questo argomento; la costruzione diretta non scarica i pesi, quindi il file deve essere già sul disco.
+Senza modifiche, il trainer esegue 132 epoche con `lr0=2e-4`, `amp=True` e `amp_dtype="float16"`, un batch di 16 e early stopping dopo 50 epoche senza miglioramenti. `libreyolo train` parte dalla stessa ricetta per entrambi i task: AdamW con una schedule coseno piatta, `weight_decay=1e-4`, 2 epoche di warmup, un clip della norma del gradiente a 0.1, e nessuna augmentation con mosaic, MixUp, HSV o affine. Senza `name=`, le sue esecuzioni vanno in `runs/train/dfine_exp`. I pesi di rilevamento sono un punto di partenza valido per l'addestramento della segmentazione, ma solo con un trasferimento esplicito: la testa delle maschere parte senza addestramento e altrimenti restituirebbe maschere prive di significato. Passare `task=segment` alla CLI autorizza il trasferimento. Il percorso Python è più limitato: occorre costruire direttamente `LibreDFINE` con `allow_detect_to_segment_transfer=True`, perché la factory `LibreYOLO()` non accetta questo argomento; la costruzione diretta non scarica i pesi, quindi il file deve essere già sul disco.
 
 `lora=True` si applica al rilevamento. L'addestramento di segmentazione lo
 rifiuta e rimanda invece a `freeze='backbone'`, perché la testa delle maschere

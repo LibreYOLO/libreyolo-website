@@ -148,7 +148,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## Definisi
@@ -206,8 +206,10 @@ model yang dilatih pada skeleton berbeda mengembalikan `K` dan arti per indeks
 yang berbeda. Isi kolom keypoint ketiga juga merupakan properti checkpoint:
 EdgeCrafter menulis konstanta di sana, bukan skor per titik, dan tidak memiliki
 bounding box head sama sekali, sehingga setiap pose bounding box-nya adalah batas cakupan keypoint
-instance itu sendiri. Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan
-penanganan hasil.
+instance itu sendiri. `agnostic_nms=True` menekan kotak yang tumpang tindih lintas kelas
+dan membuang keypoint setiap instance yang ditekan bersama kotaknya; HRNet memunculkan
+`NotImplementedError` untuk opsi itu. Lihat [prediksi](/docs/predict) untuk sumber,
+streaming, dan penanganan hasil.
 
 ## Format dataset
 
@@ -288,7 +290,8 @@ luas instance, medium dan large; evaluasi keypoint COCO tidak mendefinisikan
 bucket small. Angka average recall pasangannya adalah
 `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`, `metrics/keypoints_AR75`,
 `metrics/keypoints_AR_M`, dan `metrics/keypoints_AR_L`. Setiap kunci pada task ini
-diawali `keypoints_`, sehingga kunci `mAP` bounding box dari detector tidak muncul.
+diawali `keypoints_`, sehingga kunci `mAP` bounding box dari detector tidak muncul. `val(agnostic_nms=True)` memunculkan
+`ValueError` pada task ini.
 
 ## Ekspor
 

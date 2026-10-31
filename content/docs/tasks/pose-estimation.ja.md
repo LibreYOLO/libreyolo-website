@@ -132,7 +132,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## 定義
@@ -189,7 +189,7 @@ LibreYOLO9t検出器と自動的に組み合わされます。`cropped=True`は�
 異なるスケルトンで学習したモデルは異なる`K`を返し、インデックスごとの意味も異なります。
 キーポイントの第3列が保持する値もチェックポイントのプロパティです。EdgeCrafterは点ごとの
 スコアではなく定数を書き込み、ボックスヘッドを一切持たないため、各姿勢ボックスはその
-インスタンス自身のキーポイントを囲む範囲になります。ソース、ストリーミング、結果処理については
+インスタンス自身のキーポイントを囲む範囲になります。`agnostic_nms=True`はクラスをまたいで重なるボックスを抑制し、抑制された各インスタンスのキーポイントもそのボックスとともに破棄します。HRNetでは`NotImplementedError`を送出します。ソース、ストリーミング、結果処理については
 [推論](/docs/predict)を参照してください。
 
 ## データセット形式
@@ -264,7 +264,7 @@ COCOキーポイント評価です。各キーポイントの距離誤差をイ�
 キーポイント評価にはsmall区分がありません。対応する平均再現率の値は
 `metrics/keypoints_AR50-95`、`metrics/keypoints_AR50`、`metrics/keypoints_AR75`、
 `metrics/keypoints_AR_M`、`metrics/keypoints_AR_L`です。このタスクのすべてのキーには
-`keypoints_`プレフィックスが付くため、検出器が返すボックスの`mAP`キーは現れません。
+`keypoints_`プレフィックスが付くため、検出器が返すボックスの`mAP`キーは現れません。`val(agnostic_nms=True)`はこのタスクでは`ValueError`を送出します。
 
 ## エクスポート
 

@@ -2,9 +2,8 @@
 title: Progi i filtrowanie
 seo_title: 'conf, iou i max_det w LibreYOLO'
 description: >-
-  Co naprawdę robią conf, iou, max_det i classes podczas predykcji, które
-  rodziny ignorują iou, ponieważ nie wykonują NMS, oraz dlaczego agnostic_nms
-  nic nie robi.
+  Co robią conf, iou, max_det, classes i agnostic_nms podczas predykcji oraz
+  które rodziny ignorują iou, ponieważ nie wykonują własnego NMS.
 lead: >-
   Cztery argumenty decydują, które predykcje pozostają: conf, iou, max_det i
   classes. Tylko dwa z nich dotyczą każdej rodziny, ponieważ predyktor zbioru
@@ -24,11 +23,11 @@ verification: >-
   libreyolo/models/base/inference.py. Zachowanie NMS dla poszczególnych rodzin
   odczytano ze wszystkich modułów w libreyolo/postprocess/ i porównano z
   _is_nms_free_family w libreyolo/backends/base.py. Filtrowanie klas pochodzi z
-  InferenceRunner._apply_classes_filter i _wrap_results. Stan agnostic_nms
-  pochodzi z NOOP_PREDICT_KWARGS w libreyolo/utils/predict_args.py. Obsługę
-  otwartego słownika zaczerpnięto z NMS_THRESHOLD w
-  libreyolo/models/openvocab/base.py. Wartości domyślne walidacji pochodzą z
-  BaseModel.val.
+  InferenceRunner._apply_classes_filter i _wrap_results. agnostic_nms pochodzi z
+  check_agnostic_nms i postprocess_max_det w libreyolo/utils/predict_args.py
+  oraz z kroku agnostic w InferenceRunner._wrap_results. Obsługę otwartego
+  słownika zaczerpnięto z NMS_THRESHOLD w libreyolo/models/openvocab/base.py.
+  Wartości domyślne walidacji pochodzą z BaseModel.val.
 snippets:
   basic:
     - label: Cztery argumenty
@@ -109,7 +108,31 @@ snippets:
         max_det.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 849650629e58c9e1
+  agnostic:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+
+        per_class = model(SAMPLE_IMAGE)
+
+        agnostic = model(SAMPLE_IMAGE, agnostic_nms=True)
+
+
+        # Nakładające się ramki różnych klas zostają zredukowane do tej z
+        najwyższym wynikiem.
+
+        print(len(per_class.boxes), len(agnostic.boxes))
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: fa0e6cee02b3e336
 ---
 
 ## Cztery argumenty
@@ -167,13 +190,16 @@ projektu źródłowego, którego `iou` nie może zmienić w obsługiwany sposób
 Następujące rodziny używają tego parametru: od YOLOv1 do YOLOv4, YOLOv7, YOLOv9,
 YOLOX, YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet i SSD.
 
-Dwie opcje predykcji sprawiają, że `iou` ma znaczenie nawet dla predyktora zbioru,
-ponieważ obie scalają ramki po zakończeniu działania modelu:
+Trzy opcje predykcji sprawiają, że `iou` ma znaczenie nawet dla predyktora zbioru,
+ponieważ wszystkie trzy działają na ramkach po zakończeniu działania modelu:
 
 - `tiling=True` uzgadnia nakładające się kafelki za pomocą NMS na klasę przy `iou`
 - `augment=True` scala odbite widoki za pomocą NMS na klasę przy `iou`
 
-Obie opisano w sekcji [wydajność wnioskowania](/docs/predict/performance).
+- `agnostic_nms=True` tłumi nakładające się ramki między klasami przy `iou`,
+  opisane [poniżej](#agnostic_nms)
+
+Pierwsze dwie opisano w sekcji [wydajność wnioskowania](/docs/predict/performance).
 
 Detektory z otwartym słownikiem mają własną zasadę. Rodzina, której procesor
 wykonuje NMS, deklaruje własny domyślny próg i respektuje `iou`, jak OMDet-Turbo.
@@ -188,13 +214,13 @@ z NMS przycina wynik po tłumieniu, a predyktor zbioru używa go jako rozmiaru
 wyboru top-k.
 
 Niektóre rodziny ograniczają wartość poniżej żądanej, ponieważ tak działa ich
-konfiguracja referencyjna. SSD ogranicza ją do 200, segmentacja instancji RTMDet
-do 100, a FCOS do własnego limitu detekcji na obraz. Zwiększanie `max_det` ponad
-te wartości nie ma wpływu.
+konfiguracja referencyjna. SSD ogranicza ją do 200, a FCOS do własnego limitu
+detekcji na obraz. Zwiększanie `max_det` ponad te wartości nie ma wpływu.
 
-Jedynym miejscem, w którym `max_det` jest stosowane centralnie zamiast osobno dla
-rodziny, jest wnioskowanie kafelkowe. Scalona lista jest wtedy przycinana po
-uzgodnieniu kafelków.
+`max_det` jest stosowane centralnie zamiast osobno dla rodziny w dwóch
+przypadkach: we wnioskowaniu kafelkowym, gdzie scalona lista jest przycinana po
+uzgodnieniu kafelków, oraz w wywołaniach z `classes` lub `agnostic_nms=True`,
+gdzie cięcie następuje po filtrze albo po tłumieniu.
 
 ## Filtrowanie klas
 
@@ -220,31 +246,60 @@ libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.gith
 ```
 
 Filtrowanie nie zapewnia bezpłatnie większej dokładności. Model nadal wykorzystuje
-zasoby na przewidywanie klas, które później są odrzucane, a `max_det` jest stosowane
-przez rodzinę przed filtrem. Obraz z dużą liczbą niepożądanych klas może więc
-osiągnąć limit przed dotarciem do właściwej klasy. W takim przypadku zmniejsz
-`conf` lub zwiększ `max_det`.
+zasoby na przewidywanie klas, które później są odrzucane. Przy ustawionym
+`classes` rodzina zachowuje budżet kandydatów równy 300 ramkom lub `max_det`,
+gdy jest wyższe, a cięcie do `max_det` następuje po filtrze, więc małe `max_det`
+nie wypycha właściwej klasy. Wyeksportowane backendy używają tego samego
+budżetu, łącznie z wsadowymi silnikami TensorRT. Obraz z więcej niż 300
+wyżej ocenionymi ramkami niepożądanych klas nadal może wypełnić budżet przed
+dotarciem do właściwej klasy; jeśli tak się stanie, zwiększ `max_det` powyżej 300.
 
 ## agnostic_nms
 
-`agnostic_nms` jest przyjmowane i nic nie robi. Przekazanie tego argumentu zgłasza
-ostrzeżenie, że jest to opcja bez działania zachowana dla zgodności z wierszem
-poleceń, po czym argument jest odrzucany.
+NMS każdej rodziny uwzględnia klasy, więc domyślnie dwie nakładające się ramki
+różnych klas pozostają obie, przy dowolnym `iou`. `agnostic_nms=True` dodaje
+jeden krok niezależny od klas: spośród ramek nakładających się powyżej `iou`
+zostaje tylko ta z najwyższym wynikiem, bez względu na ich klasy.
 
-Nie ma trybu tłumienia niezależnego od klasy. Każde wywołanie NMS w bibliotece
-uwzględnia klasy, dlatego dwie nakładające się ramki różnych klas pozostają przy
-dowolnym `iou`. Jeśli stanowi to problem, najpierw filtruj za pomocą `classes`
-albo samodzielnie wykonaj tłumienie między klasami na `result.boxes`.
+<code-tabs name="agnostic" />
+
+Krok działa na gotowych detekcjach rodziny, po filtrze `classes` i przed cięciem
+do `max_det`. Dlatego zachowuje się tak samo w predyktorach zbioru, które nie
+wykonują własnego NMS, w wyeksportowanych backendach oraz z `augment=True` i
+`tiling=True`. Maski i punkty kluczowe są odrzucane razem ze swoją ramką, a
+obrócone ramki są porównywane za pomocą obróconego IoU. Obejmuje zadania
+zwracające ramki: detekcję, segmentację, pozę i obb.
+
+Rodzina zachowuje budżet kandydatów równy 300 ramkom lub `max_det`, gdy jest
+wyższe, na którym działa ten krok. Przy `max_det` poniżej 300 kandydaci o niższym
+wyniku uzupełniają miejsca zwolnione przez tłumienie. Przy 300 lub więcej, co
+obejmuje wartość domyślną, te miejsca pozostają puste.
+
+Gdzie to nie działa:
+
+- Na standardowej ścieżce predykcji zadanie bez ramek zgłasza `ValueError`.
+- `LibreEnsemble` i [HRNet](/docs/models/hrnet) zgłaszają `NotImplementedError`.
+- Modele `LibreSAM` i [detektory 3D](/docs/tasks/3d-object-detection), czyli
+  WildDet3D, 3D-MOOD, FCOS3D i DetAny3D, nie przyjmują takiego argumentu i
+  zgłaszają `TypeError`.
+- [L2CS-Net](/docs/models/l2cs), [PP-OCRv5](/docs/models/pp-ocrv5),
+  [SAM 3D Body](/docs/models/sam-3d-body) i
+  [LibreFaceRec](/docs/models/librefacerec) mają własną ścieżkę predykcji i
+  ignorują go.
+
+`val(agnostic_nms=True)` stosuje ten sam krok w walidacji detekcji i
+segmentacji; zobacz [walidacja i metryki](/docs/train/validation).
 
 ## Argumenty odrzucane przez predict
 
 Dwa argumenty zgłaszają błąd zamiast ostrzeżenia: `visualize` i `embed` zgłaszają
 `NotImplementedError`. Aby uzyskać osadzenia, załaduj model z `task="embed"`
-i normalnie wywołaj `predict` lub `embed`.
+i normalnie wywołaj `predict` lub `embed`. `agnostic_nms=True` zgłasza błąd tam,
+gdzie nie działa, jak wymieniono powyżej.
 
 Każdy nierozpoznany argument zgłasza `TypeError` z nazwami obsługiwanych opcji,
 więc literówka powoduje natychmiastowy błąd, zamiast zostać po cichu zignorowana.
 
 Następujące argumenty są przyjmowane, powodują ostrzeżenie i są odrzucane:
-`agnostic_nms`, `boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`,
+`boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`,
 `show_labels` i `verbose`.

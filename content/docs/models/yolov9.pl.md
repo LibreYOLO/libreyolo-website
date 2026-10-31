@@ -147,7 +147,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 624f3e70d2937683
+source_hash: c322dd68d42cdf24
 ---
 
 ## Instalacja
@@ -211,9 +211,29 @@ niepowodzeniem. Zamiast tego wskaż bazowy punkt kontrolny detekcji.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
 
-Nowe dostrajanie standardowego modelu detekcji włącza gałąź PGI używaną tylko podczas trenowania, z `aux_weight=0.25`. `max_labels=300`; momentum SGD rośnie z 0.8 do 0.937 w trakcie trzech epok rozgrzewki. Stare checkpointy z jedną głowicą wznawiają trenowanie z tym samym grafem. Predykcja i eksport używają głównej głowicy. `letterbox_pad=None` dziedziczy znacznik checkpointu: nieoznaczone wagi używają `topleft`, a nowe oficjalne konwersje zapisują `center`.
+Model bazowy może trenować pomocniczą gałąź PGI obok głównej głowicy. Gałąź jest
+używana tylko podczas trenowania: predykcja i eksport używają głównej głowicy.
+Uruchomienie dołącza ją, gdy wagi startowe zawierają tensory PGI albo gdy
+trenuje od zera. Opublikowane checkpointy bazowe nie zawierają żadnego, więc
+dostrajanie z nich trenuje tylko główną głowicę i to odnotowuje w logu.
+`aux_weight=0.25` mimo to dołącza nową gałąź z tą wagą funkcji straty, a
+`aux_weight=0` zostawia ją wyłączoną. Wznowione uruchomienie zachowuje
+konfigurację PGI ze swojego checkpointu. W rozmiarach `m` i `c` gałąź jest tą z
+oryginału: drugi backbone na obrazie wejściowym, którego etapy `CBFuse` sumuje z
+odczytami `CBLinear` z głównego backbone, oraz własna głowica, czyli 12.8M i
+25.7M parametrów używanych tylko podczas trenowania przy 80 klasach. Modele
+end-to-end i z krokiem 4 nie mają gałęzi PGI.
 
-Mosaic w YOLO9 i YOLOX preferuje obrazy z adnotacjami, wykonując najwyżej 20 losowań; MixUp w YOLO9 stosuje tę samą regułę. Profile wejścia inne niż RGB opisano w sekcji [histogramów zdarzeń](/docs/train/event-histograms).
+Wszystkie trzy warianty obcinają normę L2 gradientu do 10 przed każdym krokiem
+optymalizatora; `clip_max_norm=0` wyłącza obcinanie. Przypisanie etykiet ocenia
+kotwice w fp32, także przy autocast float16. `max_labels=300` ogranicza liczbę
+ramek zachowanych na obraz treningowy, a ramki ponad ten limit są odrzucane z
+jednorazowym ostrzeżeniem; pamięć przypisania zależy od rzeczywistych ramek
+każdego obrazu, a nie od limitu. Momentum SGD rośnie z 0.8 do 0.937 w trakcie
+trzech epok. `letterbox_pad=None` dziedziczy znacznik checkpointu: nieoznaczone
+wagi używają `topleft`, a nowe oficjalne konwersje zapisują `center`.
+
+Mosaic w YOLO9 i YOLOX preferuje obrazy z adnotacjami, wykonując najwyżej 20 losowań; MixUp w YOLO9 stosuje tę samą regułę. MixUp jest domyślnie wyłączony (`mixup_prob=0`). Gdy jest włączony, współczynnik mieszania jest losowany z rozkładu Beta(1, 1), jednostajnego na [0, 1], tak jak w MultimediaTechLab/YOLO. Profile wejścia inne niż RGB opisano w sekcji [histogramów zdarzeń](/docs/train/event-histograms).
 
 ## Walidacja
 
@@ -258,6 +278,13 @@ Wszystkie opublikowane pliki wag dla tej rodziny.
 ## Licencjonowanie
 
 <provenance-box>
+
+Kod wszystkich trzech wariantów jest przeniesiony z
+[MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) z commita
+`c4cb5f6f` (MIT). Predyktor one-to-one modelu end-to-end podąża za projektem
+[DATE](https://github.com/YiqunChen1999/date) autorstwa Yiqun Chen
+(Apache-2.0), zaimplementowanym dla LibreYOLO bez kopiowania kodu DATE. Poziom o
+kroku 4 to kod LibreYOLO.
 
 Checkpoint do zdjęć lotniczych z krokiem 4 przewiduje klasy VisDrone. Należy stosować licencję zadeklarowaną przez wydawcę w repozytorium wag.
 

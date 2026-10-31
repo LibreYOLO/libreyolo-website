@@ -72,7 +72,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 7dc6a5ef1b3ba9ea
+source_hash: 93a9e4b50df2bc1c
 ---
 
 ## 入口
@@ -85,11 +85,12 @@ source_hash: 7dc6a5ef1b3ba9ea
 | `LibreSAM` | 可提示的分割器，按尺寸别名 | 点、检测框或概念文本 | `sam` |
 | `LibreVLM` | 生成式视觉语言检测器，按别名 | 类别词表或自由形式的提示 | `vlm` |
 | `LibreOpenVocab` | 以文本为条件的检测器，按别名 | 类别词表 | `openvocab` |
+| `LibreGen` | 生成式模型，按别名或本地模型目录 | 一段文本提示（文生图）或一张图像（图生 3D） | `gen` |
 | `LibreEnsemble` | 两个或更多检测器，融合成一个接口 | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO` 接受检查点文件和导出产物。其他工厂接受模型别名；`LibreVLM` 和 `LibreVLA` 还可以重新加载各自保存的检查点目录。
+`LibreYOLO` 接受检查点文件和导出产物。其他工厂接受模型别名；`LibreVLM` 和 `LibreVLA` 还可以重新加载各自保存的检查点目录，`LibreGen` 则加载受支持家族上游格式的本地模型目录。
 
 ```python
 LibreYOLO(
@@ -160,9 +161,10 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 `LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、
 `LibreKosmos2`、`LibreLocateAnything`、`LibreGemma4`、`LibreMoondream`、
 `LibreMolmo2`、`LibreNorthMicroVision`、`LibreMODUS`（也写作
-`LibreModus`）；`LibreGround` 背后的 `LibreShowUI`、`LibreGroundFlorence2` 和
+`LibreModus`）、`LibreWeVisOneVL`；`LibreGround` 背后的 `LibreShowUI`、`LibreGroundFlorence2` 和
 `LibreGroundQwen3VL`；`LibreVLA` 背后的 `LibreSmolVLA`、`LibreACT` 和
-`LibreDiffusionPolicy`。
+`LibreDiffusionPolicy`；`LibreGen` 背后的 `LibreFlux2Klein`、`LibreSanaSprint` 和
+`LibreSperidlabsIdol`。
 
 ## 预测接口
 
@@ -178,6 +180,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -199,11 +202,15 @@ model(
 `stream=True` 返回一个生成器。模型对象上的其他方法记录在[模型 API
 页面](/docs/reference/model-api)。
 
+`agnostic_nms=True` 会跑与类别无关的 NMS：在重叠超过 `iou` 的检测框之间，无论类别如何，只保留得分最高的那一个。它作用在家族已经完成的检测结果上，在 `classes` 过滤之后，覆盖检测、分割、姿态和旋转框任务，旋转框使用旋转 IoU。在任何其他任务上它会抛出 `ValueError`。
+
 ## Results 载荷
 
 `Results` 及其载荷类在包级别导出：`Results`、`Boxes`、`Masks`、`Keypoints`、`Points`、`Probs`、`OBB`、`Gaze`、`SemanticMask`、`PanopticSegmentation`、`DepthMap`、`EdgeMap`、`NormalMap`、`RestoredImage`、`Matte`、`Meshes`、`OCRRegions`、`Embeddings`、`Identities`。[Results 类型](/docs/reference/results-types)逐一说明。
 
 `Boxes3D`、`AlbedoMap` 和 `Actions` 分别新增 3D 长方体、内在反照率和动作块。见[结果类型](/docs/reference/results-types)。
+
+`GeneratedImage` 和 `Gaussians` 承载 `LibreGen` 的输出：生成的图像放在 `Results.generated`，生成的 3D 对象放在 `Results.gaussians`。
 
 ## 后端
 

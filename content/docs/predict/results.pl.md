@@ -135,12 +135,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 
 ## Jeden obiekt i jedno pole na typ danych
 
-Predykcja na jednym obrazie zwraca jeden obiekt `Results`. Zawiera on dwadzieścia jeden
+Predykcja na jednym obrazie zwraca jeden obiekt `Results`. Zawiera on dwadzieścia trzy
 pól danych wynikowych, a model wypełnia tylko te, które tworzy jego zadanie.
 Każde pozostałe pole ma wartość `None`, więc odczytanie `result.masks` dla
 detektora zwraca `None`, a nie błąd.
@@ -168,6 +168,8 @@ detektora zwraca `None`, a nie błąd.
 | `albedo` | `AlbedoMap` | `(H, W, 3)` liniowe RGB | Estymacja albedo |
 | `boxes3d` | `Boxes3D` | `(N, 14)` prostopadłościany w układzie kamery, wyrównane wierszami z `boxes` | Monokularna detekcja 3D |
 | `actions` | `Actions` | `(T, D)` fragment akcji | Polityki robotów |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB oraz prompt, seed i ustawienia | Generowanie obrazów |
+| `gaussians` | `Gaussians` | `N` gaussianów jako `xyz`, `scales`, `rotations`, `opacities` i `sh`, plus kamera i seed | Generowanie 3D |
 
 Obok nich znajdują się pola obecne w każdym wyniku: `orig_shape` jako
 `(height, width)`, `path` (ścieżka źródłowa albo `None` dla wejścia w pamięci),
@@ -177,10 +179,11 @@ współczynnik powiększenia wyniku rekonstrukcji.
 
 `result.normals` jest aliasem `result.normal_map`.
 
-`result.speed` istnieje w każdym wyniku, ale jest wypełniane tylko przez
-[zespoły](/docs/predict/ensembling), gdzie jego klucze to `member_0`, `member_1`
-i `fusion`, a wartości są podane w milisekundach. Dla pojedynczego modelu
-pozostaje pustym słownikiem.
+`result.speed` istnieje w każdym wyniku. [Zespoły](/docs/predict/ensembling)
+wypełniają je kluczami `member_0`, `member_1` i `fusion` w milisekundach, modele
+LibreGen kluczem `inference`, czyli milisekundami na wygenerowany obraz lub
+obiekt, a FCOS3D kluczami `preprocess`, `inference` i `postprocess`. Pozostałe
+modele zostawiają pusty słownik.
 
 ## Ramki
 
@@ -258,7 +261,8 @@ Dzięki temu wycięcie wyniku klasyfikacji nie skraca wektora prawdopodobieństw
 do jednej klasy, a wycięcie wyniku głębi nie psuje układu `(H, W)`.
 
 `len(result)` liczy instancje: ramki, punkty, osadzenia, regiony OCR albo siatki.
-Każde gęste dane całego obrazu liczą się jako `1`. Wynik bez zawartości ma długość `0`.
+Każde gęste dane całego obrazu liczą się jako `1`, tak samo jak wygenerowany
+obraz lub obiekt 3D. Wynik bez zawartości ma długość `0`.
 
 `to()`, `cpu()`, `cuda()` i `numpy()` zwracają nowy obiekt `Results` ze wszystkimi
 wypełnionymi polami po konwersji. Nie modyfikują oryginału.
@@ -285,7 +289,8 @@ na region z jego `text`, punkty jeden wiersz na punkt, segmentacja panoptyczna
 jeden wiersz na segment z `pixel_count` i `pixel_fraction`, semantyczna jeden
 wiersz na obecną klasę, a klasyfikacja pięć najlepszych klas. Głębia, normalne,
 krawędzie, rekonstrukcja i wyznaczanie alfa tworzą po jednym wierszu podsumowania
-opisującym mapę zamiast jej pikseli.
+opisującym mapę zamiast jej pikseli, a wygenerowany obraz lub obiekt 3D jeden
+wiersz z seedem i ustawieniami.
 
 Dwa rodzaje danych są celowo skracane. Wektor osadzenia jest domyślnie raportowany
 tylko jako `embedding_dim`, ponieważ wiersz 512 liczb zmiennoprzecinkowych zajmuje
@@ -304,10 +309,12 @@ maska, wynik głębi jako wizualizacja głębi, wynik panoptyczny z segmentami, 
 jako plik PNG RGBA z przezroczystym tłem, a wynik detektora jako ramki z maskami
 pod nimi. Zapisana ścieżka jest dołączana do wyniku jako `result.saved_path`.
 
-`Results.save(path)` również ma wąski zakres. Zapisuje wynik matte jako wycięcie
+`Results.save(path)` również ma wąski zakres. Zapisuje wygenerowany obraz lub
+obiekt 3D, wybierając format według rozszerzenia, oraz wynik matte jako wycięcie
 PNG RGBA z przezroczystym tłem, a w innych przypadkach zgłasza `NotImplementedError`.
-`Results.cutout()` zwraca tę samą tablicę RGBA bez zapisywania. Obie metody
-potrzebują obrazu źródłowego pobranego z `result.path` albo przekazanego jako `image=`.
+`Results.cutout()` zwraca tę samą tablicę RGBA bez zapisywania. Dla wyniku matte
+obie metody potrzebują obrazu źródłowego pobranego z `result.path` albo
+przekazanego jako `image=`.
 
 Dwa rodzaje danych mają własne metody zapisu: `result.restored.save(path)` dla
 zrekonstruowanego obrazu oraz `result.meshes.save_obj(path, index=0)` dla siatki.
@@ -315,7 +322,7 @@ zrekonstruowanego obrazu oraz `result.meshes.save_obj(path, index=0)` dla siatki
 Informacje o lokalizacji plików oraz zachowaniu `output_path` i
 `output_file_format` znajdziesz w sekcji [źródła predykcji](/docs/predict/sources).
 
-`plot()` obsługuje dane wszystkich zadań. Nakładki na obrazy domyślnie zwracają ciągłe tablice HxWx3 uint8 BGR; `pil=True` żąda PIL. Mapy głębi, normalnych, krawędzi i albedo, prostopadłościany 3D oraz fragmenty akcji domyślnie zwracają obraz PIL; `pil=False` zwraca tablicę. `orig_img` przechowuje piksele BGR dla źródeł w pamięci i adresów URL; pliki lokalne i zebrane klatki skończonych nagrań wideo można otworzyć ponownie.
+`plot()` obsługuje dane wszystkich zadań. Nakładki na obrazy domyślnie zwracają ciągłe tablice HxWx3 uint8 BGR; `pil=True` żąda PIL. Mapy głębi, normalnych, krawędzi i albedo, prostopadłościany 3D, fragmenty akcji, wygenerowane obrazy i rzut punktowy wygenerowanego obiektu 3D domyślnie zwracają obraz PIL; `pil=False` zwraca tablicę. `orig_img` przechowuje piksele BGR dla źródeł w pamięci i adresów URL; pliki lokalne i zebrane klatki skończonych nagrań wideo można otworzyć ponownie.
 
 Dostępne opcje to `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` i `filename`. Zapisane obrazy klasyfikacji zawierają pięć najlepszych etykiet. Zapis mattingu tworzy wycięty obiekt RGBA.
 

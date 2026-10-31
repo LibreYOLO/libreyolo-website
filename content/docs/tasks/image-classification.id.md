@@ -20,15 +20,22 @@ snippets:
   predict:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Sufiks -cls pada nama berkas memilih task, sehingga tidak perlu argumen task.
+
+        # Sufiks -cls pada nama berkas memilih task, sehingga tidak perlu
+        argumen task.
+
         # argumen diperlukan.
+
         model = LibreYOLO("LibreResNet50-cls.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         print(result.names[result.probs.top1], float(result.probs.top1conf))
+
         print(result.probs.top5)
     - label: CLI
       language: bash
@@ -37,37 +44,56 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Seluruh distribusi
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         result = LibreYOLO("LibreResNet50-cls.pt")(SAMPLE_IMAGE)
+
         probs = result.probs
 
-        # .data adalah vektor penuh (C,); top5/top5conf adalah tampilan yang diurutkan.
+
+        # .data adalah vektor penuh (C,); top5/top5conf adalah tampilan yang
+        diurutkan.
+
         print(probs.data.shape)
+
         for index, score in zip(probs.top5, probs.top5conf):
             print(result.names[index], float(score))
     - label: 'Zero-shot, tanpa pelatihan'
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # CLIP menilai gambar terhadap prompt teks, sehingga set label ditentukan
+
+        # CLIP menilai gambar terhadap prompt teks, sehingga set label
+        ditentukan
+
         # saat pemanggilan, bukan tertanam dalam checkpoint.
+
         model = LibreYOLO("LibreCLIPb32-cls.pt")
-        model.set_classes(["a person jumping", "an empty street", "a parked car"])
+
+        model.set_classes(["a person jumping", "an empty street", "a parked
+        car"])
+
         result = model(SAMPLE_IMAGE)
+
 
         print(model.names[result.probs.top1], float(result.probs.top1conf))
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # imagenette160 adalah nama dataset yang dikenal dan diunduh pada penggunaan pertama.
+
+        # imagenette160 adalah nama dataset yang dikenal dan diunduh pada
+        penggunaan pertama.
+
         # Lewatkan direktori dengan pembagian train/ untuk data Anda sendiri.
+
         model = LibreYOLO("LibreResNet50-cls.pt")
+
         model.train(data="imagenette160", epochs=5)
     - label: CLI
       language: bash
@@ -86,11 +112,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() mengembalikan dict biasa, bukan objek.
+        # Dict berisi kunci metrics/, ditambah top1, top5, dan confusion_matrix.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -109,16 +136,22 @@ snippets:
         libreyolo export model=LibreResNet50-cls.pt format=onnx
     - label: Gunakan berkas yang diekspor
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Pabrik mengarahkan berdasarkan akhiran berkas, sehingga artifak yang diekspor memuat
+
+        # Pabrik mengarahkan berdasarkan akhiran berkas, sehingga artifak yang
+        diekspor memuat
+
         # seperti checkpoint dan mengembalikan objek Results yang sama.
+
         model = LibreYOLO("LibreResNet50-cls.onnx")
+
         result = model(SAMPLE_IMAGE)
 
+
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 90aed355e0ddf5e3
+source_hash: 7934244e90056e77
 ---
 
 ## Definisi
@@ -206,9 +239,11 @@ multi-GPU dan logger.
 
 ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2, dan DINOv2 mendukung pembobotan loss `cls_pw` atau `class_weights`. `scale` klasifikasi mengontrol area crop, dan `crop_pct` mengontrol crop evaluasi. Lihat [augmentasi](/docs/train/augmentations).
 
+Filter resize adalah bagian dari model. Atur `model.interpolation` ke `"bilinear"`, `"bicubic"`, `"nearest"`, atau `"bilinear_no_antialias"` sebelum pelatihan: pelatihan, `val()`, `predict()`, kalibrasi INT8, dan ekspor semuanya memakainya, dan `save()`, `best.pt`, serta `last.pt` mencatatnya, sehingga pemuatan ulang mempertahankannya. Nama lain memunculkan `ValueError`. `"bilinear_no_antialias"` melakukan resize dengan bilinear biasa tanpa antialiasing di mana-mana, termasuk `RandomResizedCrop`, untuk model yang akan berjalan di belakang resize runtime tanpa antialiasing. MobileNetV4, ResNet, ConvNeXt, ConvNeXt V2, EfficientNetV2, DeiT, Swin, dan ViT memakai bicubic secara default; AlexNet dan VGG memakai bilinear.
+
 ## Validasi
 
-`val()` mengembalikan kamus sederhana dari kunci `metrics/`, dihitung di atas `val/`
+`val()` mengembalikan kamus dari kunci `metrics/`, dihitung di atas `val/`
 pembagian dari akar dataset.
 
 <code-tabs name="val" />
@@ -220,6 +255,14 @@ di mana saja dalam lima kelas dengan skor tertinggi, yang berarti lebih sedikit 
 yang dimiliki dataset. Kamus juga memuat `fitness`, salinan dari nilai top-1.
 
 Validasi ImageFolder juga mengembalikan makro `metrics/precision`, `metrics/recall`, dan `metrics/f1`, dengan rata-rata atas kelas yang ada dalam target validasi. Kelas tanpa prediksi menyumbang presisi nol. Fitness default tetap akurasi top-1. Validasi dan kalibrasi memakai transformasi evaluasi model.
+
+Hasilnya adalah subclass `dict` dengan tiga atribut: `top1` dan `top5` menyimpan
+dua nilai akurasi, dan `confusion_matrix` menghitung setiap gambar pada kelas top-1-nya
+terhadap labelnya, diindeks `matrix[predicted, true]`. `plots=True` menulisnya
+sebagai hitungan ke `confusion_matrix.png` dan sebagai proporsi tiap label ke
+`confusion_matrix_normalized.png`. Di atas 2.000 kelas, matriks padat dan plotnya
+tidak tersedia, dan `nonzero()`, `tp_fp()`, serta `class_accuracy()` membaca hitungannya;
+lihat [Validasi dan metrik](/docs/train/validation#confusion-matrix).
 
 ## Ekspor
 

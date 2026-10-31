@@ -19,7 +19,6 @@ keywords:
   - omdet turbo
   - детекция по текстовому запросу
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Python
@@ -60,7 +59,7 @@ snippets:
         # декодированной фразы. Если не задать, оба равны 0.25. Только Grounding
         # DINO принимает text_threshold, остальные вызывают ошибку.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Определение
@@ -134,7 +133,7 @@ OV-DEIM как нативному порту.
 семейства на этой странице — дискриминативные детекторы, которые выдают оценки
 напрямую, а группа VLM их генерирует.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) и [North Micro Vision](/docs/models/northmicrovision) расширяют выбор детекторов `LibreVLM`. [Molmo2](/docs/models/molmo2) возвращает точки. Для запросов клика по инструкции используйте [LibreGround](/docs/reference/ground-api), а не словарь детекции.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) и [WeVisOne-VL](/docs/models/wevisone-vl) расширяют выбор детекторов `LibreVLM`. [Molmo2](/docs/models/molmo2) возвращает точки. Для запросов клика по инструкции используйте [LibreGround](/docs/reference/ground-api), а не словарь детекции.
 
 ## Предсказание
 

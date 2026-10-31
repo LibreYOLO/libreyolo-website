@@ -50,7 +50,7 @@ snippets:
         # Baris sebagai dict biasa, lalu sebagai JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## Objek Results
@@ -96,6 +96,8 @@ ditentukan oleh task-nya.
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, dengan gallery |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` adalah alias baca-tulis untuk `result.normal_map`.
 
@@ -324,3 +326,54 @@ mengembalikan string JSON.
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` merepresentasikan potongan aksi float32 `(T, D)`. `first` mengembalikan baris pertama; slicing memilih timestep. Nilai tetap dalam satuan dataset policy. `names` menjelaskan dimensi aksi, `fps` laju kontrol, dan `instruction` teks pengondisi.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+menyimpan satu gambar sintetis, `(H, W, 3)` uint8 RGB. `array` mengembalikan view
+numpy dan `image` mengembalikan `PIL.Image`. `prompt` adalah teks yang menghasilkan
+gambar dan `seed` adalah bilangan bulat yang mereproduksinya dengan model dan
+pengaturan yang sama; `params` mencatat sisa pemanggilan: `model`, `imgsz`, dan
+setiap pengaturan family yang berlaku. `save(path)` menulis gambar, dan PNG juga
+menyimpan `to_dict()`, yaitu shape, prompt, seed, dan params, sebagai JSON dalam
+chunk teks `libreyolo`.
+
+Pada hasil generasi, `Results.boxes` dan `Results.path` bernilai `None`,
+`orig_shape` adalah `(H, W)` milik gambar itu sendiri, dan `len(result)` bernilai 1.
+`Results.save(path)` menulis gambar, `plot()` mengembalikannya sebagai gambar PIL,
+dan `summary()` mengembalikan satu baris berisi catatan payload.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+menyimpan satu objek 3D hasil generasi sebagai splat Gaussian, dalam kerangka
+objek itu sendiri: z ke atas, berpusat di kubus `[-0.5, 0.5]^3`. Setiap baris
+adalah satu Gaussian.
+
+| Anggota | Mengembalikan |
+|---|---|
+| `xyz` | `(N, 3)` posisi dalam kerangka objek |
+| `scales` | `(N, 3)` simpangan baku sepanjang sumbu lokal, linear, bukan log |
+| `rotations` | `(N, 4)` quaternion satuan `(w, x, y, z)`, sumbu lokal ke kerangka objek |
+| `opacities` | `(N,)` dalam `[0, 1]` |
+| `sh` | `(N, K, 3)` koefisien warna spherical-harmonic, derajat 0 lebih dulu |
+| `colors` | `(N, 3)` RGB dalam `[0, 1]`, dari suku derajat 0 |
+| `camera` | Tampilan input yang diinferensikan: `yaw` dan `pitch` dalam radian, `radius` dalam satuan objek, `fov` vertikal dalam derajat, dan `margin` crop |
+| `seed`, `params` | Seed dan pengaturan pemanggilan yang mereproduksi objek |
+| `input_image` | Gambar RGB yang dilihat model setelah preprocessing-nya sendiri |
+
+`len(gaussians)` adalah `N`, dan `gaussians[gaussians.opacities > 0.1]`
+mengembalikan `Gaussians` baru berisi baris yang dipilih. `save(path)` menulis
+menurut ekstensi. `.ply` adalah tata letak 3D Gaussian Splatting standar, dengan
+skala log dan opacity logit, diputar y-up seperti yang diharapkan viewer splat, dan
+satu baris header `comment libreyolo` berisi seed, kamera, dan params sebagai JSON.
+Payload dengan warna orde lebih tinggi (`K > 1`) memunculkan `NotImplementedError`
+untuk `.ply`. `.splat` adalah format web ringkas, 32 byte per Gaussian.
+`render(size=512, background=(0, 0, 0))` mengembalikan render titik dari tampilan
+input yang diinferensikan sebagai `PIL.Image`, tinjauan cepat, bukan rasterisasi
+Gaussian.
+
+Pada hasil 3D hasil generasi, `Results.boxes` bernilai `None`; `path`, `orig_shape`,
+dan `orig_img` menjelaskan gambar sumber, dan `len(result)` bernilai 1.
+`Results.save(path)` menulis objek, `plot()` mengembalikan render titik itu, dan
+`summary()` mengembalikan satu baris berisi catatan payload.

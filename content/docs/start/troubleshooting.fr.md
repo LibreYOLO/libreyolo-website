@@ -13,7 +13,7 @@ keywords:
   - notimplementederror libreyolo
   - dépannage libreyolo
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 Les erreurs sont regroupées selon le texte affiché. Si votre message n'est pas
@@ -30,6 +30,16 @@ Exécutez `libreyolo models`. Toute famille dont une dépendance manque est
 affichée avec la commande pip exacte qui l'active. Vous n'avez donc pas à
 retrouver vous-même l'extra correspondant au package.
 `libreyolo models --json` affiche les mêmes informations sous forme d'objet.
+
+RF-DETR et DINOv2 nécessitent `libreyolo[rfdetr]`, et leur message nomme l'extra.
+Sans lui, `LibreYOLO("LibreRFDETRn.pt")`, les noms de poids DINOv2 et
+`libreyolo predict model=rfdetr-n` s'arrêtent avec la ligne d'installation, et la
+CLI se termine avec `model_load_failed` :
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 La [page d'installation](/docs/install) énumère chaque extra et son rôle.
 
@@ -103,12 +113,18 @@ transmis. L'URL en est dérivée, suffixe de tâche compris. Un nom qui ne
 correspond à aucun checkpoint publié produit donc une URL inexistante. Le
 tableau des checkpoints de chaque page de modèle énumère les noms exacts.
 
-## L'entraînement se fige ou redémarre sous Windows ou macOS
+## train() ou val() a été appelé au niveau supérieur de votre script
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 Windows ne possède pas `fork`, et Python sur macOS ne l'utilise pas par défaut.
-Les workers du dataloader démarrent donc en réimportant votre script. Sans garde `if __name__ == "__main__":`, chaque
-worker relance votre appel d'entraînement, ce qui provoque un deadlock ou crée
-des processus sans fin.
+Les workers du dataloader démarrent donc en réimportant votre script. Les
+méthodes de démarrage `spawn` et `forkserver` font de même sur n'importe quelle
+plateforme. Sans garde `if __name__ == "__main__":`, chaque worker exécuterait de
+nouveau votre appel `train()` ou `val()`. Chacun s'arrête donc à cet appel,
+affiche cette ligne qui nomme l'appel, et le script se termine avec une erreur.
 
 ```python
 def main():

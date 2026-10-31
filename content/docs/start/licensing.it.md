@@ -15,7 +15,7 @@ keywords:
   - licenza checkpoint modello
   - object detection apache-2.0
 last_verified: 1.6.0
-source_hash: 03e83b82bd2da258
+source_hash: 3204f1f80370c85a
 ---
 
 ## Il codice di LibreYOLO
@@ -26,9 +26,11 @@ gli exporter, i loader dei dataset e gli script di conversione sotto
 di copyright e il testo della licenza con ogni copia che ridistribuisci, e
 l'obbligo finisce lì.
 
-La concessione si ferma al codice. Il file
-[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) lo
-dice chiaramente:
+La concessione si ferma al codice.
+[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) contiene
+solo il testo MIT, e la nota sui pesi in cima a
+[`NOTICE`](https://github.com/LibreYOLO/libreyolo/blob/release/NOTICE) lo dice
+chiaramente:
 
 > Quelle licenze variano e non sono tutte permissive: alcuni pesi pubblicati
 > sono non commerciali o comunque soggetti a restrizioni, e questa MIT License
@@ -57,8 +59,10 @@ BSD-3-Clause copre tutto ciò che deriva da torchvision: Faster R-CNN,
 Mask R-CNN, FCOS, RetinaNet, SSD300, AlexNet, VGG, FCN e DeepLabv3.
 
 MIT copre un gruppo più ristretto, che comprende NAFNet di Megvii, CenterNet di
-Xingyi Zhou, e YOLOv7 nella riedizione dei suoi stessi autori, Kin-Yiu Wong e
-Hao-Tang Tsui, presso MultimediaTechLab. Le famiglie da YOLOv1 a YOLOv4
+Xingyi Zhou, e YOLOv7 e YOLOv9 nella riedizione dei loro stessi autori, Kin-Yiu Wong e
+Hao-Tang Tsui, presso MultimediaTechLab. I blocchi costitutivi di YOLOv9, le
+torri delle teste di rilevamento che YOLO9-E2E e YOLO9-P2 condividono, i rami PGI
+e la miscela mixup di YOLOv9 sono portati da quella release MIT. Le famiglie da YOLOv1 a YOLOv4
 riproducono architetture del progetto Darknet, di Joseph Redmon e, per YOLOv4,
 di Alexey Bochkovskiy. Darknet è di pubblico dominio, quindi quelle non
 comportano alcun obbligo.
@@ -124,7 +128,7 @@ dichiara su ogni model card che la base è implicita anziché concessa per
 singolo checkpoint, e ripete l'avvertenza di torchvision stesso secondo cui i
 termini di un modello preaddestrato possono derivare dai dati di addestramento.
 
-I pesi preaddestrati ConvNeXt V2 e LeVJEPA hanno licenza CC-BY-NC-4.0. Moondream 3 usa BSL 1.1, i mirror Dome-DETR sono limitati alla ricerca accademica e le varianti EdgeCrafter `obj2coco` e DetAny3D hanno termini restrittivi sui pesi. Le pagine dei modelli riportano le dichiarazioni accanto alla licenza del codice. I checkpoint EdgeCrafter COCO originali mantengono la licenza Apache-2.0 registrata. I mirror MiDaS mantengono la licenza MIT del distributore.
+I pesi preaddestrati ConvNeXt V2 e LeVJEPA hanno licenza CC-BY-NC-4.0. Moondream 3 usa BSL 1.1, i mirror Dome-DETR sono limitati alla ricerca accademica e le varianti EdgeCrafter `obj2coco` e DetAny3D hanno termini restrittivi sui pesi. L'encoder di testo Gemma 2 incluso in SANA-Sprint resta sotto i Gemma Terms of Use di Google, e l'encoder DINOv3 che Speridlabs Idol legge dal mirror `LibreYOLO/LibreDINOv3vith16plus` resta sotto la DINOv3 License di Meta. Le pagine dei modelli riportano le dichiarazioni accanto alla licenza del codice. I checkpoint EdgeCrafter COCO originali mantengono la licenza Apache-2.0 registrata. I mirror MiDaS mantengono la licenza MIT del distributore.
 
 I riepiloghi dei pesi seguono la licenza dichiarata dal distributore del checkpoint. Il nome di un dataset di addestramento non stabilisce una licenza aggiuntiva per il checkpoint.
 

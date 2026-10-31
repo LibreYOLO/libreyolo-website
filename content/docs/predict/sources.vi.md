@@ -210,7 +210,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 ## Cách phân loại nguồn
 
@@ -394,7 +394,8 @@ không phải ảnh, nên `result[0]` trên dự đoán một ảnh là box đ�
 nên hai thư mục đầu vào có cùng tên tệp sẽ ghi đè lẫn nhau. Ảnh trong bộ nhớ không
 có tên tệp để dùng lại. Một ảnh đơn lẻ được lưu với tên `inference`, nên các lần
 gọi lặp lại sẽ ghi đè nó; một danh sách hoặc batch được đánh số `image0`, `image1`
-rồi tiếp tục.
+rồi tiếp tục. Hai tiến trình lưu cùng lúc sẽ nhận các thư mục đánh số riêng, vì
+mỗi lần chạy giữ chỗ thư mục của mình bằng cách tạo nó.
 
 Video và nguồn trực tiếp được ghi thành một tệp `.mp4` duy nhất đặt theo tên nguồn.
 

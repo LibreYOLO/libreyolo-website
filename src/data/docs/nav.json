@@ -1,6 +1,6 @@
 {
   "_comment": "Docs sidebar manifest. In production this is generated from the content tree at build time; pages with built:false are planned but not yet written, and render as dimmed placeholders so the shape of the docs is visible while it fills in.",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "groups": [
     {
       "id": "start",
@@ -205,6 +205,16 @@
         {
           "slug": "/docs/tasks/robot-policies",
           "label": "Robot policies",
+          "built": true
+        },
+        {
+          "slug": "/docs/tasks/image-generation",
+          "label": "Image generation",
+          "built": true
+        },
+        {
+          "slug": "/docs/tasks/3d-generation",
+          "label": "3D generation",
           "built": true
         }
       ]
@@ -845,6 +855,21 @@
           "built": true
         },
         {
+          "slug": "/docs/models/flux2-klein",
+          "label": "FLUX.2 klein",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/sana-sprint",
+          "label": "SANA-Sprint",
+          "built": true
+        },
+        {
+          "slug": "/docs/models/wevisone-vl",
+          "label": "WeVisOne-VL",
+          "built": true
+        },
+        {
           "slug": "/docs/models/tinyformer",
           "label": "TinyFormer",
           "built": true
@@ -1096,6 +1121,11 @@
         {
           "slug": "/docs/cli/val",
           "label": "val",
+          "built": true
+        },
+        {
+          "slug": "/docs/cli/generate",
+          "label": "generate",
           "built": true
         },
         {

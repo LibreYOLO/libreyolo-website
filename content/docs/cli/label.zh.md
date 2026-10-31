@@ -31,7 +31,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## 概要
@@ -75,6 +75,15 @@ libreyolo label [data=<dataset.yaml|folder>] [key=value ...]
 不带 `data` 时，工具从项目主页启动，数据集在浏览器里选择或新建。传入
 `data=path/to/data.yaml` 会直接打开那个数据集，启动行会报告图像数量、类别数量，
 以及数据集是否可写。只读的数据集仍然可以打开，并会说明为什么无法写入。
+
+### 标注错误雷达（Label-Error Radar）
+
+开启 AI 辅助后，Radar 按钮或 `Y` 键会用辅助模型跑一遍所有已标注的图像，列出模型与
+标注不一致的图像，最严重的排在最前：模型在里面什么也没找到的检测框、没有检测框的
+高置信度检测，或者模型对类别有异议的检测框。Radar 不写入任何东西；每一处修正都要
+手动编辑。`N` 按这个从重到轻的顺序跳到下一张被标记的图像，到末尾后回到开头。再按一次
+`Y` 会重新打开上一次的扫描结果，附带扫描时间和一个 Rescan 按钮，而不是重新扫描。旋转框
+项目上没有 Radar，两个按键都可以在 `?` 快捷键对话框里重新映射。
 
 ### 共享，以及 `host` 的作用
 

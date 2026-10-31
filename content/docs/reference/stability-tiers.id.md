@@ -42,7 +42,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Tier dukungan ekspor
@@ -118,9 +118,9 @@ sama pada header halaman model.
 | `g2` | Supported | 19 | Kelompok cakupan tambahan untuk family yang dapat dilatih |
 | `g3` | Inference only | 44 | Family tanpa implementasi pelatihan |
 | `g4` | Museum | 5 | Family historis dengan cakupan inferensi |
-| `s` | Sibling tier | 36 | API sibling (SAM, open-vocab, VLM, grounding, zero-shot) yang dicakup secara terpisah |
+| `s` | Sibling tier | 40 | API sibling (SAM, open-vocab, VLM, grounding, zero-shot) yang dicakup secara terpisah |
 
-Jumlahnya 118 family dalam enam kelompok. `g3` adalah kelompok terbesar karena
+Jumlahnya 122 family dalam enam kelompok. `g3` adalah kelompok terbesar karena
 banyak isi registry merupakan lineage inference-only, bukan detektor yang aktif
 dilatih.
 
@@ -158,7 +158,7 @@ Family dalam `g3` atau `g4` tidak memiliki implementasi pelatihan, dan
 memanggil `train()` akan memunculkan error. Hal itu merupakan properti kode
 family, bukan kelompoknya: kelompok mencatat fakta tersebut, bukan menyebabkannya.
 
-Dari 118 family, 37 dapat dilatih: setiap family `g0`, `g1`, dan `g2`, ditambah
+Dari 122 family, 37 dapat dilatih: setiap family `g0`, `g1`, dan `g2`, ditambah
 Qwen3-VL melalui `LibreVLM` serta SmolVLA, ACT, dan Diffusion Policy melalui
 `LibreVLA`.
 

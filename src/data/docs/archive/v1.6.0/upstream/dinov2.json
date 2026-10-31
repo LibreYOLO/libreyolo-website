@@ -1,0 +1,12 @@
+{
+  "name": "DINOv2",
+  "org": "Meta AI (FAIR)",
+  "paper_title": "DINOv2: Learning Robust Visual Features without Supervision",
+  "paper_url": "https://arxiv.org/abs/2304.07193",
+  "code_url": "https://github.com/facebookresearch/dinov2",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. LibreYOLO does not host or republish a DINOv2 checkpoint of its own: LibreDINOv2 downloads the pretrained backbone directly from Meta's facebook/dinov2-with-registers-small repository on Hugging Face the first time it runs, unmodified. The semantic and classification heads start at random initialization until you train them, since LibreYOLO does not publish a trained head for this family.",
+  "bibtex": "@misc{oquab2023dinov2,\n  title={DINOv2: Learning Robust Visual Features without Supervision},\n  author={Oquab, Maxime and Darcet, Timothée and Moutakanni, Theo and Vo, Huy V. and Szafraniec, Marc and Khalidov, Vasil and Fernandez, Pierre and Haziza, Daniel and Massa, Francisco and El-Nouby, Alaaeldin and Howes, Russell and Huang, Po-Yao and Xu, Hu and Sharma, Vasu and Li, Shang-Wen and Galuba, Wojciech and Rabbat, Mike and Assran, Mido and Ballas, Nicolas and Synnaeve, Gabriel and Misra, Ishan and Jegou, Herve and Mairal, Julien and Labatut, Patrick and Joulin, Armand and Bojanowski, Piotr},\n  journal={arXiv:2304.07193},\n  year={2023}\n}",
+  "bibtex_source_url": "https://github.com/facebookresearch/dinov2#citing-dinov2",
+  "bibtex_verified": "2026-08-08, copied verbatim from the 'Citing DINOv2' section of the upstream README on branch main. Cross-checked against the arXiv API for 2304.07193 (v2): the same 26 authors appear, but the arXiv record's author order differs from the README's bibtex from El-Nouby onward (the README was not updated when the paper revised its author list). Reproduced the README's order unchanged, as instructed: never assemble or reorder a citation by hand. LibreDINOv2 specifically loads the DINOv2-with-Registers variant; the registers paper has its own verbatim entry in the same README section (Darcet et al., 'Vision Transformers Need Registers', arXiv:2309.16588, NeurIPS-track preprint, four authors, cross-checked and matching exactly) but is not duplicated here since this field holds one entry."
+}

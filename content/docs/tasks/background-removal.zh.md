@@ -9,7 +9,7 @@ keywords:
   - 二分图像分割
   - 透明背景 png 抠图
   - alpha matte
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 预测一张 matte
@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## 定义
@@ -128,6 +128,8 @@ BiRefNet 的前向路径、预处理和单 logit 输出，所以预测、验证�
 仓库上标注的许可才是权威的。
 
 [BEN2](/docs/models/ben2) 提供固定 1024 分辨率的背景移除。[ViTMatte](/docs/models/vitmatte) 接受图像和三级 `trimap=`，分别标记背景、未知和前景像素。
+
+[WeVisOne-VL](/docs/models/wevisone-vl) 用文本提示：`LibreVLM("wevisone-vl", names=["person"], task="matte")` 返回与该短语匹配的每个实例的透明度遮罩的并集。它是一个视觉语言模型，需要 `vlm` extra，它的 `val()` 和 `export()` 会抛错。
 
 ## 预测
 

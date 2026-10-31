@@ -118,8 +118,10 @@ The returned `Results` object is the one every family returns, so swapping in a
 different detector is a one line change. A `-seg` filename resolves to the
 RTMDet-Ins task on its own, and `result.masks` then carries the instance
 masks alongside the boxes. `conf` sets the confidence threshold and `iou` the
-NMS threshold. See [prediction](/docs/predict) for sources, streaming and
-result handling.
+NMS threshold. `max_det` applies as given to both tasks, up to 300 boxes or
+masks per image by default; MMDetection's RTMDet-Ins test configuration keeps
+100, which `max_det=100` reproduces. See [prediction](/docs/predict) for
+sources, streaming and result handling.
 
 ## Variants
 

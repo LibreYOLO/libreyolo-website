@@ -40,7 +40,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: a0446a47e0f89b27
+source_hash: 587851b0988347c3
 ---
 
 ## Синтаксис
@@ -64,6 +64,7 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | `imgsz` | | Розмір зображення: `640` (квадрат) або `480x640` (HxW). Якщо не задано, власний вхідний розмір моделі |
 | `conf` | `0.001` | Поріг впевненості |
 | `iou` | `0.6` | Поріг IoU для NMS |
+| `agnostic_nms` | `false` | NMS без урахування класів: з рамок, що перекриваються понад `iou`, лишається тільки та, що має найвищу оцінку, незалежно від їхніх класів. Лише для detect і segment |
 | `max_det` | `300` | Максимум передбачень на зображення після NMS |
 | `eval_max_det` | | Обмеження оцінювача COCO. Якщо не задано, діє домовленість AP@100 з pycocotools |
 | `faster_coco_eval` | `true` | Використання швидшого C++ бекенда faster-coco-eval для метрик COCO, якщо він встановлений; інакше pycocotools |

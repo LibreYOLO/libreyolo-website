@@ -168,7 +168,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## Definición
@@ -250,9 +250,9 @@ orientadas sobre vehículos vistos desde arriba, y para verificar que tu pipelin
 funciona de principio a fin. Cualquier otro dominio implica entrenar con tus
 propias etiquetas orientadas, y para las categorías aéreas por las que DOTA es
 conocido, los checkpoints de RT-DETRv2 son los que están realmente entrenados
-con esos datos. `conf` y `max_det` dan forma a la salida igual que en detección.
-Consulta [predicción](/docs/predict) para fuentes, streaming y manejo de
-resultados.
+con esos datos. `conf` y `max_det` dan forma a la salida igual que en detección, y `agnostic_nms=True` suprime los
+boxes solapados entre clases por IoU rotado. Consulta [predicción](/docs/predict)
+para fuentes, streaming y manejo de resultados.
 
 ## Formato del dataset
 
@@ -353,7 +353,8 @@ con sufijo.
 
 Dos opciones no hacen nada en esta tarea. `save_json` y `save_plots` se aceptan
 y registran un aviso: los volcados de predicciones orientadas y las gráficas de
-validación no están implementados.
+validación no están implementados. `agnostic_nms=True` lanza `ValueError` aquí;
+solo cubre la validación de detect y segment.
 
 ## Exportación
 

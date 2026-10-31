@@ -1,23 +1,57 @@
 ---
-title: Meningkatkan ke 1.6.0
-seo_title: Tingkatkan LibreYOLO 1.5.0 ke 1.6.0
+title: Meningkatkan ke 1.7.0
+seo_title: Tingkatkan LibreYOLO 1.6.0 ke 1.7.0
 description: >-
-  Langkah migrasi prapemrosesan, default pelatihan, direktori proses, aset yang
-  dipatok, QAT, dan loader data di LibreYOLO 1.6.0.
+  Langkah migrasi untuk checkpoint YOLO9, nama modul dan resep pelatihan, folder
+  run CLI, confusion matrix, dan error baru di LibreYOLO 1.7.0.
 lead: >-
-  Versi 1.6.0 mengubah prapemrosesan, default pelatihan, dan penanganan
-  checkpoint. Validasi ulang baseline tersimpan dan atur default lama secara
-  eksplisit saat mereproduksi proses sebelumnya.
+  Versi 1.7.0 tetap memuat checkpoint YOLO9 lama dengan box float yang sama.
+  Versi ini mengubah pelatihan family YOLO9, nama yang dilihat kode di dalam
+  jaringan, dan beberapa kontrak validasi dan predict.
 keywords:
   - upgrade libreyolo
-  - migrasi libreyolo 1.5.0
-  - allow_experimental dihapus
+  - migrasi libreyolo 1.6.0
   - breaking change libreyolo
-  - yolox bn eps
-  - default faster-coco-eval
-last_verified: 1.6.0
-source_hash: e9c7cb5271aa4a81
+  - nama modul yolo9
+  - clip_max_norm
+  - confusion matrix
+last_verified: 1.7.0
+source_hash: 895bcd7425f0052f
 ---
+
+## 1.6.0 ke 1.7.0
+
+- Checkpoint YOLO9, YOLO9-E2E, dan YOLO9-P2 yang disimpan oleh 1.7.0 memakai nama tensor baru dan tidak dapat dimuat di 1.6.x: 1.6.x memuat yang YOLO9 dan YOLO9-P2 dengan peringatan missing-keys dan tidak memprediksi box, dan memunculkan error ketidakcocokan `model_family` untuk yang YOLO9-E2E. Tingkatkan setiap lingkungan yang membacanya. Checkpoint float, terkuantisasi, dan pelatihan yang ditulis rilis sebelumnya dapat dimuat di 1.7.0, dan ekspor ONNX tidak terpengaruh.
+
+- Kode yang mengakses `model.model` pada model family YOLO9 melihat nama modul MultimediaTechLab/YOLO, tanpa alias. `DDetect` menjadi `YOLO9Head` (`anchor_convs` / `class_convs`), `RepConvN` menjadi `RepConv`, `RepNBottleneck` menjadi `Bottleneck`, `DFL` menjadi `Anchor2Vec` (`anchor2vec`), `nc` menjadi `num_classes`, dan sublayer blok menjadi `conv1`/`conv2`/`bottleneck`. Pada YOLO9-E2E, `YOLO9E2EDetect` menjadi `YOLO9E2EHead` dan `one2one_cv2` / `one2one_cv3` menjadi `one_to_one_anchor_convs` / `one_to_one_class_convs`. `LibreYOLO9Model.fuse()`, `RepConvN.fuse_convs()`, `Conv.forward_without_bn()`, `Concat`, dan `yolo9.utils.decode_boxes` dihapus. [Changelog](/docs/changelog) mencantumkan setiap penggantian nama.
+
+- Nama node ONNX mengikuti nama modul baru pada head, backbone, dan neck, misalnya `/head/anchor_convs.0/...`. Perbarui alat yang bergantung pada nama node, seperti konfigurasi end-node Hailo. Input, output, dan nama output model tidak berubah.
+
+- Fine-tuning YOLO9 dari bobot tanpa tensor PGI, termasuk `LibreYOLO9{t,s,m,c}.pt` yang dipublikasikan, hanya melatih head utama, seperti di 1.5.0; 1.6.0 memasang cabang PGI yang diinisialisasi acak dengan `aux_weight=0.25`. Bobot yang membawa tensor PGI, dan run dari nol, tetap dilatih dengan PGI. Berikan `aux_weight=0.25` untuk tetap memasang cabang baru, atau `aux_weight=0` untuk memaksanya mati.
+
+- Saat PGI dipasang, YOLO9-m dan YOLO9-c membangun cabang auxiliary MultimediaTechLab: 12.8M (m) dan 25.7M (c) parameter khusus pelatihan pada 80 kelas, naik dari 7.5M dan 10.2M, sehingga pelatihan PGI pada ukuran ini memerlukan lebih banyak memori dan waktu per langkah. Checkpoint pelatihan m/c dari 1.6.0 dapat dilanjutkan dan di-fine-tune dengan cabang yang dipakai saat pelatihannya. Inferensi serta YOLO9-t/s tidak berubah.
+
+- YOLO9, YOLO9-E2E, dan YOLO9-P2 memotong norma L2 gradien pada 10, dan assigner pelatihannya menilai anchor dalam fp32, sehingga positif yang dipilih di bawah fp16 AMP bisa berbeda. Berikan `clip_max_norm=0` untuk pemotongan 1.6.0; run yang dimulai di 1.6.0 dan dilanjutkan di 1.7.0 juga memotong kecuali Anda memberikannya. Penetapan fp32 tidak punya sakelar.
+
+- `perspective` bukan nol sekarang membengkokkan lewat pergeseran sudut di setiap family yang memakai affine warp bersama (YOLO9 beserta varian E2E dan P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR, dan RT-DETRv2), termasuk run yang dilanjutkan dari checkpoint 1.6.0 yang menetapkannya. Nilai `0.002` ke atas memberi warp maksimum yang sama, dan nilai negatif memunculkan `ValueError`. Tidak ada pengaturan yang mereproduksi warp 1.6.0; default `perspective=0` tidak berubah.
+
+- Pipeline mosaic YOLO9 menarik rasio mixup dari Beta(1, 1), bukan Beta(32, 32), tanpa pengaturan untuk nilai lama. Pelatihan YOLOv7 default berubah, karena YOLOv7 mengaktifkan mixup secara default. YOLO9, YOLO9-E2E, YOLO9-P2, RT-DETR, dan RT-DETRv2 hanya berubah bila mixup diaktifkan.
+
+- `libreyolo train` tanpa `name=` menulis run EC, D-FINE, SegFormer, dan LingBot-Vision ke `runs/train/ec_exp`, `dfine_exp`, `segformer_exp`, dan `lingbotvision_exp`, bukan `runs/train/exp`, probe V-JEPA 2 ke `runs/train/train`, dan run YOLO9-P2 ke `runs/train/yolo9_exp`. Berikan `name=exp` untuk path lama, atau `name=yolo9_p2_exp` untuk YOLO9-P2.
+
+- `libreyolo train` memulai D-FINE, SegFormer, dan LingBot-Vision dari resepnya sendiri. Untuk D-FINE itu berarti 132 epoch, `lr0=2e-4`, `weight_decay=1e-4`, 2 epoch warmup, dan tanpa augmentasi mosaic, mixup, HSV, maupun affine. Untuk mengirim nilai yang dikirim 1.6.0, berikan `epochs=300 optimizer=sgd lr0=0.01 weight_decay=5e-4 warmup_epochs=5 mosaic=1.0 mixup=1.0 hsv_prob=1.0 degrees=10 translate=0.1 shear=2.0`.
+
+- `libreyolo.validation.ConfusionMatrix` mengindeks `matrix[predicted, true]` (dulu `[actual, predicted]`), menghitung deteksi pada `conf_thres=0.25` (dulu 0.15), menerima `names=` dan `task=` hanya sebagai argumen keyword, dan `matrix`-nya tidak dapat lagi ditetapkan ulang. Transpos kode yang mengindeks matriks lama, dan berikan `conf_thres=0.15` untuk hitungan lama. `plots=True` menulis hitungan ke `confusion_matrix.png` dan plot ternormalisasi ke `confusion_matrix_normalized.png`.
+
+- `predict(agnostic_nms=True)` menekan kotak tumpang tindih lintas kelas, bukan lagi memberi peringatan. Task tanpa kotak memunculkan `ValueError`, `LibreEnsemble` dan HRNet memunculkan `NotImplementedError`, dan tier SAM menolak keyword itu dengan `TypeError`; hapus argumen dari pemanggilan tersebut.
+
+- `interpolation` classifier yang tidak dikenal memunculkan `ValueError`, termasuk mode torchvision `LANCZOS`, `BOX`, `HAMMING`, dan `NEAREST_EXACT`. Gunakan `bilinear`, `bicubic`, `nearest`, atau `bilinear_no_antialias`.
+
+- Jalankan ulang validasi sebelum membandingkan dengan angka 1.6.0 untuk `val(single_cls=True)` pada model yang dilatih dengan beberapa kelas, dataset segmentasi yang mencampur baris box-saja dan poligon, dan RTMDet-Ins, yang mempertahankan hingga `max_det=300` mask per gambar secara default; berikan `max_det=100` untuk pengaturan MMDetection.
+
+- Tanpa `libreyolo[rfdetr]`, pemanggilan CLI dengan nama model RF-DETR atau DINOv2 keluar dengan kode error JSON `model_load_failed`, bukan `model_not_found`, dan pesannya menyebut `pip install libreyolo[rfdetr]`.
+
+Lihat [changelog](/docs/changelog) untuk rilis lengkapnya.
 
 ## 1.5.0 ke 1.6.0
 

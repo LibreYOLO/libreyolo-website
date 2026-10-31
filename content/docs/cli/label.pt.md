@@ -41,7 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## Sinopse
@@ -88,6 +88,19 @@ escolhido ou criado pelo navegador. Passar `data=path/to/data.yaml` abre esse
 dataset direto, e a linha de inicialização informa a quantidade de imagens, a
 quantidade de classes e se o dataset é gravável. Um dataset somente leitura
 também abre e diz por que não é possível escrever nele.
+
+### Label-Error Radar
+
+Com a assistência por IA ligada, o botão Radar, ou `Y`, roda o modelo de
+assistência em todas as imagens rotuladas e lista as imagens em que o modelo discorda das
+labels, da pior para a melhor: um box em que o modelo não encontra nada, uma
+detecção confiante sem box, ou um box cuja classe o modelo contesta. O Radar não
+escreve nada; toda correção é uma edição manual. `N` avança para a próxima
+imagem sinalizada nessa ordem, da pior para a melhor, e volta ao início no fim.
+Apertar `Y` de novo reabre a última varredura, com o horário em que ela rodou e
+um botão Rescan, em vez de varrer de novo. O Radar não está disponível em
+projetos de caixas orientadas, e as duas teclas podem ser remapeadas no diálogo
+de atalhos `?`.
 
 ### Compartilhamento, e o que o `host` faz
 

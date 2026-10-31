@@ -123,7 +123,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## Installation
@@ -183,9 +183,10 @@ wird verweigert.
 
 `delegate` akzeptiert in dieser Version `"xnnpack"` und sonst nichts.
 
-Exporte für die Klassifikation tragen zwei zusätzliche Metadaten-Schlüssel,
-`crop_pct` und `interpolation`, damit die Runtime das Resize- und
-Center-Crop-Verhalten der Familie reproduzieren kann.
+Exporte für die Klassifikation tragen das Evaluations-Preprocessing des Modells
+als Metadaten, `crop_pct` und `interpolation`, dazu `norm_mean`, `norm_std` und
+`resize_mode` bei Familien, die sie setzen, damit die Runtime das Resize und
+den Center Crop des Modells reproduziert.
 
 Die blockierten Einträge benennen den konkreten Fehler statt einer Kategorie.
 D-FINE-Erkennung und -Segmentierung stoßen unter der strikten Erfassung auf einen

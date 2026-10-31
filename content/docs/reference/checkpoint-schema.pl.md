@@ -52,7 +52,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## Schemat v1.0
@@ -99,6 +99,16 @@ czytników, ustawioną na `max(imgsz_h, imgsz_w)`, a dodatkowo zapisują
 prostokątne musi preferować je względem wartości skalarnej. Rodziny o stałym
 kontrakcie prostokątnym, takie jak HRNet pose, odrzucają niezgodne rozmiary
 środowiska uruchomieniowego.
+
+Checkpointy klasyfikacji mogą dodawać `interpolation`, filtr zmiany rozmiaru
+modelu: `"bilinear"`, `"bicubic"`, `"nearest"` lub `"bilinear_no_antialias"`.
+`save()`, `best.pt` i `last.pt` go zapisują, a wczytanie go przywraca, więc
+trenowanie, `val()`, `predict()`, kalibracja INT8 i eksport zachowują filtr, z
+którym zapisano checkpoint. Checkpoint bez tego klucza zachowuje domyślną wartość
+rodziny, a każda inna wartość jest nieprawidłowa. Pierwsze trzy zmieniają rozmiar
+za pomocą Pillow, który stosuje antyaliasing przy zmniejszaniu;
+`"bilinear_no_antialias"` to zwykła interpolacja dwuliniowa ze środkami
+półpikseli i bez antyaliasingu.
 
 Schemat jest celowo płaski, a `model` celowo jest słownikiem stanu.
 
@@ -211,9 +221,10 @@ dla środowiska uruchomieniowego wymagają tej wartości.
 
 Eksporty klasyfikacji mogą dodawać `crop_pct`, zmiennoprzecinkowy współczynnik
 wycięcia ze środka, dla którego docelowy rozmiar przed przycięciem wynosi
-`round(imgsz / crop_pct)` i który domyślnie wynosi `0.875` w razie braku, oraz
-`interpolation`, `"bilinear"` lub `"bicubic"`, z domyślną wartością
-`"bilinear"`.
+`floor(imgsz / crop_pct)` i który domyślnie wynosi `0.875` w razie braku, oraz
+`interpolation`, jedną z czterech wartości checkpointu opisanych wyżej, z
+domyślną wartością `"bilinear"` w razie braku; czytniki odrzucają każdą inną
+wartość.
 
 Eksporty ExecuTorch zapisują płaskie metadane w wymaganym pliku pomocniczym
 `<program>.pte.json`. Kontrakt v1 obejmuje CPU, FP32, batch 1 i stały obszar

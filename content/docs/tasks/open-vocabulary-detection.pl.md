@@ -74,7 +74,7 @@ snippets:
         # DINO akceptuje text_threshold; pozostałe modele zgłaszają błąd.
 
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Definicja
@@ -148,7 +148,7 @@ sam interfejs `set_classes()`. Różnica polega na sposobie tworzenia ramek:
 rodziny na tej stronie są detektorami dyskryminacyjnymi, które bezpośrednio
 zwracają wyniki, natomiast warstwa VLM je generuje.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) i [North Micro Vision](/docs/models/northmicrovision) rozszerzają wybór modeli detekcji `LibreVLM`. [Molmo2](/docs/models/molmo2) zwraca punkty. Do zapytań przekształcających instrukcję w kliknięcie należy użyć [LibreGround](/docs/reference/ground-api), zamiast słownika detekcji.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) i [WeVisOne-VL](/docs/models/wevisone-vl) rozszerzają wybór modeli detekcji `LibreVLM`. [Molmo2](/docs/models/molmo2) zwraca punkty. Do zapytań przekształcających instrukcję w kliknięcie należy użyć [LibreGround](/docs/reference/ground-api), zamiast słownika detekcji.
 
 ## Predykcja
 

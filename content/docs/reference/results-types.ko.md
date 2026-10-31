@@ -46,7 +46,7 @@ snippets:
         # 행을 일반 딕셔너리로, 그 다음에는 JSON으로.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## 결과 객체
@@ -89,6 +89,8 @@ source_hash: 173c542fb675892e
 | `embeddings` | `Embeddings` | 삽입하다 |
 | `identities` | `Identities` | 갤러리와 함께 삽입 |
 | `meshes` | `Meshes` | 메시 |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals`는 `result.normal_map`의 읽기-쓰기 별칭입니다.
 
@@ -232,3 +234,29 @@ source_hash: 173c542fb675892e
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)`는 float32 동작 청크 `(T, D)`를 나타냅니다. `first`는 첫 행을 반환하며 슬라이싱은 시간 단계를 선택합니다. 값은 정책 데이터셋의 단위를 유지합니다. `names`는 동작 차원, `fps`는 제어 주파수, `instruction`은 조건 텍스트를 설명합니다.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`는 합성된 이미지 하나를 담으며, `(H, W, 3)` uint8 RGB입니다. `array`는 numpy 뷰를, `image`는 `PIL.Image`를 반환합니다. `prompt`는 이미지를 만든 텍스트이고, `seed`는 같은 모델과 설정으로 이 이미지를 재현하는 정수입니다. `params`는 호출의 나머지를 기록하며 `model`, `imgsz`, 적용된 모든 계열 설정이 들어갑니다. `save(path)`는 이미지를 기록하며, PNG는 `to_dict()`의 내용인 shape, prompt, seed, params도 JSON으로 `libreyolo` 텍스트 청크에 함께 저장합니다.
+
+생성된 결과에서 `Results.boxes`와 `Results.path`는 `None`이고, `orig_shape`는 이미지 자체의 `(H, W)`이며, `len(result)`는 1입니다. `Results.save(path)`는 이미지를 기록하고, `plot()`은 이를 PIL 이미지로 반환하며, `summary()`는 페이로드의 기록이 담긴 한 행을 반환합니다.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`는 생성된 3D 객체 하나를 객체 자체의 좌표계(z가 위쪽, 큐브 `[-0.5, 0.5]^3`의 중심)에서 가우시안 스플랫으로 담습니다. 각 행이 가우시안 하나입니다.
+
+| 멤버 | 반환값 |
+|---|---|
+| `xyz` | 객체 좌표계의 `(N, 3)` 위치 |
+| `scales` | 로컬 축을 따른 `(N, 3)` 표준편차이며, 로그가 아닌 선형 값 |
+| `rotations` | `(N, 4)` 단위 쿼터니언 `(w, x, y, z)`, 로컬 축에서 객체 좌표계로의 변환 |
+| `opacities` | `[0, 1]` 범위의 `(N,)` |
+| `sh` | `(N, K, 3)` 구면 조화 함수 색상 계수, 0차가 먼저 옴 |
+| `colors` | 0차 항에서 얻은 `[0, 1]` 범위의 `(N, 3)` RGB |
+| `camera` | 추정된 입력 시점: 라디안 단위의 `yaw`와 `pitch`, 객체 단위의 `radius`, 도 단위의 수직 `fov`, 자르기 `margin` |
+| `seed`, `params` | 객체를 재현하는 시드와 호출 설정 |
+| `input_image` | 모델 자체의 전처리를 거친 뒤 모델이 본 RGB 이미지 |
+
+`len(gaussians)`는 `N`이며, `gaussians[gaussians.opacities > 0.1]`은 선택한 행을 담은 새 `Gaussians`를 반환합니다. `save(path)`는 확장자에 따라 기록합니다. `.ply`는 로그 스케일과 로짓 불투명도를 쓰는 표준 3D Gaussian Splatting 레이아웃이며, 스플랫 뷰어가 기대하는 대로 y가 위쪽이 되도록 돌려 저장하고, 시드, 카메라, params를 JSON으로 담은 `comment libreyolo` 헤더 줄을 포함합니다. 고차 색상(`K > 1`)이 있는 페이로드를 `.ply`로 저장하면 `NotImplementedError`를 발생시킵니다. `.splat`은 가우시안당 32바이트인 간결한 웹 형식입니다. `render(size=512, background=(0, 0, 0))`는 추정된 입력 시점에서 본 포인트 렌더를 `PIL.Image`로 반환하며, 가우시안 래스터화가 아닌 빠른 미리보기입니다.
+
+생성된 3D 결과에서 `Results.boxes`는 `None`이고, `path`, `orig_shape`, `orig_img`는 원본 이미지를 설명하며, `len(result)`는 1입니다. `Results.save(path)`는 객체를 기록하고, `plot()`은 그 포인트 렌더를 반환하며, `summary()`는 페이로드의 기록이 담긴 한 행을 반환합니다.

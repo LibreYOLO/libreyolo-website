@@ -161,6 +161,9 @@ RF-DETR needs its own extra, which pulls in `transformers` for the backbone.
 pip install "libreyolo[rfdetr]"
 ```
 
+Without it, loading an RF-DETR checkpoint or model name, from Python or the CLI,
+stops with an error that names this install line.
+
 ## Predict
 
 Weights download from Hugging Face on first use and are cached locally.
@@ -200,6 +203,11 @@ tolerates. Leave `imgsz` at the checkpoint's native resolution unless you have a
 reason to change it. The input must divide evenly by the backbone patch size
 times the window count; LibreYOLO checks this before the run starts and names
 the nearest valid sizes.
+
+Segment fine-tuning starts from a segment checkpoint, because RF-DETR has no
+detect-to-segment transfer. `libreyolo train model=LibreRFDETRn-seg.pt task=segment`
+loads that checkpoint, and a detection checkpoint with `task=segment` stops
+with an error.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 

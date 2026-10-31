@@ -123,7 +123,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## Installazione
@@ -180,9 +180,10 @@ respinto.
 
 `delegate` accetta `"xnnpack"` e nient'altro in questa versione.
 
-Le esportazioni di classificazione portano due chiavi di metadati extra, `crop_pct` e
-`interpolation`, così il runtime può riprodurre la politica di ridimensionamento e
-ritaglio centrale della famiglia.
+Le esportazioni di classificazione portano come metadati il preprocessing di
+valutazione del modello, `crop_pct` e `interpolation`, più `norm_mean`,
+`norm_std` e `resize_mode` per le famiglie che li impostano, così il runtime
+riproduce il ridimensionamento e il ritaglio centrale del modello.
 
 Le voci bloccate indicano il fallimento concreto invece di una categoria. Il
 rilevamento e la segmentazione di D-FINE arrivano a una lettura di `ContextVar` non

@@ -96,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## Definizione
@@ -135,6 +135,12 @@ pagine dei modelli, e la licenza sul repository Hugging Face dello specifico
 checkpoint è quella che fa fede.
 
 [BEN2](/docs/models/ben2) aggiunge la rimozione dello sfondo a risoluzione fissa 1024. [ViTMatte](/docs/models/vitmatte) riceve un'immagine e una `trimap=` a tre livelli che contrassegna i pixel di sfondo, sconosciuti e in primo piano.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) riceve un prompt di testo:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` restituisce l'unione
+dei matte alfa di ogni istanza che corrisponde alla frase. È un modello
+vision-language che richiede l'extra `vlm`, e i suoi `val()` ed `export()`
+sollevano un errore.
 
 ## Predizione
 

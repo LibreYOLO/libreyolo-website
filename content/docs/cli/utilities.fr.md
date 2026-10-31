@@ -43,7 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## Synopsis
@@ -135,9 +135,13 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | Sortie JSON sur stdout |
 | `quiet` | `false` | Masque stderr |
 
-Sans `family`, la sortie se limite à l'inventaire des formats. Avec, chaque
-format reçoit le niveau de prise en charge pour cette famille et cette tâche,
-la raison de ce niveau, et toute contrainte qui s'y rattache. Une famille
+Sans `family`, la sortie se limite à l'inventaire des formats, et les champs
+FP16 et INT8 décrivent le format. Avec, chaque format reçoit le niveau de prise
+en charge pour cette famille et cette tâche, la raison de ce niveau, et toute
+contrainte qui s'y rattache, et les champs FP16 et INT8 indiquent ce que
+`export()` accepte pour cette combinaison : les deux valent false pour un
+format bloqué ou une famille qui n'exporte qu'en FP32, et INT8 ne vaut true que
+là où l'export INT8 du format couvre cette famille et cette tâche. Une famille
 inconnue, ou une tâche que la famille ne prend pas en charge, est une erreur
 d'utilisation.
 

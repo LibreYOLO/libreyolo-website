@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## Régler les paramètres
@@ -142,10 +142,11 @@ par échantillon toujours active et MixUp appliqué indépendamment plutôt que
 conditionné. Sa valeur `mosaic_scale` est réutilisée comme plage d'échelle de
 la transformation affine.
 
-SegFormer et NAFNet utilisent chacun un pipeline propre à leur tâche, dont
-l'aléa est fixé dans la famille au lieu d'être configurable. Pour SegFormer,
-les paramètres actifs sont les attributs de classe `semantic_scale_jitter` et
-`semantic_hsv_prob`, pas `mosaic_scale` et `hsv_prob`. Le recadrage et les
+SegFormer, LingBot-Vision et NAFNet utilisent chacun un pipeline propre à leur
+tâche, dont l'aléa est fixé dans la famille au lieu d'être configurable. Pour
+SegFormer et LingBot-Vision, les paramètres actifs sont les attributs de classe
+`semantic_scale_jitter` et `semantic_hsv_prob`, pas `mosaic_scale` et
+`hsv_prob`. Le recadrage et les
 retournements de NAFNet sont des opérations couplées sur l'entrée et la cible,
 avec une probabilité fixe de 0.5.
 
@@ -190,7 +191,23 @@ Les exceptions dans ces colonnes les restreignent toutes :
   segmentation sémantique, et ajoute l'ensemble de classification pour
   `task="classify"`.
 
-`no_aug_epochs` est `used` partout, mais son effet varie. Dans les pipelines avec mosaic, il désactive mosaic et MixUp pendant les dernières époques. Dans les pipelines de type DETR, il arrête les augmentations photométriques, le zoom-out et le recadrage, et règle la fin du planning. En classification, il désactive l'augmentation automatique, erasing, MixUp et CutMix ; le recadrage et les retournements restent actifs.
+`no_aug_epochs` est `used` partout, mais son effet varie. Dans les pipelines avec mosaic, il désactive mosaic et MixUp pendant les dernières époques. Dans les pipelines de type DETR, il arrête les augmentations photométriques, le zoom-out et le recadrage, et règle la fin du planning. En classification, il désactive l'augmentation automatique, erasing, MixUp et CutMix ; le recadrage et les retournements restent actifs.
+
+`perspective` ajoute une transformation projective par-dessus la rotation,
+l'échelle, le cisaillement et la translation. Chaque coin du canevas se déplace
+vers l'intérieur d'une quantité aléatoire pouvant atteindre
+`min(perspective * 100, 0.2)` fois la moitié du côté du canevas, par axe, si bien
+que `perspective=0.001` déplace un coin d'au plus 5 pour cent du côté, quelle que
+soit la résolution, et que toute valeur à partir de `0.002` atteint le même
+maximum. La valeur par défaut `0` garde la déformation affine, et une valeur
+négative lève `ValueError` lorsque le premier échantillon est déformé. YOLOv9 et
+ses variantes E2E et P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet,
+RT-DETR et RT-DETRv2 l'appliquent.
+
+MixUp dans le pipeline mosaic de YOLOv9, par lequel s'entraînent YOLOv9 et ses
+variantes, YOLOv7, RT-DETR et RT-DETRv2, tire le ratio de mélange selon
+Beta(1, 1), uniforme sur [0, 1]. Le wrapper mosaïque de YOLOX, utilisé par YOLOX,
+RTMDet et PicoDet, mélange à un ratio fixe de 0.5.
 
 ## L'ensemble de classification
 
@@ -227,14 +244,16 @@ famille et ne disposent d'aucun flag CLI.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Probabilité d'augmentation copy-paste des instances, uniquement pour `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` réutilise le même échantillon retourné, `"mixup"` charge un second échantillon |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Probabilité de rotation aléatoire à 90 degrés |
-| YOLOv9 | `max_labels` | Limite de vérités terrain par image dans les transformations d'entraînement, 100 par défaut |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Limite de vérités terrain par image dans les transformations d'entraînement, 300 par défaut |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste pour `task="segment"`, mode `"flip"` uniquement |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilité de recadrage-redimensionnement aléatoire |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilités de variation sur le chemin de pose et de transformation affine tenant compte des points clés |
 
-`max_labels` est celui qui fait perdre silencieusement des données. Les boîtes
-au-delà de la limite sont supprimées sans erreur. Les images denses, comme les
-photographies aériennes, exigent donc d'augmenter cette valeur.
+`max_labels` est celui qui fait perdre des données. Les boîtes au-delà de la
+limite sont supprimées avec un avertissement unique plutôt qu'une erreur. Les
+images denses, comme les photographies aériennes, exigent donc d'augmenter cette
+valeur. La mémoire d'affectation des labels suit l'image la plus dense du batch,
+pas la limite.
 
 La mosaïque et MixUp sont désactivés pour l'entraînement de boîtes orientées,
 quels que soient les paramètres, car l'augmentation tenant compte des coins

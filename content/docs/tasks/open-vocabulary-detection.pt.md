@@ -59,7 +59,7 @@ snippets:
         # da frase decodificada. Ambos assumem 0.25 quando não são definidos.
         # Só o Grounding DINO aceita text_threshold; os outros levantam erro.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Definição
@@ -133,7 +133,7 @@ superfície `set_classes()`. A diferença está no que produz as caixas: as
 famílias desta página são detectores discriminativos que emitem scores
 diretamente, enquanto o tier de VLMs as gera.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) e [North Micro Vision](/docs/models/northmicrovision) ampliam as opções de detecção do `LibreVLM`. [Molmo2](/docs/models/molmo2) retorna pontos. Use [LibreGround](/docs/reference/ground-api) para consultas de instrução para clique em vez de um vocabulário de detecção.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) e [WeVisOne-VL](/docs/models/wevisone-vl) ampliam as opções de detecção do `LibreVLM`. [Molmo2](/docs/models/molmo2) retorna pontos. Use [LibreGround](/docs/reference/ground-api) para consultas de instrução para clique em vez de um vocabulário de detecção.
 
 ## Predição
 

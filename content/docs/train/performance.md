@@ -116,6 +116,10 @@ autocast. `amp_dtype` chooses `float16` or `bfloat16`.
 
 Float16 uses a gradient scaler; bfloat16 disables it. D-FINE, DEIM, RT-DETRv4 and YOLO-NAS detection default to `amp=True`. Dome-DETR, PP-YOLOE and YOLO-NAS OBB retain FP32 defaults. Pass `amp=False` to request FP32 explicitly.
 
+YOLOv9, YOLOv9-E2E and YOLOv9-P2 score anchors for label assignment in fp32
+under either dtype, because the sigmoid of a strongly negative float16 class
+logit underflows to zero and would leave a batch with no positive anchors.
+
 The argument semantics, including what a bfloat16 request does on hardware
 without bfloat16 support, are on
 [Hyperparameters](/docs/train/hyperparameters).

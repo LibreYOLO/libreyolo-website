@@ -144,7 +144,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 
 ## Instalasi
@@ -199,7 +199,7 @@ Pelatihan dimulai dari checkpoint yang dipublikasikan, untuk kedua task.
 
 <code-tabs name="train" />
 
-Secara default, trainer berjalan selama 132 epoch dengan `lr0=2e-4`, `amp=True` dan `amp_dtype="float16"`, batch 16, serta early stopping setelah 50 epoch tanpa peningkatan. Bobot deteksi dapat menjadi titik awal pelatihan segmentasi, tetapi hanya melalui transfer eksplisit, karena head mask belum dilatih dan akan menghasilkan mask yang tidak bermakna. Memberikan `task=segment` ke CLI mengizinkan transfer ini. Jalur Python lebih terbatas: `LibreDFINE` harus dibuat langsung dengan `allow_detect_to_segment_transfer=True`, karena factory `LibreYOLO()` tidak menerima argumen tersebut. Konstruksi langsung tidak mengunduh bobot, sehingga berkas bobot harus sudah ada di disk.
+Secara default, trainer berjalan selama 132 epoch dengan `lr0=2e-4`, `amp=True` dan `amp_dtype="float16"`, batch 16, serta early stopping setelah 50 epoch tanpa peningkatan. `libreyolo train` memulai dari resep yang sama untuk kedua task: AdamW dengan jadwal cosine datar, `weight_decay=1e-4`, 2 epoch warmup, pemotongan norma gradien 0.1, dan tanpa augmentasi mosaic, MixUp, HSV maupun affine. Tanpa `name=`, run-nya masuk ke `runs/train/dfine_exp`. Bobot deteksi dapat menjadi titik awal pelatihan segmentasi, tetapi hanya melalui transfer eksplisit, karena head mask belum dilatih dan akan menghasilkan mask yang tidak bermakna. Memberikan `task=segment` ke CLI mengizinkan transfer ini. Jalur Python lebih terbatas: `LibreDFINE` harus dibuat langsung dengan `allow_detect_to_segment_transfer=True`, karena factory `LibreYOLO()` tidak menerima argumen tersebut. Konstruksi langsung tidak mengunduh bobot, sehingga berkas bobot harus sudah ada di disk.
 
 `lora=True` berlaku untuk deteksi. Pelatihan segment menolaknya dan mengarahkan
 ke `freeze='backbone'`, karena mask head belum diuji dengan adapter. Di Apple

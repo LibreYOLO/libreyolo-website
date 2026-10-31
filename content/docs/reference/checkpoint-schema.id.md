@@ -2,12 +2,13 @@
 title: Skema checkpoint
 seo_title: Skema metadata checkpoint LibreYOLO v1.0
 description: >-
-  Metadata yang dibawa setiap checkpoint .pt LibreYOLO: kunci wajib, tambahan per
-  task, kunci runtime ekspor, manifest terkuantisasi, dan kolom pelatihan.
+  Metadata yang dibawa setiap checkpoint .pt LibreYOLO: kunci wajib, tambahan
+  per task, kunci runtime ekspor, manifest terkuantisasi, dan kolom pelatihan.
 lead: >-
-  Berkas .pt LibreYOLO adalah dictionary flat yang disimpan dengan torch.save. Kunci
-  model menyimpan state dict; kunci top-level lainnya adalah metadata yang
-  mengidentifikasi checkpoint tanpa parsing nama berkas atau sniffing state dict.
+  Berkas .pt LibreYOLO adalah dictionary flat yang disimpan dengan torch.save.
+  Kunci model menyimpan state dict; kunci top-level lainnya adalah metadata yang
+  mengidentifikasi checkpoint tanpa parsing nama berkas atau sniffing state
+  dict.
 keywords:
   - skema checkpoint libreyolo
   - schema_version 1.0
@@ -16,8 +17,9 @@ keywords:
   - manifest quant
   - wrap_libreyolo_checkpoint
 last_verified: 1.6.0
-verification: Mengikuti docs/checkpoint_schema.md dalam repositori libreyolo pada v1.6.0, diperiksa
-  silang dengan libreyolo/utils/serialization.py dan BaseModel.save.
+verification: >-
+  Mengikuti docs/checkpoint_schema.md dalam repositori libreyolo pada v1.6.0,
+  diperiksa silang dengan libreyolo/utils/serialization.py dan BaseModel.save.
 snippets:
   usage:
     - label: Baca metadata dari checkpoint
@@ -47,7 +49,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## Skema v1.0
@@ -93,6 +95,15 @@ nilai `max(imgsz_h, imgsz_w)`, dan juga menulis `imgsz_h` serta `imgsz_w` dengan
 dimensi sebenarnya. Reader yang memahami kolom rectangle harus
 memprioritaskannya daripada skalar. Family dengan kontrak rectangle tetap,
 seperti pose HRNet, menolak ukuran runtime yang tidak kompatibel.
+
+Checkpoint klasifikasi dapat menambahkan `interpolation`, filter resize model:
+`"bilinear"`, `"bicubic"`, `"nearest"`, atau `"bilinear_no_antialias"`. `save()`,
+`best.pt`, dan `last.pt` menuliskannya dan pemuatan memulihkannya, sehingga
+pelatihan, `val()`, `predict()`, kalibrasi INT8, dan ekspor mempertahankan filter
+yang dipakai saat checkpoint disimpan. Checkpoint tanpa key ini memakai default
+family, dan nilai lain tidak valid. Tiga yang pertama melakukan resize dengan
+Pillow, yang melakukan antialiasing saat mengecilkan gambar; `"bilinear_no_antialias"`
+adalah bilinear biasa dengan pusat setengah piksel dan tanpa antialiasing.
 
 Skema sengaja dibuat flat, dan `model` sengaja berupa state dict.
 
@@ -200,9 +211,9 @@ graph menerima satu crop yang sudah diekstrak dan tidak memuat detektor. Ekspor
 runtime HRNet mewajibkan nilai tersebut.
 
 Ekspor classification dapat menambahkan `crop_pct`, rasio center-crop float
-dengan target resize pracrop `round(imgsz / crop_pct)` dan default `0.875` jika
-tidak ada, serta `interpolation`, `"bilinear"` atau `"bicubic"`, dengan default
-`"bilinear"`.
+dengan target resize pracrop `floor(imgsz / crop_pct)` dan default `0.875` jika
+tidak ada, serta `interpolation`, salah satu dari empat nilai checkpoint di atas,
+dengan default `"bilinear"` jika tidak ada; pembaca menolak nilai lain.
 
 Ekspor ExecuTorch menulis metadata flat ke sidecar wajib `<program>.pte.json`.
 Kontrak v1 adalah CPU, FP32, batch 1, dan canvas input tetap, serta mewajibkan

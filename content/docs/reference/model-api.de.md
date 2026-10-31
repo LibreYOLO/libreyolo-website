@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Erstellung
@@ -79,6 +79,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -105,6 +106,7 @@ model(
 | `device` | `None` | Geräteüberschreibung für diesen Aufruf |
 | `classes` | `None` | Nur diese Klassen-IDs behalten |
 | `max_det` | `300` | Maximale Erkennungen je Bild |
+| `agnostic_nms` | `False` | Nur die am höchsten bewertete Box unter Boxen behalten, die sich über `iou` hinaus überlappen, gleich welcher Klasse. Detect, segment, pose und obb |
 | `augment` | `False` | Test-Time Augmentation |
 | `save` | `False` | Annotiertes Bild oder Video schreiben |
 | `batch` | `1` | Bilder je Vorwärtsdurchlauf für Verzeichnis- und Listenquellen |
@@ -192,7 +194,11 @@ model.val(
 
 Gibt ein Metrik-Dictionary zurück, dessen Schlüssel von der Aufgabe abhängen. Die Objekterkennung liefert `metrics/precision`, `metrics/recall`, `metrics/mAP50` und `metrics/mAP50-95`. `imgsz` akzeptiert eine Ganzzahl für ein Quadrat oder ein Tupel `(height, width)` und verwendet standardmäßig die native Eingabegröße des Modells. `data=None` validiert auf dem Datensatz, der in der Trainingskonfiguration des Checkpoints gespeichert ist, und löst einen Fehler aus, wenn es keinen gibt, wie bei veröffentlichten Gewichten. `project`, `name` und `exist_ok` legen das Ausgabeverzeichnis als `project/name` fest, hochgezählt, sofern nicht `exist_ok=True` gesetzt ist. `plots` ist ein Alias für `save_plots`. `allow_download_scripts` steuert die Ausführung eingebetteten Python-Codes, den eine Datensatz-YAML-Datei im Feld `download` enthalten kann.
 
+Bei detect und segment ist das Dictionary eine `dict`-Unterklasse, die zusätzlich `box` (Metriken je Bild sowie klassenweise Precision-, Recall- und F1-Kurven) und `confusion_matrix` trägt; bei classify trägt sie `top1`, `top5` und `confusion_matrix`. Siehe [Validierung und Metriken](/docs/train/validation).
+
 `faster_coco_eval` wird über `**kwargs` akzeptiert und ist standardmäßig `True`. Ist das Paket nicht installiert, wird auf pycocotools zurückgegriffen. Das verwendete Backend steht in `model.last_eval_backend`.
+
+`agnostic_nms=True`, ebenfalls über `**kwargs`, wendet vor der Bewertung klassenunabhängiges NMS bei `iou` an. Es deckt detect und segment ab und löst bei jeder anderen Aufgabe `ValueError` aus.
 
 Augmentierte Validierung löst für die Aufgaben `obb` und `pose` einen Fehler aus.
 

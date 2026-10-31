@@ -22,7 +22,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tarefas canônicas
-    value: 20
+    value: 22
   - label: Níveis de suporte
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -51,12 +51,12 @@ snippets:
         # "pose", "det" vira "detect", "semantic-segmentation" vira "semantic".
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Tarefas
 
-Uma tarefa é o que um modelo retorna. O LibreYOLO tem vinte nomes canônicos
+Uma tarefa é o que um modelo retorna. O LibreYOLO tem vinte e dois nomes canônicos
 de tarefa, e cada um deles dá nome ao campo do objeto `Results` que carrega sua
 saída.
 
@@ -82,6 +82,8 @@ saída.
 | `mesh` | Um corpo 3D com pose por pessoa detectada |
 | `detect3d` | Caixas 3D em coordenadas da câmera, com uma classe e uma confiança |
 | `act` | Um bloco de ações de robô previstas a partir de quadros da câmera e do estado do robô |
+| `generate` | Uma imagem RGB gerada a partir de um prompt de texto, com o prompt, a seed e os parâmetros da chamada que a reproduzem |
+| `generate3d` | Um objeto como splats gaussianos 3D, gerado a partir de uma única imagem dele |
 
 Esses são os nomes que aparecem nos metadados do checkpoint e nos nomes de
 arquivo. Aliases conhecidos são aceitos em qualquer lugar onde uma tarefa é
@@ -177,10 +179,10 @@ publica pesos treinados em um dataset diferente do seu padrão acrescenta o nome
 do dataset como um sufixo a mais, e essa variante continua fazendo parte do nome
 do repositório de onde o arquivo é baixado.
 
-Três níveis ficam fora desse esquema. As famílias de segmentação promptable, as
-famílias de visão e linguagem e os detectores de vocabulário aberto não são
-registrados na fábrica de checkpoints e não emitem nenhum arquivo
-`Libre<FAMILY><size>.pt`. O prefixo delas nomeia um snapshot baixado do Hugging
+Vários níveis ficam fora desse esquema. As famílias de segmentação promptable, as
+famílias de visão e linguagem, os detectores de vocabulário aberto e as famílias
+de geração `LibreGen` não são registrados na fábrica de checkpoints e não emitem
+nenhum arquivo `Libre<FAMILY><size>.pt`. O prefixo delas nomeia um snapshot baixado do Hugging
 Face ou um checkpoint promptable, e ali as maiúsculas da marca original são
 preservadas de propósito.
 

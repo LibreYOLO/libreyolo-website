@@ -1,0 +1,12 @@
+{
+  "name": "HRNet",
+  "org": "Microsoft",
+  "paper_title": "Deep High-Resolution Representation Learning for Human Pose Estimation",
+  "paper_url": "https://arxiv.org/abs/1902.09212",
+  "code_url": "https://github.com/leoxiaobin/deep-high-resolution-net.pytorch",
+  "license": "MIT",
+  "license_interpretation": "MIT permits commercial and non-commercial use, modification and redistribution of both the code and the two published checkpoints, with the copyright notice retained. The official repository does not attach a separate license to its model-zoo checkpoints; LibreYOLO's redistribution basis is the MIT license the releasing project implies, the same basis the upstream repository's own files state.",
+  "bibtex": "@inproceedings{sun2019deep,\n  title={Deep High-Resolution Representation Learning for Human Pose Estimation},\n  author={Sun, Ke and Xiao, Bin and Liu, Dong and Wang, Jingdong},\n  booktitle={CVPR},\n  year={2019}\n}",
+  "bibtex_source_url": "https://github.com/leoxiaobin/deep-high-resolution-net.pytorch#citation",
+  "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch master (the first of three entries listed there; the other two cover a related tracking paper and a later TPAMI classification paper this port does not use). Cross-checked against the arXiv API for 1902.09212: four authors in the same order (Sun, Xiao, Liu, Wang), identical title, and the arXiv comment field reads 'accepted by CVPR2019', matching the booktitle and year. Do not hand-edit; a wrong citation misattributes someone's work."
+}

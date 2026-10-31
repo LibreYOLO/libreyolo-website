@@ -51,7 +51,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## Schema v1.0
@@ -89,6 +89,8 @@ Jeder offizielle LibreYOLO-Checkpoint mit der Endung `.pt` enthält:
 Offizielle Checkpoints schreiben jeden Schlüssel von `names`. Leser dürfen fehlende Schlüssel aus veralteten lückenhaften Zuordnungen mit Labels `class_i` auffüllen. Schlüssel außerhalb des Bereichs sind ungültig.
 
 Rechteckige Checkpoints behalten für ältere Leser einen skalaren Wert `imgsz`, der auf `max(imgsz_h, imgsz_w)` gesetzt wird. Zusätzlich schreiben sie die tatsächlichen Dimensionen als `imgsz_h` und `imgsz_w`. Ein Leser mit Unterstützung für rechteckige Felder muss diese gegenüber dem Skalar bevorzugen. Familien mit festem rechteckigem Vertrag wie HRNet Pose lehnen inkompatible Laufzeitgrößen ab.
+
+Klassifizierungs-Checkpoints dürfen `interpolation` ergänzen, den Resize-Filter des Modells: `"bilinear"`, `"bicubic"`, `"nearest"` oder `"bilinear_no_antialias"`. `save()`, `best.pt` und `last.pt` schreiben ihn, und das Laden stellt ihn wieder her, sodass Training, `val()`, `predict()`, INT8-Kalibrierung und Export den Filter behalten, mit dem der Checkpoint gespeichert wurde. Ein Checkpoint ohne diesen Schlüssel behält den Standard der Familie, und jeder andere Wert ist ungültig. Die ersten drei skalieren mit Pillow, das beim Verkleinern antialiased; `"bilinear_no_antialias"` ist schlichtes bilineares Resampling mit Halbpixel-Zentren und ohne Antialiasing.
 
 Das Schema ist bewusst flach und `model` bewusst ein State-Dictionary.
 
@@ -165,7 +167,7 @@ Bei ONNX-Exporten für die YOLO9-Objekterkennung mit `nms=true` ist Ausgabe `0` 
 
 Pose-Exporte dürfen `num_keypoints`, `keypoint_dim`, `num_keypoints_per_class` und `pose_input` ergänzen. Bei rohen GroupPose-artigen Exporten kann `keypoint_dim` größere Werte wie `8` verwenden, wenn der Tensor Felder für Genauigkeit oder Klassen-Logits enthält. `num_keypoints_per_class` ist eine JSON-codierte Liste. Klassenslots ohne Keypoints müssen erhalten bleiben, da sie das Schema definieren. Bei `pose_input` bedeutet `"person_crop"`, dass der Graph einen bereits extrahierten Ausschnitt verarbeitet und keinen Detektor enthält. HRNet-Laufzeitexporte benötigen diesen Wert.
 
-Klassifizierungsexporte dürfen `crop_pct` als Gleitkommawert für den mittigen Beschnitt ergänzen. Das Skalierungsziel vor dem Beschnitt lautet `round(imgsz / crop_pct)`. Bei Auslassung ist der Standard `0.875`. `interpolation` ist `"bilinear"` oder `"bicubic"` und standardmäßig `"bilinear"`.
+Klassifizierungsexporte dürfen `crop_pct` als Gleitkommawert für den mittigen Beschnitt ergänzen. Das Skalierungsziel vor dem Beschnitt lautet `floor(imgsz / crop_pct)`. Bei Auslassung ist der Standard `0.875`. `interpolation` ist einer der vier oben genannten Checkpoint-Werte und standardmäßig `"bilinear"`, wenn er fehlt; Leser lehnen jeden anderen Wert ab.
 
 ExecuTorch-Exporte schreiben die flachen Metadaten in die erforderliche Nebendatei `<program>.pte.json`. Der v1-Vertrag lautet CPU, FP32, Batchgröße 1 und fester Eingabe-Canvas. Zusätzlich benötigt er `executorch_version`, `executorch_delegate` gleich `"xnnpack"` und eine positive Zahl `executorch_delegate_partitions`. Der Loader lehnt Nebendateien ab, die einen anderen Delegate, dynamische Formen oder eine andere Genauigkeit als FP32 angeben.
 

@@ -50,7 +50,7 @@ snippets:
         # Le righe, come dict semplici, poi come JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## L'oggetto Results
@@ -96,6 +96,8 @@ famiglia riempie è deciso dal suo task.
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, con una gallery |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` è un alias in lettura e scrittura per `result.normal_map`.
 
@@ -330,3 +332,55 @@ argomenti a `summary` e restituisce la stringa JSON.
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` rappresenta un blocco di azioni float32 `(T, D)`. `first` restituisce la prima riga; lo slicing seleziona i passi temporali. I valori restano nelle unità del dataset della policy. `names` descrive le dimensioni delle azioni, `fps` la frequenza di controllo e `instruction` il testo di condizionamento.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+contiene una singola immagine sintetizzata, `(H, W, 3)` RGB uint8. `array`
+restituisce la vista numpy e `image` una `PIL.Image`. `prompt` è il testo che ha
+prodotto l'immagine e `seed` l'intero che la riproduce con lo stesso modello e
+le stesse impostazioni; `params` registra il resto della chiamata: `model`,
+`imgsz` e ogni impostazione della famiglia in vigore. `save(path)` scrive
+l'immagine, e un PNG memorizza anche `to_dict()`, cioè forma, prompt, seed e
+params, come JSON in un chunk di testo `libreyolo`.
+
+Su un risultato generato, `Results.boxes` e `Results.path` sono `None`,
+`orig_shape` è il `(H, W)` dell'immagine stessa, e `len(result)` è 1.
+`Results.save(path)` scrive l'immagine, `plot()` la restituisce come immagine
+PIL, e `summary()` restituisce una riga con il record del payload.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+contiene un oggetto 3D generato come splat gaussiani, nel sistema di riferimento
+proprio dell'oggetto: z verso l'alto, centrato nel cubo `[-0.5, 0.5]^3`. Ogni
+riga è una gaussiana.
+
+| Membro | Restituisce |
+|---|---|
+| `xyz` | `(N, 3)` posizioni nel sistema dell'oggetto |
+| `scales` | `(N, 3)` deviazioni standard lungo gli assi locali, lineari, non log |
+| `rotations` | `(N, 4)` quaternioni unitari `(w, x, y, z)`, dagli assi locali al sistema dell'oggetto |
+| `opacities` | `(N,)` in `[0, 1]` |
+| `sh` | `(N, K, 3)` coefficienti di colore in armoniche sferiche, grado 0 per primo |
+| `colors` | `(N, 3)` RGB in `[0, 1]`, dal termine di grado 0 |
+| `camera` | La vista di input dedotta: `yaw` e `pitch` in radianti, `radius` in unità dell'oggetto, `fov` verticale in gradi e il `margin` di ritaglio |
+| `seed`, `params` | Il seed e le impostazioni della chiamata che riproducono l'oggetto |
+| `input_image` | L'immagine RGB vista dal modello dopo il suo preprocessing |
+
+`len(gaussians)` è `N`, e `gaussians[gaussians.opacities > 0.1]` restituisce un
+nuovo `Gaussians` con le righe selezionate. `save(path)` scrive in base
+all'estensione. `.ply` è il layout standard del 3D Gaussian Splatting, con scale
+logaritmiche e opacità logit, ruotato con y verso l'alto come si aspettano i
+visualizzatori di splat, e una riga di intestazione `comment libreyolo` che
+contiene seed, camera e params come JSON. Un payload con colore di ordine
+superiore (`K > 1`) solleva `NotImplementedError` per `.ply`. `.splat` è il
+formato web compatto, 32 byte per gaussiana. `render(size=512,
+background=(0, 0, 0))` restituisce un render a punti dalla vista di input
+dedotta come `PIL.Image`, un'occhiata rapida e non una rasterizzazione
+gaussiana.
+
+Su un risultato 3D generato, `Results.boxes` è `None`; `path`, `orig_shape` e
+`orig_img` descrivono l'immagine di origine, e `len(result)` è 1.
+`Results.save(path)` scrive l'oggetto, `plot()` restituisce quel render a punti,
+e `summary()` restituisce una riga con il record del payload.

@@ -110,7 +110,7 @@ snippets:
         # yaml의 키는 TrainConfig 필드 이름입니다. 명시적인 kwargs가 우선합니다.
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## 인수 설정
@@ -182,6 +182,8 @@ Autobatch는 CUDA 기능입니다. CPU나 MPS에서는 한 줄을 기록하고 �
 일정은 `scheduler`, `warmup_epochs`, `warmup_lr_start` 및 `min_lr_ratio`에 의해 형성됩니다. `no_aug_epochs`는 강한 증강 없이 최종 에포크가 몇 번 실행될지를 설정하며, 여러 일정이 꼬리를 형성하기 위해 이것을 사용하기도 하므로 순수하게 증강 조절기만은 아닙니다. 각 계열이 증강 부분으로 무엇을 하는지는 [Augmentations](/docs/train/augmentations)에서 확인할 수 있습니다.
 
 일부 가정에서는 자체 학습률 조절 장치를 추가합니다. `backbone_lr_mult`는 백본 그룹을 헤드에 맞춰 조정하고, `clip_max_norm`는 그래디언트 클리핑을 설정하며, SegFormer는 `head_lr_mult`를 사용하여 디코드 헤드를 백본 속도의 10배로 실행합니다. 이들은 기본 클래스가 아닌 가정의 구성 서브클래스에 존재합니다.
+
+`clip_max_norm`은 각 옵티마이저 스텝 전에 그래디언트 L2 노름을 그 값으로 클리핑하며, `0`은 클리핑을 끕니다. YOLOv9, YOLOv9-E2E, YOLOv9-P2는 기본값이 `10`입니다. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4, RF-DETR, DINOv2, GTR, EC는 기본값이 `0.1`입니다. CLI에서는 `clip_max_norm=` 또는 `--clip-max-norm`이며, CLI에서 이를 받는 계열은 [`libreyolo train`](/docs/cli/train)을 참조하십시오.
 
 ## EMA
 

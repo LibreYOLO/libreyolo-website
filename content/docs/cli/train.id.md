@@ -26,8 +26,8 @@ meta:
     mono: true
   - label: Keluaran
     value: >-
-      Checkpoint, metrik dan log di dalam runs/train/<name>; YOLO9 memakai
-      yolo9_exp
+      Checkpoint, metrik dan log di dalam runs/train/<name>; tanpa name=, nama
+      run bawaan family itu sendiri, seperti yolo9_exp
 snippets:
   examples:
     - label: Dasar
@@ -54,7 +54,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 30b2c16d339f5f50
+source_hash: 5916562e70ea1d8a
 ---
 
 ## Sinopsis
@@ -84,9 +84,9 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | Argumen | Default | Arti |
 |---|---|---|
 | `epochs` | `300` | Epoch pelatihan |
-| `batch` | `16` | Ukuran batch per perangkat |
+| `batch` | `16` | Ukuran batch. Dengan beberapa GPU, ini adalah batch global yang dibagi rata ke semuanya |
 | `imgsz` | `640` | Ukuran gambar pelatihan: `640` (persegi) atau `480x640` (tinggi x lebar) |
-| `device` | `auto` | Perangkat: `0`, `cpu`, `mps`, `auto` |
+| `device` | `auto` | Perangkat: `0`, `cpu`, `mps`, `auto`. Daftar GPU seperti `0,1` atau `[0,1]` melatih di GPU tersebut |
 | `workers` | `4` | Worker dataloader |
 | `cache` | `false` | Cache gambar untuk mempercepat pemuatan data: `ram`, `disk`, `true`, `false` |
 | `seed` | `0` | Seed acak |
@@ -115,6 +115,7 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | `momentum` | `0.937` | Momentum SGD, sekaligus koefisien momen pertama untuk optimizer Adam |
 | `weight_decay` | `0.0005` | Regularisasi L2 |
 | `nesterov` | `true` | Momentum Nesterov |
+| `clip_max_norm` | | Memotong norma L2 gradien ke nilai ini sebelum setiap langkah optimizer; `0` menonaktifkan pemotongan. Bila tidak diatur, nilai family yang berlaku |
 
 ### Scheduler
 
@@ -165,7 +166,7 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | Argumen | Default | Arti |
 |---|---|---|
 | `project` | `runs/train` | Root direktori keluaran |
-| `name` | `exp` | Nama eksperimen |
+| `name` | | Nama eksperimen. Bila tidak diatur, run memakai nama yang dipakai `train()` family itu, seperti `yolo9_exp` atau `dfine_exp` |
 | `exist_ok` | `false` | Pakai ulang direktori keluaran yang sudah ada |
 | `save_period` | `10` | Simpan checkpoint setiap N epoch |
 | `log_interval` | `10` | Catat loss setiap N batch |
@@ -190,7 +191,7 @@ dan `false`: `amp=false` menjadi `--no-amp` pada flag yang punya bentuk negatif.
 | `average_best` | `0` | Rata-ratakan N checkpoint terbaik secara seragam berdasarkan metrik yang dipantau ke weights/average.pt pada akhir pelatihan (0 = nonaktif) |
 | `export_check` | `False` | Ekspor ONNX sebelum epoch 1 dan hentikan proses jika ekspor gagal (default: nonaktif) |
 | `precise_bn` | `0` | Hitung ulang statistik berjalan BatchNorm dari sebanyak ini gambar pelatihan setelah epoch terakhir (0 = nonaktif) |
-| `aux_weight` | | Khusus YOLO9: bobot loss cabang auxiliary PGI untuk fine-tuning. `0.25` bila tidak diatur; `0` hanya melatih head utama |
+| `aux_weight` | | Khusus YOLO9: bobot loss cabang auxiliary PGI. Sebuah nilai memasang cabang baru dengan bobot itu, dan `0` hanya melatih head utama. Bila tidak diatur, cabang hanya dipasang dengan `0.25` jika bobot membawa tensor PGI atau run melatih dari nol |
 | `fliplr` | `None` | Probabilitas pembalikan horizontal (alias ekosistem untuk flip_prob) |
 | `flipud` | `0.0` | Probabilitas pembalikan vertikal |
 | `auto_augment` | `None` | Kebijakan augmentasi otomatis klasifikasi: randaugment, autoaugment, augmix (default: tidak ada) |
@@ -237,8 +238,8 @@ affine warp, jadi `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`,
 memakai pipeline yang sama tapi tetap membaca `hsv_prob`, `degrees` dan
 `translate` ketika task-nya pose. Family klasifikasi mengabaikan kumpulan itu
 kecuali `mixup`, yang bagi mereka berarti MixUp batch, dan mereka membaca
-`flip_prob`. SegFormer dan NAFNet mengabaikan seluruh kumpulan itu berikut
-`flip_prob`, karena flip mereka berjalan pada probabilitas tetap, bukan
+`flip_prob`. SegFormer, LingBot-Vision dan NAFNet mengabaikan seluruh kumpulan
+itu berikut `flip_prob`, karena flip mereka berjalan pada probabilitas tetap, bukan
 probabilitas yang bisa diatur. YOLO-NAS
 hanya mengabaikan `mosaic`, sebab ia justru melakukan augmentasi dengan affine
 per sampel yang selalu aktif. RF-DETR mengabaikan tiga argumen lagi di luar
@@ -259,6 +260,22 @@ tidak menulis `best.pt`.
 `lora=true` diterima oleh RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1, v2 dan v4,
 EC, GTR serta ConvNeXt. Family lain akan keluar dengan `config_unsupported`
 alih-alih melatih tanpa LoRA.
+
+`clip_max_norm` diterima oleh family yang config pelatihannya mendeklarasikannya:
+YOLOv9, YOLOv9-E2E dan YOLOv9-P2, dengan nilai bawaan `10`, serta D-FINE,
+Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4, RF-DETR,
+DINOv2 dan GTR, dengan nilai bawaan `0.1`. Family lain akan keluar dengan
+`config_unsupported`, dan nilai negatif atau tidak hingga akan keluar dengan
+`config_type_error`.
+
+`device=0,1` membangun model di GPU pertama dalam daftar dan meneruskan daftar
+itu ke `train()`, yang memulai satu proses per GPU. Lihat
+[pelatihan multi-GPU](/docs/train/multi-gpu).
+
+RF-DETR tidak punya transfer dari detect ke segment. `task=segment` dengan
+checkpoint segment RF-DETR memuat checkpoint itu apa pun nama berkasnya, karena
+metadata checkpoint yang menentukan task-nya, sedangkan checkpoint deteksi
+berhenti dengan error alih-alih melatih mask head yang belum terlatih.
 
 `pretrained=false` yang digabung dengan `resume` ditolak pada family yang
 mendukung pelatihan dari nol, karena keduanya meminta hal yang berlawanan.

@@ -123,7 +123,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Cómo pasar argumentos
@@ -231,6 +231,13 @@ escala el grupo del backbone frente a la cabeza, `clip_max_norm` fija el recorte
 de gradientes, y SegFormer usa `head_lr_mult` para ejecutar su cabeza de
 decodificación a diez veces el ritmo del backbone. Estos viven en la subclase de
 configuración de la familia, no en la base.
+
+`clip_max_norm` recorta la norma L2 del gradiente a ese valor antes de cada paso
+del optimizador, y `0` desactiva el recorte. YOLOv9, YOLOv9-E2E y YOLOv9-P2 lo
+fijan por defecto en `10`. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR,
+RT-DETRv2, RT-DETRv4, RF-DETR, DINOv2, GTR y EC lo fijan por defecto en `0.1`. En
+el CLI es `clip_max_norm=` o `--clip-max-norm`; consulta
+[`libreyolo train`](/docs/cli/train) para ver qué familias lo aceptan ahí.
 
 ## EMA
 

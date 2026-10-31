@@ -42,7 +42,7 @@ snippets:
         # 팩토리는 파일 접미사를 보고 분기하므로 내보낸 파일이 체크포인트처럼 로드됩니다.
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## 요약
@@ -121,7 +121,8 @@ FP16으로 ONNX로 내보내면 `weights/LibreYOLO9s_fp16.onnx`가 됩니다. JS
 
 지원 여부는 전역이 아니라 모델 계열별, 작업별로 정해집니다.
 `libreyolo formats family=<family> task=<task>`는 그 조합에서 각 형식의 등급을
-이유 및 관련 제약과 함께 출력합니다. 인자는
+이유, 관련 제약, 그리고 그 조합에서 `export()`가 FP16과 INT8을 받는지와 함께
+출력합니다. 인자는
 [`libreyolo formats`](/docs/cli/utilities) 문서를 참고하십시오.
 
 일부 형식은 선택적 설치가 필요하고 일부는 툴체인이 필요합니다. Python 의존성이

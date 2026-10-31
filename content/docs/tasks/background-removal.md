@@ -113,6 +113,12 @@ authoritative one.
 
 [BEN2](/docs/models/ben2) adds fixed-1024 background removal. [ViTMatte](/docs/models/vitmatte) takes an image and a three-level `trimap=` marking background, unknown and foreground pixels.
 
+[WeVisOne-VL](/docs/models/wevisone-vl) is prompted with text:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` returns the union
+of the alpha mattes of every instance that matches the phrase. It is a
+vision-language model that needs the `vlm` extra, and its `val()` and
+`export()` raise.
+
 ## Predict
 
 Weights download from Hugging Face on first use and are cached locally.

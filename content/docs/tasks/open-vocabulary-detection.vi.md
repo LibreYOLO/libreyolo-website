@@ -2,12 +2,14 @@
 title: Phát hiện với từ vựng mở
 seo_title: Phát hiện với từ vựng mở trong LibreYOLO
 description: >-
-  Phát hiện đối tượng từ từ vựng văn bản trong LibreYOLO. Nạp Grounding DINO, OWLv2, OMDet-Turbo hoặc OV-DEIM
-  qua LibreOpenVocab và đặt lớp đối tượng tại runtime.
+  Phát hiện đối tượng từ từ vựng văn bản trong LibreYOLO. Nạp Grounding DINO,
+  OWLv2, OMDet-Turbo hoặc OV-DEIM qua LibreOpenVocab và đặt lớp đối tượng tại
+  runtime.
 lead: >-
-  Phát hiện với từ vựng mở thay danh sách lớp cố định của checkpoint bằng các từ bạn chọn tại thời điểm gọi.
-  Trong LibreYOLO, đây không phải tác vụ riêng: đó là tác vụ detect do một tầng mô hình riêng phục vụ, được
-  nạp qua factory LibreOpenVocab thay vì LibreYOLO.
+  Phát hiện với từ vựng mở thay danh sách lớp cố định của checkpoint bằng các từ
+  bạn chọn tại thời điểm gọi. Trong LibreYOLO, đây không phải tác vụ riêng: đó
+  là tác vụ detect do một tầng mô hình riêng phục vụ, được nạp qua factory
+  LibreOpenVocab thay vì LibreYOLO.
 keywords:
   - phát hiện từ vựng mở
   - zero shot object detection
@@ -57,7 +59,7 @@ snippets:
         # decode. Cả hai mặc định là 0.25 khi không đặt. Chỉ Grounding DINO
         # chấp nhận text_threshold; các mô hình khác phát sinh lỗi.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 ## Định nghĩa
 
@@ -123,7 +125,7 @@ Nó dùng chung bề mặt `set_classes()`. Điểm khác biệt nằm ở ngu�
 family trên trang này là detector phân biệt phát điểm trực tiếp, còn tầng VLM
 tạo ra chúng.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) và [North Micro Vision](/docs/models/northmicrovision) mở rộng lựa chọn phát hiện của `LibreVLM`. [Molmo2](/docs/models/molmo2) trả về điểm. Dùng [LibreGround](/docs/reference/ground-api) cho truy vấn chỉ dẫn thành vị trí nhấp thay vì từ vựng phát hiện.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) và [WeVisOne-VL](/docs/models/wevisone-vl) mở rộng lựa chọn phát hiện của `LibreVLM`. [Molmo2](/docs/models/molmo2) trả về điểm. Dùng [LibreGround](/docs/reference/ground-api) cho truy vấn chỉ dẫn thành vị trí nhấp thay vì từ vựng phát hiện.
 
 ## Dự đoán
 

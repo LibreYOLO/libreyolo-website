@@ -134,7 +134,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Định nghĩa
@@ -178,8 +178,10 @@ cụm từ chọn đối tượng và mô hình trả về mặt nạ. [SAM](/do
 [MobileSAM](/docs/models/mobilesam), [EdgeTAM](/docs/models/edgetam) và
 [PicoSAM3](/docs/models/picosam3) hoạt động theo cách này, cũng như
 [SenseNova-Vision](/docs/models/sensenova-vision), có phân đoạn referring: mô
-hình nhận cụm từ đặt tên một đối tượng. Chúng được nạp qua factory và thành phần
-bổ sung riêng, còn từng trang mô hình chứa lời gọi chính xác.
+hình nhận cụm từ đặt tên một đối tượng.
+[WeVisOne-VL](/docs/models/wevisone-vl) phân đoạn từng cụm từ được đưa vào
+`names=` và trả về hộp cùng mặt nạ nhị phân. Chúng được nạp qua factory và thành
+phần bổ sung riêng, còn từng trang mô hình chứa lời gọi chính xác.
 
 ## Dự đoán
 
@@ -189,7 +191,8 @@ cục bộ.
 <code-tabs name="predict" />
 
 `conf` và `max_det` định hình đầu ra giống như với phát hiện, còn mặt nạ được lọc
-cùng các hộp tương ứng. Xem [dự đoán](/docs/predict) để biết về nguồn, stream và
+cùng các hộp tương ứng, kể cả bởi
+`agnostic_nms=True`. Xem [dự đoán](/docs/predict) để biết về nguồn, stream và
 cách xử lý kết quả.
 
 ## Định dạng dataset
@@ -247,8 +250,10 @@ biết về dataset, augmentation, multi-GPU và logger.
 
 ## Xác thực
 
-`val()` trả về dictionary thuần gồm các key `metrics/`. Hộp và mặt nạ được tính
-điểm riêng, cả hai dùng đánh giá COCO, còn số liệu mặt nạ là chính.
+`val()` trả về một dictionary gồm các key `metrics/`. Hộp và mặt nạ được tính
+điểm riêng, cả hai dùng đánh giá COCO, còn số liệu mặt nạ là chính. Một hàng nhãn
+chỉ có hộp gồm năm trường được tính điểm như mặt nạ hình chữ nhật của nó, đúng
+như việc huấn luyện segment đọc từ hàng đó.
 
 <code-tabs name="val" />
 
@@ -271,6 +276,11 @@ là alias, không phải operating point: `metrics/precision(M)` giữ cùng gi�
 với `metrics/mAP50-95(M)`, còn `metrics/recall(M)` giữ cùng giá trị với mask AR
 ở 100 kết quả phát hiện, và `(B)` hoạt động tương tự cho hộp. Vẽ một cặp key này
 sẽ báo cáo cùng một số hai lần.
+
+Kết quả còn chứa `confusion_matrix` và các đường cong precision, recall và F1 theo
+từng lớp đối tượng trên `box`, cả hai đều được tính từ hộp chứ không phải mặt nạ;
+xem [Xác thực và metric](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` được hỗ trợ trên tác vụ này.
 
 ## Xuất
 

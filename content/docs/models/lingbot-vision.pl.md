@@ -115,7 +115,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Instalacja
@@ -155,7 +155,9 @@ Metoda `train()` dostraja opublikowany punkt kontrolny. Domyślna konfiguracja
 odpowiada sondzie liniowej z raportu źródłowego: backbone ViT jest zamrożony,
 a trenowana jest wyłącznie głowica gęsta 1x1, tak jak podczas tworzenia wag
 udostępnianych przez LibreYOLO powyżej. Przekaż `freeze_backbone=False`, aby
-zamiast tego dostroić całą sieć, i odpowiednio zmniejsz `lr0`.
+zamiast tego dostroić całą sieć, i odpowiednio zmniejsz `lr0`. `libreyolo train`
+zaczyna od tej samej receptury, a bez `name=` jego przebiegi trafiają do
+`runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

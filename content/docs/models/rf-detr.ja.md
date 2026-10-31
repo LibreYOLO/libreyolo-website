@@ -176,7 +176,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 3238696a4e1ab6c2
+source_hash: 1b6651371762ad63
 ---
 
 ## インストール
@@ -186,6 +186,8 @@ RF-DETRには専用の追加パッケージが必要で、バックボーン用�
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+これがないと、PythonからでもCLIからでも、RF-DETRのチェックポイントやモデル名を読み込む時点で、このインストール行を示すエラーで停止します。
 
 ## 推論
 
@@ -212,6 +214,8 @@ pip install "libreyolo[rfdetr]"
 <code-tabs name="train" />
 
 ここでは、CNN検出器の場合より2つの引数が重要です。Transformer検出器はYOLOモデルが許容する学習率では発散するため、`lr0`を`1e-4`以下に保ってください。変更する理由がない限り、`imgsz`はチェックポイントのネイティブ解像度のままにしてください。入力はバックボーンのパッチサイズとウィンドウ数の積で割り切れる必要があります。LibreYOLOは実行開始前にこれを確認し、最も近い有効なサイズを示します。
+
+セグメンテーションのファインチューニングはセグメンテーションチェックポイントから始めます。RF-DETRには検出からセグメンテーションへの転移がないためです。`libreyolo train model=LibreRFDETRn-seg.pt task=segment`はそのチェックポイントを読み込み、`task=segment`を指定した検出チェックポイントはエラーで停止します。
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
 

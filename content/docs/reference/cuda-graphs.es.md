@@ -71,7 +71,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## Qué se captura
@@ -142,8 +142,7 @@ alrededor de 1e-7 aun siendo idéntica bit a bit en la prueba que importa.
 
 ## Soporte en entrenamiento
 
-La captura en entrenamiento pasó de dos familias a 24 en esta versión, repartidas
-en cinco tareas.
+La captura en entrenamiento cubre 24 familias repartidas en cinco tareas.
 
 | Tarea | Familias |
 |---|---|

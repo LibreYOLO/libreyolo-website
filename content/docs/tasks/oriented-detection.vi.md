@@ -161,7 +161,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 ## Định nghĩa
 
@@ -230,7 +230,8 @@ Trong thực tế, chúng là điểm bắt đầu hoạt động được cho h
 nhìn từ trên cao và để xác minh pipeline chạy đầu cuối. Mọi domain khác cần huấn
 luyện trên nhãn hộp xoay riêng, còn với các category hàng không vốn gắn với
 DOTA, checkpoint RT-DETRv2 mới là mô hình thực sự được huấn luyện trên dữ liệu
-đó. `conf` và `max_det` định hình đầu ra giống như khi phát hiện. Xem [dự
+đó. `conf` và `max_det` định hình đầu ra giống như khi phát hiện, còn `agnostic_nms=True` loại bỏ các hộp
+chồng lấn xuyên các lớp đối tượng theo IoU xoay. Xem [dự
 đoán](/docs/predict) để biết về nguồn, stream và cách xử lý kết quả.
 
 ## Định dạng dataset
@@ -321,7 +322,8 @@ có hậu tố.
 
 Hai tùy chọn không có tác dụng trên tác vụ này. `save_json` và `save_plots` được
 chấp nhận và ghi cảnh báo: chưa triển khai dump dự đoán hộp xoay và biểu đồ xác
-thực.
+thực. `agnostic_nms=True` phát sinh `ValueError` ở đây; nó chỉ bao phủ việc xác
+thực detect và segment.
 
 ## Xuất
 

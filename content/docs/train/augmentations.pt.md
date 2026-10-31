@@ -75,7 +75,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## Definir os parâmetros
@@ -143,10 +143,10 @@ amostra sempre ligada e o MixUp aplicado de forma independente em vez de
 condicionado. O valor de `mosaic_scale` dele é reaproveitado como faixa de escala
 dessa transformação afim.
 
-SegFormer e NAFNet rodam cada um um pipeline específico da tarefa, cuja
-aleatoriedade está fixada na família em vez de ser configurável. No SegFormer os
-parâmetros ativos são os atributos de classe `semantic_scale_jitter` e
-`semantic_hsv_prob`, não `mosaic_scale` e `hsv_prob`. O recorte e os flips do
+SegFormer, LingBot-Vision e NAFNet rodam cada um um pipeline específico da
+tarefa, cuja aleatoriedade está fixada na família em vez de ser configurável. No
+SegFormer e no LingBot-Vision os parâmetros ativos são os atributos de classe
+`semantic_scale_jitter` e `semantic_hsv_prob`, não `mosaic_scale` e `hsv_prob`. O recorte e os flips do
 NAFNet são operações acopladas de entrada e alvo com uma probabilidade fixa de
 0.5.
 
@@ -194,6 +194,21 @@ lugar. Nos pipelines de mosaico ele desliga o mosaico e o MixUp nas épocas
 finais. Nos pipelines no estilo DETR ele interrompe o data augmentation
 fotométrico, o zoom-out e o recorte, e molda a cauda do schedule. Nos pipelines de classificação, desativa auto-augmentation, erasing, MixUp e CutMix; recortes e espelhamentos permanecem.
 
+`perspective` acrescenta um warp projetivo por cima da rotação, da escala, do
+cisalhamento e da translação. Cada canto do canvas se move para dentro por uma
+quantidade aleatória de até `min(perspective * 100, 0.2)` vezes metade do lado do
+canvas, por eixo, então `perspective=0.001` move um canto em no máximo 5 por
+cento do lado em qualquer resolução, e todo valor de `0.002` para cima chega ao
+mesmo máximo. O padrão `0` mantém o warp afim, e um valor negativo levanta
+`ValueError` quando a primeira amostra é deformada. YOLOv9 e suas variantes E2E e
+P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR e RT-DETRv2 o
+aplicam.
+
+O MixUp no pipeline de mosaic do YOLOv9, pelo qual treinam o YOLOv9 e suas
+variantes, o YOLOv7, o RT-DETR e o RT-DETRv2, sorteia a razão de mistura de
+Beta(1, 1), uniforme em [0, 1]. O wrapper de mosaic do YOLOX, usado por YOLOX,
+RTMDet e PicoDet, mistura em um 0.5 fixo.
+
 ## O pacote de classificação
 
 Quatro parâmetros governam o pipeline de classificação e mais nada. As famílias
@@ -228,14 +243,15 @@ base, então existem só para aquela família e não têm flag na CLI.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Probabilidade do data augmentation de instâncias copy-paste, só para `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` reaproveita a mesma amostra espelhada, `"mixup"` puxa uma segunda amostra |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Probabilidade de rotação aleatória de 90 graus |
-| YOLOv9 | `max_labels` | Limite de ground truth por imagem nas transformações de treinamento, 100 por padrão |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Limite de ground truth por imagem nas transformações de treinamento, 300 por padrão |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste para `task="segment"`, só no modo `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilidade de recorte e redimensionamento aleatórios |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilidades do jitter do caminho de pose e da transformação afim ciente dos keypoints |
 
-`max_labels` é o que perde dados em silêncio. Os bounding boxes que passam do
-limite são descartados sem erro, então imagens densas como as de fotografia aérea
-precisam que ele seja aumentado.
+`max_labels` é o que perde dados. Os bounding boxes que passam do limite são
+descartados com um aviso único em vez de um erro, então imagens densas como as de
+fotografia aérea precisam que ele seja aumentado. A memória da atribuição de
+labels acompanha a imagem mais densa do batch, não o limite.
 
 O mosaico e o MixUp ficam desativados no treinamento com caixas orientadas
 independentemente dos parâmetros, porque o data augmentation ciente dos cantos

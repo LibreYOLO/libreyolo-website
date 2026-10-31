@@ -147,7 +147,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## Définition
@@ -220,8 +220,10 @@ autre valeur `K` et un autre sens pour chaque indice. Le contenu de la troisièm
 colonne des points clés dépend également du checkpoint. EdgeCrafter y écrit une
 constante plutôt qu'un score par point. Il ne possède aucune tête de boîte, de
 sorte que chacune de ses boîtes de pose est l'étendue englobante des propres
-points clés de l'instance. Consultez la page [prédiction](/docs/predict) pour
-les sources, le streaming et la gestion des résultats.
+points clés de l'instance. `agnostic_nms=True` supprime les boîtes qui se
+chevauchent entre classes et retire les points clés de chaque instance supprimée
+avec sa boîte ; HRNet lève `NotImplementedError` dans ce cas. Consultez la page
+[prédiction](/docs/predict) pour les sources, le streaming et la gestion des résultats.
 
 ## Format du dataset
 
@@ -308,7 +310,7 @@ moyen sont `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
 `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` et
 `metrics/keypoints_AR_L`. Chaque clé de cette tâche est préfixée par
 `keypoints_`. Les clés `mAP` de boîtes renvoyées par un détecteur n'apparaissent
-donc pas.
+donc pas. `val(agnostic_nms=True)` lève `ValueError` pour cette tâche.
 
 ## Exporter
 

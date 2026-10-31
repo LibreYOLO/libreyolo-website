@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo fehlerbehebung
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 Die Fehler sind nach dem angezeigten Text gruppiert. Wenn deine Meldung hier
@@ -34,6 +34,16 @@ Führe `libreyolo models` aus. Jede Familie mit fehlender Abhängigkeit wird
 zusammen mit dem genauen pip-Befehl ausgegeben, der sie aktiviert. Du musst das
 Paket daher nicht selbst dem Extra zuordnen. `libreyolo models --json` gibt
 dieselben Daten als Objekt aus.
+
+RF-DETR und DINOv2 benötigen `libreyolo[rfdetr]`, und ihre Meldung nennt das
+Extra. Ohne es brechen `LibreYOLO("LibreRFDETRn.pt")`, die DINOv2-Gewichtsnamen
+und `libreyolo predict model=rfdetr-n` mit der Installationszeile ab, und die
+CLI endet mit `model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 Die [Installationsseite](/docs/install) führt alle Extras und ihren Umfang auf.
 
@@ -110,14 +120,19 @@ veröffentlichten Checkpoint entspricht, erzeugt eine nicht vorhandene URL. Die
 Checkpoint-Tabelle jeder Modellseite führt die genauen veröffentlichten
 Dateinamen auf.
 
-## Training hängt oder startet unter Windows oder macOS neu
+## train() oder val() wurde auf oberster Ebene deines Skripts aufgerufen
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 Windows unterstützt kein `fork`, und Python unter macOS verwendet es
 standardmäßig nicht. Dataloader-Worker starten daher, indem sie dein Skript
-erneut importieren. Ohne einen Guard
-`if __name__ == "__main__":` führt jeder Worker deinen Trainingsaufruf erneut
-aus. Dadurch entsteht entweder ein Deadlock oder es werden endlos neue Prozesse
-gestartet.
+erneut importieren. Die Startmethoden `spawn` und `forkserver` tun das auf jeder
+Plattform. Ohne einen Guard `if __name__ == "__main__":` würde jeder Worker
+deinen Aufruf von `train()` oder `val()` erneut ausführen. Deshalb bricht jeder
+an diesem Aufruf ab, gibt diese Zeile mit dem Namen des Aufrufs aus, und das
+Skript endet mit einem Fehler.
 
 ```python
 def main():

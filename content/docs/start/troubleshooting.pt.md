@@ -15,7 +15,7 @@ keywords:
   - libreyolo notimplementederror
   - resolver erros libreyolo
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 Os erros estão agrupados pelo texto que você vê. Se a sua mensagem não estiver
@@ -31,6 +31,16 @@ Rode `libreyolo models`. Toda família com dependência faltando é impressa jun
 com o comando pip exato que a habilita, então você não precisa mapear o pacote
 de volta para o extra por conta própria. `libreyolo models --json` imprime a
 mesma coisa como um objeto.
+
+O RF-DETR e o DINOv2 precisam de `libreyolo[rfdetr]`, e a mensagem deles nomeia o
+extra. Sem ele, `LibreYOLO("LibreRFDETRn.pt")`, os nomes de pesos do DINOv2 e
+`libreyolo predict model=rfdetr-n` param com a linha de instalação, e a CLI sai
+com `model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 A [página de instalação](/docs/install) lista todos os extras e o que cada um
 cobre.
@@ -105,12 +115,18 @@ derivada dele, incluindo o sufixo da tarefa, então um nome que não corresponde
 um checkpoint publicado produz uma URL que não existe. A tabela de checkpoints
 em cada página de modelo lista os nomes de arquivo publicados exatos.
 
-## O treinamento trava ou reinicia no Windows ou no macOS
+## train() ou val() foi chamado no nível superior do seu script
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 O Windows não tem `fork`, e o Python no macOS não o usa por padrão, então os
-workers do dataloader começam reimportando o seu script. Sem uma guarda `if __name__ == "__main__":`, cada worker roda de
-novo a sua chamada de treinamento, o que trava em deadlock ou gera processos sem
-parar.
+workers do dataloader começam reimportando o seu script. Os métodos de início
+`spawn` e `forkserver` fazem o mesmo em qualquer plataforma. Sem uma guarda
+`if __name__ == "__main__":`, cada worker rodaria de novo a sua chamada de
+`train()` ou `val()`, então cada um para nessa chamada, imprime essa linha
+nomeando a chamada, e o script sai com um erro.
 
 ```python
 def main():

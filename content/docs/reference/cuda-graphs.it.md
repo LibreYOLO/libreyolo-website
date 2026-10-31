@@ -70,7 +70,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## Cosa viene catturato
@@ -139,8 +139,7 @@ grafo misura circa 1e-7 pur restando bit-identica sulla prova che conta.
 
 ## Supporto in addestramento
 
-La cattura in addestramento è passata da due famiglie a 24 in questa release, su
-cinque task.
+La cattura in addestramento copre 24 famiglie su cinque task.
 
 | Task | Famiglie |
 |---|---|

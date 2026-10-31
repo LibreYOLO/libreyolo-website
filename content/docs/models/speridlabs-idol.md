@@ -101,7 +101,9 @@ format from the extension. A `.ply` is the standard 3D Gaussian Splatting
 layout, turned y-up the way splat viewers and trainers expect, with the seed,
 camera and settings stored in a header comment. A `.splat` is the compact web
 format, 32 bytes per Gaussian. `result.plot()` returns a point render from the
-inferred input view, a quick look rather than a Gaussian rasterization.
+inferred input view, a quick look rather than a Gaussian rasterization. The
+[3D generation](/docs/tasks/3d-generation) task page describes the payload in
+full.
 
 A seed, with the same model and settings, gives the same object. Object `i`
 of a source uses `seed + i`; without a seed, a fresh one is drawn and recorded

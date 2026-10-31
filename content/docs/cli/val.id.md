@@ -40,7 +40,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: a0446a47e0f89b27
+source_hash: 587851b0988347c3
 ---
 
 ## Sinopsis
@@ -64,6 +64,7 @@ Argumen berupa pasangan `key=value`, dan bentuk POSIX juga berlaku, jadi
 | `imgsz` | | Ukuran gambar: `640` (persegi) atau `480x640` (tinggi x lebar). Ukuran input model itu sendiri bila tidak diisi |
 | `conf` | `0.001` | Ambang batas skor keyakinan (confidence) |
 | `iou` | `0.6` | Ambang IoU untuk NMS |
+| `agnostic_nms` | `false` | NMS class-agnostic: di antara box yang saling tumpang tindih di atas `iou`, hanya box dengan skor tertinggi yang dipertahankan, apa pun kelasnya. Hanya detect dan segment |
 | `max_det` | `300` | Prediksi maksimum per gambar setelah NMS |
 | `eval_max_det` | | Batas atas evaluator COCO. Mengikuti konvensi AP@100 pycocotools bila tidak diisi |
 | `faster_coco_eval` | `true` | Memakai backend C++ faster-coco-eval untuk metrik COCO bila terpasang; jika tidak ada, kembali ke pycocotools |

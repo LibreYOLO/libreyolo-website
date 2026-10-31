@@ -149,7 +149,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 
 ## Instalação
@@ -205,7 +205,7 @@ O treinamento parte de um checkpoint publicado, para as duas tarefas.
 
 <code-tabs name="train" />
 
-Por padrão, o trainer roda 132 épocas com `lr0=2e-4`, `amp=True` e `amp_dtype="float16"`, batch de 16 e early stopping após 50 épocas sem melhora. Pesos de detecção são um ponto de partida válido para treinamento de segmentação, mas só como transferência explícita, pois a cabeça de máscaras começa sem treinamento e, de outro modo, retornaria máscaras sem sentido. Passar `task=segment` na CLI autoriza a transferência. Em Python, o caminho é mais restrito: é preciso construir `LibreDFINE` diretamente com `allow_detect_to_segment_transfer=True`, porque a factory `LibreYOLO()` não aceita esse argumento, e a construção direta não faz download, então o arquivo de pesos já deve estar no disco.
+Por padrão, o trainer roda 132 épocas com `lr0=2e-4`, `amp=True` e `amp_dtype="float16"`, batch de 16 e early stopping após 50 épocas sem melhora. O `libreyolo train` parte da mesma receita para as duas tarefas: AdamW com um schedule de cosseno plano, `weight_decay=1e-4`, 2 épocas de warmup, um clip de norma do gradiente de 0.1, e sem augmentation de mosaic, MixUp, HSV ou afim. Sem `name=`, suas execuções vão para `runs/train/dfine_exp`. Pesos de detecção são um ponto de partida válido para treinamento de segmentação, mas só como transferência explícita, pois a cabeça de máscaras começa sem treinamento e, de outro modo, retornaria máscaras sem sentido. Passar `task=segment` na CLI autoriza a transferência. Em Python, o caminho é mais restrito: é preciso construir `LibreDFINE` diretamente com `allow_detect_to_segment_transfer=True`, porque a factory `LibreYOLO()` não aceita esse argumento, e a construção direta não faz download, então o arquivo de pesos já deve estar no disco.
 
 `lora=True` vale para detecção. O treinamento de segmentação o rejeita e aponta
 para `freeze='backbone'` no lugar, porque a cabeça de máscaras não foi testada

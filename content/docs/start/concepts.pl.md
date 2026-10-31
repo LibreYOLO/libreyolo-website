@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Zadania kanoniczne
-    value: 20
+    value: 22
   - label: Poziomy obsługi
     value: 'Flagowy, Rdzeń, Obsługiwany, Tylko inferencja, Muzeum, Sąsiedni poziom'
 snippets:
@@ -51,12 +51,12 @@ snippets:
         # "pose", "det" do "detect", a "semantic-segmentation" do "semantic".
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Zadania
 
-Zadanie określa, co zwraca model. LibreYOLO ma dwadzieścia kanonicznych nazw
+Zadanie określa, co zwraca model. LibreYOLO ma dwadzieścia dwie kanoniczne nazwy
 zadań, a każda odpowiada polu obiektu `Results`, które zawiera wynik.
 
 | Zadanie | Zwraca |
@@ -81,6 +81,8 @@ zadań, a każda odpowiada polu obiektu `Results`, które zawiera wynik.
 | `mesh` | Ustawione w pozie ciało 3D każdej wykrytej osoby |
 | `detect3d` | Ramki 3D we współrzędnych kamery wraz z klasą i pewnością |
 | `act` | Fragment akcji robota przewidziany na podstawie klatek z kamery i stanu robota |
+| `generate` | Obraz RGB wygenerowany z promptu tekstowego, z promptem, seedem i parametrami wywołania, które go odtwarzają |
+| `generate3d` | Jeden obiekt jako gaussiany 3D (splaty), wygenerowany z pojedynczego jego obrazu |
 
 Są to nazwy występujące w metadanych checkpointów i nazwach plików. Znane
 aliasy są akceptowane wszędzie tam, gdzie przekazuje się zadanie, i
@@ -174,12 +176,12 @@ publikująca wagi trenowane na zbiorze innym niż domyślny dołącza nazwę zbi
 danych jako kolejny sufiks, a ten wariant pozostaje częścią nazwy repozytorium,
 z którego pobierany jest plik.
 
-Trzy poziomy nie korzystają z tego schematu. Rodziny segmentacji sterowanej
-podpowiedziami, rodziny wizyjno-językowe i detektory z otwartym słownikiem nie są
-rejestrowane w fabryce checkpointów i nie emitują pliku
-`Libre<FAMILY><size>.pt`. Ich prefiks nazywa zamiast tego pobraną migawkę
-Hugging Face lub checkpoint sterowany podpowiedziami, a wielkość liter marki ze
-źródła nadrzędnego jest tam celowo zachowywana.
+Kilka poziomów nie korzysta z tego schematu. Rodziny segmentacji sterowanej
+podpowiedziami, rodziny wizyjno-językowe, detektory z otwartym słownikiem i
+rodziny generowania `LibreGen` nie są rejestrowane w fabryce checkpointów i nie
+emitują pliku `Libre<FAMILY><size>.pt`. Ich prefiks nazywa zamiast tego pobraną
+migawkę Hugging Face lub checkpoint sterowany podpowiedziami, a wielkość liter
+marki ze źródła nadrzędnego jest tam celowo zachowywana.
 
 ## Sposób ustalania zadania
 

@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: c8d7adb6aabcbc80
+source_hash: 766f7d68cb2233ad
 ---
 
 ## 変更する前に測定する
@@ -101,6 +101,8 @@ RF-DETRとD-FINE、DEIM、RT-DETRのマッチャー経路は、ホストへの�
 <code-tabs name="amp" />
 
 Float16では勾配スケーラーを使い、bfloat16では無効にします。D-FINE、DEIM、RT-DETRv4、YOLO-NASの物体検出は、デフォルトで`amp=True`です。Dome-DETR、PP-YOLOE、YOLO-NAS OBBはFP32のデフォルトを維持します。FP32を明示的に使うには`amp=False`を渡します。
+
+YOLOv9、YOLOv9-E2E、YOLOv9-P2は、どちらのdtypeでもラベル割り当てのアンカーのスコアリングをfp32で行います。強い負のfloat16のクラスロジットのシグモイドはゼロにアンダーフローし、バッチに正例のアンカーが1つも残らなくなるためです。
 
 bfloat16非対応ハードウェアで要求した場合の動作を含む引数の意味は、[ハイパーパラメーター](/docs/train/hyperparameters)にあります。
 

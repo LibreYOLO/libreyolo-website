@@ -39,7 +39,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## Składnia
@@ -78,6 +78,19 @@ Ramki są zapisywane jako pliki `labels/*.txt` w natywnym formacie LibreYOLO,
 czyli w tym samym, który czyta `libreyolo train`, więc później nic nie trzeba
 konwertować. Ta wersja obsługuje wyłącznie ramki ograniczające. Zmiany
 zapisują się przy przechodzeniu między obrazami.
+
+### Label-Error Radar
+
+Przy włączonym AI assist przycisk Radar, albo klawisz `Y`, uruchamia model
+asystujący na każdym obrazie z etykietami i wypisuje obrazy, na których model
+nie zgadza się z etykietami, od najgorszych: ramka, w której model nic nie
+znajduje, pewna detekcja bez ramki albo ramka, której klasę model kwestionuje.
+Radar niczego nie zapisuje; każda poprawka to ręczna edycja. `N` przechodzi do
+następnego oznaczonego obrazu w tej kolejności od najgorszych i zawija się na
+końcu. Ponowne naciśnięcie `Y` otwiera ostatni skan, z czasem jego wykonania i
+przyciskiem Rescan, zamiast skanować od nowa. Radar nie jest dostępny w
+projektach z obróconymi ramkami, a oba klawisze można przemapować w oknie
+skrótów `?`.
 
 ### Otwieranie zbioru danych
 

@@ -215,6 +215,12 @@ portability across Ampere and newer. The `"same_compute_capability"` value maps 
 `NONE` and warns: the engine is optimized for the current GPU only, and the export
 says so rather than claiming a portability it did not apply.
 
+The `tensorrt` extra installs TensorRT 10.16. On TensorRT 11, which removed the
+`EXPLICIT_BATCH` network flag, export creates the network without it. That step
+is the only part checked on TensorRT 11, and only against a mocked TensorRT
+module: no FP32, FP16 or INT8 engine build has run there, and the FP16 and INT8
+builder flags may still fail on it.
+
 Only the batch axis is profiled. A build with dynamic spatial dimensions is not
 part of this contract, which is why FCOS is blocked: it needs dynamic padded
 height and width to preserve its 800 by 1333 aspect transform.

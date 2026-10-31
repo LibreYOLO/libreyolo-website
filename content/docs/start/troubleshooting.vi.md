@@ -14,7 +14,7 @@ keywords:
   - libreyolo notimplementederror
   - khắc phục sự cố libreyolo
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 Các lỗi được nhóm theo nội dung bạn nhìn thấy. Nếu thông báo của bạn không có ở
 đây, [FAQ](/docs/faq) trả lời những câu hỏi không phải lỗi, còn `libreyolo
@@ -28,6 +28,16 @@ tên gói bổ sung, nên cách sửa không phải lúc nào cũng rõ từ tra
 Chạy `libreyolo models`. Mọi họ còn thiếu dependency được in kèm lệnh pip chính
 xác để kích hoạt, nên bạn không phải tự ánh xạ package về gói bổ sung.
 `libreyolo models --json` in cùng dữ liệu dưới dạng object.
+
+RF-DETR và DINOv2 cần `libreyolo[rfdetr]`, và thông báo của chúng nêu tên extra.
+Khi thiếu extra này, `LibreYOLO("LibreRFDETRn.pt")`, các tên trọng số DINOv2 và
+`libreyolo predict model=rfdetr-n` dừng với dòng cài đặt, và CLI thoát với
+`model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 [Trang cài đặt](/docs/install) liệt kê mọi gói bổ sung và phạm vi của chúng.
 
@@ -96,11 +106,18 @@ tên đó, gồm cả hậu tố tác vụ, nên tên không khớp checkpoint �
 URL không tồn tại. Bảng checkpoint trên mỗi trang mô hình liệt kê chính xác các
 tên file đã công bố.
 
-## Huấn luyện bị treo hoặc khởi động lại trên Windows hoặc macOS
+## train() hoặc val() được gọi ở cấp cao nhất của script
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 Windows không có `fork`, và Python trên macOS mặc định không dùng nó, nên worker
-dataloader bắt đầu bằng cách import lại script của bạn. Nếu thiếu guard `if __name__ == "__main__":`, mỗi worker chạy
-lại lệnh huấn luyện, dẫn đến deadlock hoặc sinh tiến trình vô hạn.
+dataloader bắt đầu bằng cách import lại script của bạn. Các phương thức khởi động
+`spawn` và `forkserver` cũng làm như vậy trên mọi nền tảng. Nếu thiếu guard
+`if __name__ == "__main__":`, mỗi worker sẽ chạy lại lệnh `train()` hoặc `val()`
+của bạn, nên mỗi worker dừng tại lệnh gọi đó, in dòng này nêu tên lệnh gọi, và
+script thoát với một lỗi.
 
 ```python
 def main():

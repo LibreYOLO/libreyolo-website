@@ -20,6 +20,8 @@ keywords:
   - miou
   - panoptic quality
   - top1 accuracy
+  - konfusionsmatrix
+  - klassenunabhängiges nms
 last_verified: 1.6.0
 snippets:
   val:
@@ -63,7 +65,40 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: da1e3ccfd1efba73
+  confusion:
+    - label: Konfusionsmatrix
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+        metrics = model.val(data="coco8.yaml")
+
+
+        cm = metrics.confusion_matrix
+
+        print(cm.matrix.shape)      # (81, 81): 80 Klassen plus Hintergrund
+
+        print(cm.class_accuracy())  # Klassenname: Anteil gefundener Objekte mit
+        dieser Klasse
+
+        tp, fp = cm.tp_fp()
+  curves:
+    - label: Kurven je Klasse
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        box = metrics.box
+        print(box.px.shape, box.f1_curve.shape)  # (1000,) und (Klassen, 1000)
+        for index, f1 in zip(box.ap_class_index, box.f1):
+            print(model.names[int(index)], round(float(f1), 3))
+source_hash: a5704354163337cf
 ---
 
 ## Ausführen einer Validierung
@@ -72,8 +107,10 @@ source_hash: da1e3ccfd1efba73
 
 <code-tabs name="val" />
 
-Der Rückgabewert ist ein `dict[str, float]`. Jeder Schlüssel ist
-literal. Lies ihn daher über seinen Namen und nicht über seine Position aus.
+Der Rückgabewert ist ein flaches `dict` aus Metrikschlüsseln und Zahlen. Jeder
+Schlüssel ist literal. Lies ihn daher über seinen Namen und nicht über seine
+Position aus. Bei detect, segment und classify ist es eine `dict`-Unterklasse,
+die zusätzlich Ergebnisse je Klasse als Attribute trägt, wie unten beschrieben.
 
 Die wichtigsten Argumente sind `data`, `split`, `batch`, `imgsz`, `conf`,
 `iou`, `workers`, `device`, `augment`, `save_json` und `verbose`. `conf` hat
@@ -87,7 +124,23 @@ Gewichte enthalten keinen und benötigen `data=`.
 
 Jedes weitere Feld der Validierungskonfiguration wird als Keyword-Argument
 weitergereicht. Dazu gehören `save_dir`, `max_det`, `eval_max_det`, `half`,
-`amp_dtype`, `cache` und `save_plots`.
+`amp_dtype`, `cache`, `save_plots`, `single_cls` und `agnostic_nms`. Mit
+`half=True` auf CUDA läuft die Validierung unter Autocast in `amp_dtype`, und
+bfloat16-Ausgaben werden vor der Nachverarbeitung in float32 umgewandelt; ein
+Training mit `amp_dtype="bfloat16"` validiert auf dieselbe Weise.
+
+`agnostic_nms=True` behält unter Boxen, die sich über `iou` hinaus überlappen,
+nur die am höchsten bewertete, gleich welcher Klasse. Es läuft auf den fertigen
+Erkennungen der Familie, nach `classes=`, sodass mAP, Konfusionsmatrix, Kurven
+und Zählungen je Bild alle dieselben Boxen bewerten. Es deckt detect und segment
+ab, und jede andere Aufgabe löst `ValueError` aus. Die Seite der Vorhersage
+steht unter [Schwellenwerte und Filterung](/docs/predict/thresholds).
+
+`single_cls=True` bewertet die Erkennung als eine Klasse. Die Ground Truth wird
+auf Klasse 0 zusammengelegt, und die Erkennungen des Modells werden auf
+`classes=` im eigenen Label-Raum des Modells beschränkt und dann als 0 neu
+gelabelt, sodass ein auf mehreren Klassen trainierter Checkpoint als
+Ein-Klassen-Detektor bewertet wird.
 
 ## Metrikschlüssel pro Aufgabe
 
@@ -143,6 +196,8 @@ obigen Konvention für `(B)` und `(M)`.
 `accuracy_top5` bedeutet tatsächlich top-`min(5, num_classes)`. Bei einem
 Datensatz mit drei Klassen ist dies also top-3, was jedes Sample erfüllt und
 deshalb den Wert 1.0 ergibt.
+Klassifikationsergebnisse stellen die beiden Werte auch als Attribute `top1` und
+`top5` bereit, neben `confusion_matrix`.
 
 Der Sweep-Schlüssel der Punktaufgabe wird aus den Distanzschwellenwerten
 gebildet. Mit den Standardwerten lautet er `metrics/mAP@[0.01:0.10]`, während
@@ -158,6 +213,73 @@ Trainer setzen `best_metric_key` stattdessen auf
 `metrics/keypoints_mAP50-95`.
 
 ImageFolder-Klassifikation ergänzt die Makrometriken `metrics/precision`, `metrics/recall` und `metrics/f1`, gemittelt über die in den Validierungszielen vorhandenen Klassen. Top-1 bleibt die Standardfitness. Die Erkennung liefert außerdem `metrics/best_conf` und `metrics/best_conf_f1`, wählt dabei den Micro-F1-optimalen Schwellenwert bei IoU 0.50 und legt Schwellenwerte mit Klassennamen als Schlüssel in `metrics.box.best_conf_per_class` ab. Erkennungen mit gleichem Score bleiben gruppiert; bei Gleichstand wird der höhere Schwellenwert gewählt. Ohne positiven F1 ergibt sich 0.0. Segmentierung stellt diese Schwellenwertschlüssel nicht bereit.
+
+## Konfusionsmatrix
+
+Ergebnisse von detect, segment und classify tragen `results.confusion_matrix`.
+Sie wird bei jeder Validierung berechnet, unabhängig davon, ob Diagramme
+geschrieben werden, und ihre `matrix` ist ein Integer-Array, indiziert als
+`matrix[predicted, true]`.
+
+<code-tabs name="confusion" />
+
+Bei detect und segment werden Vorhersagen mit Confidence 0.25, oder `conf`, falls
+höher, eins zu eins mit Ground-Truth-Boxen beliebiger Klasse bei IoU 0.5 gepaart,
+zuerst die mit der höchsten IoU. Ein Paar zählt bei seiner vorhergesagten und
+seiner wahren Klasse, sodass eine gut platzierte Box mit falscher Klasse neben
+der Diagonale landet. Die Matrix hat eine zusätzliche Zeile und Spalte
+`background`: Eine ungepaarte Ground Truth zählt in der Zeile `background`, eine
+ungepaarte Vorhersage in der Spalte `background`. Die Segmentierung paart Boxen,
+nicht Masken. Mit `classes=` bleibt die Ground Truth der anderen Klassen
+unberücksichtigt.
+
+COCO-Crowd-Regionen (`iscrowd=1`) folgen der Regel, die auch mAP anwendet. Eine
+Vorhersage, der keine Ground Truth ihrer Klasse zugeordnet wurde und die
+mindestens zur Hälfte in einer Crowd-Region derselben Klasse liegt (Schnittmenge
+bezogen auf die eigene Fläche der Vorhersage), wird ignoriert statt gezählt.
+`box.image_metrics` und die Bilder von `visualize=True` verwenden dieselben
+Schwellenwerte und dieselbe Crowd-Regel. Labels im YOLO-Format haben keine
+Crowd-Regionen.
+
+Bei classify zählt jedes Bild einmal, mit seiner Top-1-Klasse gegen sein Label,
+und es gibt kein `background`.
+
+| Methode | Liefert |
+|---|---|
+| `summary(normalize=False)` | Ein Dictionary je vorhergesagter Klasse, `{"Predicted": name, <wahre Klasse>: Wert}`; mit `normalize` die Anteile jeder wahren Klasse |
+| `to_csv()`, `to_json()` | Die Zusammenfassung als CSV- oder JSON-Text |
+| `to_df()` | Die Zusammenfassung als Polars-DataFrame; benötigt `pip install polars` |
+| `tp_fp()` | True Positives je Klasse (die Diagonale) und False Positives (der Rest der vorhergesagten Zeile) |
+| `nonzero()` | Die gefüllten Zellen als ausgerichtete Arrays `(predicted, true, count)` |
+| `class_accuracy()` | Je Klasse der Anteil ihrer Instanzen, der diese Klasse erhielt; bei der Erkennung nur ihrer gefundenen Objekte |
+| `plot(normalize=True, save_dir="")` | Schreibt `confusion_matrix_normalized.png`, mit `normalize=False` `confusion_matrix.png`, und gibt den Pfad zurück |
+
+Ab 2,000 Klassen wird die dichte Klassifikationsmatrix nicht aufgebaut: `matrix`,
+`summary()`, die Exporte `to_*()` und `plot()` lösen Fehler aus, während
+`tp_fp()`, `nonzero()` und `class_accuracy()` weiterhin funktionieren.
+
+Die Klasse ist `libreyolo.validation.ConfusionMatrix`, erstellt als
+`ConfusionMatrix(nc, iou_thres=0.5, conf_thres=0.25, *, names=None, task="detect")`,
+wobei `task` `"detect"` oder `"classify"` ist.
+
+## Precision, Recall und F1 je Klasse
+
+Ergebnisse von detect und segment tragen Precision, Recall und F1 jeder Klasse
+über die Confidence-Schwellenwerte, abgeglichen bei IoU 0.5.
+
+<code-tabs name="curves" />
+
+`box.px` enthält die 1000 Confidences, gleichmäßig über `[0, 1]` verteilt.
+`box.p_curve`, `box.r_curve` und `box.f1_curve` sind Arrays `(Klassen, 1000)`,
+eine Zeile pro Eintrag von `box.ap_class_index`, den Klassenindizes, die im Split
+Ground Truth haben, in aufsteigender Reihenfolge. `box.p`, `box.r` und `box.f1`
+sind die Werte je Klasse bei der Confidence, die den mittleren F1 über diese
+Klassen maximiert. Die Segmentierung berechnet alle aus Boxen. Sie sind leere
+Arrays, wenn der Lauf keine Kurven erzeugt hat.
+
+## Box-Metriken je Bild
+
+Erkennungs- und Segmentierungsergebnisse bleiben mit Dictionaries kompatibel und bieten zusätzlich `results.box.image_metrics`. Jeder Dateiname wird `precision`, `recall`, `f1`, `tp`, `fp` und `fn` zugeordnet, nach der Abgleichregel der Visualisierung, auch wenn diese ausgeschaltet ist. Segmentierung zählt hier Boxen. Bei doppelten Basisdateinamen werden nach dem ersten Vorkommen vollständige Pfade verwendet. Nenner null ergeben 0.0. Diese Datensätze werden nicht über verteilte Ranks zusammengeführt.
 
 ## Geschwindigkeitsschlüssel
 
@@ -271,13 +393,20 @@ Mit `save_json=True` wird für die Erkennung `predictions.json` geschrieben.
 Für die Segmentierung entstehen `predictions_bbox.json` und
 `predictions_masks.json`. OBB unterstützt dies nicht und meldet den Umstand.
 
-`save_plots=True` schreibt in ein Unterverzeichnis namens `plots/`. Für die
-Erkennung entstehen `box_metrics.png`, AP- und Recall-Diagramme pro Klasse,
-Precision-Recall- und Confidence-Kurven, eine Konfusionsmatrix und bei
-installiertem OpenCV annotierte Beispielbilder. Die Segmentierung ergänzt
-davon jeweils maskenbezogene Kopien, während Pose einen eigenen Satz von
-Metriken und Kurven erhält. Die anderen Validatoren implementieren keine
-Diagramme. Klassifikation, semantische und panoptische Segmentierung, Tiefe,
+`save_plots=True` oder sein Alias `plots=True` schreibt in ein Unterverzeichnis
+namens `plots/` und benötigt matplotlib, das `pip install "libreyolo[plots]"`
+installiert. Für die Erkennung entstehen `box_metrics.png`, AP- und
+Recall-Diagramme pro Klasse, Precision-Recall- und Confidence-Kurven, die
+F1-Kurven je Klasse in `f1_conf_box.png`, die Konfusionsmatrix als Zählungen in
+`confusion_matrix.png` und als Anteile jeder wahren Klasse in
+`confusion_matrix_normalized.png` und bei installiertem OpenCV annotierte
+Beispielbilder. Die Segmentierung ergänzt maskenbezogene Kopien des
+Metrikdiagramms, der Diagramme je Klasse und der Precision-Recall- und
+Confidence-Kurven; die F1-Kurven und die Konfusionsmatrix bleiben auf
+Box-Ebene. Pose erhält einen eigenen Satz von Metriken und Kurven. Die
+Klassifikation schreibt die beiden Dateien der Konfusionsmatrix, außer ab 2,000
+Klassen. Die anderen Validatoren implementieren keine
+Diagramme. Semantische und panoptische Segmentierung, Tiefe,
 Normalen, Kanten, Restaurierung, Matting, OCR, OBB und Punkte schreiben dort
 nichts. Ein Fehler beim Plotten löst eine Warnung aus und bricht den Lauf nie
 ab.
@@ -304,7 +433,3 @@ geschrieben werden.
 
 - [Datensätze](/docs/train/datasets) beschreibt die Split-Schlüssel und
   Formate, die Validatoren lesen.
-
-## Box-Metriken je Bild
-
-Erkennungs- und Segmentierungsergebnisse bleiben mit Dictionaries kompatibel und bieten zusätzlich `results.box.image_metrics`. Jeder Dateiname wird `precision`, `recall`, `f1`, `tp`, `fp` und `fn` zugeordnet, nach der Abgleichregel der Visualisierung, auch wenn diese ausgeschaltet ist. Segmentierung zählt hier Boxen. Bei doppelten Basisdateinamen werden nach dem ersten Vorkommen vollständige Pfade verwendet. Nenner null ergeben 0.0. Diese Datensätze werden nicht über verteilte Ranks zusammengeführt.

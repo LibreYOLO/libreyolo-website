@@ -14,14 +14,14 @@ keywords:
   - 모델 체크포인트 라이선스
   - apache-2.0 객체 탐지
 last_verified: 1.6.0
-source_hash: "03e83b82bd2da258"
+source_hash: 3204f1f80370c85a
 ---
 
 ## LibreYOLO 자체 코드
 
 이 라이브러리는 MIT 라이선스입니다. 여기에는 Python API, CLI, 트레이너, 검증기 및 익스포터, 데이터셋 로더, 그리고 `weights/` 아래의 변환 스크립트가 포함됩니다. 이를 상업적 또는 폐쇄 소스 제품에서 사용하되, 배포하는 복사본에 저작권 표시와 라이선스 문구를 유지하면 되며, 그 의무는 여기서 끝납니다.
 
-허용 범위는 코드에서 끝납니다. [`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) 파일은 이를 명확히 설명합니다:
+허용 범위는 코드에서 끝납니다. [`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE)에는 MIT 텍스트만 있으며, [`NOTICE`](https://github.com/LibreYOLO/libreyolo/blob/release/NOTICE) 맨 위의 가중치 관련 안내가 이를 명확히 설명합니다:
 
 > 이 라이선스는 다양하며 모두 허용적인 것은 아닙니다: 일부 공개된 가중치는
 > 비상업적이거나 기타 제한된 용도로, 이 MIT 라이선스는 확장되지 않습니다
@@ -35,7 +35,7 @@ Apache-2.0은 DETR 라인과 많은 트랜스포머 작업을 포함합니다: M
 
 BSD-3-Clause는 torchvision에서 파생된 모든 것을 포함합니다: Faster R-CNN, Mask R-CNN, FCOS, RetinaNet, SSD300, AlexNet, VGG, FCN 및 DeepLabv3.
 
-MIT는 Megvii의 NAFNet, Xingyi Zhou의 CenterNet, 그리고 MultimediaTechLab에서 Kin-Yiu Wong과 Hao-Tang Tsui가 다시 발표한 YOLOv7을 포함하는 더 작은 그룹을 다룹니다. YOLOv1부터 YOLOv4까지의 계열는 Joseph Redmon의 Darknet 프로젝트, 그리고 YOLOv4의 경우 Alexey Bochkovskiy에 의해 만든 아키텍처를 재현합니다. Darknet은 퍼블릭 도메인이기 때문에 이들에 대해서는 아무런 의무가 없습니다.
+MIT는 Megvii의 NAFNet, Xingyi Zhou의 CenterNet, 그리고 MultimediaTechLab에서 Kin-Yiu Wong과 Hao-Tang Tsui가 다시 발표한 YOLOv7과 YOLOv9을 포함하는 더 작은 그룹을 다룹니다. YOLOv9 빌딩 블록, YOLO9-E2E와 YOLO9-P2가 공유하는 탐지 헤드 타워, PGI 분기, YOLOv9 mixup 블렌드는 그 MIT 릴리스에서 포팅했습니다. YOLOv1부터 YOLOv4까지의 계열는 Joseph Redmon의 Darknet 프로젝트, 그리고 YOLOv4의 경우 Alexey Bochkovskiy에 의해 만든 아키텍처를 재현합니다. Darknet은 퍼블릭 도메인이기 때문에 이들에 대해서는 아무런 의무가 없습니다.
 
 하나의 번들된 서브트리는 오픈 소스 라이선스가 아닙니다. DEIMv2 계열는 Meta Platforms의 DINOv3 백본 코드를 DINOv3 라이선스 계약에 따라 제공하며, 이는 맞춤형 비-OSI 라이선스입니다. 해당 코드를 재배포하는 경우 계약서를 함께 제공해야 하며, 계약서는 ITAR, 군사 또는 전쟁 목적, 핵 산업, 첩보 활동, 무기 개발과 관련된 활동에 대한 사용을 금지하고 있습니다. 이러한 조건은 해당 서브트리에만 적용됩니다.
 
@@ -62,7 +62,7 @@ SAM 3은 Meta의 사용자 정의 SAM License에 따라 접근이 제한된 업�
 
 여러 torchvision 체크포인트는 자체 라이선스 파일을 포함하지 않습니다. LibreYOLO는 이를 공개 프로젝트에서 사용하는 라이선스를 따라 미러링하며, 각 모델 카드에 기초가 체크포인트별로 부여되는 것이 아니라 암시된 것임을 명시하고, pretrained 모델의 조건이 학습 데이터에서 유래할 수 있다는 torchvision의 경고를 반복합니다.
 
-ConvNeXt V2와 LeVJEPA 사전 학습 가중치에는 CC-BY-NC-4.0이 적용됩니다. Moondream 3은 BSL 1.1을 사용하고, Dome-DETR 미러는 학술 연구로 제한되며, EdgeCrafter `obj2coco` 변형과 DetAny3D에는 제한적인 가중치 약관이 적용됩니다. 모델 페이지는 코드 라이선스 옆에 이러한 선언을 명시합니다. 원본 EdgeCrafter COCO 체크포인트는 기록된 Apache-2.0 허가를 유지합니다. MiDaS 미러는 배포자의 MIT 허가를 유지합니다.
+ConvNeXt V2와 LeVJEPA 사전 학습 가중치에는 CC-BY-NC-4.0이 적용됩니다. Moondream 3은 BSL 1.1을 사용하고, Dome-DETR 미러는 학술 연구로 제한되며, EdgeCrafter `obj2coco` 변형과 DetAny3D에는 제한적인 가중치 약관이 적용됩니다. SANA-Sprint에 번들된 Gemma 2 텍스트 인코더는 Google의 Gemma 이용 약관을 따르고, Speridlabs Idol이 `LibreYOLO/LibreDINOv3vith16plus` 미러에서 읽는 DINOv3 인코더는 Meta의 DINOv3 라이선스를 따릅니다. 모델 페이지는 코드 라이선스 옆에 이러한 선언을 명시합니다. 원본 EdgeCrafter COCO 체크포인트는 기록된 Apache-2.0 허가를 유지합니다. MiDaS 미러는 배포자의 MIT 허가를 유지합니다.
 
 가중치 요약은 체크포인트 배포자가 선언한 라이선스를 따릅니다. 학습 데이터셋 이름만으로 체크포인트에 추가 라이선스가 적용된다고 판단할 수 없습니다.
 

@@ -43,7 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## Einstellungen
@@ -61,7 +61,7 @@ Dies sind Feldnamen von `TrainConfig`, nicht ihre Schreibweisen in der CLI. `tra
 | `mosaic_scale` | Bereich zufälliger Skalierung für die affine Transformation |
 | `mixup_scale` | Bereich des Skalierungs-Jitters für das MixUp-Partnerbild |
 | `shear` | Bereich zufälliger Scherung für die affine Transformation in Grad |
-| `perspective` | Stärke der projektiven Transformation für die affine Transformation |
+| `perspective` | Stärke der projektiven Transformation, die zur affinen Transformation hinzukommt: Die Ecken der Leinwand wandern pro Achse um bis zu `min(perspective * 100, 0.2)` mal die halbe Leinwandseite nach innen; `0` schaltet sie ab |
 | `flipud` | Wahrscheinlichkeit einer vertikalen Spiegelung |
 | `no_aug_epochs` | Abschließende Epochen mit deaktivierter starker Augmentation |
 | `auto_augment` | AutoAugment-Richtlinie für Klassifizierung: randaugment, autoaugment oder augmix |
@@ -117,13 +117,13 @@ Die DETR-Pipeline verwendet eine Transformation ohne Mosaic. Photometrische Verz
 | Archetyp | Familien |
 |---|---|
 | YOLOX-Stil | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| DETR-Stil | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Klassifizierung | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Semantik | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| DETR-Stil | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Klassifizierung | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Semantik | `segformer`, `unet`, `lingbotvision` |
 | Restauration | `nafnet` |
 
-Fünfundzwanzig Familien werden erfasst. Für eine Familie außerhalb dieser Liste wird eine leere Menge ignorierter Einstellungen zurückgegeben, sodass keine Warnung erscheint.
+Einunddreißig Familien werden erfasst. Für eine Familie außerhalb dieser Liste wird eine leere Menge ignorierter Einstellungen zurückgegeben, sodass keine Warnung erscheint.
 
 ## Abweichungen
 
@@ -134,6 +134,8 @@ Fünfundzwanzig Familien werden erfasst. Für eine Familie außerhalb dieser Lis
 | `rtdetr` | `flipud` wird ignoriert |
 | `rtdetrv2` | `flipud` wird ignoriert |
 | `fomo` | `perspective` und `flipud` werden ignoriert |
+| `ppyoloe` | `flipud` wird ignoriert: Das Quellrezept verwendet stattdessen eine zufällige 90-Grad-Drehung |
+| `gtr` | `mosaic_prob` und `mixup_prob` werden verwendet, für die ersten `mosaic_epochs` Epochen; `degrees`, `translate` und `mosaic_scale` bestimmen die affine Transformation nach dem Mosaic |
 | `ec` | `hsv_prob`, `degrees` und `translate` werden nur für `task="pose"` verwendet; detect und segment nutzen feste fotometrische Rezepte |
 | `dinov2` | Das Klassifizierungspaket wird nur für `task="classify"` verwendet |
 

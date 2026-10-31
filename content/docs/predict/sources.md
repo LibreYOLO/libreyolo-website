@@ -364,7 +364,9 @@ and so on, keeping the source filename. Every image in one process lands in the
 same directory, so two input folders holding the same filename overwrite each
 other. In-memory images have no filename to reuse. A single one is saved as
 `inference`, so repeated calls overwrite it; a list or batch is numbered
-`image0`, `image1` and so on.
+`image0`, `image1` and so on. Two processes that save at the same moment get
+separate numbered directories, because each run reserves its directory by
+creating it.
 
 Video and live sources are written as a single `.mp4` named after the source.
 

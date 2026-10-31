@@ -222,7 +222,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## Sposób klasyfikowania źródła
@@ -417,7 +417,9 @@ obraz w jednym procesie trafia do tego samego katalogu, więc dwa foldery wejśc
 zawierające tę samą nazwę pliku nadpisują się. Obrazy w pamięci nie mają nazwy
 do ponownego użycia. Pojedynczy obraz jest zapisywany jako `inference`, więc
 kolejne wywołania go nadpisują; obrazy z listy lub batcha są numerowane jako
-`image0`, `image1` i kolejne.
+`image0`, `image1` i kolejne. Dwa procesy zapisujące w tej samej chwili dostają
+osobne ponumerowane katalogi, ponieważ każde uruchomienie rezerwuje swój katalog,
+tworząc go.
 
 Wideo i źródła na żywo są zapisywane jako pojedynczy plik `.mp4` nazwany według źródła.
 

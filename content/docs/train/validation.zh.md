@@ -15,6 +15,8 @@ keywords:
   - miou
   - 全景质量 pq
   - top1 准确率
+  - yolo 混淆矩阵
+  - agnostic nms 类别无关
 last_verified: 1.6.0
 snippets:
   val:
@@ -58,7 +60,33 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: da1e3ccfd1efba73
+  confusion:
+    - label: 混淆矩阵
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        cm = metrics.confusion_matrix
+        print(cm.matrix.shape)      # (81, 81)：80 个类别加背景
+        print(cm.class_accuracy())  # 类别名：找到的目标中被判为该类别的占比
+        tp, fp = cm.tp_fp()
+  curves:
+    - label: 逐类别曲线
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        box = metrics.box
+        print(box.px.shape, box.f1_curve.shape)  # (1000,) 和 (classes, 1000)
+        for index, f1 in zip(box.ap_class_index, box.f1):
+            print(model.names[int(index)], round(float(f1), 3))
+source_hash: a5704354163337cf
 ---
 
 ## 运行一次验证
@@ -67,8 +95,8 @@ source_hash: da1e3ccfd1efba73
 
 <code-tabs name="val" />
 
-返回值是一个 `dict[str, float]`。每个键都是字面量，所以按名字读，而不是按
-位置读。
+返回值是一个由指标键到数值组成的扁平 `dict`。每个键都是字面量，所以按名字读，而不是按
+位置读。对于检测、分割和分类，它是一个 `dict` 子类，还带有作为属性的逐类别结果，见下文。
 
 主要参数是 `data`、`split`、`batch`、`imgsz`、`conf`、`iou`、`workers`、`device`、
 `augment`、`save_json` 和 `verbose`。`conf` 默认是 `0.001`，`iou` 默认是 `0.6`，
@@ -78,7 +106,11 @@ source_hash: da1e3ccfd1efba73
 已发布的权重不携带数据集，需要传 `data=`。
 
 验证配置里的其他字段都会作为关键字参数透传，包括 `save_dir`、`max_det`、
-`eval_max_det`、`half`、`amp_dtype`、`cache` 和 `save_plots`。
+`eval_max_det`、`half`、`amp_dtype`、`cache`、`save_plots`、`single_cls` 和 `agnostic_nms`。在 CUDA 上设 `half=True` 时，验证在 `amp_dtype` 的 autocast 下运行，bfloat16 的输出会在后处理之前转成 float32；用 `amp_dtype="bfloat16"` 训练时的验证也是这样做的。
+
+`agnostic_nms=True` 会在重叠超过 `iou` 的检测框之间，无论类别如何，只保留得分最高的那一个。它作用在家族已经完成的检测结果上，在 `classes=` 之后，所以 mAP、混淆矩阵、曲线和逐图像计数打分的都是同一批检测框。它覆盖检测和分割，任何其他任务都会抛出 `ValueError`。预测一侧见[阈值与过滤](/docs/predict/thresholds)。
+
+`single_cls=True` 把检测当作单一类别来打分。真值被合并为类别 0，模型的检测按模型自身标签空间里的 `classes=` 保留，然后重新标为 0，所以一个在多个类别上训练的检查点会被当作单类别检测器来打分。
 
 ## 每种任务的指标键
 
@@ -126,7 +158,8 @@ OBB 的 `metrics/precision` 和 `metrics/recall` 不是别名：它们是 IoU 0.
 `(M)` 的约定一样。
 
 `accuracy_top5` 其实是 top-`min(5, num_classes)`，所以在一个三类的数据集上它就是
-top-3，每个样本都满足，因此读数是 1.0。
+top-3，每个样本都满足，因此读数是 1.0。分类结果还把这两个值暴露为属性 `top1` 和
+`top5`，与 `confusion_matrix` 放在一起。
 
 point 任务的扫描键是按距离阈值拼出来的，所以用默认值时它是
 `metrics/mAP@[0.01:0.10]`，单阈值的那个键是 `metrics/mAP@0.01`。传入
@@ -139,6 +172,44 @@ point 任务的扫描键是按距离阈值拼出来的，所以用默认值时�
 `metrics/keypoints_mAP50-95`。
 
 ImageFolder 分类新增宏平均 `metrics/precision`、`metrics/recall` 和 `metrics/f1`，对验证目标中出现的类别取平均。top-1 仍是默认适应度。检测还返回 `metrics/best_conf` 和 `metrics/best_conf_f1`，在 IoU 0.50 下选择 micro-F1 最优阈值，并把以类别名称为键的阈值放在 `metrics.box.best_conf_per_class` 上。同分检测保持分组；并列时选择更高的阈值。没有正 F1 时返回 0.0。分割不提供这些阈值键。
+
+## 混淆矩阵
+
+检测、分割和分类的结果带有 `results.confusion_matrix`。每次验证都会计算它，不管有没有写出图表，它的 `matrix` 是一个整数数组，索引为 `matrix[predicted, true]`。
+
+<code-tabs name="confusion" />
+
+对于检测和分割，置信度达到 0.25（或更高的 `conf`）的预测，会与任意类别的真值检测框在 IoU 0.5 下一对一配对，IoU 高的优先。一个配对按它预测的类别和真实的类别计数，所以位置准确但类别错误的框会落在对角线之外。矩阵多出一个 `background` 行和列：没有配上的真值计入 `background` 行，没有配上的预测计入 `background` 列。分割配对的是检测框，不是掩码。设了 `classes=` 时，其他类别的真值会被排除。
+
+COCO 的 crowd 区域（`iscrowd=1`）遵循 mAP 所用的规则。一个没有被其类别的任何真值匹配到的预测，如果至少有一半落在同类别的 crowd 区域内（交集除以预测自身的面积），就会被忽略而不是被计数。`box.image_metrics` 和 `visualize=True` 的图像使用同样的阈值和同样的 crowd 规则。YOLO 格式的标注没有 crowd 区域。
+
+对于分类，每张图像只计一次，按它的 top-1 类别对照它的标签，没有 `background`。
+
+| 方法 | 返回 |
+|---|---|
+| `summary(normalize=False)` | 每个预测类别一个字典，`{"Predicted": name, <true class>: value}`；设 `normalize` 时是占每个真实类别的比例 |
+| `to_csv()`、`to_json()` | 以 CSV 或 JSON 文本形式给出的汇总 |
+| `to_df()` | 以 Polars DataFrame 形式给出的汇总；需要 `pip install polars` |
+| `tp_fp()` | 逐类别的真正例（对角线）和假正例（预测行的其余部分） |
+| `nonzero()` | 已填充的单元格，以对齐的 `(predicted, true, count)` 数组给出 |
+| `class_accuracy()` | 逐类别，其实例被判为该类别的占比；对于检测，只统计找到的目标 |
+| `plot(normalize=True, save_dir="")` | 写出 `confusion_matrix_normalized.png`，用 `normalize=False` 则写出 `confusion_matrix.png`，并返回路径 |
+
+超过 2,000 个类别时，不会构建稠密的分类矩阵：`matrix`、`summary()`、`to_*()` 导出和 `plot()` 会抛错，而 `tp_fp()`、`nonzero()` 和 `class_accuracy()` 仍然可用。
+
+这个类是 `libreyolo.validation.ConfusionMatrix`，构造方式为 `ConfusionMatrix(nc, iou_thres=0.5, conf_thres=0.25, *, names=None, task="detect")`，其中 `task` 是 `"detect"` 或 `"classify"`。
+
+## 逐类别的查准率、查全率和 F1
+
+检测和分割的结果带有每个类别在各个置信度阈值上的查准率、查全率和 F1，在 IoU 0.5 下匹配。
+
+<code-tabs name="curves" />
+
+`box.px` 保存 1000 个置信度，在 `[0, 1]` 上均匀分布。`box.p_curve`、`box.r_curve` 和 `box.f1_curve` 是 `(classes, 1000)` 的数组，每一行对应 `box.ap_class_index` 的一个条目，即在这个划分里有真值的类别索引，按升序排列。`box.p`、`box.r` 和 `box.f1` 是每个类别在使这些类别平均 F1 最大的置信度上的值。分割时它们全部由检测框算出。运行没有产生曲线时，它们是空数组。
+
+## 逐图像检测框指标
+
+检测和分割的结果保持字典兼容，同时提供 `results.box.image_metrics`。每个文件名对应 `precision`、`recall`、`f1`、`tp`、`fp` 和 `fn`，即使关闭可视化，也使用可视化的匹配规则。这里分割统计的是检测框。文件基名重复时，第一次出现后改用完整路径。分母为零时返回 0.0。这些记录不会在分布式 rank 之间汇总。
 
 ## 速度键
 
@@ -233,10 +304,13 @@ FOMO 是那个什么都不改变的例外：它的验证器一直都在算这个
 `save_json=True` 对目标检测写出 `predictions.json`，对分割写出
 `predictions_bbox.json` 和 `predictions_masks.json`。OBB 不支持它，而且会明说。
 
-`save_plots=True` 会写进一个 `plots/` 子目录。目标检测会拿到 `box_metrics.png`、
-各类别的 AP 和查全率图表、查准率-查全率曲线和置信度曲线、一张混淆矩阵，装了
-OpenCV 时还有标注过的样本图像。分割会加上每一项在掩码那侧的副本，姿态有自己的一套
-指标和曲线。其他验证器没有实现图表；分类、语义分割、全景分割、深度估计、法向估计、
+`save_plots=True`，或者它的别名 `plots=True`，会写进一个 `plots/` 子目录，并且需要
+matplotlib，`pip install "libreyolo[plots]"` 会装上它。目标检测会拿到 `box_metrics.png`、
+各类别的 AP 和查全率图表、查准率-查全率曲线和置信度曲线、`f1_conf_box.png` 里的逐类别
+F1 曲线、`confusion_matrix.png` 里以计数表示的混淆矩阵、`confusion_matrix_normalized.png`
+里以各真实类别占比表示的混淆矩阵，装了 OpenCV 时还有标注过的样本图像。分割会加上指标图表、
+逐类别图表以及查准率-查全率曲线和置信度曲线在掩码那侧的副本；F1 曲线和混淆矩阵仍然是检测框层面的。
+姿态有自己的一套指标和曲线。分类会写出这两个混淆矩阵文件，超过 2,000 个类别时除外。其他验证器没有实现图表；语义分割、全景分割、深度估计、法向估计、
 边缘检测、图像复原、抠图、OCR、OBB 和点检测在那里什么都不写。画图失败只会警告，
 绝不会中止这次运行。
 
@@ -257,7 +331,3 @@ OpenCV 时还有标注过的样本图像。分割会加上每一项在掩码那�
 ## 相关
 
 - [数据集](/docs/train/datasets)，验证器读取的划分键和格式都在那里。
-
-## 逐图像检测框指标
-
-检测和分割的结果保持字典兼容，同时提供 `results.box.image_metrics`。每个文件名对应 `precision`、`recall`、`f1`、`tp`、`fp` 和 `fn`，即使关闭可视化，也使用可视化的匹配规则。这里分割统计的是检测框。文件基名重复时，第一次出现后改用完整路径。分母为零时返回 0.0。这些记录不会在分布式 rank 之间汇总。

@@ -17,7 +17,7 @@ keywords:
   - libreyolo cli
   - libreyolo senza internet
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## Con quale modello conviene iniziare?
@@ -94,9 +94,13 @@ te lo dice prima ancora che tu ci provi. Vedi [concetti fondamentali](/docs/conc
 Un dizionario con i nomi delle metriche come chiavi. Per il rilevamento le chiavi
 includono `metrics/precision`, `metrics/recall`, `metrics/mAP50` e
 `metrics/mAP50-95`, e i risultati di rilevamento e segmentazione portano anche i
-risultati per immagine su `metrics.box`. Gli altri task restituiscono le chiavi che hanno senso per loro, come
-`metrics/accuracy_top1` per la classificazione o `metrics/PQ`, `metrics/SQ` e
-`metrics/RQ` per la segmentazione panottica.
+risultati per immagine e le curve di precisione, recall e F1 per classe su
+`metrics.box`. I risultati di rilevamento, segmentazione e classificazione
+portano `metrics.confusion_matrix`, e la classificazione aggiunge `metrics.top1`
+e `metrics.top5`. Gli altri task restituiscono le chiavi che hanno senso per loro,
+come `metrics/accuracy_top1` per la classificazione o `metrics/PQ`, `metrics/SQ`
+e `metrics/RQ` per la segmentazione panottica. Vedi
+[Validazione e metriche](/docs/train/validation).
 
 ## Come eseguo su una cartella, un video o una webcam?
 

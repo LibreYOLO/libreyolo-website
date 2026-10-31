@@ -2,11 +2,12 @@
 title: Giấy phép
 seo_title: 'Giấy phép LibreYOLO: mã nguồn và trọng số'
 description: >-
-  Mã nguồn riêng của LibreYOLO dùng MIT. Mã upstream được đưa vào và checkpoint đã công bố có giấy phép riêng,
-  trong đó một số chỉ cho phép phi thương mại.
+  Mã nguồn riêng của LibreYOLO dùng MIT. Mã upstream được đưa vào và checkpoint
+  đã công bố có giấy phép riêng, trong đó một số chỉ cho phép phi thương mại.
 lead: >-
-  LibreYOLO chứa ba thành phần được cấp phép riêng: mã nguồn của chính nó, mã upstream được đưa vào một họ mô
-  hình và checkpoint huấn luyện sẵn. Chúng thường không dùng cùng giấy phép.
+  LibreYOLO chứa ba thành phần được cấp phép riêng: mã nguồn của chính nó, mã
+  upstream được đưa vào một họ mô hình và checkpoint huấn luyện sẵn. Chúng
+  thường không dùng cùng giấy phép.
 keywords:
   - giấy phép libreyolo
   - thư viện thị giác máy tính mit
@@ -14,7 +15,7 @@ keywords:
   - giấy phép checkpoint mô hình
   - apache 2.0 detection
 last_verified: 1.6.0
-source_hash: 03e83b82bd2da258
+source_hash: 3204f1f80370c85a
 ---
 ## Mã nguồn riêng của LibreYOLO
 
@@ -23,8 +24,10 @@ exporter, loader dataset cùng script chuyển đổi dưới `weights/`. Bạn 
 dùng trong sản phẩm thương mại hoặc nguồn đóng; hãy giữ dòng bản quyền và nội
 dung giấy phép cùng mọi bản sao được phân phối lại, và nghĩa vụ dừng ở đó.
 
-Quyền cấp phép chỉ áp dụng cho mã nguồn. File
-[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) nói rõ:
+Quyền cấp phép chỉ áp dụng cho mã nguồn.
+[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE) chỉ chứa
+văn bản MIT, và ghi chú về trọng số ở đầu
+[`NOTICE`](https://github.com/LibreYOLO/libreyolo/blob/release/NOTICE) nói rõ:
 
 > Các giấy phép đó khác nhau và không phải tất cả đều thông thoáng: một số
 > trọng số công bố chỉ dành cho mục đích phi thương mại hoặc bị hạn chế theo
@@ -51,8 +54,10 @@ BSD-3-Clause bao phủ mọi thứ bắt nguồn từ torchvision: Faster R-CNN,
 R-CNN, FCOS, RetinaNet, SSD300, AlexNet, VGG, FCN và DeepLabv3.
 
 MIT bao phủ một nhóm nhỏ hơn, gồm NAFNet từ Megvii, CenterNet từ Xingyi Zhou và
-YOLOv7 được chính các tác giả Kin-Yiu Wong cùng Hao-Tang Tsui tại
-MultimediaTechLab phát hành lại. Các họ YOLOv1 đến YOLOv4 tái tạo kiến trúc từ
+YOLOv7 và YOLOv9 được chính các tác giả Kin-Yiu Wong cùng Hao-Tang Tsui tại
+MultimediaTechLab phát hành lại. Các khối xây dựng YOLOv9, các tower head phát
+hiện mà YOLO9-E2E và YOLO9-P2 dùng chung, các nhánh PGI và phép trộn mixup của
+YOLOv9 được chuyển từ bản phát hành MIT đó. Các họ YOLOv1 đến YOLOv4 tái tạo kiến trúc từ
 dự án Darknet của Joseph Redmon và với YOLOv4 là Alexey Bochkovskiy. Darknet
 thuộc phạm vi công cộng nên các họ đó không có nghĩa vụ nào.
 
@@ -111,7 +116,7 @@ căn cứ này là ngụ ý chứ không phải được cấp riêng cho checkp
 cảnh báo của torchvision rằng điều khoản mô hình huấn luyện sẵn có thể bắt
 nguồn từ dữ liệu huấn luyện.
 
-Trọng số được huấn luyện sẵn của ConvNeXt V2 và LeVJEPA dùng CC-BY-NC-4.0. Moondream 3 dùng BSL 1.1, bản sao Dome-DETR giới hạn ở nghiên cứu học thuật, còn biến thể `obj2coco` của EdgeCrafter và DetAny3D có điều khoản trọng số hạn chế. Trang mô hình ghi các công bố bên cạnh giấy phép mã nguồn. Checkpoint COCO gốc của EdgeCrafter giữ giấy phép Apache-2.0 đã ghi. Bản sao MiDaS giữ giấy phép MIT của nhà phát hành.
+Trọng số được huấn luyện sẵn của ConvNeXt V2 và LeVJEPA dùng CC-BY-NC-4.0. Moondream 3 dùng BSL 1.1, bản sao Dome-DETR giới hạn ở nghiên cứu học thuật, còn biến thể `obj2coco` của EdgeCrafter và DetAny3D có điều khoản trọng số hạn chế. Bộ mã hóa văn bản Gemma 2 đi kèm của SANA-Sprint vẫn thuộc Gemma Terms of Use của Google, và bộ mã hóa DINOv3 mà Speridlabs Idol đọc từ bản sao `LibreYOLO/LibreDINOv3vith16plus` vẫn thuộc DINOv3 License của Meta. Trang mô hình ghi các công bố bên cạnh giấy phép mã nguồn. Checkpoint COCO gốc của EdgeCrafter giữ giấy phép Apache-2.0 đã ghi. Bản sao MiDaS giữ giấy phép MIT của nhà phát hành.
 
 Tóm tắt trọng số tuân theo giấy phép do nhà phát hành checkpoint công bố. Tên dataset huấn luyện không xác lập thêm giấy phép cho checkpoint.
 

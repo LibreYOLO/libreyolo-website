@@ -12,8 +12,10 @@ keywords:
   - libreyolo 检查点元数据
   - 量化 quant 清单
   - wrap_libreyolo_checkpoint
-last_verified: "1.6.0"
-verification: "对应 libreyolo 仓库 v1.6.0 的 docs/checkpoint_schema.md，并与 libreyolo/utils/serialization.py 和 BaseModel.save 交叉核对。"
+last_verified: 1.6.0
+verification: >-
+  对应 libreyolo 仓库 v1.6.0 的 docs/checkpoint_schema.md，并与
+  libreyolo/utils/serialization.py 和 BaseModel.save 交叉核对。
 snippets:
   usage:
     - label: 读出检查点里的元数据
@@ -43,7 +45,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## 结构 v1.0
@@ -86,6 +88,8 @@ source_hash: 177904564cf0a488
 矩形检查点为旧版读取方保留标量 `imgsz`，取值为 `max(imgsz_h, imgsz_w)`，并额外
 写出带真实尺寸的 `imgsz_h` 和 `imgsz_w`。理解矩形字段的读取方必须优先使用它们，
 而不是那个标量。有固定矩形契约的家族，例如 HRNet 姿态，会拒绝不兼容的运行时尺寸。
+
+分类检查点可以加上 `interpolation`，即模型的缩放滤波器：`"bilinear"`、`"bicubic"`、`"nearest"` 或 `"bilinear_no_antialias"`。`save()`、`best.pt` 和 `last.pt` 会写出它，加载时会恢复它，所以训练、`val()`、`predict()`、INT8 校准和导出都沿用检查点保存时的滤波器。没有这个键的检查点沿用家族默认值，任何其他取值都是无效的。前三种用 Pillow 缩放，Pillow 在缩小时会做抗锯齿；`"bilinear_no_antialias"` 是普通的双线性，使用半像素中心，不做抗锯齿。
 
 这个结构是刻意保持扁平的，`model` 也是刻意做成状态字典的。
 
@@ -182,8 +186,8 @@ RF-DETR 可在 `kpt_names` 旁记录 `num_keypoints_per_class`。数量与数据
 图消费的是一份已经裁好的人体裁剪，并且不含检测器。HRNet 的运行时导出要求该取值。
 
 分类导出可以加上 `crop_pct`，即中心裁剪比例的浮点值，它裁剪前的缩放目标是
-`round(imgsz / crop_pct)`，缺失时默认为 `0.875`；以及 `interpolation`，取
-`"bilinear"` 或 `"bicubic"`，默认为 `"bilinear"`。
+`floor(imgsz / crop_pct)`，缺失时默认为 `0.875`；以及 `interpolation`，取上面
+四种检查点取值之一，缺失时默认为 `"bilinear"`；读取方会拒绝任何其他取值。
 
 ExecuTorch 导出把扁平元数据写进必需的 `<program>.pte.json` 附属文件。v1 契约是
 CPU、FP32、batch 为 1 和固定的输入画布，此外还要求 `executorch_version`、等于

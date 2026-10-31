@@ -1,23 +1,57 @@
 ---
-title: Nâng cấp lên 1.6.0
-seo_title: Nâng cấp LibreYOLO 1.5.0 lên 1.6.0
+title: Nâng cấp lên 1.7.0
+seo_title: Nâng cấp LibreYOLO 1.6.0 lên 1.7.0
 description: >-
-  Các bước chuyển đổi tiền xử lý, mặc định huấn luyện, thư mục chạy, tài nguyên
-  đã ghim, QAT và loader dữ liệu trong LibreYOLO 1.6.0.
+  Các bước chuyển đổi cho checkpoint, tên module và công thức huấn luyện YOLO9,
+  thư mục chạy của CLI, confusion matrix và các lỗi mới trong LibreYOLO 1.7.0.
 lead: >-
-  Phiên bản 1.6.0 thay đổi tiền xử lý, mặc định huấn luyện và xử lý checkpoint.
-  Đánh giá lại kết quả chuẩn đã lưu và đặt rõ giá trị mặc định trước đây khi tái
-  tạo lần chạy cũ.
+  Phiên bản 1.7.0 vẫn nạp được các checkpoint YOLO9 cũ với cùng box dạng float.
+  Nó thay đổi huấn luyện họ YOLO9, các tên mà mã nhìn thấy bên trong mạng, và
+  một vài hợp đồng của validation và predict.
 keywords:
   - nâng cấp libreyolo
-  - chuyển sang libreyolo 1.5.0
-  - allow_experimental bị xóa
+  - chuyển sang libreyolo 1.6.0
   - thay đổi không tương thích libreyolo
-  - yolox bn eps
-  - faster coco eval mặc định
-last_verified: 1.6.0
-source_hash: e9c7cb5271aa4a81
+  - tên module yolo9
+  - clip_max_norm
+  - confusion matrix
+last_verified: 1.7.0
+source_hash: 895bcd7425f0052f
 ---
+## 1.6.0 lên 1.7.0
+
+- Checkpoint YOLO9, YOLO9-E2E và YOLO9-P2 do 1.7.0 lưu dùng tên tensor mới và không nạp được trong 1.6.x: 1.6.x nạp checkpoint YOLO9 và YOLO9-P2 kèm cảnh báo thiếu khóa rồi không dự đoán ra box nào, và phát sinh lỗi không khớp `model_family` với checkpoint YOLO9-E2E. Hãy nâng cấp mọi môi trường đọc chúng. Checkpoint float, lượng tử hóa và huấn luyện do các bản phát hành trước ghi vẫn nạp được trong 1.7.0, và bản xuất ONNX không bị ảnh hưởng.
+
+- Mã truy cập vào `model.model` của một mô hình họ YOLO9 sẽ thấy tên module của MultimediaTechLab/YOLO, không có alias. `DDetect` là `YOLO9Head` (`anchor_convs` / `class_convs`), `RepConvN` là `RepConv`, `RepNBottleneck` là `Bottleneck`, `DFL` là `Anchor2Vec` (`anchor2vec`), `nc` là `num_classes`, và các lớp con của block là `conv1`/`conv2`/`bottleneck`. Trong YOLO9-E2E, `YOLO9E2EDetect` là `YOLO9E2EHead` và `one2one_cv2` / `one2one_cv3` là `one_to_one_anchor_convs` / `one_to_one_class_convs`. `LibreYOLO9Model.fuse()`, `RepConvN.fuse_convs()`, `Conv.forward_without_bn()`, `Concat` và `yolo9.utils.decode_boxes` đã bị xóa. [Changelog](/docs/changelog) liệt kê mọi lần đổi tên.
+
+- Tên node ONNX theo tên module mới trong head, backbone và neck, chẳng hạn `/head/anchor_convs.0/...`. Hãy cập nhật các công cụ dựa vào tên node, như cấu hình end-node của Hailo. Đầu vào, đầu ra và tên đầu ra của mô hình không đổi.
+
+- Một lần tinh chỉnh YOLO9 từ trọng số không có tensor PGI, bao gồm `LibreYOLO9{t,s,m,c}.pt` đã công bố, chỉ huấn luyện head chính, như trong 1.5.0; 1.6.0 đã gắn một nhánh PGI khởi tạo ngẫu nhiên ở `aux_weight=0.25`. Trọng số có chứa tensor PGI, và các lần chạy từ đầu, vẫn huấn luyện với PGI. Truyền `aux_weight=0.25` để vẫn gắn một nhánh mới, hoặc `aux_weight=0` để buộc tắt nó.
+
+- Khi PGI được gắn, YOLO9-m và YOLO9-c dựng nhánh phụ của MultimediaTechLab: 12.8M (m) và 25.7M (c) tham số chỉ dùng khi huấn luyện ở 80 lớp đối tượng, tăng từ 7.5M và 10.2M, nên huấn luyện PGI ở các kích thước này cần nhiều bộ nhớ và thời gian hơn cho mỗi bước. Một checkpoint huấn luyện m/c của 1.6.0 tiếp tục và tinh chỉnh với nhánh mà nó đã được huấn luyện. Inference và YOLO9-t/s không đổi.
+
+- YOLO9, YOLO9-E2E và YOLO9-P2 cắt chuẩn L2 của gradient ở 10, và bộ gán trong huấn luyện của chúng chấm điểm anchor ở fp32, nên các mẫu dương được chọn dưới fp16 AMP có thể khác. Truyền `clip_max_norm=0` để có cách cắt của 1.6.0; một lần chạy bắt đầu trong 1.6.0 và tiếp tục trong 1.7.0 cũng cắt trừ khi bạn truyền tham số này. Việc gán ở fp32 không có công tắc.
+
+- Một giá trị `perspective` khác không làm méo theo độ dịch góc ở mọi họ dùng phép affine warp dùng chung (YOLO9 cùng các biến thể E2E và P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR và RT-DETRv2), kể cả các lần chạy tiếp tục từ checkpoint 1.6.0 có đặt giá trị này. Các giá trị từ `0.002` trở lên cho cùng mức méo tối đa, và giá trị âm phát sinh `ValueError`. Không thiết lập nào tái tạo được phép méo của 1.6.0; mặc định `perspective=0` không đổi.
+
+- Pipeline mosaic của YOLO9 lấy tỉ lệ mixup từ Beta(1, 1) thay vì Beta(32, 32), không có thiết lập nào cho giá trị cũ. Huấn luyện YOLOv7 mặc định thay đổi, vì YOLOv7 bật mixup theo mặc định. YOLO9, YOLO9-E2E, YOLO9-P2, RT-DETR và RT-DETRv2 chỉ thay đổi khi mixup được bật.
+
+- `libreyolo train` không có `name=` ghi các lần chạy EC, D-FINE, SegFormer và LingBot-Vision vào `runs/train/ec_exp`, `dfine_exp`, `segformer_exp` và `lingbotvision_exp` thay vì `runs/train/exp`, các probe V-JEPA 2 vào `runs/train/train`, và các lần chạy YOLO9-P2 vào `runs/train/yolo9_exp`. Truyền `name=exp` để dùng đường dẫn cũ, hoặc `name=yolo9_p2_exp` cho YOLO9-P2.
+
+- `libreyolo train` khởi động D-FINE, SegFormer và LingBot-Vision từ công thức riêng của chúng. Với D-FINE đó là 132 epoch, `lr0=2e-4`, `weight_decay=1e-4`, 2 epoch warmup và không có tăng cường mosaic, mixup, HSV hay affine. Để gửi các giá trị mà 1.6.0 đã gửi, truyền `epochs=300 optimizer=sgd lr0=0.01 weight_decay=5e-4 warmup_epochs=5 mosaic=1.0 mixup=1.0 hsv_prob=1.0 degrees=10 translate=0.1 shear=2.0`.
+
+- `libreyolo.validation.ConfusionMatrix` lập chỉ mục `matrix[predicted, true]` (trước đây là `[actual, predicted]`), đếm các detection ở `conf_thres=0.25` (trước đây là 0.15), chỉ nhận `names=` và `task=` dưới dạng đối số từ khóa, và `matrix` của nó không còn gán lại được. Hãy chuyển vị mã đã lập chỉ mục ma trận cũ, và truyền `conf_thres=0.15` để có số đếm cũ. `plots=True` ghi số đếm vào `confusion_matrix.png` và biểu đồ đã chuẩn hóa vào `confusion_matrix_normalized.png`.
+
+- `predict(agnostic_nms=True)` loại bỏ các box chồng lấn xuyên các lớp đối tượng thay vì phát cảnh báo. Các tác vụ không có box phát sinh `ValueError`, `LibreEnsemble` và HRNet phát sinh `NotImplementedError`, và tầng SAM từ chối từ khóa này bằng `TypeError`; hãy bỏ đối số khỏi các lời gọi đó.
+
+- Một `interpolation` của bộ phân loại không xác định phát sinh `ValueError`, kể cả các chế độ torchvision `LANCZOS`, `BOX`, `HAMMING` và `NEAREST_EXACT`. Hãy dùng `bilinear`, `bicubic`, `nearest` hoặc `bilinear_no_antialias`.
+
+- Hãy chạy lại validation trước khi so sánh với số liệu của 1.6.0 cho `val(single_cls=True)` trên một mô hình được huấn luyện với nhiều lớp đối tượng, các dataset phân đoạn trộn lẫn hàng chỉ có box và hàng polygon, và RTMDet-Ins, vốn giữ tối đa `max_det=300` mask mỗi ảnh theo mặc định; truyền `max_det=100` để có thiết lập của MMDetection.
+
+- Khi không có `libreyolo[rfdetr]`, các lời gọi CLI với tên mô hình RF-DETR hoặc DINOv2 thoát với mã lỗi JSON `model_load_failed` thay vì `model_not_found`, và thông báo nêu tên `pip install libreyolo[rfdetr]`.
+
+Xem [changelog](/docs/changelog) để biết toàn bộ bản phát hành.
+
 ## 1.5.0 lên 1.6.0
 
 - Nâng môi trường đang ghim dưới ONNX Runtime 1.18 lên `onnxruntime>=1.18.0` trước khi cài extra ONNX.

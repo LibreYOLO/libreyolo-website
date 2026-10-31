@@ -19,7 +19,7 @@ keywords:
   - instanzsegmentierung python
   - DETR
   - d-fine fine-tuning
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -145,7 +145,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: "afc2a4900f773c9d"
+source_hash: bfc9280d61063ff7
 ---
 
 ## Installation
@@ -202,7 +202,7 @@ Das Training startet für beide Aufgaben von einem publizierten Checkpoint.
 
 <code-tabs name="train" />
 
-Ohne weitere Angaben trainiert der Trainer 132 Epochen mit `lr0=2e-4`, `amp=True` und `amp_dtype="float16"`, einer Batch-Größe von 16 und Early Stopping nach 50 Epochen ohne Verbesserung. Erkennungsgewichte sind ein zulässiger Ausgangspunkt für das Segmentierungstraining, aber nur als ausdrücklicher Transfer: Der Masken-Head beginnt untrainiert und würde sonst bedeutungslose Masken zurückgeben. `task=segment` in der CLI erlaubt diesen Transfer. Der Python-Weg ist enger: `LibreDFINE` muss direkt mit `allow_detect_to_segment_transfer=True` erstellt werden, weil die Factory `LibreYOLO()` dieses Argument nicht annimmt. Die direkte Erstellung lädt nichts herunter, daher muss die Gewichtsdatei bereits lokal vorliegen.
+Ohne weitere Angaben trainiert der Trainer 132 Epochen mit `lr0=2e-4`, `amp=True` und `amp_dtype="float16"`, einer Batch-Größe von 16 und Early Stopping nach 50 Epochen ohne Verbesserung. `libreyolo train` startet für beide Aufgaben mit demselben Rezept: AdamW mit flachem Cosinus-Plan, `weight_decay=1e-4`, 2 Warmup-Epochen, ein Gradientennorm-Clipping von 0.1 und keine Mosaic-, MixUp-, HSV- oder affine Augmentation. Ohne `name=` landen die Läufe in `runs/train/dfine_exp`. Erkennungsgewichte sind ein zulässiger Ausgangspunkt für das Segmentierungstraining, aber nur als ausdrücklicher Transfer: Der Masken-Head beginnt untrainiert und würde sonst bedeutungslose Masken zurückgeben. `task=segment` in der CLI erlaubt diesen Transfer. Der Python-Weg ist enger: `LibreDFINE` muss direkt mit `allow_detect_to_segment_transfer=True` erstellt werden, weil die Factory `LibreYOLO()` dieses Argument nicht annimmt. Die direkte Erstellung lädt nichts herunter, daher muss die Gewichtsdatei bereits lokal vorliegen.
 
 `lora=True` gilt für die Detektion. Das Segment-Training lehnt es ab und
 verweist stattdessen auf `freeze='backbone'`, weil der Mask-Head nicht mit

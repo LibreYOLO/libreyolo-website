@@ -61,7 +61,7 @@ snippets:
         # entrambi valgono 0.25. Solo Grounding DINO accetta text_threshold;
         # gli altri sollevano un'eccezione.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Definizione
@@ -137,7 +137,7 @@ ciò che produce i box: le famiglie di questa pagina sono rilevatori
 discriminativi che emettono punteggi direttamente, mentre la fascia VLM li
 genera.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) e [North Micro Vision](/docs/models/northmicrovision) ampliano le opzioni di rilevamento di `LibreVLM`. [Molmo2](/docs/models/molmo2) restituisce punti. Usa [LibreGround](/docs/reference/ground-api) per query che trasformano istruzioni in clic invece di un vocabolario di rilevamento.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) e [WeVisOne-VL](/docs/models/wevisone-vl) ampliano le opzioni di rilevamento di `LibreVLM`. [Molmo2](/docs/models/molmo2) restituisce punti. Usa [LibreGround](/docs/reference/ground-api) per query che trasformano istruzioni in clic invece di un vocabolario di rilevamento.
 
 ## Predizione
 

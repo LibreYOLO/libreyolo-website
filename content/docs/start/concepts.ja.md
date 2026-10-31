@@ -16,7 +16,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: 標準タスク
-    value: 20
+    value: 22
   - label: サポートティア
     value: Flagship、Core、Supported、Inference only、Museum、Sibling tier
 snippets:
@@ -45,12 +45,12 @@ snippets:
         # "det"は"detect"へ "semantic-segmentation"は"semantic"へ解決される
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## タスク
 
-タスクはモデルが返すものを表します。LibreYOLOには20個の標準タスク名があり、それぞれ出力を保持する`Results`オブジェクト上のフィールド名に対応します。
+タスクはモデルが返すものを表します。LibreYOLOには22個の標準タスク名があり、それぞれ出力を保持する`Results`オブジェクト上のフィールド名に対応します。
 
 | タスク | 戻り値 |
 |---|---|
@@ -74,6 +74,8 @@ source_hash: c745a3c602db00ea
 | `mesh` | 検出した人物ごとの姿勢付き3D人体 |
 | `detect3d` | クラスと信頼度を持つ、カメラ座標系の3Dボックス |
 | `act` | カメラフレームとロボットの状態から予測したロボットのアクションチャンク |
+| `generate` | テキストプロンプトから生成したRGB画像。再現に必要なプロンプト、シード、呼び出しパラメータを含む |
+| `generate3d` | 1枚の画像から生成した、3Dガウシアンスプラットで表す1つのオブジェクト |
 
 これらの名前はチェックポイントのメタデータとファイル名に現れます。タスクを渡す場所では一般的な別名も受け付け、他の処理より先に正規化します。`detection`と`det`は`detect`、`keypoints`は`pose`、`cls`は`classify`、`deblur`、`denoise`、`super-resolution`はすべて`restore`、`face-recognition`と`reid`は`embed`になります。認識できない名前は暗黙にデフォルトを使用せず例外を送出します。
 
@@ -129,7 +131,7 @@ Libre<FAMILY><size>[-<task>].pt
 
 接尾辞なしのタスクがないファミリーでは接尾辞を必須にできるため、接尾辞なしの名前は有効なチェックポイントとして受け付けられません。デフォルト以外のデータセットで学習した重みを公開するファミリーでは、さらにデータセット名を接尾辞として追加します。そのバリアント名はファイルのダウンロード元となるリポジトリ名にも含まれます。
 
-このスキーマの対象外となる3つのティアがあります。プロンプト可能セグメンテーション、Vision-Language、オープンボキャブラリー検出の各ファミリーはチェックポイントファクトリへ登録されず、`Libre<FAMILY><size>.pt`ファイルを生成しません。その接頭辞は、ダウンロード済みのHugging Faceスナップショットまたはプロンプト可能チェックポイントを指します。アップストリームブランドの大文字と小文字は意図的にそのまま維持されます。
+このスキーマの対象外となるティアがいくつかあります。プロンプト可能セグメンテーション、Vision-Language、オープンボキャブラリー検出、`LibreGen`生成の各ファミリーはチェックポイントファクトリへ登録されず、`Libre<FAMILY><size>.pt`ファイルを生成しません。その接頭辞は、ダウンロード済みのHugging Faceスナップショットまたはプロンプト可能チェックポイントを指します。アップストリームブランドの大文字と小文字は意図的にそのまま維持されます。
 
 ## タスクの決定方法
 

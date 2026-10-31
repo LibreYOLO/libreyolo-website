@@ -123,7 +123,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Instalacja
@@ -143,9 +143,11 @@ Przy pierwszym użyciu wagi są pobierane z Hugging Face i zapisywane w lokalnej
 Zwracany obiekt `Results` jest taki sam dla każdej rodziny, więc zamiana na
 inny detektor wymaga zmiany jednego wiersza. Nazwa pliku z przyrostkiem `-seg`
 samoczynnie wybiera zadanie RTMDet-Ins, a `result.masks` zawiera wtedy maski
-instancji obok ramek. Parametr `conf` ustawia próg pewności, a `iou` próg NMS.
-Informacje o źródłach, strumieniowaniu i obsłudze wyników znajdziesz w sekcji
-[predykcja](/docs/predict).
+instancji obok ramek. Parametr `conf` ustawia próg pewności, a `iou` próg NMS. `max_det` obowiązuje
+w podanej wartości dla obu zadań, domyślnie do 300 ramek lub masek na obraz;
+konfiguracja testowa RTMDet-Ins w MMDetection zachowuje 100, co odtwarza
+`max_det=100`. Informacje o źródłach, strumieniowaniu i obsłudze wyników
+znajdziesz w sekcji [predykcja](/docs/predict).
 
 ## Warianty
 

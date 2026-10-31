@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Definicja
@@ -196,7 +196,7 @@ wyraźnie większego opóźnienia na obraz niż w wyspecjalizowanym detektorze. 
 wagi są przeznaczone do użytku niekomercyjnego. Informacje o licencji znajdują
 się na stronie modelu.
 
-[Molmo2](/docs/models/molmo2) i [Moondream](/docs/models/moondream) zwracają punkty uwarunkowane tekstem. [LibreGround](/docs/reference/ground-api) używa instrukcji, aby wybrać najwyżej jedno kliknięcie na zapytanie za pomocą ShowUI, Florence-2 lub Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) i [WeVisOne-VL](/docs/models/wevisone-vl) zwracają punkty uwarunkowane tekstem. [LibreGround](/docs/reference/ground-api) używa instrukcji, aby wybrać najwyżej jedno kliknięcie na zapytanie za pomocą ShowUI, Florence-2 lub Qwen3-VL.
 
 ## Predykcja
 

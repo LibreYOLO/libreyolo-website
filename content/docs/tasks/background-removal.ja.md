@@ -92,7 +92,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## 定義
@@ -112,6 +112,8 @@ BiRefNetとFeyNobgは同じ順伝播経路を共有します。
 2つの重みには異なるライセンスが適用されます。どちらもモデルページに記載されており、特定チェックポイントのHugging Faceリポジトリにあるライセンスが正式な情報源です。
 
 [BEN2](/docs/models/ben2)は、固定1024の背景除去を追加します。[ViTMatte](/docs/models/vitmatte)は、画像と、背景、未確定、前景のピクセルを表す3段階の`trimap=`を受け取ります。
+
+[WeVisOne-VL](/docs/models/wevisone-vl)はテキストでプロンプトします。`LibreVLM("wevisone-vl", names=["person"], task="matte")`は、フレーズに一致するすべてのインスタンスのアルファマットの和集合を返します。これはビジョン言語モデルで、`vlm`追加パッケージが必要であり、`val()`と`export()`は例外を送出します。
 
 ## 推論
 

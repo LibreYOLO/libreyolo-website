@@ -135,7 +135,7 @@ and every prediction is a generation pass over a 7B model, so expect noticeably
 higher per-image latency than a purpose-built detector. Its weights are
 non-commercial; the license is on its page.
 
-[Molmo2](/docs/models/molmo2) and [Moondream](/docs/models/moondream) provide text-conditioned points. [LibreGround](/docs/reference/ground-api) uses an instruction to select at most one click per query with ShowUI, Florence-2 or Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) and [WeVisOne-VL](/docs/models/wevisone-vl) provide text-conditioned points. [LibreGround](/docs/reference/ground-api) uses an instruction to select at most one click per query with ShowUI, Florence-2 or Qwen3-VL.
 
 ## Predict
 

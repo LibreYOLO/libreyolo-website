@@ -17,7 +17,6 @@ keywords:
   - посчитать объекты на фото python
   - локализация объектов точками
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Предсказание точек и их подсчёт
@@ -130,7 +129,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Определение
@@ -170,7 +169,7 @@ extra `vlm`, она создаётся как `LibreLocateAnything`, а не ч�
 специализированного детектора. Его веса некоммерческие; лицензия — на его
 странице.
 
-[Molmo2](/docs/models/molmo2) и [Moondream](/docs/models/moondream) возвращают точки по текстовому условию. [LibreGround](/docs/reference/ground-api) использует инструкцию, чтобы выбрать не более одного клика на запрос с ShowUI, Florence-2 или Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) и [WeVisOne-VL](/docs/models/wevisone-vl) возвращают точки по текстовому условию. [LibreGround](/docs/reference/ground-api) использует инструкцию, чтобы выбрать не более одного клика на запрос с ShowUI, Florence-2 или Qwen3-VL.
 
 ## Предсказание
 

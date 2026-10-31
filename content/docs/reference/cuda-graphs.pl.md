@@ -72,7 +72,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## Co jest przechwytywane
@@ -144,8 +144,7 @@ próby wyniki są identyczne bitowo.
 
 ## Obsługa trenowania
 
-W tym wydaniu obsługa przechwytywania podczas trenowania wzrosła z dwóch do
-24 rodzin w pięciu zadaniach.
+Przechwytywanie podczas trenowania obejmuje 24 rodziny w pięciu zadaniach.
 
 | Zadanie | Rodziny |
 |---|---|

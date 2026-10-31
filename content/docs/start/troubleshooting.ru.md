@@ -16,7 +16,7 @@ keywords:
   - cuda out of memory обучение yolo
   - libreyolo не работает
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 Ошибки сгруппированы по тексту, который вы видите. Если вашего сообщения здесь
@@ -32,6 +32,16 @@ source_hash: f2faaab56a2f0415
 выводится точная команда pip, которая его включает, так что сопоставлять пакет с
 extra вручную не нужно. `libreyolo models --json` выводит то же самое в виде
 объекта.
+
+RF-DETR и DINOv2 требуют `libreyolo[rfdetr]`, и в их сообщении назван extra.
+Без него `LibreYOLO("LibreRFDETRn.pt")`, имена весов DINOv2 и
+`libreyolo predict model=rfdetr-n` останавливаются со строкой установки, а CLI
+завершается с `model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 На [странице установки](/docs/install) перечислены все extra и то, что каждый из
 них покрывает.
@@ -107,12 +117,18 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 опубликованным чекпойнтом, даёт несуществующий URL. В таблице чекпойнтов на
 странице каждой модели перечислены точные опубликованные имена файлов.
 
-## Обучение зависает или перезапускается в Windows или macOS
+## train() или val() вызван на верхнем уровне скрипта
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 В Windows нет `fork`, а Python на macOS по умолчанию его не использует,
-поэтому воркеры загрузчика данных запускаются, заново импортируя ваш скрипт. Без защиты `if __name__ == "__main__":` каждый воркер
-заново выполняет ваш вызов обучения, что либо приводит к взаимной блокировке,
-либо бесконечно порождает новые процессы.
+поэтому воркеры загрузчика данных запускаются, заново импортируя ваш скрипт.
+Методы запуска `spawn` и `forkserver` делают то же самое на любой платформе. Без
+защиты `if __name__ == "__main__":` каждый воркер выполнил бы ваш вызов `train()`
+или `val()` снова, поэтому каждый из них останавливается на этом вызове, печатает
+эту строку с именем вызова, а скрипт завершается с ошибкой.
 
 ```python
 def main():

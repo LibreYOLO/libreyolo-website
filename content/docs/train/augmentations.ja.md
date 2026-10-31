@@ -69,7 +69,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## 設定値の指定
@@ -126,9 +126,9 @@ YOLO-NASは独自の形状です。mosaicは一切なく、サンプルごとの
 制限されず独立して適用されます。`mosaic_scale`の値はアフィン変換のスケール範囲として再利用
 されます。
 
-SegFormerとNAFNetは、それぞれタスク固有のパイプラインを実行します。そのランダム性は設定可能
-ではなくファミリー内で固定されています。SegFormerで有効な設定値は、`mosaic_scale`と
-`hsv_prob`ではなくクラス属性`semantic_scale_jitter`と`semantic_hsv_prob`です。NAFNetの
+SegFormer、LingBot-Vision、NAFNetは、それぞれタスク固有のパイプラインを実行します。そのランダム性は
+設定可能ではなくファミリー内で固定されています。SegFormerとLingBot-Visionで有効な設定値は、
+`mosaic_scale`と`hsv_prob`ではなくクラス属性`semantic_scale_jitter`と`semantic_hsv_prob`です。NAFNetの
 切り抜きと反転は、入力とターゲットを組み合わせた処理として固定確率0.5で行われます。
 
 ## 各ファミリーが尊重する設定値
@@ -164,6 +164,17 @@ SegFormerとNAFNetは、それぞれタスク固有のパイプラインを実�
 
 `no_aug_epochs`はすべてのパイプラインで`used`ですが、効果は異なります。モザイク系では最後のエポックでモザイクとMixUpを無効にします。DETR系では測光的な拡張、ズームアウト、クロップを停止し、スケジュールの終盤も制御します。分類では自動拡張、erasing、MixUp、CutMixを無効にしますが、クロップと反転は残ります。
 
+`perspective`は、回転、スケール、せん断、平行移動に加えて射影変形を追加します。キャンバスの各隅は
+軸ごとに、キャンバスの辺の半分の最大`min(perspective * 100, 0.2)`倍のランダムな量だけ内側へ
+移動します。そのため、`perspective=0.001`はどの解像度でも隅を辺の最大5パーセントだけ移動させ、
+`0.002`以上の値はすべて同じ最大値に達します。デフォルトの`0`は変形をアフィンのまま保ち、負の値は
+最初のサンプルを変形するときに`ValueError`を送出します。YOLOv9とそのE2EおよびP2バリアント、
+YOLOX、YOLOv7、YOLO-NAS、PP-YOLOE、RTMDet、PicoDet、RT-DETR、RT-DETRv2がこれを適用します。
+
+YOLOv9とそのバリアント、YOLOv7、RT-DETR、RT-DETRv2が学習に使うYOLOv9のmosaicパイプラインでは、
+MixUpは混合比率を[0, 1]上の一様分布であるBeta(1, 1)から抽出します。YOLOX、RTMDet、PicoDetが使う
+YOLOXのmosaicラッパーは、固定の0.5で混合します。
+
 ## 分類用設定
 
 4つの設定値が分類パイプラインだけを制御します。検出ファミリーは4つすべてを無視します。
@@ -195,13 +206,14 @@ CLIは`auto_augment`、`erasing`、`cutmix`、`fliplr`、`flipud`を公開しま
 | YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `copy_paste` | Copy-pasteインスタンス拡張の確率。`task="segment"`のみ |
 | YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `copy_paste_mode` | `"flip"`は同じサンプルを反転して再利用し、`"mixup"`は2つ目のサンプルを取得 |
 | YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `rot90` | 90度ランダム回転の確率 |
-| YOLOv9 | `max_labels` | 学習変換での画像ごとの正解データ上限。デフォルトは100 |
+| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `max_labels` | 学習変換での画像ごとの正解データ上限。デフォルトは300 |
 | RF-DETR | `copy_paste`、`copy_paste_mode` | `task="segment"`用のCopy-paste。`"flip"`モードのみ |
 | RF-DETR、D-FINE、EC | `crop_resize_prob` | ランダムな切り抜きとサイズ変更の確率 |
 | EC、YOLO-NAS | `brightness_contrast_prob`、`affine_prob` | 姿勢経路のジッターとキーポイント対応アフィン変換の確率 |
 
-`max_labels`は、通知なくデータを失う設定値です。上限を超えたボックスはエラーなく破棄されるため、
-航空写真など検出対象が密な画像では値を増やす必要があります。
+`max_labels`は、データを失う設定値です。上限を超えたボックスはエラーではなく一度だけの警告とともに
+破棄されるため、航空写真など検出対象が密な画像では値を増やす必要があります。ラベル割り当てのメモリは
+上限ではなく、バッチ内で最も検出対象が密な画像に従います。
 
 回転ボックスに対応した隅座標のデータ拡張は実装されていないため、設定値にかかわらず回転ボックス
 学習ではMosaicとMixUpが無効になります。

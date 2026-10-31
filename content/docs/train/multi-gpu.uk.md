@@ -19,7 +19,7 @@ keywords:
   - глобальний розмір батча
   - nccl gloo backend
   - кілька gpu windows
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -37,6 +37,11 @@ snippets:
                 batch=32,     # глобальний батч: 16 зображень на GPU для двох GPU
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -74,7 +79,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Перевіряється один раз на GPU 0 і масштабується до числа, кратного world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 
 ## Запуск на двох GPU
@@ -87,6 +92,9 @@ source_hash: e339072d5d8e71ea
 
 `device` приймає `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` і
 `"auto"`. Автоматичний запуск активує лише список із кількох індексів CUDA.
+
+`libreyolo train device=0,1` або `device=[0,1]` будує модель на першому GPU зі
+списку й передає список у `train()`, який запускає робочі процеси так само.
 
 ## Автоматичний запуск і захисна умова main
 

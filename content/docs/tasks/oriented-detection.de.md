@@ -183,7 +183,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## Definition
@@ -218,7 +218,7 @@ Die Gewichte werden bei der ersten Verwendung von Hugging Face heruntergeladen u
 
 Prüfe vor der Verwendung, was die veröffentlichten RF-DETR-Checkpoints enthalten. Obwohl DOTA der Referenzbenchmark für diese Aufgabe ist, wurden diese Gewichte nicht darauf trainiert. Alle vier wurden mit RF-DETR-Erkennungsgewichten initialisiert und auf einem einzelnen UAV-Videodatensatz mit sechs Fahrzeugklassen nachtrainiert: bike, bus, car, other_vehicle, taxi und truck. Ihre Modellkarten bezeichnen sie als Entwicklungsgewichte, die zur Validierung der Unterstützung für orientiertes Training entstanden sind, und ausdrücklich nicht als Produktionsgewichte oder offizielle Benchmarkgewichte.
 
-In der Praxis sind sie ein funktionierender Ausgangspunkt für orientierte Boxen um Fahrzeuge aus der Vogelperspektive und zur Prüfung einer vollständigen Pipeline. Jede andere Domäne erfordert Training mit eigenen orientierten Labels. Für die bekannten Luftbildkategorien von DOTA wurden tatsächlich die RT-DETRv2-Checkpoints auf diesen Daten trainiert. `conf` und `max_det` formen die Ausgabe wie bei der Objekterkennung. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
+In der Praxis sind sie ein funktionierender Ausgangspunkt für orientierte Boxen um Fahrzeuge aus der Vogelperspektive und zur Prüfung einer vollständigen Pipeline. Jede andere Domäne erfordert Training mit eigenen orientierten Labels. Für die bekannten Luftbildkategorien von DOTA wurden tatsächlich die RT-DETRv2-Checkpoints auf diesen Daten trainiert. `conf` und `max_det` formen die Ausgabe wie bei der Objekterkennung, und `agnostic_nms=True` unterdrückt überlappende Boxen klassenübergreifend über die gedrehte IoU. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
 
 ## Datensatzformat
 
@@ -276,7 +276,7 @@ YOLO-NAS OBB verwendet gedrehte Zuordnung und Losses, Spiegelungs-/HSV-Augmentie
 
 `metrics/mAP50-95` ist die Mean Average Precision über IoU-Schwellenwerte von 0,50 bis 0,95 in Schritten von 0,05 und die wichtigste Kennzahl. Anders als der COCO-Pfad der Objekterkennung berücksichtigt diese Aufgabe `iou_thresholds` in der Validierungskonfiguration. Der Durchlauf lässt sich daher ändern. `metrics/mAP50` und `metrics/mAP75` sind Varianten bei einem einzelnen Schwellenwert. `metrics/precision` und `metrics/recall` sind echte Precision und Recall bei IoU 0,50 am lockersten Arbeitspunkt. Jede Vorhersage oberhalb des Konfidenzschwellenwerts wird gezählt. Während der Validierung ist dieser standardmäßig 0,001. Eine Erhöhung von `conf` verändert diese Werte, während die über die gesamte Precision-Recall-Kurve berechneten mAP-Werte gleich bleiben. Vier Werte wiederholen sich mit dem Suffix `(OBB)`: `metrics/mAP50-95(OBB)`, `metrics/mAP50(OBB)`, `metrics/precision(OBB)` und `metrics/recall(OBB)`. So kann ein Aufrufer ein orientiertes von einem achsenparallelen Ergebnis in derselben Tabelle unterscheiden. `metrics/mAP75` besitzt keinen Alias mit Suffix.
 
-Zwei Optionen haben bei dieser Aufgabe keine Wirkung. `save_json` und `save_plots` werden akzeptiert und protokollieren eine Warnung. Dumps orientierter Vorhersagen und Validierungsdarstellungen sind nicht implementiert.
+Zwei Optionen haben bei dieser Aufgabe keine Wirkung. `save_json` und `save_plots` werden akzeptiert und protokollieren eine Warnung. Dumps orientierter Vorhersagen und Validierungsdarstellungen sind nicht implementiert. `agnostic_nms=True` löst hier `ValueError` aus; es deckt nur die Validierung von detect und segment ab.
 
 ## Export
 

@@ -80,7 +80,7 @@ geometry.
 
 ## Models
 
-Two families serve `ocr`.
+Three families serve `ocr`.
 
 [PP-OCRv5](/docs/models/pp-ocrv5) is the dedicated pipeline: a
 differentiable-binarization detector finds the text quads and an SVTR/CTC
@@ -94,6 +94,13 @@ words as tagged text from the same 7B checkpoint that serves its six other
 tasks, loaded with `LibreVLM("sensenova-vision", task="ocr")`. It needs the
 `sensenova` extra, and its weights are restricted to non-commercial use; the
 license is on its page.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) also generates its answer as tagged
+text, loaded with `LibreVLM("wevisone-vl", task="ocr")`. Its released
+instruction asks for every word in box format, and each box comes back as an
+axis-aligned quad with its transcript. `.conf` and `.det_conf` are a constant
+1.0, since the model emits no score. It needs the `vlm` extra, and its weights
+are Apache-2.0.
 
 ## Predict
 
@@ -140,9 +147,9 @@ returns `Results.ocr` rather than detections. See
 
 ## Train
 
-Neither OCR family has a training implementation: `train()` raises
-`NotImplementedError` on both, and OCR support covers prediction and validation
-only. PP-OCRv5's page names the Apache-2.0 upstream training code and the
+No OCR family has a training implementation: `train()` raises
+`NotImplementedError` on all three. Validation covers PP-OCRv5; `val()` raises
+on the two vision-language families. PP-OCRv5's page names the Apache-2.0 upstream training code and the
 conversion script that brings a fine-tuned checkpoint back into LibreYOLO.
 
 ## Validate
@@ -168,5 +175,5 @@ a character scores near 1 where end-to-end F1 scores it 0.
 
 No export format is available for this task. PP-OCRv5 is two networks moving
 together rather than one traceable graph, and `export()` raises for every format
-on both families. To deploy outside LibreYOLO, fine-tune upstream and use the
+on all three families. To deploy outside LibreYOLO, fine-tune upstream and use the
 upstream deployment path.

@@ -12,7 +12,7 @@ keywords:
   - 实例分割
   - d-fine 训练自己的数据集
   - DETR
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -136,7 +136,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 
 ## 安装
@@ -184,7 +184,7 @@ pip install "libreyolo[lora]"
 
 <code-tabs name="train" />
 
-默认情况下，训练器以 `lr0=2e-4`、`amp=True` 和 `amp_dtype="float16"` 运行 132 轮，批大小为 16，连续 50 轮没有改善后提前停止。检测权重可以作为分割训练的起点，但必须显式授权迁移，因为 mask head 尚未训练，否则会返回无意义的掩码。在 CLI 中传入 `task=segment` 即可授权。Python 路径的要求更严格：必须直接构造 `LibreDFINE` 并传入 `allow_detect_to_segment_transfer=True`，因为 `LibreYOLO()` 工厂不接受这个参数；直接构造不会下载权重，所以权重文件必须已在磁盘上。
+默认情况下，训练器以 `lr0=2e-4`、`amp=True` 和 `amp_dtype="float16"` 运行 132 轮，批大小为 16，连续 50 轮没有改善后提前停止。`libreyolo train` 对两个任务使用同一套起始配方：AdamW 加平坦余弦调度，`weight_decay=1e-4`，2 轮预热，梯度范数裁剪为 0.1，并且不使用 mosaic、MixUp、HSV 或仿射数据增强。不传 `name=` 时，它的运行结果写入 `runs/train/dfine_exp`。检测权重可以作为分割训练的起点，但必须显式授权迁移，因为 mask head 尚未训练，否则会返回无意义的掩码。在 CLI 中传入 `task=segment` 即可授权。Python 路径的要求更严格：必须直接构造 `LibreDFINE` 并传入 `allow_detect_to_segment_transfer=True`，因为 `LibreYOLO()` 工厂不接受这个参数；直接构造不会下载权重，所以权重文件必须已在磁盘上。
 
 `lora=True` 适用于检测。分割训练会拒绝它，并转而指向 `freeze='backbone'`，因为
 mask head 还没有和适配器一起测试过。在 Apple silicon 上，训练器会把整个训练过程搬到

@@ -2,11 +2,12 @@
 title: Xóa nền
 seo_title: Xóa nền trong LibreYOLO
 description: >-
-  Tách chủ thể khỏi nền trong LibreYOLO. Dự đoán alpha matte mềm, ghi PNG trong suốt và xác thực bằng MAE cùng
-  S-measure.
+  Tách chủ thể khỏi nền trong LibreYOLO. Dự đoán alpha matte mềm, ghi PNG trong
+  suốt và xác thực bằng MAE cùng S-measure.
 lead: >-
-  Xóa nền tách chủ thể khỏi mọi thứ phía sau. LibreYOLO cung cấp dưới dạng tác vụ matte, trả về giá trị alpha
-  mềm trên mỗi pixel thay vì mặt nạ foreground cứng.
+  Xóa nền tách chủ thể khỏi mọi thứ phía sau. LibreYOLO cung cấp dưới dạng tác
+  vụ matte, trả về giá trị alpha mềm trên mỗi pixel thay vì mặt nạ foreground
+  cứng.
 keywords:
   - xóa nền bằng python
   - mô hình alpha matting
@@ -18,14 +19,19 @@ snippets:
   predict:
     - label: Dự đoán matte
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         matte = result.matte
-        print(matte.array.shape, matte.array.dtype)   # (H, W) float32 trong [0, 1]
+
+        print(matte.array.shape, matte.array.dtype)   # (H, W) float32 trong [0,
+        1]
     - label: Ghi PNG trong suốt
       language: python
       code: |
@@ -41,17 +47,26 @@ snippets:
         print(rgba.shape)
     - label: Ghép lên nền mới
       language: python
-      code: |
+      code: >
         import numpy as np
+
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("LibreBiRefNetl-matte.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         rgba = result.cutout()
+
         alpha = rgba[..., 3:4].astype(np.float32) / 255.0
+
         backdrop = np.full_like(rgba[..., :3], 255)          # trắng
-        composited = (rgba[..., :3] * alpha + backdrop * (1 - alpha)).astype(np.uint8)
+
+        composited = (rgba[..., :3] * alpha + backdrop * (1 -
+        alpha)).astype(np.uint8)
+
         print(composited.shape)
   val:
     - label: Xác thực và đọc các key metric
@@ -86,7 +101,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 ## Định nghĩa
 
@@ -120,6 +135,11 @@ và giấy phép trong repo Hugging Face của checkpoint cụ thể là nguồn
 quyền.
 
 [BEN2](/docs/models/ben2) bổ sung xóa nền với kích thước cố định 1024. [ViTMatte](/docs/models/vitmatte) nhận ảnh và `trimap=` ba mức đánh dấu pixel nền, chưa xác định và tiền cảnh.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) được nhắc bằng văn bản:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` trả về hợp của các alpha
+matte của mọi instance khớp với cụm từ. Đây là một mô hình vision-language cần
+extra `vlm`, và `val()` cùng `export()` của nó phát sinh lỗi.
 
 ## Dự đoán
 

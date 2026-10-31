@@ -109,7 +109,7 @@ snippets:
         # yamlのキーはTrainConfigフィールド名。明示的なkwargsが優先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## 引数の設定
@@ -204,6 +204,8 @@ SGDのmomentumまたはAdamのbeta1、`weight_decay`はL2項で、`nesterov`はS
 グループの倍率を設定し、`clip_max_norm`は勾配クリッピングを設定します。SegFormerは
 `head_lr_mult`を使い、デコードヘッドをバックボーンの10倍の学習率で実行します。これらは基底
 クラスではなく、ファミリーの設定サブクラスにあります。
+
+`clip_max_norm`は、各オプティマイザーステップの前に勾配のL2ノルムをその値にクリップし、`0`でクリッピングを無効にします。YOLOv9、YOLOv9-E2E、YOLOv9-P2ではデフォルトが`10`です。D-FINE、Dome-DETR、DEIM、DEIMv2、TinyFormer、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、DINOv2、GTR、ECではデフォルトが`0.1`です。CLIでは`clip_max_norm=`または`--clip-max-norm`で指定します。CLIで受け付けるファミリーについては[`libreyolo train`](/docs/cli/train)を参照してください。
 
 ## EMA
 

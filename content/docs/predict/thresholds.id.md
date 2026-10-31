@@ -2,9 +2,8 @@
 title: Ambang batas dan pemfilteran
 seo_title: 'conf, iou, dan max_det di LibreYOLO'
 description: >-
-  Fungsi sebenarnya conf, iou, max_det, dan classes saat prediksi, family yang
-  mengabaikan iou karena tidak menjalankan NMS, serta alasan agnostic_nms tidak
-  berpengaruh.
+  Fungsi conf, iou, max_det, classes, dan agnostic_nms saat prediksi, serta
+  family yang mengabaikan iou karena tidak menjalankan NMS sendiri.
 lead: >-
   Empat argumen menentukan prediksi yang bertahan: conf, iou, max_det, dan
   classes. Hanya dua yang berlaku pada setiap family karena set predictor
@@ -24,9 +23,10 @@ verification: >-
   libreyolo/models/base/inference.py. Perilaku NMS per family dibaca dari setiap
   modul dalam libreyolo/postprocess/ dan diperiksa silang terhadap
   _is_nms_free_family dalam libreyolo/backends/base.py. Pemfilteran kelas
-  berasal dari InferenceRunner._apply_classes_filter dan _wrap_results. Status
-  agnostic_nms berasal dari NOOP_PREDICT_KWARGS dalam
-  libreyolo/utils/predict_args.py. Penanganan open-vocabulary berasal dari
+  berasal dari InferenceRunner._apply_classes_filter dan _wrap_results.
+  agnostic_nms berasal dari check_agnostic_nms dan postprocess_max_det dalam
+  libreyolo/utils/predict_args.py serta langkah agnostic dalam
+  InferenceRunner._wrap_results. Penanganan open-vocabulary berasal dari
   NMS_THRESHOLD dalam libreyolo/models/openvocab/base.py. Nilai default validasi
   berasal dari BaseModel.val.
 snippets:
@@ -109,7 +109,31 @@ snippets:
         berfungsi.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 849650629e58c9e1
+  agnostic:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+
+        per_class = model(SAMPLE_IMAGE)
+
+        agnostic = model(SAMPLE_IMAGE, agnostic_nms=True)
+
+
+        # Kotak tumpang tindih dari kelas berbeda diciutkan menjadi satu dengan
+        skor tertinggi.
+
+        print(len(per_class.boxes), len(agnostic.boxes))
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: fa0e6cee02b3e336
 ---
 
 ## Empat argumen
@@ -166,13 +190,15 @@ pada ambang upstream tetap yang tidak dapat diubah oleh `iou`.
 Family berikut menggunakannya: YOLOv1 hingga YOLOv4, YOLOv7, YOLOv9, YOLOX, YOLO-NAS,
 RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet, dan SSD.
 
-Dua opsi saat prediksi membuat `iou` berpengaruh bahkan untuk set predictor karena keduanya
-menggabungkan kotak setelah model selesai:
+Tiga opsi saat prediksi membuat `iou` berpengaruh bahkan untuk set predictor karena ketiganya
+bekerja pada kotak setelah model selesai:
 
 - `tiling=True` merekonsiliasi tile yang tumpang tindih dengan NMS per kelas pada `iou`
 - `augment=True` menggabungkan tampilan yang dibalik dengan NMS per kelas pada `iou`
+- `agnostic_nms=True` menekan kotak yang tumpang tindih lintas kelas pada `iou`,
+  dijelaskan [di bawah](#agnostic_nms)
 
-Keduanya dibahas dalam [Performa inferensi](/docs/predict/performance).
+Dua yang pertama dibahas dalam [Performa inferensi](/docs/predict/performance).
 
 Detektor open-vocabulary memiliki aturan sendiri. Family yang prosesornya menjalankan NMS
 mendeklarasikan ambang default sendiri dan menghormati `iou`, seperti OMDet-Turbo. Family
@@ -186,11 +212,11 @@ di semua tempat melalui mekanisme berbeda: family NMS memangkas setelah suppress
 set predictor memakainya sebagai ukuran pilihan top-k.
 
 Beberapa family membatasi di bawah nilai yang diminta karena konfigurasi referensi upstream.
-SSD membatasi pada 200, segmentasi instance RTMDet pada 100, dan FCOS pada batas deteksi per
-gambarnya sendiri. Menaikkan `max_det` melewati angka tersebut tidak berpengaruh.
+SSD membatasi pada 200, dan FCOS pada batas deteksi per gambarnya sendiri. Menaikkan `max_det` melewati angka tersebut tidak berpengaruh.
 
-Satu tempat `max_det` diterapkan secara terpusat, bukan per family, adalah inferensi berbasis
-tile, tempat daftar gabungan dipangkas setelah tile direkonsiliasi.
+`max_det` diterapkan secara terpusat, bukan per family, dalam dua kasus: inferensi berbasis
+tile, tempat daftar gabungan dipangkas setelah tile direkonsiliasi, dan pemanggilan dengan
+`classes` atau `agnostic_nms=True`, tempat pemangkasan terjadi setelah filter atau suppression.
 
 ## Pemfilteran kelas
 
@@ -214,28 +240,57 @@ libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.gith
 ```
 
 Pemfilteran bukan akurasi gratis. Model tetap menghabiskan kapasitas untuk memprediksi kelas
-yang kemudian dibuang, dan `max_det` diterapkan oleh family sebelum filter, sehingga gambar
-yang dipenuhi kelas tidak diinginkan dapat mencapai batas sebelum kelas target. Turunkan
-`conf` atau naikkan `max_det` jika itu terjadi.
+yang kemudian dibuang. Dengan `classes` diatur, family mempertahankan anggaran kandidat
+sebesar 300 kotak, atau `max_det` bila lebih tinggi, dan pemangkasan ke `max_det` terjadi
+setelah filter, sehingga `max_det` kecil tidak menyingkirkan kelas target. Backend hasil
+ekspor memakai anggaran yang sama, termasuk engine TensorRT ber-batch. Gambar dengan lebih
+dari 300 kotak berskor lebih tinggi dari kelas yang tidak diinginkan tetap dapat memenuhi
+anggaran sebelum kelas target tercapai; naikkan `max_det` di atas 300 jika itu terjadi.
 
 ## agnostic_nms
 
-`agnostic_nms` diterima dan tidak melakukan apa pun. Meneruskannya memunculkan peringatan bahwa
-argumen tersebut no-op demi kompatibilitas command line, lalu argumen dibuang.
+NMS setiap family sadar kelas, sehingga secara default dua kotak tumpang tindih dari kelas
+berbeda sama-sama bertahan pada nilai `iou` apa pun. `agnostic_nms=True` menambahkan satu
+langkah class-agnostic: di antara kotak yang tumpang tindih di atas `iou`, hanya kotak dengan
+skor tertinggi yang bertahan, apa pun kelasnya.
 
-Tidak ada mode suppression class-agnostic. Setiap pemanggilan NMS dalam library sadar kelas,
-sehingga dua kotak tumpang tindih dari kelas berbeda sama-sama bertahan pada nilai `iou` apa
-pun. Jika ini bermasalah, filter lebih dulu dengan `classes`, atau lakukan suppression lintas
-kelas sendiri pada `result.boxes`.
+<code-tabs name="agnostic" />
+
+Langkah ini berjalan pada deteksi akhir milik family, setelah filter `classes` dan sebelum
+pemangkasan ke `max_det`. Karena itu perilakunya sama pada set predictor yang tidak menjalankan
+NMS sendiri, pada backend hasil ekspor, serta dengan `augment=True` dan `tiling=True`. Mask dan
+keypoint dibuang bersama kotaknya, dan kotak berorientasi dibandingkan dengan IoU terotasi.
+Langkah ini mencakup task yang mengembalikan kotak: detect, segment, pose, dan obb.
+
+Family mempertahankan anggaran kandidat sebesar 300 kotak, atau `max_det` bila lebih tinggi,
+sebagai bahan kerja langkah ini. Dengan `max_det` di bawah 300, kandidat berskor lebih rendah
+mengisi kembali slot yang dibebaskan suppression. Pada 300 atau lebih, termasuk nilai default,
+slot itu dibiarkan kosong.
+
+Tempat langkah ini tidak berlaku:
+
+- Pada jalur predict standar, task tanpa kotak memunculkan `ValueError`.
+- `LibreEnsemble` dan [HRNet](/docs/models/hrnet) memunculkan `NotImplementedError`.
+- Model `LibreSAM` dan [detektor 3D](/docs/tasks/3d-object-detection), yaitu WildDet3D,
+  3D-MOOD, FCOS3D, dan DetAny3D, tidak menerima argumen semacam itu dan memunculkan
+  `TypeError`.
+- [L2CS-Net](/docs/models/l2cs), [PP-OCRv5](/docs/models/pp-ocrv5),
+  [SAM 3D Body](/docs/models/sam-3d-body), dan
+  [LibreFaceRec](/docs/models/librefacerec) menjalankan jalur predict sendiri dan
+  mengabaikannya.
+
+`val(agnostic_nms=True)` menerapkan langkah yang sama pada validasi detect dan segment;
+lihat [Validasi dan metrik](/docs/train/validation).
 
 ## Hal yang ditolak predict
 
 Dua argumen memunculkan error, bukan peringatan: `visualize` dan `embed` sama-sama memunculkan
 `NotImplementedError`. Untuk embedding, muat model dengan `task="embed"`, lalu panggil
-`predict` atau `embed` seperti biasa.
+`predict` atau `embed` seperti biasa. `agnostic_nms=True` memunculkan error di tempat
+ia tidak berlaku, seperti yang tercantum di atas.
 
 Semua argumen tidak dikenal memunculkan `TypeError` yang menyebut opsi yang didukung, sehingga
 kesalahan ketik langsung gagal, bukan diabaikan.
 
-Argumen berikut diterima, diberi peringatan, lalu dibuang: `agnostic_nms`, `boxes`, `dnn`,
-`half`, `line_width`, `retina_masks`, `show_conf`, `show_labels`, dan `verbose`.
+Argumen berikut diterima, diberi peringatan, lalu dibuang: `boxes`, `dnn`, `half`,
+`line_width`, `retina_masks`, `show_conf`, `show_labels`, dan `verbose`.

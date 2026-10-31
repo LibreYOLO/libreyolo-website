@@ -10,7 +10,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo トラブルシューティング
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 表示されるテキスト別にエラーをまとめています。該当するメッセージがない場合は、[FAQ](/docs/faq)で障害以外の疑問を確認できます。また、`libreyolo models` で現在のインストールが実際に読み込めるものを確認できます。
@@ -20,6 +20,13 @@ source_hash: f2faaab56a2f0415
 一部のファミリーには任意の追加パッケージが必要です。メッセージには追加パッケージ名ではなく、不足しているパッケージ名が表示されるため、トレースバックから修正方法が分かるとは限りません。
 
 `libreyolo models` を実行してください。依存関係が不足しているファミリーごとに、有効化するための正確なpipコマンドが表示されるため、パッケージから追加パッケージへの対応を自身で調べる必要はありません。`libreyolo models --json` では同じ内容をオブジェクトとして出力します。
+
+RF-DETRとDINOv2には`libreyolo[rfdetr]`が必要で、そのメッセージには追加パッケージ名が表示されます。これがない場合、`LibreYOLO("LibreRFDETRn.pt")`、DINOv2の重み名、`libreyolo predict model=rfdetr-n`はインストール用の行を表示して停止し、CLIは`model_load_failed`で終了します。
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 [インストールページ](/docs/install)には、すべての追加パッケージとその対象が記載されています。
 
@@ -69,9 +76,13 @@ Windowsでは、ディスプレイ用GPUにメモリ不足とは別の障害モ�
 
 ダウンロードで404が発生した場合は、渡したファイル名を確認してください。URLはタスク接尾辞を含むファイル名から生成されるため、公開済みチェックポイントと一致しない名前を使うと、存在しないURLが生成されます。各モデルページのチェックポイント表には、公開されている正確なファイル名が記載されています。
 
-## WindowsやmacOSで学習が停止または再起動する
+## スクリプトのトップレベルでtrain()またはval()が呼び出された
 
-Windowsには `fork` がなく、macOSのPythonもデフォルトでは使わないため、dataloaderのworkerはスクリプトを再インポートして起動します。`if __name__ == "__main__":` ガードがないと、各workerが学習呼び出しを再実行し、デッドロックするか、プロセスを際限なく生成します。
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
+
+Windowsには `fork` がなく、macOSのPythonもデフォルトでは使わないため、dataloaderのworkerはスクリプトを再インポートして起動します。`spawn`と`forkserver`の起動方式は、どのプラットフォームでも同じ動作をします。`if __name__ == "__main__":`ガードがないと、各workerが`train()`または`val()`の呼び出しをもう一度実行することになるため、各workerはその呼び出しの時点で停止してその呼び出しを示すこの行を出力し、スクリプトはエラーで終了します。
 
 ```python
 def main():

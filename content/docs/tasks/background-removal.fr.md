@@ -14,7 +14,7 @@ keywords:
   - segmentation image dichotomique
   - détourage png transparent
   - cache alpha progressif
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prédire un cache
@@ -108,7 +108,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## Définition
@@ -148,6 +148,12 @@ indiquées sur les pages des modèles. La licence du dépôt Hugging Face du
 checkpoint précis fait autorité.
 
 [BEN2](/docs/models/ben2) ajoute la suppression d'arrière-plan à une résolution fixe de 1024. [ViTMatte](/docs/models/vitmatte) reçoit une image et un `trimap=` à trois niveaux indiquant les pixels d'arrière-plan, inconnus et de premier plan.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) reçoit un prompt texte :
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` renvoie l'union des
+alpha mattes de chaque instance qui correspond à l'expression. C'est un modèle
+vision-langage qui nécessite l'extra `vlm`, et son `val()` et son `export()`
+lèvent une erreur.
 
 ## Prédire
 

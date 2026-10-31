@@ -43,7 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## Параметры
@@ -62,7 +62,7 @@ source_hash: f0d31511715e3cc4
 | `mosaic_scale` | Диапазон случайного масштаба для аффинного преобразования |
 | `mixup_scale` | Диапазон джиттера масштаба, применяемый к парному изображению MixUp |
 | `shear` | Диапазон случайного скоса для аффинного преобразования, в градусах |
-| `perspective` | Величина проективного искажения в аффинном преобразовании |
+| `perspective` | Сила проективного искажения, добавляемого к аффинному преобразованию: углы холста сдвигаются внутрь не более чем на `min(perspective * 100, 0.2)` половины стороны холста по каждой оси; `0` отключает |
 | `flipud` | Вероятность вертикального отражения |
 | `no_aug_epochs` | Последние эпохи, которые обучаются с отключённой сильной аугментацией |
 | `auto_augment` | Политика AutoAugment для классификации: randaugment, autoaugment или augmix |
@@ -128,13 +128,13 @@ source_hash: f0d31511715e3cc4
 | Архетип | Семейства |
 |---|---|
 | В стиле YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| В стиле DETR | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Классификация | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Семантика | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| В стиле DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Классификация | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Семантика | `segformer`, `unet`, `lingbotvision` |
 | Восстановление | `nafnet` |
 
-Охвачено двадцать пять семейств. Семейство вне этого списка возвращает пустое
+Охвачено тридцать одно семейство. Семейство вне этого списка возвращает пустое
 множество игнорируемых параметров, поэтому предупреждений для него не выводится.
 
 ## Отклонения
@@ -146,6 +146,8 @@ source_hash: f0d31511715e3cc4
 | `rtdetr` | `flipud` игнорируется |
 | `rtdetrv2` | `flipud` игнорируется |
 | `fomo` | `perspective` и `flipud` игнорируются |
+| `ppyoloe` | `flipud` игнорируется: исходный рецепт вместо него использует случайный поворот на 90 градусов |
+| `gtr` | `mosaic_prob` и `mixup_prob` используются в первые `mosaic_epochs` эпох; `degrees`, `translate` и `mosaic_scale` задают аффинное преобразование после мозаики |
 | `ec` | `hsv_prob`, `degrees` и `translate` используются только для `task="pose"`; в detect и segment применяются фиксированные фотометрические рецепты |
 | `dinov2` | Набор для классификации используется только для `task="classify"` |
 

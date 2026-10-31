@@ -42,7 +42,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## Sinopsis
@@ -132,10 +132,14 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | Keluaran JSON ke stdout |
 | `quiet` | `false` | Menyembunyikan stderr |
 
-Tanpa `family`, keluarannya hanya inventaris format. Dengan `family`, tiap
-format mendapat tier dukungan untuk family dan task tersebut, alasan di balik
-tier itu, dan batasan apa pun yang melekat padanya. Family yang tidak dikenal,
-atau task yang tidak didukung family tersebut, dihitung sebagai kesalahan
+Tanpa `family`, keluarannya hanya inventaris format, dan field FP16 serta INT8
+menjelaskan format itu. Dengan `family`, tiap format mendapat tier dukungan
+untuk family dan task tersebut, alasan di balik tier itu, dan batasan apa pun
+yang melekat padanya, dan field FP16 serta INT8 melaporkan apa yang diterima
+`export()` untuk kombinasi itu: keduanya false pada format yang diblokir atau
+family yang hanya mengekspor FP32, dan INT8 bernilai true hanya bila ekspor INT8
+format itu mencakup family dan task tersebut. Family yang tidak dikenal, atau
+task yang tidak didukung family tersebut, dihitung sebagai kesalahan
 penggunaan.
 
 Alias format muncul di sebelah nama kanonisnya: `engine` untuk `tensorrt`,

@@ -221,7 +221,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## Cómo se clasifica una fuente
@@ -420,7 +420,8 @@ dos carpetas de entrada que contengan el mismo nombre de archivo se sobrescriben
 entre sí. Las imágenes en memoria no tienen nombre de archivo que reutilizar.
 Una imagen suelta se guarda como `inference`, así que las llamadas repetidas
 la sobrescriben; una lista o un batch se numera `image0`, `image1` y así
-sucesivamente.
+sucesivamente. Dos procesos que guardan en el mismo instante obtienen directorios
+numerados distintos, porque cada ejecución reserva su directorio creándolo.
 
 Las fuentes de vídeo y en directo se escriben como un único `.mp4` con el nombre
 de la fuente.

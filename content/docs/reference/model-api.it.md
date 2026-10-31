@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Costruzione
@@ -85,6 +85,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -111,6 +112,7 @@ model(
 | `device` | `None` | Override del dispositivo per questa chiamata |
 | `classes` | `None` | Mantiene solo questi ID di classe |
 | `max_det` | `300` | Numero massimo di rilevamenti per immagine |
+| `agnostic_nms` | `False` | Mantiene solo il box con il punteggio più alto tra i box che si sovrappongono oltre `iou`, qualunque sia la classe. Detect, segment, pose e obb |
 | `augment` | `False` | Data augmentation al momento del test |
 | `save` | `False` | Scrive un'immagine o un video annotato |
 | `batch` | `1` | Immagini per forward pass con sorgenti directory e liste |
@@ -223,10 +225,19 @@ la directory di output come `project/name`, incrementata a meno che
 `allow_download_scripts` regola l'esecuzione del Python incorporato che un YAML
 di dataset può portare nel suo campo `download`.
 
+Per detect e segment il dizionario è una sottoclasse di `dict` che porta anche
+`box` (metriche per immagine e curve di precisione, recall e F1 per classe) e
+`confusion_matrix`; per classify porta `top1`, `top5` e `confusion_matrix`. Vedi
+[Validazione e metriche](/docs/train/validation).
+
 `faster_coco_eval` è accettato tramite `**kwargs` e vale `True` per
 impostazione predefinita, con ripiego su pycocotools quando il pacchetto non è
 installato. Il backend che è stato usato viene riportato in
 `model.last_eval_backend`.
+
+`agnostic_nms=True`, anche tramite `**kwargs`, applica la NMS agnostica rispetto
+alla classe a `iou` prima del calcolo del punteggio. Copre detect e segment e
+solleva `ValueError` su qualsiasi altro task.
 
 La validazione con augmentation solleva un errore per i task `obb` e `pose`.
 

@@ -59,7 +59,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## 捕获了什么
@@ -103,7 +103,7 @@ NMS 和检测损失都不在候选之列。两者都用布尔掩码做筛选，�
 
 ## 训练支持
 
-本次发布中，训练捕获从两个家族增加到 24 个，覆盖五类任务。
+训练捕获覆盖 24 个家族，涉及五类任务。
 
 | 任务 | 家族 |
 |---|---|

@@ -15,7 +15,7 @@ keywords:
   - top-1 accuracy
   - класифікація zero-shot
   - MIT бібліотека класифікації
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -104,11 +104,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() повертає звичайний словник, а не об'єкт.
+        # Словник ключів metrics/, а також top1, top5 і confusion_matrix.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -136,7 +137,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 90aed355e0ddf5e3
+source_hash: 7934244e90056e77
 ---
 
 ## Визначення
@@ -235,9 +236,11 @@ URL-адресу файла `.zip` або одну з відомих назв д
 
 ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 і DINOv2 підтримують зважування втрат через `cls_pw` або `class_weights`. У класифікації `scale` керує площею обрізання, а `crop_pct` керує обрізанням під час оцінювання. Див. [аугментації](/docs/train/augmentations).
 
+Фільтр зміни розміру є частиною моделі. Задайте `model.interpolation` як `"bilinear"`, `"bicubic"`, `"nearest"` або `"bilinear_no_antialias"` перед навчанням: його використовують навчання, `val()`, `predict()`, калібрування INT8 та експорт, а `save()`, `best.pt` і `last.pt` його записують, тому перезавантаження його зберігає. Будь-яка інша назва спричиняє `ValueError`. `"bilinear_no_antialias"` змінює розмір простою білінійною інтерполяцією без згладжування скрізь, зокрема в `RandomResizedCrop`, для моделей, що працюватимуть за зміною розміру в середовищі виконання без згладжування. MobileNetV4, ResNet, ConvNeXt, ConvNeXt V2, EfficientNetV2, DeiT, Swin і ViT типово використовують бікубічну інтерполяцію; AlexNet і VGG білінійну.
+
 ## Валідація
 
-`val()` повертає звичайний словник ключів `metrics/`, обчислених для розбиття
+`val()` повертає словник ключів `metrics/`, обчислених для розбиття
 `val/` кореневого каталогу датасету.
 
 <code-tabs name="val" />
@@ -250,6 +253,14 @@ ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 і DINOv2 підтр�
 top-1.
 
 Валідація ImageFolder також повертає макроусереднені `metrics/precision`, `metrics/recall` і `metrics/f1` за класами, присутніми в цільових мітках валідації. Класи без передбачень додають нульову точність. Типовою оцінкою якості залишається правильність top-1. Валідація й калібрування використовують перетворення оцінювання моделі.
+
+Результат є підкласом `dict` із трьома атрибутами: `top1` і `top5` містять два
+значення правильності, а `confusion_matrix` рахує кожне зображення за його
+класом top-1 щодо його мітки, з індексацією `matrix[predicted, true]`.
+`plots=True` записує її як кількості в `confusion_matrix.png` і як частки кожної
+мітки в `confusion_matrix_normalized.png`. Понад 2,000 класів щільна матриця та її
+графіки недоступні, а `nonzero()`, `tp_fp()` і `class_accuracy()` читають
+кількості натомість; див. [Валідація та метрики](/docs/train/validation#confusion-matrix).
 
 ## Експорт
 

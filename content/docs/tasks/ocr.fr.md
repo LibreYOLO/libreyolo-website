@@ -95,7 +95,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
-source_hash: 58ad5305c9dd458c
+source_hash: d6ec02dfdb1a69a8
 ---
 
 ## Définition
@@ -118,7 +118,7 @@ tableaux de scores avec la géométrie.
 
 ## Modèles
 
-Deux familles couvrent la tâche `ocr`.
+Trois familles couvrent la tâche `ocr`.
 
 [PP-OCRv5](/docs/models/pp-ocrv5) est le pipeline dédié. Un détecteur à
 binarisation différentiable trouve les quadrilatères de texte, puis un système
@@ -134,6 +134,13 @@ autres tâches, chargé avec
 `LibreVLM("sensenova-vision", task="ocr")`. Il nécessite l'extra
 `sensenova` et ses poids sont réservés à un usage non commercial. Sa page
 précise leur licence.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) génère aussi sa réponse sous forme de
+texte balisé, chargé avec `LibreVLM("wevisone-vl", task="ocr")`. Son
+instruction publiée demande chaque mot au format boîte, et chaque boîte revient
+sous forme de quadrilatère aligné sur les axes avec sa transcription. `.conf` et
+`.det_conf` valent constamment 1.0, puisque le modèle n'émet aucun score. Il
+nécessite l'extra `vlm` et ses poids sont sous licence Apache-2.0.
 
 ## Prédire
 
@@ -185,10 +192,10 @@ que des détections. Consultez les
 
 ## Entraîner
 
-Aucune des deux familles OCR ne possède d'implémentation d'entraînement.
-`train()` déclenche une `NotImplementedError` dans les deux cas, et la prise en
-charge de l'OCR se limite à la prédiction et à la validation. La page PP-OCRv5
-indique le code d'entraînement amont sous licence Apache-2.0 ainsi que le script
+Aucune famille OCR ne possède d'implémentation d'entraînement. `train()`
+déclenche une `NotImplementedError` pour les trois. La validation couvre
+PP-OCRv5 ; `val()` déclenche une erreur pour les deux familles vision-langage.
+La page PP-OCRv5 indique le code d'entraînement amont sous licence Apache-2.0 ainsi que le script
 de conversion qui réimporte dans LibreYOLO un checkpoint affiné.
 
 ## Valider
@@ -217,6 +224,6 @@ ainsi un score proche de 1, tandis que la F1 de bout en bout lui attribue 0.
 
 Aucun format d'exportation n'est disponible pour cette tâche. PP-OCRv5 réunit
 deux réseaux qui se déplacent ensemble plutôt qu'un seul graphe traçable, et
-`export()` déclenche une erreur pour chaque format dans les deux familles. Pour
+`export()` déclenche une erreur pour chaque format dans les trois familles. Pour
 déployer hors de LibreYOLO, effectuez le fine-tuning dans le projet amont et
 utilisez son parcours de déploiement.

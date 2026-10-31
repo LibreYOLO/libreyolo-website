@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## Nội dung được capture
@@ -131,7 +131,7 @@ nhưng vẫn giống từng bit trên đầu vào thử quan trọng.
 
 ## Hỗ trợ huấn luyện
 
-Capture huấn luyện tăng từ hai lên 24 họ trong bản phát hành này, trên năm tác vụ.
+Capture huấn luyện bao phủ 24 họ trên năm tác vụ.
 
 | Task | Families |
 |---|---|

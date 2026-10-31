@@ -221,7 +221,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## Como uma fonte é classificada
@@ -415,7 +415,9 @@ imagem de um mesmo processo cai no mesmo diretório, então duas pastas de entra
 com um mesmo nome de arquivo sobrescrevem uma à outra. Imagens em memória não têm
 nome de arquivo para reaproveitar. Uma imagem única é gravada como `inference`,
 então chamadas repetidas a sobrescrevem; uma lista ou um batch é numerado
-`image0`, `image1` e assim por diante.
+`image0`, `image1` e assim por diante. Dois processos que gravam no mesmo
+momento recebem diretórios numerados separados, porque cada execução reserva o
+seu diretório criando-o.
 
 Fontes de vídeo e ao vivo são gravadas como um único `.mp4` nomeado a partir da
 fonte.

@@ -129,7 +129,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Definição
@@ -177,9 +177,10 @@ dele. [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2),
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
 [EdgeTAM](/docs/models/edgetam) e [PicoSAM3](/docs/models/picosam3) funcionam
 assim, e o [SenseNova-Vision](/docs/models/sensenova-vision) também, cuja
-segmentação é do tipo referring: ele recebe uma frase que nomeia um objeto. Eles
-são carregados pela própria factory e pelos próprios extras, e cada página de
-modelo traz a chamada exata.
+segmentação é do tipo referring: ele recebe uma frase que nomeia um objeto. O
+[WeVisOne-VL](/docs/models/wevisone-vl) segmenta cada frase dada em `names=` e
+retorna caixas mais máscaras binárias. Eles são carregados pela própria factory e
+pelos próprios extras, e cada página de modelo traz a chamada exata.
 
 ## Predição
 
@@ -189,7 +190,8 @@ localmente.
 <code-tabs name="predict" />
 
 `conf` e `max_det` moldam a saída do mesmo jeito que na detecção, e as
-máscaras são filtradas junto com as caixas às quais pertencem. Veja
+máscaras são filtradas junto com as caixas às quais pertencem, inclusive por
+`agnostic_nms=True`. Veja
 [predição](/docs/predict) para fontes, streaming e tratamento de resultados.
 
 ## Formato do dataset
@@ -250,9 +252,10 @@ loggers.
 
 ## Validação
 
-`val()` retorna um dicionário simples de chaves `metrics/`. Caixas e máscaras
-são pontuadas separadamente, ambas com avaliação COCO, e os números das
-máscaras são os principais.
+`val()` retorna um dicionário de chaves `metrics/`. Caixas e máscaras são
+pontuadas separadamente, ambas com avaliação COCO, e os números das máscaras são
+os principais. Uma linha de rótulo só com caixa, de cinco campos, é pontuada como
+a sua máscara retangular, que é o que o treinamento de segment lê dela.
 
 <code-tabs name="val" />
 
@@ -277,6 +280,11 @@ compatibilidade retroativa e são aliases, não um ponto de operação:
 `metrics/recall(M)` o mesmo valor que o AR de máscara em 100 detecções, com
 `(B)` se comportando do mesmo jeito para as caixas. Plotar um par delas informa
 o mesmo número duas vezes.
+
+O resultado também traz `confusion_matrix` e as curvas de precisão, recall e F1
+por classe em `box`, ambas calculadas a partir das caixas e não das máscaras;
+veja [Validação e métricas](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` é suportado nesta tarefa.
 
 ## Exportação
 

@@ -72,15 +72,17 @@ which takes `device`, `names` (the initial vocabulary, equivalent to calling
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Pinned upstream snapshot |
 
 The default alias is `qwen3-vl-4b`. Sizes for the default alias of each family
 are the ones listed first: `qwen3-vl` resolves to `4b`, `lfm2-vl` to `450m`,
-`internvl3` to `2b`, `smolvlm2` to `2.2b`, `florence-2` to `base`.
+`internvl3` to `2b`, `smolvlm2` to `2.2b`, `florence-2` to `base`,
+`wevisone-vl` to `2b`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` and `LibreMODUS`
-(also spelled `LibreModus`) are exported at package level.
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL`
+and `LibreMODUS` (also spelled `LibreModus`) are exported at package level.
 
 Detection also includes `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` and `lfm2-vl-3b`. The bare `gemma-4` alias selects E4B. Molmo2 aliases are `molmo2-4b`, `molmo2-8b` and `molmo2-o-7b`; its default is 4B. Aliases establish routing, not that every remote snapshot has been downloaded and tested. `moondream-3` does not load in 1.6.0: its mirror is missing weight shards.
 
@@ -92,6 +94,7 @@ Task support is family-specific. These adapters support multiple tasks:
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 Because the task is prompt-driven rather than baked into a checkpoint, it can
 be switched on a loaded model:
@@ -104,7 +107,7 @@ The task is validated against the family's supported list, is sticky across
 later `predict()` and `track()` calls, and the model is returned so calls can
 chain.
 
-Molmo2 returns points and requires `{label}` in custom pointing templates. Moondream supports detection, points and native chat. Use [LibreGround](/docs/reference/ground-api) for instruction-to-click queries.
+Molmo2 returns points and requires `{label}` in custom pointing templates. WeVisOne-VL's `referring=True` makes `detect` send one generation per phrase, and its `segment`, `matte` and referring detection raise `ValueError` without a vocabulary. Moondream supports detection, points and native chat. Use [LibreGround](/docs/reference/ground-api) for instruction-to-click queries.
 
 ## set_classes
 

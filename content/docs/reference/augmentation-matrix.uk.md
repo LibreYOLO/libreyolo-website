@@ -43,7 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## Параметри
@@ -62,7 +62,7 @@ source_hash: f0d31511715e3cc4
 | `mosaic_scale` | Діапазон випадкового масштабу для афінного перетворення |
 | `mixup_scale` | Діапазон випадкового масштабу, застосований до партнерського зображення MixUp |
 | `shear` | Діапазон випадкового зсуву для афінного перетворення в градусах |
-| `perspective` | Величина проєктивного викривлення для афінного перетворення |
+| `perspective` | Сила проєктивного викривлення, що додається до афінного перетворення: кути полотна зсуваються всередину щонайбільше на `min(perspective * 100, 0.2)` половини сторони полотна по кожній осі; `0` вимикає |
 | `flipud` | Імовірність вертикального віддзеркалення |
 | `no_aug_epochs` | Останні епохи навчання з вимкненою сильною аугментацією |
 | `auto_augment` | Політика AutoAugment для класифікації: randaugment, autoaugment або augmix |
@@ -126,13 +126,13 @@ CLI попереджає, коли явно заданий параметр на
 | Архетип | Сімейства |
 |---|---|
 | У стилі YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| У стилі DETR | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Класифікація | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Семантична | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| У стилі DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Класифікація | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Семантична | `segformer`, `unet`, `lingbotvision` |
 | Відновлення | `nafnet` |
 
-Охоплено двадцять п'ять сімейств. Для сімейства поза цим списком повертається
+Охоплено тридцять одне сімейство. Для сімейства поза цим списком повертається
 порожній набір ігнорованих параметрів, тому попередження не виводиться.
 
 ## Відхилення
@@ -144,6 +144,8 @@ CLI попереджає, коли явно заданий параметр на
 | `rtdetr` | `flipud` ігнорується |
 | `rtdetrv2` | `flipud` ігнорується |
 | `fomo` | `perspective` і `flipud` ігноруються |
+| `ppyoloe` | `flipud` ігнорується: рецепт першоджерела натомість використовує випадковий поворот на 90 градусів |
+| `gtr` | `mosaic_prob` і `mixup_prob` використовуються протягом перших `mosaic_epochs` епох; `degrees`, `translate` і `mosaic_scale` формують афінне перетворення, що йде після мозаїки |
 | `ec` | `hsv_prob`, `degrees` і `translate` використовуються лише для `task="pose"`; detect і segment застосовують фіксовані фотометричні рецепти |
 | `dinov2` | Пакет класифікації використовується лише для `task="classify"` |
 

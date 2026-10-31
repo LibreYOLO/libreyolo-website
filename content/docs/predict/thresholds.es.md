@@ -2,9 +2,8 @@
 title: Umbrales y filtrado
 seo_title: 'conf, iou y max_det en LibreYOLO'
 description: >-
-  Qué hacen realmente conf, iou, max_det y classes en la predicción, qué
-  familias ignoran iou porque no ejecutan NMS y por qué agnostic_nms es un
-  no-op.
+  Qué hacen conf, iou, max_det, classes y agnostic_nms en la predicción, y qué
+  familias ignoran iou porque no ejecutan NMS propio.
 lead: >-
   Cuatro argumentos deciden qué predicciones sobreviven: conf, iou, max_det y
   classes. Solo dos de ellos se aplican a todas las familias, porque un
@@ -25,10 +24,11 @@ verification: >-
   libreyolo/models/base/inference.py. Comportamiento de NMS por familia leído de
   todos los módulos de libreyolo/postprocess/ y contrastado con
   _is_nms_free_family en libreyolo/backends/base.py. Filtrado por clases de
-  InferenceRunner._apply_classes_filter y _wrap_results. Estado de agnostic_nms
-  de NOOP_PREDICT_KWARGS en libreyolo/utils/predict_args.py. Gestión de
-  vocabulario abierto de NMS_THRESHOLD en libreyolo/models/openvocab/base.py.
-  Valores por defecto de la validación de BaseModel.val.
+  InferenceRunner._apply_classes_filter y _wrap_results. agnostic_nms de
+  check_agnostic_nms y postprocess_max_det en libreyolo/utils/predict_args.py y
+  del paso agnóstico en InferenceRunner._wrap_results. Gestión de vocabulario
+  abierto de NMS_THRESHOLD en libreyolo/models/openvocab/base.py. Valores por
+  defecto de la validación de BaseModel.val.
 snippets:
   basic:
     - label: Los cuatro argumentos
@@ -109,7 +109,31 @@ snippets:
         funcionan.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 849650629e58c9e1
+  agnostic:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+
+        per_class = model(SAMPLE_IMAGE)
+
+        agnostic = model(SAMPLE_IMAGE, agnostic_nms=True)
+
+
+        # Los boxes solapados de clases distintas se reducen al de mayor
+        puntuación.
+
+        print(len(per_class.boxes), len(agnostic.boxes))
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: fa0e6cee02b3e336
 ---
 
 ## Los cuatro argumentos
@@ -168,14 +192,16 @@ fijo aguas arriba que `iou` no tiene forma soportada de cambiar.
 Estas familias sí lo usan: de YOLOv1 a YOLOv4, YOLOv7, YOLOv9, YOLOX,
 YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet y SSD.
 
-Dos opciones del momento de la predicción hacen que `iou` importe incluso para un
-predictor de conjuntos, porque ambas fusionan boxes después de que el modelo haya
-terminado:
+Tres opciones del momento de la predicción hacen que `iou` importe incluso para
+un predictor de conjuntos, porque las tres actúan sobre los boxes después de que
+el modelo haya terminado:
 
 - `tiling=True` reconcilia los tiles solapados con NMS por clase en `iou`
 - `augment=True` fusiona las vistas volteadas con NMS por clase en `iou`
+- `agnostic_nms=True` suprime los boxes solapados entre clases en `iou`,
+  descrito [más abajo](#agnostic_nms)
 
-Ambas se explican en [Rendimiento de la inferencia](/docs/predict/performance).
+Las dos primeras se explican en [Rendimiento de la inferencia](/docs/predict/performance).
 
 Los detectores de vocabulario abierto tienen su propia regla. Una familia cuyo
 procesador ejecuta NMS declara su propio umbral por defecto y respeta `iou`, que
@@ -191,13 +217,14 @@ de la supresión, y un predictor de conjuntos lo usa como el tamaño de su
 selección top-k.
 
 Algunas familias recortan por debajo de lo que pidas, porque su configuración de
-referencia original lo hace. SSD se queda en 200, la segmentación de instancias
-de RTMDet en 100 y FCOS en su propio límite de detecciones por imagen. Subir
-`max_det` por encima de esos valores no tiene efecto.
+referencia original lo hace. SSD se queda en 200 y FCOS en su propio
+límite de detecciones por imagen. Subir `max_det` por encima de esos valores no
+tiene efecto.
 
-El único sitio donde `max_det` se aplica de forma centralizada en lugar de por
-familia es la inferencia por tiles, donde la lista fusionada se trunca después de
-reconciliar los tiles.
+`max_det` se aplica de forma centralizada en lugar de por familia en dos casos: la
+inferencia por tiles, donde la lista fusionada se trunca después de reconciliar
+los tiles, y las llamadas con `classes` o `agnostic_nms=True`, donde el corte
+llega después del filtro o de la supresión.
 
 ## Filtrado por clases
 
@@ -224,30 +251,61 @@ libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.gith
 ```
 
 Filtrar no es precisión gratis. El modelo sigue gastando su presupuesto
-prediciendo clases que luego descartas, y la familia aplica `max_det` antes del
-filtro, así que una imagen abarrotada de clases no deseadas puede llegar al tope
-antes de alcanzar tu clase. Baja `conf` o sube `max_det` si eso pasa.
+prediciendo clases que luego descartas. Con `classes` indicado, la familia
+conserva un presupuesto de candidatos de 300 boxes, o `max_det` cuando es mayor,
+y el corte a `max_det` llega después del filtro, de modo que un `max_det` pequeño
+no desplaza a tu clase. Los backends exportados usan el mismo presupuesto,
+incluidos los motores TensorRT con batch. Una imagen con más de 300 boxes de
+mayor puntuación de clases no deseadas aún puede llenar el presupuesto antes de
+alcanzar tu clase; sube `max_det` por encima de 300 si eso pasa.
 
 ## agnostic_nms
 
-`agnostic_nms` se acepta y no hace nada. Pasarlo lanza un aviso que dice que es un
-no-op por compatibilidad con la línea de comandos, y el argumento se descarta.
+El NMS propio de cada familia tiene en cuenta la clase, así que por defecto dos
+boxes solapados de clases distintas sobreviven ambos, sea cual sea el `iou`.
+`agnostic_nms=True` añade un paso agnóstico a la clase: entre los boxes que se
+solapan por encima de `iou`, solo sobrevive el de mayor puntuación, sean cuales
+sean sus clases.
 
-No existe un modo de supresión agnóstico a la clase. Todas las llamadas a NMS de
-la biblioteca tienen en cuenta la clase, así que dos boxes solapados de clases
-distintas sobreviven ambos, sea cual sea el `iou`. Cuando eso sea un problema,
-filtra antes con `classes`, o haz tú mismo la supresión entre clases sobre
-`result.boxes`.
+<code-tabs name="agnostic" />
+
+El paso se ejecuta sobre las detecciones ya terminadas de la familia, después del
+filtro `classes` y antes del corte a `max_det`. Por eso se comporta igual en los
+predictores de conjuntos que no ejecutan NMS propio, en los backends exportados, y
+con `augment=True` y `tiling=True`. Las máscaras y los keypoints se descartan junto
+con su box, y los boxes orientados se comparan por IoU rotado. Cubre las tareas
+que devuelven boxes: detect, segment, pose y obb.
+
+La familia conserva un presupuesto de candidatos de 300 boxes, o `max_det` cuando
+es mayor, sobre el que trabaja el paso. Con `max_det` por debajo de 300, los
+candidatos de menor puntuación rellenan los huecos que libera la supresión. Con
+300 o más, lo que incluye el valor por defecto, esos huecos quedan vacíos.
+
+Donde no se aplica:
+
+- En el camino de predicción estándar, una tarea sin boxes lanza `ValueError`.
+- `LibreEnsemble` y [HRNet](/docs/models/hrnet) lanzan `NotImplementedError`.
+- Los modelos `LibreSAM` y los [detectores 3D](/docs/tasks/3d-object-detection),
+  WildDet3D, 3D-MOOD, FCOS3D y DetAny3D, no aceptan ese argumento y lanzan
+  `TypeError`.
+- [L2CS-Net](/docs/models/l2cs), [PP-OCRv5](/docs/models/pp-ocrv5),
+  [SAM 3D Body](/docs/models/sam-3d-body) y
+  [LibreFaceRec](/docs/models/librefacerec) ejecutan su propio camino de
+  predicción y lo ignoran.
+
+`val(agnostic_nms=True)` aplica el mismo paso a la validación de detect y segment;
+consulta [Validación y métricas](/docs/train/validation).
 
 ## Qué rechaza predict
 
 Dos argumentos lanzan un error en vez de un aviso: `visualize` y `embed` lanzan
 ambos `NotImplementedError`. Para los embeddings, carga el modelo con
 `task="embed"` y llama a `predict` o a `embed` con normalidad.
+`agnostic_nms=True` lanza un error donde no se aplica, como se lista arriba.
 
 Cualquier cosa no reconocida lanza un `TypeError` que nombra las opciones
 soportadas, de modo que una errata falla al momento en lugar de ignorarse en
 silencio.
 
-Estos se aceptan, avisan y se descartan: `agnostic_nms`, `boxes`, `dnn`,
-`half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` y `verbose`.
+Estos se aceptan, avisan y se descartan: `boxes`, `dnn`, `half`,
+`line_width`, `retina_masks`, `show_conf`, `show_labels` y `verbose`.

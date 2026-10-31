@@ -138,7 +138,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Definicja
@@ -187,9 +187,10 @@ sposób działają [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2),
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
 [EdgeTAM](/docs/models/edgetam) i [PicoSAM3](/docs/models/picosam3), a także
 [SenseNova-Vision](/docs/models/sensenova-vision), którego segmentacja jest
-referencyjna i przyjmuje frazę nazywającą jeden obiekt. Modele te są wczytywane
-przez własne funkcje fabrykujące i zestawy zależności, a ich strony zawierają
-dokładne wywołania.
+referencyjna i przyjmuje frazę nazywającą jeden obiekt.
+[WeVisOne-VL](/docs/models/wevisone-vl) segmentuje każdą frazę podaną w `names=`
+i zwraca ramki oraz maski binarne. Modele te są wczytywane przez własne funkcje
+fabrykujące i zestawy zależności, a ich strony zawierają dokładne wywołania.
 
 ## Predykcja
 
@@ -261,8 +262,10 @@ wielu GPU i modułach rejestrujących zawiera strona [trenowania](/docs/train).
 
 ## Walidacja
 
-Funkcja `val()` zwraca zwykły słownik kluczy `metrics/`. Ramki i maski są
-oceniane osobno za pomocą oceny COCO, a wyniki masek są wynikami głównymi.
+Funkcja `val()` zwraca słownik kluczy `metrics/`. Ramki i maski są oceniane
+osobno za pomocą oceny COCO, a wyniki masek są wynikami głównymi. Pięciopolowy
+wiersz etykiety tylko z ramką jest oceniany jako maska będąca jego prostokątem,
+tak jak czyta go trenowanie segmentacji.
 
 <code-tabs name="val" />
 
@@ -287,6 +290,11 @@ zgodności wstecznej i są aliasami, a nie punktem pracy.
 `metrics/recall(M)` tę samą wartość co AR masek przy 100 detekcjach. Sufiks
 `(B)` działa tak samo dla ramek. Wykreślenie tej pary zgłasza jedną wartość
 dwukrotnie.
+
+Wynik zawiera też `confusion_matrix` oraz krzywe precyzji, recall i F1 dla
+poszczególnych klas w `box`, obie obliczane z ramek, a nie z masek; zobacz
+[walidacja i metryki](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` jest obsługiwane w tym zadaniu.
 
 ## Eksport
 

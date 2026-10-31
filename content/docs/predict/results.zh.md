@@ -118,12 +118,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 
 ## 一个对象，每种载荷一个槽位
 
-对一张图像做一次预测返回一个 `Results`。它带着二十一个载荷槽位，模型只填充自己
+对一张图像做一次预测返回一个 `Results`。它带着二十三个载荷槽位，模型只填充自己
 这个任务会产出的那些。其余每个槽位都是 `None`，所以在检测器上读 `result.masks`
 得到的是 `None`，而不是报错。
 
@@ -150,6 +150,8 @@ source_hash: cebaac95f0a28b5f
 | `albedo` | `AlbedoMap` | `(H, W, 3)` 线性 RGB | 反照率估计 |
 | `boxes3d` | `Boxes3D` | `(N, 14)`，相机坐标系下的长方体，与 `boxes` 逐行对齐 | 单目 3D 检测 |
 | `actions` | `Actions` | `(T, D)` 动作块 | 机器人策略 |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB，加上提示词、种子和设置 | 图像生成 |
+| `gaussians` | `Gaussians` | `N` 个高斯，包含 `xyz`、`scales`、`rotations`、`opacities` 和 `sh`，再加上相机和种子 | 3D 生成 |
 
 和它们并列的，是每个结果都有的那些字段：`orig_shape` 是 `(height, width)`，
 `path` 是源路径（内存输入时为 `None`），`names` 把类别 id 映射到类别名，
@@ -158,9 +160,10 @@ source_hash: cebaac95f0a28b5f
 
 `result.normals` 是 `result.normal_map` 的别名。
 
-`result.speed` 每个结果上都有，但只有[集成](/docs/predict/ensembling)会填充它，
-这时它的键是 `member_0`、`member_1` 和 `fusion`，单位是毫秒。单个模型时它一直
-是一个空字典。
+`result.speed` 每个结果上都有。[集成](/docs/predict/ensembling)会用 `member_0`、
+`member_1` 和 `fusion` 填充它，单位是毫秒；LibreGen 模型填充 `inference`，即每生成
+一张图像或一个对象所用的毫秒数；FCOS3D 填充 `preprocess`、`inference` 和
+`postprocess`。其他模型让它保持为空字典。
 
 ## Boxes
 
@@ -231,7 +234,7 @@ source_hash: cebaac95f0a28b5f
 个深度结果切片也不会破坏 `(H, W)` 的布局。
 
 `len(result)` 数的是实例：检测框、点、嵌入向量、OCR 区域或网格。任何稠密的整图
-载荷都算作 `1`。什么都没装的结果是 `0`。
+载荷都算作 `1`，生成的图像或 3D 对象也算作 `1`。什么都没装的结果是 `0`。
 
 `to()`、`cpu()`、`cuda()` 和 `numpy()` 各自返回一个新的 `Results`，其中每个已
 填充的槽位都转换过。它们不会修改原对象。
@@ -254,7 +257,7 @@ source_hash: cebaac95f0a28b5f
 没有检测框时，由某一个载荷来决定这些行：OCR 每个区域输出一行，带上它的
 `text`，点每个点一行，全景每个分段一行、带 `pixel_count` 和 `pixel_fraction`，
 语义每个出现过的类别一行，分类输出前五个类别。深度、法线、边缘、恢复和抠图各自
-只输出一行汇总，描述的是这张图本身，而不是它的像素。
+只输出一行汇总，描述的是这张图本身，而不是它的像素；生成的图像或 3D 对象输出一行，带上它的种子和设置。
 
 有两种载荷是有意精简过的。嵌入向量只报告 `embedding_dim`，因为一行 512 个浮点数
 意味着每张脸大约 2 KB；传 `embeddings=True` 才会把数值也包含进来。网格顶点则
@@ -270,9 +273,10 @@ source_hash: cebaac95f0a28b5f
 图，全景结果带上它的分段，matte 写成透明背景的 RGBA PNG，检测器写成检测框、掩码
 画在框下面。写出的路径会作为 `result.saved_path` 挂在结果上。
 
-`Results.save(path)` 同样窄：它把 matte 结果写成透明背景的 RGBA PNG 抠图，其他
-情况一律抛 `NotImplementedError`。`Results.cutout()` 返回同一个 RGBA 数组，但
-不写盘。两者都需要源图像，从 `result.path` 取，或者用 `image=` 传进来。
+`Results.save(path)` 同样窄：它写出生成的图像或 3D 对象，格式由扩展名决定；把
+matte 结果写成透明背景的 RGBA PNG 抠图；其他情况一律抛 `NotImplementedError`。
+`Results.cutout()` 返回同一个 RGBA 数组，但不写盘。对 matte 来说，两者都需要源图像，
+从 `result.path` 取，或者用 `image=` 传进来。
 
 有两种载荷自带写盘方法：恢复后的图像用 `result.restored.save(path)`，网格用
 `result.meshes.save_obj(path, index=0)`。
@@ -280,7 +284,7 @@ source_hash: cebaac95f0a28b5f
 文件最终落在哪里，以及 `output_path` 和 `output_file_format` 的行为，见
 [预测数据源](/docs/predict/sources)。
 
-`plot()` 覆盖所有任务载荷。图像叠加默认返回连续的 HxWx3 uint8 BGR；`pil=True` 请求 PIL。深度、法线、边缘和反照率图，以及 3D 长方体和动作块，默认返回 PIL 图像；`pil=False` 返回数组。`orig_img` 为内存和 URL 数据源保留 BGR 像素；本地文件和已收集的有限时长视频帧可以重新打开。
+`plot()` 覆盖所有任务载荷。图像叠加默认返回连续的 HxWx3 uint8 BGR；`pil=True` 请求 PIL。深度、法线、边缘和反照率图，3D 长方体、动作块、生成的图像，以及生成的 3D 对象的点渲染图，默认返回 PIL 图像；`pil=False` 返回数组。`orig_img` 为内存和 URL 数据源保留 BGR 像素；本地文件和已收集的有限时长视频帧可以重新打开。
 
 控制项包括 `img`、`conf`、`labels`、`boxes`、`masks`、`probs`、`line_width`、`pil`、`show`、`save` 和 `filename`。保存的分类图像包含前五个标签。透明度图保存为 RGBA 抠图。
 

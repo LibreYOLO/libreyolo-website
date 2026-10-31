@@ -27,7 +27,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Niveaux de prise en charge de l'export
@@ -107,9 +107,9 @@ pour le même groupe dans l'en-tête d'une page de modèle.
 | `g2` | Supported | 19 | Ensemble de couverture supplémentaire des familles entraînables |
 | `g3` | Inference only | 44 | Familles sans implémentation d'entraînement |
 | `g4` | Museum | 5 | Familles historiques avec couverture de l'inférence |
-| `s` | Sibling tier | 36 | API sœurs (SAM, vocabulaire ouvert, VLM, grounding, zero-shot) couvertes séparément |
+| `s` | Sibling tier | 40 | API sœurs (SAM, vocabulaire ouvert, VLM, grounding, zero-shot) couvertes séparément |
 
-Cela représente 118 familles réparties entre six groupes. `g3` est le plus
+Cela représente 122 familles réparties entre six groupes. `g3` est le plus
 grand groupe, car une grande partie du registre couvre des lignées réservées à
 l'inférence plutôt que des détecteurs activement entraînés.
 
@@ -150,7 +150,7 @@ Une famille de `g3` ou `g4` ne possède aucune implémentation d'entraînement e
 l'appel à `train()` lève une erreur. Il s'agit d'une propriété du code de la
 famille, et non de son groupe : le groupe enregistre ce fait sans le provoquer.
 
-Sur les 118 familles, 37 s'entraînent : toutes les familles `g0`, `g1` et `g2`,
+Sur les 122 familles, 37 s'entraînent : toutes les familles `g0`, `g1` et `g2`,
 plus Qwen3-VL via `LibreVLM` et SmolVLA, ACT et Diffusion Policy via
 `LibreVLA`.
 

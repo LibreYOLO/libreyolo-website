@@ -22,7 +22,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Task canonici
-    value: 20
+    value: 22
   - label: Livelli di supporto
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -56,12 +56,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Task
 
-Un task è ciò che un modello restituisce. LibreYOLO ha venti nomi di task
+Un task è ciò che un modello restituisce. LibreYOLO ha ventidue nomi di task
 canonici, e ognuno dà il nome al campo dell'oggetto `Results` che ne contiene
 l'output.
 
@@ -87,6 +87,8 @@ l'output.
 | `mesh` | Un corpo 3D in posa per ogni persona rilevata |
 | `detect3d` | Box 3D in coordinate della camera, con una classe e una confidenza |
 | `act` | Un chunk di azioni del robot, predetto dai frame della camera e dallo stato del robot |
+| `generate` | Un'immagine RGB generata da un prompt di testo, con il prompt, il seed e i parametri della chiamata che la riproducono |
+| `generate3d` | Un oggetto come splat gaussiani 3D, generato da una sua singola immagine |
 
 Sono questi i nomi che compaiono nei metadati dei checkpoint e nei nomi dei
 file. Gli alias più familiari sono accettati ovunque si passi un task e vengono
@@ -183,10 +185,10 @@ quello predefinito aggiunge il nome del dataset come ulteriore suffisso, e
 quella variante resta parte del nome del repository da cui il file viene
 scaricato.
 
-Tre livelli restano fuori da questo schema. Le famiglie di segmentazione
-promptable, le famiglie vision-language e i detector a vocabolario aperto non
-sono registrati nella factory dei checkpoint e non emettono alcun file
-`Libre<FAMILY><size>.pt`. Il loro prefisso indica invece uno snapshot scaricato
+Diversi livelli restano fuori da questo schema. Le famiglie di segmentazione
+promptable, le famiglie vision-language, i detector a vocabolario aperto e le
+famiglie di generazione `LibreGen` non sono registrati nella factory dei
+checkpoint e non emettono alcun file `Libre<FAMILY><size>.pt`. Il loro prefisso indica invece uno snapshot scaricato
 da Hugging Face o un checkpoint promptable, e lì le maiuscole del marchio
 originale sono conservate di proposito.
 

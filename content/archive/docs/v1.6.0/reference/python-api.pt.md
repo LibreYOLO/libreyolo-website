@@ -1,0 +1,275 @@
+---
+title: API Python
+seo_title: Referência da API Python do LibreYOLO
+description: >-
+  Os nomes que LibreYOLO exporta no nível do pacote: factories, classes de
+  famílias, payloads de Results, backends, validadores, trackers e utilitários
+  de dados.
+lead: >-
+  A interface pública Python do LibreYOLO é a lista __all__ em
+  libreyolo/__init__.py. Exportações no nível do pacote usam from libreyolo
+  import <name>; os protocolos de rastreamento e treinamento abaixo usam seus
+  submódulos nomeados.
+keywords:
+  - api python libreyolo
+  - importar libreyolo python
+  - factory LibreYOLO
+  - LibreSAM
+  - LibreVLM
+  - LibreOpenVocab
+  - LibreEnsemble
+  - libreyolo __all__
+last_verified: 1.6.0
+verification: >-
+  Nomes e assinaturas lidos de libreyolo/__init__.py,
+  libreyolo/models/__init__.py, libreyolo/models/base/model.py,
+  libreyolo/models/base/inference.py, libreyolo/models/sam/model.py,
+  libreyolo/models/vlm/__init__.py, libreyolo/models/openvocab/__init__.py e
+  libreyolo/ensemble/model.py na v1.6.0.
+snippets:
+  usage:
+    - label: Carregar qualquer coisa por uma única factory
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreYOLO9t.pt")
+
+        # Uma fonte de imagem única retorna um Results; uma lista ou um
+        # diretório retorna uma lista deles.
+        result = model(SAMPLE_IMAGE)
+
+        print(result.boxes.xyxy)
+        print(result.names)
+    - label: Importar uma classe de família diretamente
+      language: python
+      code: |
+        from libreyolo import LibreYOLO9, SAMPLE_IMAGE
+
+        model = LibreYOLO9("LibreYOLO9t.pt", size="t")
+        result = model(SAMPLE_IMAGE)
+
+        print(len(result))
+  factories:
+    - label: Pontos de entrada
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, LibreEnsemble
+
+
+        # Factory que fareja os pesos, sobre as famílias sem prompt.
+
+        detector = LibreYOLO("LibreYOLO9t.pt")
+
+
+        # Dois ou mais detectores atrás de uma única superfície de predição.
+
+        ens = LibreEnsemble(["LibreYOLO9t.pt", "LibreYOLO9s.pt"])
+
+
+        # As outras três factories precisam de um extra instalado:
+
+        #   pip install 'libreyolo[sam]'        -> from libreyolo import
+        LibreSAM
+
+        #   pip install 'libreyolo[vlm]'        -> from libreyolo import
+        LibreVLM
+
+        #   pip install 'libreyolo[openvocab]'  -> from libreyolo import
+        LibreOpenVocab
+
+        print(type(detector).__name__, ens.fusion)
+source_hash: 7dc6a5ef1b3ba9ea
+---
+
+## Pontos de entrada
+
+As factories carregam modelos ou configuram clientes de API. Elas são separadas pelo contrato de chamada, não pela arquitetura.
+
+| Factory | Carrega | Prompt no momento da chamada | Extra necessário |
+|---|---|---|---|
+| `LibreYOLO` | Famílias sem prompt, farejando o checkpoint ou o sufixo do arquivo | | |
+| `LibreSAM` | Segmentadores com prompt, por alias de tamanho | Pontos, boxes ou texto de conceito | `sam` |
+| `LibreVLM` | Detectores generativos de visão e linguagem, por alias | Vocabulário de classes ou um prompt livre | `vlm` |
+| `LibreOpenVocab` | Detectores condicionados por texto, por alias | Vocabulário de classes | `openvocab` |
+| `LibreEnsemble` | Dois ou mais detectores, fundidos em uma única superfície | | |
+
+<code-tabs name="factories" />
+
+`LibreYOLO` aceita arquivos de checkpoint e artefatos exportados. As demais factories aceitam aliases de modelos; `LibreVLM` e `LibreVLA` também recarregam seus próprios diretórios de checkpoints salvos.
+
+```python
+LibreYOLO(
+    model_path: str,
+    size: str | None = None,
+    reg_max: int = 16,
+    nb_classes: int | None = None,
+    device: str = "auto",
+    task: str | None = None,
+    compute_units: str = "all",
+)
+```
+
+`model_path` aceita um checkpoint `.pt`, um arquivo ONNX `.onnx`, um
+ExecuTorch `.pte`, um MNN `.mnn`, uma engine TensorRT `.engine`, um diretório
+OpenVINO, Paddle ou ncnn, ou uma URL HTTP ou HTTPS de modelo no Triton. `size`
+e `nb_classes` são lidos do checkpoint quando omitidos. `compute_units` só é
+lido em cargas de CoreML `.mlpackage` e é um de `all`, `cpu_only`,
+`cpu_and_gpu`, `cpu_and_ne`. `task` aceita qualquer nome canônico de tarefa de
+`libreyolo.tasks.TASKS`.
+
+<code-tabs name="usage" />
+
+`LibreGround` mapeia instruções para pontos na imagem; `LibreVLA` prevê blocos de ações de robôs; `LibreLLM` chama um endpoint remoto compatível de modelo de linguagem. Veja a [API de grounding](/docs/reference/ground-api), a [API de políticas](/docs/reference/vla-api) e o [cliente de modelo de linguagem](/docs/reference/llm-api).
+
+`LibreYOLO("hf://owner/repo@revision/filename")` carrega checkpoints do Hub. `model.push_to_hub(repo_id, private=False)` publica um checkpoint e um card. A [referência do Hub](/docs/reference/hugging-face) define a resolução e a autenticação.
+
+## Classes de família
+
+Toda família que a factory pode retornar também é exportada por nome, então uma
+classe pode ser construída diretamente quando o checkpoint é conhecido de
+antemão. Os construtores seguem `BaseModel.__init__`:
+
+```python
+Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
+```
+
+Os padrões do construtor variam por família; confira sua assinatura antes de construí-la diretamente. YOLO9 e suas variantes inserem `reg_max: int = 16` depois de `size`.
+
+Famílias de detecção e multitarefa: `LibreYOLO9`, `LibreYOLO9E2E`,
+`LibreYOLO9P2`, `LibreYOLONAS`, `LibreYOLOX`, `LibreYOLO7`, `LibreYOLO4`,
+`LibreYOLO3`, `LibreYOLO2`, `LibreYOLO1`, `LibreRTDETR`, `LibreRTDETRv2`,
+`LibreRTDETRv4`, `LibreRFDETR`, `LibreDFINE`, `LibreDOMEDETR`, `LibreDEIM`,
+`LibreDEIMv2`, `LibreDETR`, `LibreDeformableDETR`, `LibreDINODETR`,
+`LibreLWDETR`, `LibreMaskRCNN`, `LibreFCOS`, `LibreFasterRCNN`,
+`LibreRetinaNet`, `LibreSSD`, `LibreCenterNet`, `LibreEfficientDet`,
+`LibreEC`, `LibreGTR`, `LibreTinyFormer`, `LibrePICODET`, `LibrePPYOLOE`,
+`LibreRTMDet`, `LibreFOMO`.
+
+Famílias de predição densa: `LibreMiDaS`, `LibreDepthAnythingV2`,
+`LibreDepthAnything3`, `LibreZipDepth`, `LibreMoGe2`, `LibreTEED`,
+`LibreDexiNed`, `LibreNAFNet`, `LibreRealESRGAN`, `LibreSwinIR`,
+`LibreBiRefNet`, `LibreFeyNobg`, `LibreFCN`, `LibreEoMT`, `LibreDeepLabv3`,
+`LibrePIDNet`, `LibrePPLiteSeg`, `LibreUNet`, `LibreSegformer`,
+`LibreLingBotVision`, `LibreMarigoldV2`, `LibreDDColor`, `LibreHVICIDNet`,
+`LibreLaMa`, `LibreQuickSRNet`, `LibreBEN2`, `LibreViTMatte`.
+
+Famílias de classificação e embedding: `LibreViT`, `LibreMobileNetV4`,
+`LibreConvNeXt`, `LibreDeiT`, `LibreSwin`, `LibreEfficientNetV2`, `LibreVGG`,
+`LibreResNet`, `LibreAlexNet`, `LibreCLIP`, `LibreSigLIP2`, `LibreDINOv2`,
+`LibreConvNeXtV2`, `LibrePE`, `LibreVJEPA2`, `LibreLeVJEPA`.
+
+Outras tarefas: `LibreHRNet` e `LibreDEKR` (pose), `LibreL2CS` (gaze),
+`LibrePPOCR` (ocr), `LibreFaceEmbedder` (embed) e os detectores 3D
+`LibreFCOS3D`, `LibreDetAny3D`, `LibreWildDet3D` e `Libre3DMOOD` (detect3d).
+
+Os tiers irmãos também exportam suas classes de família: `LibreSAM1`,
+`LibreSAM2`, `LibreSAM3`, `LibreEdgeTAM`, `LibreMobileSAM`, `LibrePicoSAM3`;
+`LibreGroundingDINO`, `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`,
+`LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
+`LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
+`LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (também escrito
+`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` e `LibreGroundQwen3VL`
+por trás de `LibreGround`; `LibreSmolVLA`, `LibreACT` e `LibreDiffusionPolicy`
+por trás de `LibreVLA`.
+
+## Superfície de predição
+
+Chamar um modelo roda a inferência. `predict` é um alias de `__call__`, então
+os dois são intercambiáveis.
+
+```python
+model(
+    source=None,
+    *,
+    conf=0.25,
+    iou=0.45,
+    imgsz=None,
+    device=None,
+    classes=None,
+    max_det=300,
+    augment=False,
+    save=False,
+    batch=1,
+    stream=False,
+    stream_buffer=False,
+    vid_stride=1,
+    show=False,
+    output_path=None,
+    color_format="auto",
+    tiling=False,
+    overlap_ratio=0.2,
+    output_file_format=None,
+    cuda_graph=False,
+    **kwargs,
+)
+```
+
+Uma fonte de imagem única retorna um `Results`. Uma lista, uma tupla ou um
+diretório retorna uma lista deles, e `stream=True` retorna um gerador. Os
+outros métodos do objeto de modelo estão documentados na
+[página da API do modelo](/docs/reference/model-api).
+
+## Payloads de Results
+
+`Results` e suas classes de payload são exportadas no nível do pacote: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. Cada uma é descrita em [tipos de Results](/docs/reference/results-types).
+
+`Boxes3D`, `AlbedoMap` e `Actions` adicionam cuboides 3D, albedo intrínseco e blocos de ações. Veja [tipos de resultados](/docs/reference/results-types).
+
+## Backends
+
+Artefatos exportados carregam por `LibreYOLO()` a partir do sufixo do arquivo,
+então as classes de backend raramente são construídas na mão. Elas são
+exportadas para os casos em que um backend precisa ser escolhido
+explicitamente: `OnnxBackend`, `OpenVINOBackend`, `PaddleBackend`,
+`TensorRTBackend`, `TritonBackend`, `NcnnBackend`, `CoreMLBackend`, mais
+`create_triton_config`. `BaseExporter` é o registro de exportadores por trás de
+`model.export()`.
+
+## Validadores
+
+`model.val()` despacha para o validador certo conforme a tarefa, então estes
+são exportados para uso direto e para herança: `DetectionValidator`,
+`SegmentationValidator`, `PoseValidator`, `SemanticValidator`,
+`PanopticValidator`, `DepthValidator`, `NormalValidator`, `EdgeValidator` e o
+`ValidationConfig` compartilhado.
+
+## Rastreamento
+
+`model.track()` escolhe um tracker pelo nome. As classes de tracker e suas
+dataclasses de configuração também são exportadas: `ByteTracker` com
+`TrackConfig`, `BoTSortTracker` com `BoTSortConfig` e `OCSortTracker` com
+`OCSortConfig`.
+
+`libreyolo.tracking.Tracker` define `reset()` e `update(results, image=None)` para instâncias de trackers personalizados.
+
+## Helpers de dados
+
+`DATASETS_DIR` é a raiz resolvida dos datasets, `load_data_config` lê um YAML
+de dataset e `check_dataset` valida um. Os loaders específicos de tarefa
+citados em [formatos de dataset](/docs/reference/dataset-formats) ficam em
+`libreyolo.data` e não no nível do pacote.
+
+## Galerias e destilação
+
+`Gallery` e `FaceGallery` guardam os vetores de identidade cadastrados para a
+tarefa `embed` e produzem o payload `Identities`. `Distiller` e
+`get_distill_config` conduzem o treinamento professor-aluno.
+
+`libreyolo.training.TrainFitnessCallback` define `fitness(metrics)` para seleção personalizada de checkpoints. Veja [callbacks de fitness](/docs/train/fitness-callbacks).
+
+## Assets
+
+`SAMPLE_IMAGE` é um caminho absoluto para uma imagem embutida no pacote, então
+todo snippet destes docs roda sem precisar baixar uma figura antes.
+
+## Imports lazy e classes renomeadas
+
+A maioria dos nomes de tier irmão, os backends, os validadores e os helpers de
+dados resolvem pelo `__getattr__` de nível de módulo, então importar
+`libreyolo` não importa as dependências deles. O import ainda falha com uma
+mensagem clara quando o extra necessário está faltando.
+
+Dois nomes de classe foram renomeados e a grafia antiga ainda resolve, com um
+`DeprecationWarning`: `LibreYOLORTDETR` agora é `LibreRTDETR`, e
+`LibreYOLORFDETR` agora é `LibreRFDETR`.

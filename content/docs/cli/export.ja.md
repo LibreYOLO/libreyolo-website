@@ -40,7 +40,7 @@ snippets:
         # ファクトリーはファイル拡張子で振り分けるので、エクスポート結果もチェックポイントと同じように読み込まれる
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## 概要
@@ -102,7 +102,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 
 ### モデルファミリーがどの形式に対応するか
 
-対応状況はグローバルではなく、ファミリーごと・タスクごとに決まります。`libreyolo formats family=<family> task=<task>`は、その組み合わせについて各形式のティアを、理由と付随する制約とあわせて表示します。引数は[`libreyolo formats`](/docs/cli/utilities)を参照してください。
+対応状況はグローバルではなく、ファミリーごと・タスクごとに決まります。`libreyolo formats family=<family> task=<task>`は、その組み合わせについて各形式のティアを、理由、付随する制約、そこで`export()`がFP16とINT8を受け付けるかどうかとあわせて表示します。引数は[`libreyolo formats`](/docs/cli/utilities)を参照してください。
 
 オプションのインストールが必要な形式もあれば、ツールチェーンが必要な形式もあります。Pythonの依存関係が足りない場合は`export_dep_missing`で終了し、その形式が生成できない精度を指定した場合は`format_precision_unsupported`で終了します。
 

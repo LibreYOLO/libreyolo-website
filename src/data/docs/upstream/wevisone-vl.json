@@ -1,0 +1,14 @@
+{
+  "name": "WeVisOne-VL",
+  "org": "Tencent (WeChat Vision)",
+  "paper_title": "WeVisOne-VL: Unified Visual Perception from Objects to Pixels",
+  "paper_url": "https://arxiv.org/abs/2610.31329",
+  "code_url": "https://github.com/Tencent/WeVisOne-VL",
+  "license": "Apache-2.0",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the WeVisOne-VL code and weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and notices, and the license grants a patent license. Tencent declares Apache-2.0 on both Hugging Face repositories LibreYOLO downloads, tencent/WeVisOne-VL-2B and tencent/WeVisOne-VL-4B, in the license tag and LICENSE file. Each LICENSE prefixes the Apache-2.0 text with a Tencent preamble that adds no restrictions, and names the model it builds upon, Qwen3-VL-2B-Instruct or Qwen3-VL-4B-Instruct (Apache-2.0, Copyright 2024 Alibaba Cloud). LibreYOLO's wrapper is MIT; the pixel decoder, feature bridge, prompts and response parser it ports from the Tencent/WeVisOne-VL repository keep Apache-2.0, with their notices in libreyolo/models/wevisone/NOTICE. The Qwen3-VL backbone runs from transformers, so no Qwen code is copied. The weights are not redistributed: they download from Tencent at pinned revisions, 798ffc7c87ad6104410812b589e240ba32d92315 for 2B and 4a7bed92750ac9d8b8a124cede14759036932dc2 for 4B.",
+  "bibtex": "@article{liang2026wevisone,\n  title={WeVisOne-VL: Unified Visual Perception from Objects to Pixels},\n  author={Liang, Tianming and Pan, Junyi and Li, Yuxi and Fu, Canmiao and Huang, Zhipeng and Sun, Chong and Li, Chen and Lyu, Jing},\n  journal={arXiv preprint arXiv:2610.31329},\n  year={2026}\n}",
+  "bibtex_source_url": "https://github.com/Tencent/WeVisOne-VL#-citation",
+  "bibtex_verified": "2026-10-31, copied verbatim from the Citation section of the Tencent/WeVisOne-VL README on branch main (commit 9a6bcd85404505df0d05cfb5d97512ccacf35dee, the commit LibreYOLO's port is pinned to). README_zh-CN.md carries the identical entry; neither model card publishes one, and the repository has no CITATION.cff. Cross-checked against the arXiv API for 2610.31329: the same eight authors in the same order (Liang, Pan, Li, Fu, Huang, Sun, Li, Lyu), identical title, first submitted 2026-10-22 (v2 updated 2026-10-24), no journal-ref, so the @article form with an arXiv preprint journal still matches the record. Do not hand-edit; a wrong citation misattributes someone's work."
+}

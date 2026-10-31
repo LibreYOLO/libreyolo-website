@@ -42,7 +42,7 @@ snippets:
         # 行数据，先是普通 dict，再是 JSON
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## Results 对象
@@ -86,6 +86,8 @@ source_hash: 173c542fb675892e
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed，带图库（gallery） |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` 是 `result.normal_map` 的可读写别名。
 
@@ -286,3 +288,29 @@ blendshape 系数。骨架尺度、手部姿态和面部表情放在 `extras` �
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` 表示 float32 动作块 `(T, D)`。`first` 返回第一行；切片选择时间步。数值保持策略数据集的单位。`names` 描述动作维度，`fps` 描述控制频率，`instruction` 描述条件文本。
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)` 保存一张合成图像，形状为 `(H, W, 3)` 的 uint8 RGB。`array` 返回 numpy 视图，`image` 返回 `PIL.Image`。`prompt` 是生成这张图像的文本，`seed` 是在同一模型和设置下能复现它的整数；`params` 记录调用的其余部分：`model`、`imgsz` 以及生效的每一项家族设置。`save(path)` 写出图像，PNG 还会把 `to_dict()`，即形状、提示词、种子和参数，以 JSON 形式存进一个 `libreyolo` 文本块。
+
+在生成结果上，`Results.boxes` 和 `Results.path` 是 `None`，`orig_shape` 是图像自身的 `(H, W)`，`len(result)` 为 1。`Results.save(path)` 写出图像，`plot()` 把它作为 PIL 图像返回，`summary()` 返回一行，内容是该载荷的记录。
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)` 以高斯泼溅（Gaussian splat）的形式保存一个生成的 3D 对象，使用对象自身的坐标系：z 轴向上，居中于立方体 `[-0.5, 0.5]^3`。每一行是一个高斯。
+
+| 成员 | 返回 |
+|---|---|
+| `xyz` | `(N, 3)`，对象坐标系中的位置 |
+| `scales` | `(N, 3)`，沿局部坐标轴的标准差，线性值，不是对数值 |
+| `rotations` | `(N, 4)`，单位四元数 `(w, x, y, z)`，把局部坐标轴转到对象坐标系 |
+| `opacities` | `(N,)`，取值在 `[0, 1]` |
+| `sh` | `(N, K, 3)`，球谐颜色系数，0 阶在前 |
+| `colors` | `(N, 3)`，取值在 `[0, 1]` 的 RGB，来自 0 阶项 |
+| `camera` | 推断出的输入视角：以弧度表示的 `yaw` 和 `pitch`，以对象单位表示的 `radius`，以度表示的垂直 `fov`，以及裁剪的 `margin` |
+| `seed`、`params` | 能复现该对象的种子和调用设置 |
+| `input_image` | 模型经过自身预处理之后看到的 RGB 图像 |
+
+`len(gaussians)` 是 `N`，`gaussians[gaussians.opacities > 0.1]` 返回一个新的 `Gaussians`，装着被选中的行。`save(path)` 按扩展名写出。`.ply` 是标准的 3D Gaussian Splatting 布局，使用对数尺度和 logit 不透明度，并按泼溅查看器期望的方式转成 y 轴向上，还带一行 `comment libreyolo` 头，里面以 JSON 形式保存种子、相机和参数。带有高阶颜色（`K > 1`）的载荷在写 `.ply` 时会抛出 `NotImplementedError`。`.splat` 是紧凑的网页格式，每个高斯 32 字节。`render(size=512, background=(0, 0, 0))` 从推断出的输入视角返回一张点渲染图，类型为 `PIL.Image`，用来快速查看，而不是高斯光栅化。
+
+在生成的 3D 结果上，`Results.boxes` 是 `None`；`path`、`orig_shape` 和 `orig_img` 描述源图像，`len(result)` 为 1。`Results.save(path)` 写出该对象，`plot()` 返回那张点渲染图，`summary()` 返回一行，内容是该载荷的记录。

@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## Sinopsis
@@ -84,6 +84,19 @@ dibuat dari browser. Memberikan `data=path/to/data.yaml` langsung membuka
 dataset tersebut, dan baris awal melaporkan jumlah gambar, jumlah kelas, serta
 apakah dataset bisa ditulisi. Dataset yang hanya bisa dibaca tetap terbuka dan
 menjelaskan kenapa isinya tidak bisa ditulisi.
+
+### Label-Error Radar
+
+Dengan bantuan AI aktif, tombol Radar, atau `Y`, menjalankan model bantuan pada
+setiap gambar berlabel dan mencantumkan gambar yang hasil modelnya tidak cocok
+dengan label, dimulai dari yang terburuk: box yang tidak menemukan apa pun oleh
+model, deteksi yakin tanpa box, atau box yang kelasnya dipersoalkan model. Radar
+tidak menulis apa pun; setiap perbaikan dilakukan dengan edit manual. `N`
+berpindah ke gambar bertanda berikutnya menurut urutan terburuk lebih dulu itu
+dan kembali ke awal di ujung daftar. Menekan `Y` lagi membuka kembali pemindaian
+terakhir, lengkap dengan waktu pemindaiannya dan tombol Rescan, alih-alih
+memindai ulang. Radar tidak tersedia pada proyek oriented-box, dan kedua tombol
+itu bisa dipetakan ulang di dialog pintasan `?`.
 
 ### Berbagi akses, dan fungsi `host`
 

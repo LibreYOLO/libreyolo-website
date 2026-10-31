@@ -157,7 +157,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 
 ## Instalación
@@ -215,7 +215,11 @@ El entrenamiento parte de un checkpoint publicado, para ambas tareas.
 <code-tabs name="train" />
 
 Si no se toca nada, el trainer ejecuta 132 épocas con `lr0=2e-4` y `amp=True` y `amp_dtype="float16"`,
-un batch de 16 y early stopping tras 50 épocas sin mejora. Los pesos de
+un batch de 16 y early stopping tras 50 épocas sin mejora. `libreyolo train`
+parte de la misma receta para ambas tareas: AdamW con un schedule coseno plano,
+`weight_decay=1e-4`, 2 épocas de calentamiento, un recorte de la norma del
+gradiente de 0.1, y sin aumento de mosaic, MixUp, HSV ni afín. Sin `name=`, sus
+ejecuciones van a `runs/train/dfine_exp`. Los pesos de
 detección son un punto de partida válido para entrenar segmentación, pero solo
 como transferencia explícita, ya que la cabeza de máscaras empieza sin entrenar
 y de otro modo devolvería máscaras sin sentido. Pasar `task=segment` en el CLI

@@ -114,7 +114,7 @@ snippets:
 
 ## One object, one slot per payload
 
-A prediction on one image returns one `Results`. It carries twenty-one payload
+A prediction on one image returns one `Results`. It carries twenty-three payload
 slots, and a model fills only the ones its task produces. Every other slot is
 `None`, so reading `result.masks` on a detector is `None` rather than an error.
 
@@ -141,6 +141,8 @@ slots, and a model fills only the ones its task produces. Every other slot is
 | `albedo` | `AlbedoMap` | `(H, W, 3)` linear RGB | Albedo estimation |
 | `boxes3d` | `Boxes3D` | `(N, 14)` camera-frame cuboids, row-aligned with `boxes` | Monocular 3D detection |
 | `actions` | `Actions` | `(T, D)` action chunk | Robot policies |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB plus prompt, seed and settings | Image generation |
+| `gaussians` | `Gaussians` | `N` Gaussians as `xyz`, `scales`, `rotations`, `opacities` and `sh`, plus camera and seed | 3D generation |
 
 Alongside them sit the fields every result has: `orig_shape` as
 `(height, width)`, `path` (the source path, or `None` for in-memory input),
@@ -150,10 +152,11 @@ restoration result.
 
 `result.normals` is an alias for `result.normal_map`.
 
-`result.speed` exists on every result but is populated only by
-[ensembles](/docs/predict/ensembling), where its keys are `member_0`,
-`member_1` and `fusion` in milliseconds. For a single model it stays an empty
-dict.
+`result.speed` exists on every result. [Ensembles](/docs/predict/ensembling)
+fill it with `member_0`, `member_1` and `fusion` in milliseconds, LibreGen
+models with `inference`, the milliseconds per generated image or object, and
+FCOS3D with `preprocess`, `inference` and `postprocess`. Other models leave it
+an empty dict.
 
 ## Boxes
 
@@ -230,8 +233,8 @@ classification result cannot truncate its probability vector to a single class,
 and slicing a depth result cannot corrupt the `(H, W)` layout.
 
 `len(result)` counts instances: boxes, points, embeddings, OCR regions or
-meshes. Any dense whole-image payload counts as `1`. A result with nothing in
-it is `0`.
+meshes. Any dense whole-image payload counts as `1`, and so does a generated
+image or 3D object. A result with nothing in it is `0`.
 
 `to()`, `cpu()`, `cuda()` and `numpy()` each return a new `Results` with every
 populated slot converted. They do not modify the original.
@@ -259,7 +262,7 @@ region with its `text`, points one row per point, panoptic one row per segment
 with `pixel_count` and `pixel_fraction`, semantic one row per class present,
 classification the top five classes. Depth, normals, edges, restoration and
 matting each emit a single summary row describing the map rather than its
-pixels.
+pixels, and a generated image or 3D object one row with its seed and settings.
 
 Two payloads are deliberately abbreviated. An embedding vector is reported as
 `embedding_dim` only, because a 512-float row is about 2 KB per face; pass
@@ -278,10 +281,12 @@ with its segments, a matte as a transparent-background RGBA PNG, and a detector
 as boxes with masks underneath them. The written path is attached to the result
 as `result.saved_path`.
 
-`Results.save(path)` is likewise narrow: it writes a matte result as a
-transparent-background RGBA PNG cutout and raises `NotImplementedError`
+`Results.save(path)` is likewise narrow: it writes a generated image or 3D
+object, picking the format from the extension, and a matte result as a
+transparent-background RGBA PNG cutout, and raises `NotImplementedError`
 otherwise. `Results.cutout()` returns that same RGBA array without writing it.
-Both need the source image, taken from `result.path` or passed as `image=`.
+For a matte, both need the source image, taken from `result.path` or passed as
+`image=`.
 
 Two payloads carry their own writers: `result.restored.save(path)` for a
 restored image, and `result.meshes.save_obj(path, index=0)` for a mesh.
@@ -289,7 +294,7 @@ restored image, and `result.meshes.save_obj(path, index=0)` for a mesh.
 For where files land and how `output_path` and `output_file_format` behave, see
 [Prediction sources](/docs/predict/sources).
 
-`plot()` covers all task payloads. Image overlays return contiguous HxWx3 uint8 BGR by default; `pil=True` requests PIL. Depth, normal, edge and albedo maps, 3D cuboids and action chunks return a PIL image by default; `pil=False` returns the array. `orig_img` retains BGR pixels for in-memory and URL sources; local files and collected finite-video frames can be reopened.
+`plot()` covers all task payloads. Image overlays return contiguous HxWx3 uint8 BGR by default; `pil=True` requests PIL. Depth, normal, edge and albedo maps, 3D cuboids, action chunks, generated images and the point render of a generated 3D object return a PIL image by default; `pil=False` returns the array. `orig_img` retains BGR pixels for in-memory and URL sources; local files and collected finite-video frames can be reopened.
 
 Controls include `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` and `filename`. Saved classification images include the top five labels. Matte saving writes an RGBA cutout.
 

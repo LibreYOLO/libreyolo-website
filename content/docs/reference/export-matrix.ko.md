@@ -15,7 +15,11 @@ keywords:
   - 내보내기 균형 임계값
   - NotImplementedError 내보내기
 last_verified: 1.6.0
-verification: '형식, 계층, 대체 순서, 작업 및 계열 블록과 NCNN 블록은 libreyolo/export/support.py에서 읽음; 별칭과 공유 인수는 libreyolo/export/exporter.py에서 읽음; 계층 정의는 docs/adr/0011-export-support-tiers.md에서 읽음; 패리티 임계값은 docs/export_support.md에서 읽음, 모두 v1.6.0 기준. 조합별 셀은 여기서 기록되지 않음; 아래 스니펫으로 조회하십시오.'
+verification: >-
+  형식, 계층, 대체 순서, 작업 및 계열 블록과 NCNN 블록은 libreyolo/export/support.py에서 읽음; 별칭과 공유
+  인수는 libreyolo/export/exporter.py에서 읽음; 계층 정의는
+  docs/adr/0011-export-support-tiers.md에서 읽음; 패리티 임계값은 docs/export_support.md에서
+  읽음, 모두 v1.6.0 기준. 조합별 셀은 여기서 기록되지 않음; 아래 스니펫으로 조회하십시오.
 snippets:
   usage:
     - label: '행렬을 조회하십시오, 모델은 필요 없습니다'
@@ -54,7 +58,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: "70b9541fb8949352"
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## 행렬의 형태
@@ -108,6 +112,11 @@ source_hash: "70b9541fb8949352"
 
 | 작업 | 이유 |
 |---|---|
+| `albedo` | 알베도 내보내기에는 선형 RGB 백엔드 런타임 계약이 없습니다 |
+| `act` | 정책 샘플링 루프에는 내보낼 수 있는 그래프나 백엔드 런타임 계약이 없습니다 |
+| `generate` | 이미지 생성은 여러 네트워크에 걸친 샘플링 루프를 실행하며, 이는 내보낼 수 있는 그래프나 백엔드 런타임 계약이 없습니다 |
+| `generate3d` | 3D 생성은 여러 네트워크에 걸친 샘플링 루프를 실행하며, 이는 내보낼 수 있는 그래프나 백엔드 런타임 계약이 없습니다 |
+| `detect3d` | 3D 탐지의 그래프 출력, 카메라 메타데이터, 런타임 계약이 정의되어 있지 않습니다 |
 | `ocr` | 동적 지역별 크롭을 사용하는 두 개의 네트워크는 단일 그래프 내보내기 계약에 맞지 않습니다 |
 | `point` | 계열은 공유 포인트 히트맵 및 백엔드 피크 디코딩 계약에 연결되어 있지 않습니다 |
 | `semantic` | 그 계열은 공유된 밀집 로짓과 백엔드 아그맥스 계약에 연결되어 있지 않습니다 |
@@ -129,7 +138,7 @@ source_hash: "70b9541fb8949352"
 | `hrnet` | ONNX, TorchScript, OpenVINO 및 TensorRT 외의 모든 것 |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | 모든 형식; 프롬프트 가능 모델 내보내기는 v1 런타임 계약의 범위에 포함되지 않습니다 |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | 모든 형식; 오픈-보캐뷸러리 런타임 내보내기는 v1의 범위에서 벗어납니다 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | 모든 형식; 생성형 VLM 내보내기는 v1의 범위에 포함되지 않습니다 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | 모든 형식; 생성형 VLM 내보내기는 v1의 범위에 포함되지 않습니다 |
 
 PicoSAM3는 프롬프트 가능한 계층에서 예외입니다: 그것은 원시 96 픽셀 ROI 네트워크를 ONNX로 내보냅니다.
 

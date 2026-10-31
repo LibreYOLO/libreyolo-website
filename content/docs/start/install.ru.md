@@ -67,7 +67,7 @@ snippets:
         # входными разрешениями. Семейства, у которых не хватает extra,
         # выводятся вместе с командой pip, которая их включает.
         libreyolo models
-source_hash: 3ad6bb09bf2f5434
+source_hash: a4a8cf3926eeb9bb
 ---
 
 ## Установка
@@ -98,6 +98,7 @@ Extra — это имя в квадратных скобках, которое �
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 или новее |
 | `marigold` | Зафиксированные зависимости диффузии, ускорения и Transformers |
 | `molmo2` | `transformers==4.57.1`, `einops` и `accelerate` |
+| `gen` | `diffusers>=0.38.0`, `transformers>=5.1.0` и `accelerate>=1.7.0`, для LibreGen и Speridlabs Idol |
 | `rfdetr` | `transformers`, откуда берётся бэкбон RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, откуда берутся энкодеры ViT-L/16 и EfficientNet-Lite3 для MiDaS |
@@ -172,11 +173,11 @@ COCO откатывается на pycocotools и запуск продолжа�
 какой версией PyTorch он сочетается, а `coreai` — потому что `coreai-torch`
 фиксирует PyTorch на 2.11.x и утянул бы на эту версию всё окружение.
 `fast-eval`, `hub-kernels`, `clip-convert` и `siglip2-convert` тоже оставлены за
-бортом. Любой из них ставится по имени. `all` включает `hf` и `llm`; `fiftyone`, `vla`, `marigold` и `molmo2` остаются отдельными. FiftyOne устанавливает headless OpenCV, который пересекается с базовым пакетом `cv2`.
+бортом. Любой из них ставится по имени. `all` включает `hf`, `llm` и `gen`; `fiftyone`, `vla`, `marigold` и `molmo2` остаются отдельными. FiftyOne устанавливает headless OpenCV, который пересекается с базовым пакетом `cv2`.
 
 Базовая установка требует Python 3.10 или новее и добавляет `cloudpickle>=3.0.0` для DDP под управлением координатора.
 
-Используйте отдельное окружение для Molmo2: его фиксация Transformers 4.57.1 конфликтует с более новыми стеками VLM, Hub и Marigold. Marigold фиксирует diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 и Transformers 5.4.0, а также bitsandbytes 0.49.2 в Linux/Windows. Четырёхбитный инференс Marigold по умолчанию требует CUDA. North Micro Vision требует Transformers 5.16 или новее; Gemma 4 требует 5.10 или новее, что выше общего минимума VLM.
+Используйте отдельное окружение для Molmo2: его фиксация Transformers 4.57.1 конфликтует с более новыми стеками VLM, Hub и Marigold, а `libreyolo[gen]` нельзя установить вместе с `libreyolo[molmo2]`. Marigold фиксирует diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 и Transformers 5.4.0, а также bitsandbytes 0.49.2 в Linux/Windows. Четырёхбитный инференс Marigold по умолчанию требует CUDA. North Micro Vision требует Transformers 5.16 или новее; Gemma 4 требует 5.10 или новее, что выше общего минимума VLM.
 
 ## Ограничения платформ
 

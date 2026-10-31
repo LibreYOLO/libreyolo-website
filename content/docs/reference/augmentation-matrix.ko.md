@@ -38,7 +38,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## 손잡이들
@@ -56,7 +56,7 @@ source_hash: f0d31511715e3cc4
 | `mosaic_scale` | 어파인 왜곡을 위한 랜덤 스케일 범위 |
 | `mixup_scale` | MixUp 파트너 이미지에 적용된 지터-스케일 범위 |
 | `shear` | 어파인 변환을 위한 무작위 전단 범위(도 단위) |
-| `perspective` | 아핀 왜곡을 위한 사영 변환 크기 |
+| `perspective` | 아핀 왜곡에 더해지는 사영 변환 강도: 캔버스 모서리가 축마다 캔버스 한 변의 절반에 `min(perspective * 100, 0.2)`를 곱한 만큼까지 안쪽으로 이동합니다. `0`은 비활성화합니다 |
 | `flipud` | 수직 뒤집기 확률 |
 | `no_aug_epochs` | 강한 증강을 사용하지 않고 최종 에포크 학습 |
 | `auto_augment` | 분류 AutoAugment 정책: randaugment, autoaugment 또는 augmix |
@@ -112,13 +112,13 @@ DETR 방식 파이프라인은 모자이크가 없는 통과형 변환입니다.
 | 원형 | 계열들 |
 |---|---|
 | YOLOX 스타일 | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| DETR 스타일 | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| 분류 | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| 의미론의 | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| DETR 스타일 | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| 분류 | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| 의미론의 | `segformer`, `unet`, `lingbotvision` |
 | 복원하다 | `nafnet` |
 
-25개의 계열이 포함됩니다. 이 목록에 없는 계열은 비어 있는 무시 집합을 반환하므로 경고가 발생하지 않습니다.
+31개의 계열이 포함됩니다. 이 목록에 없는 계열은 비어 있는 무시 집합을 반환하므로 경고가 발생하지 않습니다.
 
 ## 편차
 
@@ -129,6 +129,8 @@ DETR 방식 파이프라인은 모자이크가 없는 통과형 변환입니다.
 | `rtdetr` | `flipud` 무시됨 |
 | `rtdetrv2` | `flipud` 무시됨 |
 | `fomo` | `perspective` 및 `flipud` 무시됨 |
+| `ppyoloe` | `flipud` 무시됨: 원본 레시피는 대신 무작위 90도 회전을 사용합니다 |
+| `gtr` | `mosaic_prob`와 `mixup_prob` 사용, 처음 `mosaic_epochs` 에폭 동안; `degrees`, `translate`, `mosaic_scale`은 모자이크 뒤에 오는 아핀을 결정합니다 |
 | `ec` | `hsv_prob`, `degrees` 및 `translate` 사용, `task="pose"` 전용; 고정 광측정 레시피를 사용하여 탐지 및 분할 |
 | `dinov2` | 분류 팩은 `task="classify"`에만 사용됩니다 |
 

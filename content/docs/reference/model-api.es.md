@@ -48,7 +48,7 @@ snippets:
         # stream=True devuelve un generador, un Results por frame o imagen.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Construcción
@@ -81,6 +81,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -107,6 +108,7 @@ model(
 | `device` | `None` | Sobrescribe el dispositivo para esta llamada |
 | `classes` | `None` | Conserva solo estos IDs de clase |
 | `max_det` | `300` | Detecciones máximas por imagen |
+| `agnostic_nms` | `False` | Conserva solo el box de mayor puntuación entre los boxes que se solapan por encima de `iou`, sean cuales sean sus clases. Detect, segment, pose y obb |
 | `augment` | `False` | Aumento de datos en tiempo de test |
 | `save` | `False` | Escribe una imagen o un vídeo anotados |
 | `batch` | `1` | Imágenes por pasada hacia delante para fuentes de tipo directorio y lista |
@@ -219,9 +221,18 @@ publicados. `project`, `name` y `exist_ok` fijan el directorio de salida como
 `save_plots`. `allow_download_scripts` controla el Python
 embebido que un YAML de dataset puede llevar en su campo `download`.
 
+Para detect y segment el diccionario es una subclase de `dict` que además lleva
+`box` (métricas por imagen y curvas de precisión, recall y F1 por clase) y
+`confusion_matrix`; para classify lleva `top1`, `top5` y `confusion_matrix`.
+Consulta [Validación y métricas](/docs/train/validation).
+
 `faster_coco_eval` se acepta a través de `**kwargs` y por defecto vale `True`,
 con vuelta a pycocotools cuando el paquete no está instalado. El backend que se
 ejecutó se indica en `model.last_eval_backend`.
+
+`agnostic_nms=True`, también a través de `**kwargs`, aplica NMS agnóstico a la
+clase en `iou` antes de puntuar. Cubre detect y segment y lanza `ValueError` en
+cualquier otra tarea.
 
 La validación con aumento de datos lanza un error para las tareas `obb` y
 `pose`.

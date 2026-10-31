@@ -124,7 +124,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Installer
@@ -146,8 +146,11 @@ L'objet `Results` renvoyé est le même pour toutes les familles, remplacer le
 détecteur ne demande donc de modifier qu'une ligne. Un nom de fichier contenant
 `-seg` sélectionne de lui-même la tâche RTMDet-Ins, et `result.masks` contient
 alors les masques d'instances en plus des boîtes. `conf` définit le seuil de
-confiance et `iou` le seuil NMS. Consultez la [prédiction](/docs/predict) pour
-les sources, le streaming et le traitement des résultats.
+confiance et `iou` le seuil NMS. `max_det` s'applique tel quel aux deux tâches, jusqu'à 300 boîtes ou
+masques par image par défaut ; la configuration de test RTMDet-Ins de MMDetection
+en garde 100, ce que reproduit `max_det=100`. Consultez la
+[prédiction](/docs/predict) pour les sources, le streaming et le traitement des
+résultats.
 
 ## Variantes
 

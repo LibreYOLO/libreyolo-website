@@ -127,12 +127,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 
 ## Satu objek, satu slot per payload
 
-Prediksi pada satu gambar mengembalikan satu `Results`. Objek ini memiliki dua puluh satu slot
+Prediksi pada satu gambar mengembalikan satu `Results`. Objek ini memiliki dua puluh tiga slot
 payload, dan model hanya mengisi slot yang dihasilkan task-nya. Semua slot lain bernilai
 `None`, sehingga membaca `result.masks` pada detektor menghasilkan `None`, bukan error.
 
@@ -159,6 +159,8 @@ payload, dan model hanya mengisi slot yang dihasilkan task-nya. Semua slot lain 
 | `albedo` | `AlbedoMap` | `(H, W, 3)` RGB linear | Estimasi albedo |
 | `boxes3d` | `Boxes3D` | `(N, 14)` kuboid dalam kerangka kamera, barisnya selaras dengan `boxes` | Deteksi 3D monokular |
 | `actions` | `Actions` | `(T, D)` potongan aksi | Policy robot |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB beserta prompt, seed, dan pengaturan | Pembuatan gambar |
+| `gaussians` | `Gaussians` | `N` Gaussian berupa `xyz`, `scales`, `rotations`, `opacities`, dan `sh`, beserta kamera dan seed | Pembuatan 3D |
 
 Di sampingnya terdapat field yang dimiliki setiap hasil: `orig_shape` sebagai
 `(height, width)`, `path` (path sumber atau `None` untuk input dalam memori), `names` yang
@@ -167,9 +169,11 @@ pelacakan, serta `restore_scale`, yaitu faktor upscale bilangan bulat dari hasil
 
 `result.normals` adalah alias untuk `result.normal_map`.
 
-`result.speed` ada pada setiap hasil, tetapi hanya diisi oleh
-[ensemble](/docs/predict/ensembling), dengan key `member_0`, `member_1`, dan `fusion` dalam
-milidetik. Untuk satu model, nilainya tetap berupa dict kosong.
+`result.speed` ada pada setiap hasil. [Ensemble](/docs/predict/ensembling)
+mengisinya dengan `member_0`, `member_1`, dan `fusion` dalam milidetik, model
+LibreGen dengan `inference`, yaitu milidetik per gambar atau objek yang dihasilkan,
+dan FCOS3D dengan `preprocess`, `inference`, dan `postprocess`. Model lain
+membiarkannya berupa dict kosong.
 
 ## Kotak
 
@@ -242,7 +246,8 @@ klasifikasi tidak dapat memotong vektor probabilitasnya menjadi satu kelas dan s
 kedalaman tidak dapat merusak tata letak `(H, W)`.
 
 `len(result)` menghitung instance: kotak, titik, embedding, wilayah OCR, atau mesh. Payload
-padat seluruh gambar dihitung sebagai `1`. Hasil tanpa isi bernilai `0`.
+padat seluruh gambar dihitung sebagai `1`, begitu juga gambar atau objek 3D hasil
+generasi. Hasil tanpa isi bernilai `0`.
 
 `to()`, `cpu()`, `cuda()`, dan `numpy()` masing-masing mengembalikan `Results` baru dengan
 setiap slot terisi dikonversi. Semuanya tidak mengubah objek asli.
@@ -268,7 +273,8 @@ Jika tidak ada kotak, satu payload menentukan baris: OCR mengeluarkan satu baris
 dengan `text`, titik satu baris per titik, panoptik satu baris per segmen dengan `pixel_count`
 dan `pixel_fraction`, semantik satu baris per kelas yang ada, serta klasifikasi lima kelas
 teratas. Kedalaman, normal, tepi, restorasi, dan matting masing-masing mengeluarkan satu baris
-ringkasan yang menggambarkan peta, bukan pikselnya.
+ringkasan yang menggambarkan peta, bukan pikselnya, dan gambar atau objek 3D hasil
+generasi satu baris berisi seed dan pengaturannya.
 
 Dua payload sengaja disingkat. Vektor embedding hanya dilaporkan sebagai `embedding_dim`
 karena baris 512 float berukuran sekitar 2 KB per wajah; berikan `embeddings=True` untuk
@@ -286,10 +292,12 @@ berwarna, hasil kedalaman sebagai visualisasi kedalaman, hasil panoptik dengan s
 matte sebagai PNG RGBA berlatar transparan, dan detektor sebagai kotak dengan mask di bawahnya.
 Path yang ditulis dilampirkan ke hasil sebagai `result.saved_path`.
 
-`Results.save(path)` juga sempit: metode ini menulis hasil matte sebagai cutout PNG RGBA
-berlatar transparan dan memunculkan `NotImplementedError` untuk lainnya. `Results.cutout()`
-mengembalikan array RGBA yang sama tanpa menulis. Keduanya memerlukan gambar sumber, yang
-diambil dari `result.path` atau diberikan sebagai `image=`.
+`Results.save(path)` juga sempit: metode ini menulis gambar atau objek 3D hasil
+generasi, dengan format dipilih dari ekstensi, dan hasil matte sebagai cutout PNG
+RGBA berlatar transparan, serta memunculkan `NotImplementedError` untuk lainnya.
+`Results.cutout()` mengembalikan array RGBA yang sama tanpa menulis. Untuk matte,
+keduanya memerlukan gambar sumber, yang diambil dari `result.path` atau diberikan
+sebagai `image=`.
 
 Dua payload memiliki writer sendiri: `result.restored.save(path)` untuk gambar hasil restorasi,
 dan `result.meshes.save_obj(path, index=0)` untuk mesh.
@@ -297,7 +305,7 @@ dan `result.meshes.save_obj(path, index=0)` untuk mesh.
 Untuk lokasi berkas serta perilaku `output_path` dan `output_file_format`, lihat
 [Sumber prediksi](/docs/predict/sources).
 
-`plot()` mencakup payload semua task. Overlay gambar mengembalikan BGR uint8 HxWx3 kontigu secara default; `pil=True` meminta PIL. Peta kedalaman, normal, edge, dan albedo, kuboid 3D, serta potongan aksi mengembalikan gambar PIL secara default; `pil=False` mengembalikan array-nya. `orig_img` menyimpan piksel BGR untuk sumber dalam memori dan URL; berkas lokal dan frame video berdurasi terbatas yang dikumpulkan dapat dibuka ulang.
+`plot()` mencakup payload semua task. Overlay gambar mengembalikan BGR uint8 HxWx3 kontigu secara default; `pil=True` meminta PIL. Peta kedalaman, normal, edge, dan albedo, kuboid 3D, potongan aksi, gambar hasil generasi, dan render titik dari objek 3D hasil generasi mengembalikan gambar PIL secara default; `pil=False` mengembalikan array-nya. `orig_img` menyimpan piksel BGR untuk sumber dalam memori dan URL; berkas lokal dan frame video berdurasi terbatas yang dikumpulkan dapat dibuka ulang.
 
 Kontrol meliputi `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save`, dan `filename`. Gambar klasifikasi yang disimpan memuat lima label teratas. Penyimpanan matte menulis potongan RGBA.
 

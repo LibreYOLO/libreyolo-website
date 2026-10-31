@@ -1,7 +1,7 @@
 ---
 title: Thresholds and filtering
 seo_title: "conf, iou and max_det in LibreYOLO"
-description: "What conf, iou, max_det and classes actually do at predict time, which families ignore iou because they run no NMS, and why agnostic_nms is a no-op."
+description: "What conf, iou, max_det, classes and agnostic_nms do at predict time, and which families ignore iou because they run no NMS of their own."
 lead: "Four arguments decide which predictions survive: conf, iou, max_det and classes. Only two of them apply to every family, because a set predictor decodes a fixed query set and never runs NMS."
 keywords:
   - yolo conf threshold
@@ -13,7 +13,7 @@ keywords:
   - detection confidence threshold
   - class filtering inference
 last_verified: "1.6.0"
-verification: "Defaults quoted from InferenceRunner.__call__ in libreyolo/models/base/inference.py. Per-family NMS behavior read from every module in libreyolo/postprocess/ and cross-checked against _is_nms_free_family in libreyolo/backends/base.py. Class filtering from InferenceRunner._apply_classes_filter and _wrap_results. agnostic_nms status from NOOP_PREDICT_KWARGS in libreyolo/utils/predict_args.py. Open-vocabulary handling from NMS_THRESHOLD in libreyolo/models/openvocab/base.py. Validation defaults from BaseModel.val."
+verification: "Defaults quoted from InferenceRunner.__call__ in libreyolo/models/base/inference.py. Per-family NMS behavior read from every module in libreyolo/postprocess/ and cross-checked against _is_nms_free_family in libreyolo/backends/base.py. Class filtering from InferenceRunner._apply_classes_filter and _wrap_results. agnostic_nms from check_agnostic_nms and postprocess_max_det in libreyolo/utils/predict_args.py and the agnostic step in InferenceRunner._wrap_results. Open-vocabulary handling from NMS_THRESHOLD in libreyolo/models/openvocab/base.py. Validation defaults from BaseModel.val."
 snippets:
   basic:
     - label: The four arguments
@@ -86,6 +86,24 @@ snippets:
 
         # Same count either way. conf and max_det are the controls that work.
         print(len(loose.boxes), len(tight.boxes))
+  agnostic:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+        per_class = model(SAMPLE_IMAGE)
+        agnostic = model(SAMPLE_IMAGE, agnostic_nms=True)
+
+        # Overlapping boxes of different classes collapse to the highest-scoring one.
+        print(len(per_class.boxes), len(agnostic.boxes))
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
 ---
 
 ## The four arguments
@@ -143,13 +161,15 @@ no supported way to change.
 These families do use it: YOLOv1 through YOLOv4, YOLOv7, YOLOv9, YOLOX,
 YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet and SSD.
 
-Two prediction-time options make `iou` matter even for a set predictor, because
-both merge boxes after the model has finished:
+Three prediction-time options make `iou` matter even for a set predictor,
+because all three act on boxes after the model has finished:
 
 - `tiling=True` reconciles overlapping tiles with per-class NMS at `iou`
 - `augment=True` merges flipped views with per-class NMS at `iou`
+- `agnostic_nms=True` suppresses overlapping boxes across classes at `iou`,
+  described [below](#agnostic_nms)
 
-Both are covered in [Inference performance](/docs/predict/performance).
+The first two are covered in [Inference performance](/docs/predict/performance).
 
 Open-vocabulary detectors have their own rule. A family whose processor runs
 NMS declares its own default threshold and honors `iou`, which is the case for
@@ -164,12 +184,13 @@ everywhere, but through different mechanisms: an NMS family truncates after
 suppression, a set predictor uses it as the size of its top-k selection.
 
 Some families clamp below whatever you ask for, because their upstream
-reference configuration does. SSD caps at 200, RTMDet instance segmentation at
-100, and FCOS at its own per-image detection limit. Raising `max_det` past
-those has no effect.
+reference configuration does. SSD caps at 200, and FCOS at its own per-image
+detection limit. Raising `max_det` past those has no effect.
 
-The one place `max_det` is applied centrally rather than per family is tiled
-inference, where the merged list is truncated after tiles are reconciled.
+`max_det` is applied centrally rather than per family in two cases: tiled
+inference, where the merged list is truncated after tiles are reconciled, and
+calls with `classes` or `agnostic_nms=True`, where the cut comes after the
+filter or the suppression.
 
 ## Class filtering
 
@@ -194,28 +215,59 @@ libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.gith
 ```
 
 Filtering is not free accuracy. A model still spends its budget predicting
-classes you then discard, and `max_det` is applied by the family before the
-filter, so an image crowded with unwanted classes can hit the cap before your
-class is reached. Lower `conf` or raise `max_det` if that happens.
+classes you then discard. With `classes` set, the family keeps a candidate
+budget of 300 boxes, or `max_det` when that is higher, and the cut to `max_det`
+comes after the filter, so a small `max_det` does not crowd your class out.
+Exported backends use the same budget, batched TensorRT engines included. An
+image with more than 300 higher-scoring boxes of unwanted classes can still fill
+the budget before your class is reached; raise `max_det` above 300 if that
+happens.
 
 ## agnostic_nms
 
-`agnostic_nms` is accepted and does nothing. Passing it raises a warning saying
-it is a no-op for command line compatibility, and the argument is discarded.
+Every family's own NMS is class-aware, so by default two overlapping boxes of
+different classes both survive, at any `iou`. `agnostic_nms=True` adds one
+class-agnostic step: among boxes that overlap above `iou`, only the
+highest-scoring one survives, whatever their classes.
 
-There is no class-agnostic suppression mode. Every NMS call in the library is
-class-aware, so two overlapping boxes of different classes both survive, at any
-`iou`. Where that is a problem, filter with `classes` first, or suppress across
-classes yourself on `result.boxes`.
+<code-tabs name="agnostic" />
+
+The step runs on the family's finished detections, after the `classes` filter
+and before the cut to `max_det`. It therefore behaves the same on set
+predictors that run no NMS of their own, on exported backends, and with
+`augment=True` and `tiling=True`. Masks and keypoints are dropped with their
+box, and oriented boxes are compared by rotated IoU. It covers the tasks that
+return boxes: detect, segment, pose and obb.
+
+The family keeps a candidate budget of 300 boxes, or `max_det` when that is
+higher, for the step to work on. With `max_det` below 300, lower-scoring
+candidates refill the slots suppression frees. At 300 or more, which includes
+the default, those slots stay empty.
+
+Where it does not apply:
+
+- On the standard predict path, a task without boxes raises `ValueError`.
+- `LibreEnsemble` and [HRNet](/docs/models/hrnet) raise `NotImplementedError`.
+- `LibreSAM` models and the [3D detectors](/docs/tasks/3d-object-detection),
+  WildDet3D, 3D-MOOD, FCOS3D and DetAny3D, take no such argument and raise
+  `TypeError`.
+- [L2CS-Net](/docs/models/l2cs), [PP-OCRv5](/docs/models/pp-ocrv5),
+  [SAM 3D Body](/docs/models/sam-3d-body) and
+  [LibreFaceRec](/docs/models/librefacerec) run their own predict path and
+  ignore it.
+
+`val(agnostic_nms=True)` applies the same step to detect and segment
+validation; see [Validation and metrics](/docs/train/validation).
 
 ## What predict rejects
 
 Two arguments raise instead of warning: `visualize` and `embed` both raise
 `NotImplementedError`. For embeddings, load the model with `task="embed"` and
-call `predict` or `embed` normally.
+call `predict` or `embed` normally. `agnostic_nms=True` raises where it does
+not apply, as listed above.
 
 Anything unrecognized raises `TypeError` naming the supported options, so a
 typo fails immediately rather than being silently ignored.
 
-These are accepted, warned about and discarded: `agnostic_nms`, `boxes`, `dnn`,
-`half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` and `verbose`.
+These are accepted, warned about and discarded: `boxes`, `dnn`, `half`,
+`line_width`, `retina_masks`, `show_conf`, `show_labels` and `verbose`.

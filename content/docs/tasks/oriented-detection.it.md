@@ -170,7 +170,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## Definizione
@@ -240,7 +240,8 @@ orientati su veicoli visti dall'alto, e per verificare che la tua pipeline
 giri da un capo all'altro. Qualsiasi altro dominio richiede l'addestramento
 sulle tue etichette orientate, e per le categorie aeree per cui DOTA è nota, i
 checkpoint RT-DETRv2 sono quelli davvero addestrati su quei dati. `conf` e
-`max_det` modellano l'output come fanno per il rilevamento. Vedi
+`max_det` modellano l'output come fanno per il rilevamento, e `agnostic_nms=True`
+sopprime i box sovrapposti tra classi con l'IoU ruotato. Vedi
 [predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
 ## Formato del dataset
@@ -335,7 +336,8 @@ gemello con suffisso.
 
 Due opzioni non fanno nulla su questo task. `save_json` e `save_plots` sono
 accettate e registrano un avviso: i dump delle predizioni orientate e i
-grafici di validazione non sono implementati.
+grafici di validazione non sono implementati. `agnostic_nms=True` solleva qui
+`ValueError`; copre solo la validazione detect e segment.
 
 ## Esportazione
 

@@ -123,7 +123,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Mengatur argumen
@@ -226,6 +226,13 @@ Beberapa keluarga menambahkan tombol tingkat pembelajaran mereka sendiri. `backb
 Kelompok backbone melawan head, `clip_max_norm` menetapkan pemotongan gradien, dan
 SegFormer menggunakan `head_lr_mult` untuk menjalankan decode head-nya sepuluh kali backbone
 tingkat. Ini berada pada subclass konfigurasi family, bukan yang dasar.
+
+`clip_max_norm` memotong norma L2 gradien ke nilai itu sebelum setiap langkah
+optimizer, dan `0` mematikan pemotongan. YOLOv9, YOLOv9-E2E, dan YOLOv9-P2 menetapkan
+defaultnya `10`. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2,
+RT-DETRv4, RF-DETR, DINOv2, GTR, dan EC menetapkan defaultnya `0.1`. Di CLI, nilainya
+`clip_max_norm=` atau `--clip-max-norm`; lihat [`libreyolo train`](/docs/cli/train)
+untuk family yang menerimanya di sana.
 
 ## EMA
 

@@ -29,6 +29,16 @@ Run `libreyolo models`. Any family whose dependency is missing is printed with
 the exact pip command that enables it, so you do not have to map package back
 to extra yourself. `libreyolo models --json` prints the same as an object.
 
+RF-DETR and DINOv2 need `libreyolo[rfdetr]`, and their message names the extra.
+Without it, `LibreYOLO("LibreRFDETRn.pt")`, the DINOv2 weight names and
+`libreyolo predict model=rfdetr-n` stop with the install line, and the CLI
+exits with `model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
+
 The [install page](/docs/install) lists every extra and what it covers.
 
 ## ONNX inference requires onnxruntime
@@ -95,12 +105,18 @@ including the task suffix, so a name that does not match a published checkpoint
 produces a URL that does not exist. The checkpoint table on each model page
 lists the exact published filenames.
 
-## Training hangs or restarts on Windows or macOS
+## train() or val() was called at the top level of your script
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 Windows has no `fork`, and Python on macOS does not use it by default, so
-dataloader workers start by re-importing your script.
-Without a `if __name__ == "__main__":` guard, each worker re-runs your training
-call, which either deadlocks or spawns processes without end.
+dataloader workers start by re-importing your script. The `spawn` and
+`forkserver` start methods do the same on any platform. Without an
+`if __name__ == "__main__":` guard, each worker would run your `train()` or
+`val()` call again, so each one stops at that call, prints this line naming the
+call, and the script exits with an error.
 
 ```python
 def main():

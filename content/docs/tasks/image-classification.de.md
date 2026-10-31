@@ -2,9 +2,9 @@
 title: Bildklassifikation
 seo_title: Bildklassifikation in LibreYOLO
 description: >-
-  Labele in LibreYOLO ein ganzes Bild: die Familien, die diese Aufgabe
-  bedienen, das ImageFolder-Datensatzlayout und die Aufrufe für Vorhersage,
-  Training, Validierung und Export.
+  Labele in LibreYOLO ein ganzes Bild: die Familien, die diese Aufgabe bedienen,
+  das ImageFolder-Datensatzlayout und die Aufrufe für Vorhersage, Training,
+  Validierung und Export.
 lead: >-
   Die Bildklassifikation weist einem ganzen Bild eine Labelverteilung zu und
   lokalisiert nichts darin. Der Task-Key ist classify.
@@ -15,7 +15,7 @@ keywords:
   - top-1 accuracy
   - zero-shot klassifikation
   - MIT lizenz klassifikation bibliothek
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -93,11 +93,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() liefert ein schlichtes dict, kein Objekt.
+        # Ein dict mit metrics/-Keys sowie top1, top5 und confusion_matrix.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -125,7 +126,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: "90aed355e0ddf5e3"
+source_hash: 7934244e90056e77
 ---
 
 ## Definition
@@ -218,9 +219,11 @@ Logger.
 
 ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 und DINOv2 unterstützen Loss-Gewichtung über `cls_pw` oder `class_weights`. Bei der Klassifikation steuert `scale` die Ausschnittsfläche und `crop_pct` den Auswertungsausschnitt. Siehe [Augmentierungen](/docs/train/augmentations).
 
+Der Resize-Filter gehört zum Modell. Setze `model.interpolation` vor dem Training auf `"bilinear"`, `"bicubic"`, `"nearest"` oder `"bilinear_no_antialias"`: Training, `val()`, `predict()`, INT8-Kalibrierung und Export verwenden ihn, und `save()`, `best.pt` und `last.pt` halten ihn fest, sodass ein erneutes Laden ihn behält. Jeder andere Name löst `ValueError` aus. `"bilinear_no_antialias"` skaliert überall mit schlichtem bilinearem Resampling und ohne Antialiasing, `RandomResizedCrop` eingeschlossen, für Modelle, die hinter einem Runtime-Resize ohne Antialiasing laufen. MobileNetV4, ResNet, ConvNeXt, ConvNeXt V2, EfficientNetV2, DeiT, Swin und ViT verwenden standardmäßig bicubic; AlexNet und VGG bilinear.
+
 ## Validierung
 
-`val()` liefert ein schlichtes Dictionary von `metrics/`-Keys, berechnet über
+`val()` liefert ein Dictionary von `metrics/`-Keys, berechnet über
 den `val/`-Split des Datensatz-Wurzelverzeichnisses.
 
 <code-tabs name="val" />
@@ -233,6 +236,8 @@ aussagt, je weniger Klassen der Datensatz hat. Das Dictionary trägt außerdem
 `fitness`, eine Kopie des Top-1-Werts.
 
 Die ImageFolder-Validierung liefert auch die Makrometriken `metrics/precision`, `metrics/recall` und `metrics/f1`, gemittelt über die in den Validierungszielen vorhandenen Klassen. Nicht vorhergesagte Klassen tragen mit Precision null bei. Die Standardfitness bleibt Top-1-Accuracy. Validierung und Kalibrierung verwenden die Auswertungstransformation des Modells.
+
+Das Ergebnis ist eine `dict`-Unterklasse mit drei Attributen: `top1` und `top5` halten die beiden Accuracy-Werte, und `confusion_matrix` zählt jedes Bild mit seiner Top-1-Klasse gegen sein Label, indiziert als `matrix[predicted, true]`. `plots=True` schreibt sie als Zählungen nach `confusion_matrix.png` und als Anteile jedes Labels nach `confusion_matrix_normalized.png`. Ab 2,000 Klassen sind die dichte Matrix und ihre Diagramme nicht verfügbar, und `nonzero()`, `tp_fp()` und `class_accuracy()` lesen stattdessen die Zählungen; siehe [Validierung und Metriken](/docs/train/validation#confusion-matrix).
 
 ## Export
 

@@ -10,7 +10,7 @@ meta:
     value: "Libre<FAMILY><size>[-<task>].pt"
     mono: true
   - label: Canonical tasks
-    value: 20
+    value: 22
   - label: Support tiers
     value: Flagship, Core, Supported, Inference only, Museum, Sibling tier
 snippets:
@@ -43,7 +43,7 @@ snippets:
 
 ## Tasks
 
-A task is what a model returns. LibreYOLO has twenty canonical task names,
+A task is what a model returns. LibreYOLO has twenty-two canonical task names,
 and each one names the field on the `Results` object that carries its output.
 
 | Task | Returns |
@@ -68,6 +68,8 @@ and each one names the field on the `Results` object that carries its output.
 | `mesh` | A posed 3D body per detected person |
 | `detect3d` | 3D boxes in camera coordinates, with a class and a confidence |
 | `act` | A chunk of robot actions predicted from camera frames and robot state |
+| `generate` | An RGB image generated from a text prompt, with the prompt, seed and call parameters that reproduce it |
+| `generate3d` | One object as 3D Gaussian splats, generated from a single image of it |
 
 Those are the names that appear in checkpoint metadata and in filenames.
 Familiar aliases are accepted wherever a task is passed and normalized before
@@ -160,11 +162,11 @@ weights trained on a dataset other than its default appends the dataset name as
 a further suffix, and that variant stays part of the repository name the file is
 downloaded from.
 
-Three tiers stand outside this schema. The promptable segmentation families, the
-vision-language families and the open-vocabulary detectors are not registered
-into the checkpoint factory and emit no `Libre<FAMILY><size>.pt` file. Their
-prefix names a downloaded Hugging Face snapshot or a promptable checkpoint
-instead, and upstream brand casing is preserved there on purpose.
+Several tiers stand outside this schema. The promptable segmentation families,
+the vision-language families, the open-vocabulary detectors and the `LibreGen`
+generation families are not registered into the checkpoint factory and emit no
+`Libre<FAMILY><size>.pt` file. Their prefix names a downloaded Hugging Face
+snapshot or a promptable checkpoint instead, and upstream brand casing is preserved there on purpose.
 
 ## How the task is decided
 

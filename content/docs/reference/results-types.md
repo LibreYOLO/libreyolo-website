@@ -87,6 +87,8 @@ decided by its task.
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, with a gallery |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` is a read-write alias for `result.normal_map`.
 
@@ -307,3 +309,53 @@ and returns the JSON string.
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` represents a float32 action chunk `(T, D)`. `first` returns the first row; slicing selects timesteps. Values stay in the policy dataset units. `names` describes action dimensions, `fps` the control rate and `instruction` the conditioning text.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+holds one synthesized image, `(H, W, 3)` uint8 RGB. `array` returns the numpy
+view and `image` a `PIL.Image`. `prompt` is the text that produced the image
+and `seed` the integer that reproduces it with the same model and settings;
+`params` records the rest of the call: `model`, `imgsz` and every family
+setting in effect. `save(path)` writes the image, and a PNG also stores
+`to_dict()`, the shape, prompt, seed and params, as JSON in a `libreyolo` text
+chunk.
+
+On a generated result, `Results.boxes` and `Results.path` are `None`,
+`orig_shape` is the image's own `(H, W)`, and `len(result)` is 1.
+`Results.save(path)` writes the image, `plot()` returns it as a PIL image, and
+`summary()` returns one row with the payload's record.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+holds one generated 3D object as Gaussian splats, in the object's own frame:
+z up, centered in the cube `[-0.5, 0.5]^3`. Each row is one Gaussian.
+
+| Member | Returns |
+|---|---|
+| `xyz` | `(N, 3)` positions in the object frame |
+| `scales` | `(N, 3)` standard deviations along the local axes, linear, not log |
+| `rotations` | `(N, 4)` unit quaternions `(w, x, y, z)`, local axes into the object frame |
+| `opacities` | `(N,)` in `[0, 1]` |
+| `sh` | `(N, K, 3)` spherical-harmonic color coefficients, degree 0 first |
+| `colors` | `(N, 3)` RGB in `[0, 1]`, from the degree-0 term |
+| `camera` | The inferred input view: `yaw` and `pitch` in radians, `radius` in object units, vertical `fov` in degrees, and the crop `margin` |
+| `seed`, `params` | The seed and the call settings that reproduce the object |
+| `input_image` | The RGB image the model saw after its own preprocessing |
+
+`len(gaussians)` is `N`, and `gaussians[gaussians.opacities > 0.1]` returns a
+new `Gaussians` holding the selected rows. `save(path)` writes by extension.
+`.ply` is the standard 3D Gaussian Splatting layout, with log scales and logit
+opacities, turned y-up the way splat viewers expect, and a
+`comment libreyolo` header line holding seed, camera and params as JSON. A
+payload with higher-order color (`K > 1`) raises `NotImplementedError` for
+`.ply`. `.splat` is the compact web format, 32 bytes per Gaussian.
+`render(size=512, background=(0, 0, 0))` returns a point render from the
+inferred input view as a `PIL.Image`, a quick look rather than a Gaussian
+rasterization.
+
+On a generated 3D result, `Results.boxes` is `None`; `path`, `orig_shape` and
+`orig_img` describe the source image, and `len(result)` is 1.
+`Results.save(path)` writes the object, `plot()` returns that point render, and
+`summary()` returns one row with the payload's record.

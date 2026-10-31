@@ -20,7 +20,7 @@ meta:
     value: data
     mono: true
   - label: 输出
-    value: 检查点、指标和日志，位于 runs/train/<name>；YOLO9 使用 yolo9_exp
+    value: 检查点、指标和日志，位于 runs/train/<name>；不带 name= 时使用家族自己的运行名，例如 yolo9_exp
 snippets:
   examples:
     - label: 基本用法
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 30b2c16d339f5f50
+source_hash: 5916562e70ea1d8a
 ---
 
 ## 概要
@@ -75,9 +75,9 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 参数 | 默认值 | 含义 |
 |---|---|---|
 | `epochs` | `300` | 训练轮数 |
-| `batch` | `16` | 每个设备的批大小 |
+| `batch` | `16` | 批大小。使用多张 GPU 时它是全局批大小，平均分到各张卡上 |
 | `imgsz` | `640` | 训练图像尺寸：`640`（正方形）或 `480x640`（高×宽） |
-| `device` | `auto` | 设备：`0`、`cpu`、`mps`、`auto` |
+| `device` | `auto` | 设备：`0`、`cpu`、`mps`、`auto`。传入 `0,1` 或 `[0,1]` 这样的 GPU 列表时在这些 GPU 上训练 |
 | `workers` | `4` | 数据加载器的工作进程数 |
 | `cache` | `false` | 缓存图像以加快数据加载：`ram`、`disk`、`true`、`false` |
 | `seed` | `0` | 随机种子 |
@@ -106,6 +106,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `momentum` | `0.937` | SGD 动量，以及 Adam 系优化器的一阶矩系数 |
 | `weight_decay` | `0.0005` | L2 正则化 |
 | `nesterov` | `true` | Nesterov 动量 |
+| `clip_max_norm` | | 每次优化器步进之前把梯度的 L2 范数裁剪到这个值；`0` 关闭裁剪。未设置时采用家族自己的值 |
 
 ### 调度器
 
@@ -156,7 +157,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 参数 | 默认值 | 含义 |
 |---|---|---|
 | `project` | `runs/train` | 输出目录的根路径 |
-| `name` | `exp` | 实验名称 |
+| `name` | | 实验名称。未设置时，运行名取家族 `train()` 使用的名字，例如 `yolo9_exp` 或 `dfine_exp` |
 | `exist_ok` | `false` | 复用已存在的输出目录 |
 | `save_period` | `10` | 每 N 轮保存一次检查点 |
 | `log_interval` | `10` | 每 N 个批次记录一次损失 |
@@ -181,7 +182,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `average_best` | `0` | 训练结束时，对监控指标最好的 N 个检查点均匀平均，写入 weights/average.pt（0 = 关闭） |
 | `export_check` | `False` | 在第 1 轮之前导出 ONNX，导出失败则终止训练（默认关闭） |
 | `precise_bn` | `0` | 最后一轮后，用此数量的训练图像重新计算 BatchNorm 运行统计量（0 = 关闭） |
-| `aux_weight` | | 仅 YOLO9：微调时 PGI 辅助分支的损失权重。未设置时为 `0.25`；`0` 只训练主 head |
+| `aux_weight` | | 仅 YOLO9：PGI 辅助分支的损失权重。给定一个值会按该权重挂上一个新分支，`0` 只训练主 head。未设置时，只有当权重带有 PGI 张量或从头训练时，才会以 `0.25` 挂上该分支 |
 | `fliplr` | `None` | 水平翻转概率（flip_prob 的生态别名） |
 | `flipud` | `0.0` | 垂直翻转概率 |
 | `auto_augment` | `None` | 分类自动增强策略：randaugment、autoaugment、augmix（默认无） |
@@ -222,7 +223,7 @@ RF-DETR、D-FINE、DEIM、DEIMv2、RT-DETRv4 和 DINOv2 通过直通式流水线
 `mixup_scale` 在那里落不到实处。EC 共用同一条流水线，但当它的任务是姿态时
 确实会读取 `hsv_prob`、`degrees` 和 `translate`。分类家族会忽略这组参数，
 但 `mixup` 除外，它在分类家族上是批量 MixUp；它们还会读取 `flip_prob`。
-SegFormer 和 NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它们的翻转按固定
+SegFormer、LingBot-Vision 和 NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它们的翻转按固定
 概率运行，而不是一个可配置的概率。YOLO-NAS 只忽略 `mosaic`，因为它改用一直开启的逐
 样本仿射变换来做增强。RF-DETR 在这份清单之外还要再忽略三个：`optimizer`、
 `momentum` 和 `nesterov`。
@@ -240,6 +241,18 @@ SegFormer 和 NAFNet 会忽略整组参数，连 `flip_prob` 一起，因为它�
 `lora=true` 会被 RF-DETR、D-FINE、DEIM、DEIMv2、RT-DETR v1、v2 和 v4、EC、
 GTR 以及 ConvNeXt 接受。其他任何家族都会以 `config_unsupported` 退出，而不是在没
 有它的情况下训练。
+
+`clip_max_norm` 被训练配置里声明了它的家族接受：YOLOv9、YOLOv9-E2E 和 YOLOv9-P2，
+默认值为 `10`；以及 D-FINE、Dome-DETR、DEIM、DEIMv2、TinyFormer、RT-DETR、
+RT-DETRv2、RT-DETRv4、RF-DETR、DINOv2 和 GTR，默认值为 `0.1`。其他任何家族都会以
+`config_unsupported` 退出，负值或非有限值会以 `config_type_error` 退出。
+
+`device=0,1` 在列出的第一张 GPU 上构建模型，并把列表传给 `train()`，由它为每张
+GPU 启动一个进程。见[多卡训练](/docs/train/multi-gpu)。
+
+RF-DETR 没有从检测到分割的迁移。`task=segment` 配合 RF-DETR 分割检查点时，不论文件名
+如何都会加载那个检查点，因为任务由检查点元数据决定；而检测检查点会报错停止，而不是去
+训练一个未经训练的掩码 head。
 
 `pretrained=false` 与 `resume` 同时使用，在支持从头训练的家族上会被拒绝，因
 为这两者要求的是相反的事情。

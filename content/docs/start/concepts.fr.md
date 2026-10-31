@@ -22,7 +22,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tâches canoniques
-    value: 20
+    value: 22
   - label: Niveaux de prise en charge
     value: >-
       Vedette, Principal, Pris en charge, Inférence uniquement, Musée, Niveau
@@ -58,12 +58,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Tâches
 
-Une tâche correspond à ce que renvoie un modèle. LibreYOLO compte vingt noms
+Une tâche correspond à ce que renvoie un modèle. LibreYOLO compte vingt-deux noms
 de tâches canoniques, chacun désignant le champ de l'objet `Results` qui porte
 sa sortie.
 
@@ -89,6 +89,8 @@ sa sortie.
 | `mesh` | Un corps 3D articulé par personne détectée |
 | `detect3d` | Boîtes 3D en coordonnées caméra, avec une classe et un score de confiance |
 | `act` | Une séquence d'actions robotiques prédite à partir des images de la caméra et de l'état du robot |
+| `generate` | Une image RGB générée à partir d'un prompt texte, avec le prompt, la seed et les paramètres d'appel qui la reproduisent |
+| `generate3d` | Un objet sous forme de splats gaussiens 3D, généré à partir d'une seule image de celui-ci |
 
 Ces noms figurent dans les métadonnées et les noms de fichiers des checkpoints.
 Les alias courants sont acceptés partout où une tâche est fournie et sont
@@ -189,10 +191,10 @@ de celui par défaut, elle ajoute le nom du dataset comme suffixe supplémentair
 Cette variante reste intégrée au nom du dépôt depuis lequel le fichier est
 téléchargé.
 
-Trois niveaux échappent à ce schéma. Les familles de segmentation guidée, les
-familles vision-langage et les détecteurs à vocabulaire ouvert ne sont pas
-enregistrés dans la fabrique de checkpoints et ne produisent aucun fichier
-`Libre<FAMILY><size>.pt`. Leur préfixe désigne à la place un snapshot Hugging
+Plusieurs niveaux échappent à ce schéma. Les familles de segmentation guidée, les
+familles vision-langage, les détecteurs à vocabulaire ouvert et les familles de
+génération `LibreGen` ne sont pas enregistrés dans la fabrique de checkpoints et
+ne produisent aucun fichier `Libre<FAMILY><size>.pt`. Leur préfixe désigne à la place un snapshot Hugging
 Face téléchargé ou un checkpoint de segmentation guidée. La casse de la marque
 amont y est volontairement conservée.
 

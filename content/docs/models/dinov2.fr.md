@@ -17,7 +17,7 @@ keywords:
   - embedding d'images
   - extraction de caractéristiques
   - Meta AI
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Sémantique
@@ -160,7 +160,7 @@ snippets:
         # LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## Installation
@@ -172,6 +172,9 @@ demande donc le même extra.
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Sans lui, charger un checkpoint ou un nom de modèle DINOv2 s'arrête avec une
+erreur qui indique cette ligne d'installation.
 
 ## Prédire
 

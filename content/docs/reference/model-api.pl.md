@@ -52,7 +52,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Tworzenie
@@ -85,6 +85,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -111,6 +112,7 @@ model(
 | `device` | `None` | Nadpisanie urządzenia dla tego wywołania |
 | `classes` | `None` | Zachowanie tylko tych identyfikatorów klas |
 | `max_det` | `300` | Maksymalna liczba detekcji na obraz |
+| `agnostic_nms` | `False` | Zostaw tylko ramkę z najwyższym wynikiem spośród ramek nakładających się powyżej `iou`, bez względu na ich klasy. Detekcja, segmentacja, poza i obb |
 | `augment` | `False` | Augmentacja podczas testu |
 | `save` | `False` | Zapis obrazu lub wideo z adnotacjami |
 | `batch` | `1` | Liczba obrazów na przebieg w przód dla źródeł będących katalogiem lub listą |
@@ -221,9 +223,18 @@ gdy go nie ma, jak w przypadku opublikowanych wag. `project`, `name` i
 chyba że `exist_ok=True`. `plots` jest aliasem `save_plots`. `allow_download_scripts` steruje osadzonym kodem Pythona, który
 plik YAML zbioru danych może zawierać w polu `download`.
 
+Dla detekcji i segmentacji słownik jest podklasą `dict`, która niesie też `box`
+(wyniki dla poszczególnych obrazów oraz krzywe precyzji, recall i F1 dla
+poszczególnych klas) i `confusion_matrix`; dla klasyfikacji niesie `top1`,
+`top5` i `confusion_matrix`. Zobacz [walidacja i metryki](/docs/train/validation).
+
 `faster_coco_eval` jest przyjmowane przez `**kwargs` i domyślnie ma wartość
 `True`, a jeśli pakiet nie jest zainstalowany, używane jest pycocotools.
 Uruchomiony backend jest raportowany w `model.last_eval_backend`.
+
+`agnostic_nms=True`, również przez `**kwargs`, stosuje NMS niezależne od klas
+przy `iou` przed oceną. Obejmuje detekcję i segmentację, a dla każdego innego
+zadania zgłasza `ValueError`.
 
 Walidacja z augmentacją zgłasza błąd dla zadań `obb` i `pose`.
 

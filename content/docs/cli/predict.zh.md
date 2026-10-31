@@ -41,7 +41,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## 用法概要
@@ -68,6 +68,7 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `imgsz` | | 输入图像尺寸：`640`（正方形）或 `480x640`（高×宽）。不设置时使用模型自身的输入尺寸 |
 | `classes` | | 按类别 ID 过滤，例如 `[0,2,5]`。也接受单个整数 |
 | `max_det` | `300` | 每张图像的最大检测数 |
+| `agnostic_nms` | `false` | 类别无关的 NMS：在重叠超过 `iou` 的检测框中，不论类别，只保留得分最高的那个。适用于检测、分割、姿态和 OBB |
 | `half` | `false` | FP16 推理（仅限 CUDA，且需要模型支持） |
 | `save` | `false` | 保存标注后的图像 |
 | `batch` | `1` | 目录源每次前向传播处理的图像数。大于 1 时，在支持的模型上执行真正的批量推理 |

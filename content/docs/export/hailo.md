@@ -122,10 +122,14 @@ snippets:
         # LibreYOLO graphs use a "/head/..." prefix, not the "model.N" prefix
         # seen in configurations written for other exports. A copied config will
         # not match. Confirm the names in your own graph if parsing fails.
+        # anchor_convs is the box tower and class_convs the class tower.
         END_NODES = [
-            "/head/cv2.0/cv2.0.2/Conv", "/head/cv3.0/cv3.0.2/Conv",
-            "/head/cv2.1/cv2.1.2/Conv", "/head/cv3.1/cv3.1.2/Conv",
-            "/head/cv2.2/cv2.2.2/Conv", "/head/cv3.2/cv3.2.2/Conv",
+            "/head/anchor_convs.0/anchor_convs.0.2/Conv",
+            "/head/class_convs.0/class_convs.0.2/Conv",
+            "/head/anchor_convs.1/anchor_convs.1.2/Conv",
+            "/head/class_convs.1/class_convs.1.2/Conv",
+            "/head/anchor_convs.2/anchor_convs.2.2/Conv",
+            "/head/class_convs.2/class_convs.2.2/Conv",
         ]
         runner.translate_onnx_model(ONNX, end_node_names=END_NODES)
   device:

@@ -62,7 +62,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: c8d7adb6aabcbc80
+source_hash: 766f7d68cb2233ad
 ---
 
 ## 动手改任何东西之前先测量
@@ -110,6 +110,8 @@ RF-DETR 和 D-FINE/DEIM/RT-DETR 的匹配器路径减少了主机传输；满足
 <code-tabs name="amp" />
 
 Float16 使用梯度缩放器；bfloat16 禁用它。D-FINE、DEIM、RT-DETRv4 和 YOLO-NAS 检测默认使用 `amp=True`。Dome-DETR、PP-YOLOE 和 YOLO-NAS OBB 保留 FP32 默认值。传入 `amp=False` 可显式指定 FP32。
+
+YOLOv9、YOLOv9-E2E 和 YOLOv9-P2 在两种 dtype 下都用 fp32 给锚点打分以做标签分配，因为一个强负值的 float16 类别 logit 经过 sigmoid 会下溢为零，会让一个批次里没有任何正样本锚点。
 
 这些参数的语义，包括在不支持 bfloat16 的硬件上请求 bfloat16 会发生什么，都在
 [超参数](/docs/train/hyperparameters)。

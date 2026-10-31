@@ -105,7 +105,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## 安装
@@ -140,7 +140,7 @@ pip install libreyolo
 
 `train()` 微调一个已发布的检查点。默认配方是上游报告里的线性探针：ViT 骨干被
 冻结，只训练 1x1 的稠密 head，与上面那些由 LibreYOLO 托管的权重的产出方式一致。
-传 `freeze_backbone=False` 可以改成微调整个网络，并且要相应调低 `lr0`。
+传 `freeze_backbone=False` 可以改成微调整个网络，并且要相应调低 `lr0`。`libreyolo train` 使用同一套起始配方，不传 `name=` 时，它的运行结果写入 `runs/train/lingbotvision_exp`。
 
 <code-tabs name="train" />
 

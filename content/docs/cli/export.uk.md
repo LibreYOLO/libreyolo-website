@@ -48,7 +48,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## Синтаксис
@@ -128,8 +128,9 @@ JSON містить визначений `output_path`, розмір файлу 
 
 Підтримка визначається окремо для кожного сімейства і кожного завдання, а не
 глобально. `libreyolo formats family=<family> task=<task>` виводить рівень
-підтримки кожного формату для цієї комбінації, разом із причиною та будь-яким
-пов'язаним обмеженням. Аргументи описано на сторінці
+підтримки кожного формату для цієї комбінації, разом із причиною, будь-яким
+пов'язаним обмеженням і тим, чи приймає там `export()` FP16 та INT8. Аргументи
+описано на сторінці
 [`libreyolo formats`](/docs/cli/utilities).
 
 Деякі формати потребують додаткового встановлення, а деякі потребують набору

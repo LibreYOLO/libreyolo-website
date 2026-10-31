@@ -18,7 +18,7 @@ keywords:
   - owlv2
   - omdet turbo
   - text prompt objekterkennung
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -67,7 +67,7 @@ snippets:
         # decodierten Phrase. Ohne Angabe sind beide 0.25. Nur Grounding DINO
         # akzeptiert text_threshold, die anderen lösen einen Fehler aus.
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: "10f41b40f357b037"
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Definition
@@ -146,7 +146,7 @@ liegt in der Erzeugung der Boxen. Die Familien dieser Seite sind
 diskriminative Detektoren, die Scores direkt ausgeben. Die VLM-Stufe generiert
 die Boxen dagegen.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) und [North Micro Vision](/docs/models/northmicrovision) erweitern die Erkennungsmodelle von `LibreVLM`. [Molmo2](/docs/models/molmo2) liefert Punkte. Verwende [LibreGround](/docs/reference/ground-api) für Anweisung-zu-Klick-Anfragen statt eines Erkennungsvokabulars.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) und [WeVisOne-VL](/docs/models/wevisone-vl) erweitern die Erkennungsmodelle von `LibreVLM`. [Molmo2](/docs/models/molmo2) liefert Punkte. Verwende [LibreGround](/docs/reference/ground-api) für Anweisung-zu-Klick-Anfragen statt eines Erkennungsvokabulars.
 
 ## Vorhersage
 

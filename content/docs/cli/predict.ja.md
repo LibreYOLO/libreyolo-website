@@ -42,7 +42,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## 書式
@@ -70,6 +70,7 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `imgsz` | | 入力画像サイズ：`640`（正方形）または`480x640`（高さ×幅）。未指定のときはモデル自身の入力サイズ |
 | `classes` | | クラスIDによる絞り込み。例：`[0,2,5]`。整数1つの指定も可 |
 | `max_det` | `300` | 画像1枚あたりの最大検出数 |
+| `agnostic_nms` | `false` | クラス非依存NMS：`iou`を超えて重なるボックスのうち、クラスにかかわらずスコアが最も高いものだけを残す。検出、セグメンテーション、姿勢推定、OBB |
 | `half` | `false` | FP16推論（CUDAのみ、モデル側の対応が必要） |
 | `save` | `false` | アノテーション済み画像の保存 |
 | `batch` | `1` | ディレクトリをソースにしたときの1回の順伝播あたりの画像数。1より大きいと、対応するモデルでは実際のバッチ推論を実行 |

@@ -182,8 +182,10 @@ library, so a model trained on a different skeleton returns a different `K` and
 a different meaning per index. What the third keypoint column holds is also a
 checkpoint property: EdgeCrafter writes a constant there rather than a
 per-point score, and it has no box head at all, so each of its pose boxes is
-the bounding extent of that instance's own keypoints. See
-[prediction](/docs/predict) for sources, streaming and result handling.
+the bounding extent of that instance's own keypoints. `agnostic_nms=True`
+suppresses overlapping boxes across classes and drops each suppressed
+instance's keypoints with its box; HRNet raises `NotImplementedError` for it.
+See [prediction](/docs/predict) for sources, streaming and result handling.
 
 ## Dataset format
 
@@ -263,7 +265,8 @@ COCO keypoint evaluation defines no small bucket. The matching average recall
 figures are `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
 `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` and
 `metrics/keypoints_AR_L`. Every key on this task is prefixed `keypoints_`, so
-the box `mAP` keys a detector returns do not appear.
+the box `mAP` keys a detector returns do not appear. `val(agnostic_nms=True)`
+raises `ValueError` on this task.
 
 ## Export
 

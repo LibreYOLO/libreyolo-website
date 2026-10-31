@@ -50,7 +50,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## Synopsis
@@ -79,6 +79,7 @@ Task-Wort wird vor dem Parsen entfernt.
 | `imgsz` | | Eingabebildgröße: `640` (quadratisch) oder `480x640` (Höhe x Breite). Ohne Angabe die eigene Eingabegröße des Modells |
 | `classes` | | Nach Klassen-IDs filtern, z. B. `[0,2,5]`. Eine einzelne Ganzzahl wird akzeptiert |
 | `max_det` | `300` | Maximale Anzahl Detektionen pro Bild |
+| `agnostic_nms` | `false` | Klassenunabhängige NMS: Von Boxen, die sich oberhalb von `iou` überlappen, bleibt nur die mit dem höchsten Score, unabhängig von ihren Klassen. Detect, Segment, Pose und OBB |
 | `half` | `false` | FP16-Inferenz (nur CUDA, erfordert Unterstützung durch das Modell) |
 | `save` | `false` | Annotierte Bilder speichern |
 | `batch` | `1` | Bilder pro Forward-Pass bei Verzeichnisquellen. Über 1 läuft echte gebatchte Inferenz auf Modellen, die sie unterstützen |

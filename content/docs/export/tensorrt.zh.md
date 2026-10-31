@@ -150,7 +150,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cb90fc98ab735233
+source_hash: a51a22d3ffbd0d84
 ---
 
 ## 安装
@@ -219,6 +219,11 @@ INT8 走的是 TensorRT 的熵校准器，接在一个 LibreYOLO 的校准数据
 `hardware_compatibility="ampere_plus"` 用一部分性能，换来在 Ampere 及更新架构之间的
 可移植性。`"same_compute_capability"` 这个取值会映射到 `NONE` 并给出告警：engine 只针对
 当前这块 GPU 做了优化，导出会如实说出来，而不是宣称一种它并没有施加的可移植性。
+
+`tensorrt` 这个 extra 安装的是 TensorRT 10.16。TensorRT 11 去掉了 `EXPLICIT_BATCH`
+网络标志，在它上面导出时会不带这个标志创建网络。这一步是 TensorRT 11 上唯一验证过的
+部分，而且只是针对一个模拟的 TensorRT 模块：那里还没有跑过任何 FP32、FP16 或 INT8
+engine 构建，FP16 和 INT8 的构建器标志在它上面仍可能失败。
 
 只有 batch 轴会进优化配置文件。带动态空间维度的构建不在这份契约之内，FCOS 因此被拦下：
 它需要动态的填充高和宽，才能保住自己 800 乘 1333 的宽高比变换。

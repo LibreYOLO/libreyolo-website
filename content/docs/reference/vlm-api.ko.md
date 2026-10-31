@@ -46,7 +46,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## 설치
@@ -77,11 +77,12 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 | 코스모스-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | 무엇이든 찾기 | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | 센스노바-비전 | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | 리브레모두스 | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | 업스트림 스냅샷 고정 |
 
-기본 별칭은 `qwen3-vl-4b`입니다. 각 계열의 기본 별칭에 대한 크기는 먼저 나열된 것입니다: `qwen3-vl`는 `4b`로 해석되고, `lfm2-vl`는 `450m`로, `internvl3`는 `2b`로, `smolvlm2`는 `2.2b`로, `florence-2`는 `base`로 해석됩니다.
+기본 별칭은 `qwen3-vl-4b`입니다. 각 계열의 기본 별칭에 대한 크기는 먼저 나열된 것입니다: `qwen3-vl`는 `4b`로 해석되고, `lfm2-vl`는 `450m`로, `internvl3`는 `2b`로, `smolvlm2`는 `2.2b`로, `florence-2`는 `base`로, `wevisone-vl`은 `2b`로 해석됩니다.
 
-`LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` 및 `LibreMODUS`(또한 `LibreModus`라고 표기됨)는 패키지 수준에서 내보내집니다.
+`LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL` 및 `LibreMODUS`(또한 `LibreModus`라고 표기됨)는 패키지 수준에서 내보내집니다.
 
 탐지에는 `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, `lfm2-vl-3b`도 포함됩니다. 크기가 없는 `gemma-4` 별칭은 E4B를 선택합니다. Molmo2 별칭은 `molmo2-4b`, `molmo2-8b`, `molmo2-o-7b`이며 기본값은 4B입니다. 별칭은 라우팅을 정의하며, 모든 원격 스냅샷을 다운로드하고 테스트했다는 의미는 아닙니다. `moondream-3` 모델은 1.6.0에서 로드되지 않습니다: 미러에 가중치 샤드가 누락되어 있습니다.
 
@@ -93,6 +94,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 |---|---|
 | 무엇이든 찾기 | `detect`, `point` |
 | 센스노바-비전 | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 작업이 체크포인트에 내장된 것이 아니라 프롬프트 기반이기 때문에, 로드된 모델에서 전환할 수 있습니다:
 
@@ -102,7 +104,7 @@ model.set_task(task: str) -> LibreVLMModel
 
 작업은 계열의 지원 목록에 대해 검증되며, 이후 `predict()` 및 `track()` 호출에서도 지속되며, 호출이 연쇄될 수 있도록 모델이 반환됩니다.
 
-Molmo2는 점을 반환하며 사용자 정의 포인팅 템플릿에는 `{label}`이 필요합니다. Moondream은 탐지, 점, 기본 채팅을 지원합니다. 지시문으로 클릭 위치를 찾는 쿼리에는 [LibreGround](/docs/reference/ground-api)를 사용합니다.
+Molmo2는 점을 반환하며 사용자 정의 포인팅 템플릿에는 `{label}`이 필요합니다. WeVisOne-VL의 `referring=True`는 `detect`가 구절마다 한 번씩 생성을 보내게 하며, 어휘가 없으면 `segment`, `matte`, 지시 표현 탐지가 `ValueError`를 발생시킵니다. Moondream은 탐지, 점, 기본 채팅을 지원합니다. 지시문으로 클릭 위치를 찾는 쿼리에는 [LibreGround](/docs/reference/ground-api)를 사용합니다.
 
 ## 클래스 설정
 

@@ -72,7 +72,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## 노브 설정
@@ -114,7 +114,7 @@ DETR 스타일의 패스스루 파이프라인에는 모자이크나 아핀 왜�
 
 YOLO-NAS는 자체적인 형태를 가지고 있습니다: 모자이크는 전혀 없고, 항상 켜져 있는 개별 샘플 아핀(affine), 그리고 MixUp은 게이트 방식이 아닌 독립적으로 적용됩니다. 그 `mosaic_scale` 값은 아핀 스케일 범위로 재사용됩니다.
 
-SegFormer와 NAFNet은 각각 임의성을 구성할 수 있는 것이 아니라 동일 계열 내에서 고정된 작업별 파이프라인을 실행합니다. SegFormer의 경우 조정 가능한 항목은 `mosaic_scale`와 `hsv_prob`가 아니라 클래스 속성 `semantic_scale_jitter`와 `semantic_hsv_prob`입니다. NAFNet의 크롭과 플립은 고정된 0.5 확률로 입력과 타깃 연산이 결합된 형태입니다.
+SegFormer, LingBot-Vision, NAFNet은 각각 임의성을 구성할 수 있는 것이 아니라 동일 계열 내에서 고정된 작업별 파이프라인을 실행합니다. SegFormer와 LingBot-Vision의 경우 조정 가능한 항목은 `mosaic_scale`와 `hsv_prob`가 아니라 클래스 속성 `semantic_scale_jitter`와 `semantic_hsv_prob`입니다. NAFNet의 크롭과 플립은 고정된 0.5 확률로 입력과 타깃 연산이 결합된 형태입니다.
 
 ## 어떤 계열이 어떤 손잡이를 기리는가
 
@@ -148,6 +148,10 @@ SegFormer와 NAFNet은 각각 임의성을 구성할 수 있는 것이 아니라
 
 `no_aug_epochs`는 모든 곳에서 `used`이지만 의미는 같지 않습니다. 모자이크 파이프라인에서는 마지막 에폭 동안 모자이크와 MixUp을 끕니다. DETR 방식 파이프라인에서는 광도, 축소, 크롭 증강을 중단하고 스케줄의 마지막 구간을 결정합니다. 분류 파이프라인에서는 자동 증강, 지우기, MixUp, CutMix를 비활성화하며 크롭과 뒤집기는 유지합니다.
 
+`perspective`는 회전, 스케일, 전단, 이동 위에 사영 왜곡을 더합니다. 캔버스 모서리는 각각 축마다 캔버스 한 변의 절반에 `min(perspective * 100, 0.2)`를 곱한 값까지의 무작위 양만큼 안쪽으로 이동하므로, `perspective=0.001`은 어떤 해상도에서도 모서리를 한 변의 최대 5퍼센트만큼 이동시키고, `0.002` 이상의 모든 값은 같은 최대치에 도달합니다. 기본값 `0`은 왜곡을 아핀으로 유지하며, 음수 값은 첫 샘플을 왜곡할 때 `ValueError`를 발생시킵니다. YOLOv9와 그 E2E, P2 변형, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR, RT-DETRv2가 이를 적용합니다.
+
+YOLOv9, 그 변형, YOLOv7, RT-DETR, RT-DETRv2가 학습에 쓰는 YOLOv9 모자이크 파이프라인의 MixUp은 혼합 비율을 [0, 1]에서 균등한 Beta(1, 1)에서 추출합니다. YOLOX, RTMDet, PicoDet이 쓰는 YOLOX 모자이크 래퍼는 고정된 0.5로 혼합합니다.
+
 ## 분류 팩
 
 네 개의 노브가 분류 파이프라인을 구동하며 그 외에는 아무것도 구동하지 않습니다. 탐지 계열은 이 네 개 모두를 무시합니다.
@@ -175,12 +179,12 @@ CLI는 `auto_augment`, `erasing`, `cutmix`, `fliplr`, `flipud`를 제공합니�
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | 복사-붙여넣기 인스턴스 증강 확률, `task="segment"`만 |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"`는 동일한 샘플을 반사하여 재사용하고, `"mixup"`는 두 번째 샘플을 가져옵니다 |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | 무작위 90도 회전 확률 |
-| YOLOv9 | `max_labels` | 학습 변환에서 이미지별 실제 캡, 기본값 100 |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | 학습 변환에서 이미지별 실제 캡, 기본값 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | `task="segment"`, `"flip"` 모드에서만 복사-붙여넣기 |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | 랜덤 자르기-크기 조정 확률 |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | 포즈 경로 지터 및 키포인트 인식 아핀 확률 |
 
-`max_labels`는 조용히 데이터를 잃는 장치입니다. 캡을 넘어선 박스는 오류 없이 삭제되므로, 항공 사진과 같은 밀집된 이미지에는 이를 높여야 합니다.
+`max_labels`는 데이터를 잃는 장치입니다. 캡을 넘어선 박스는 오류가 아니라 한 번만 경고를 남기고 삭제되므로, 항공 사진과 같은 밀집된 이미지에는 이를 높여야 합니다. 레이블 할당 메모리는 캡이 아니라 배치에서 가장 밀집된 이미지를 따릅니다.
 
 회전된 상자에 대한 코너 인식 증강이 구현되지 않았기 때문에, 회전 상자 학습에서는 설정에 관계없이 모자이크와 MixUp이 비활성화됩니다.
 

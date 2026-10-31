@@ -117,10 +117,14 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | JSON output to stdout |
 | `quiet` | `false` | Suppress stderr |
 
-Without `family`, the output is the format inventory alone. With it, each
-format gains the support tier for that family and task, the reason behind the
-tier, and any constraint attached to it. An unknown family, or a task the family
-does not support, is a usage error.
+Without `family`, the output is the format inventory alone, and the FP16 and
+INT8 fields describe the format. With it, each format gains the support tier for
+that family and task, the reason behind the tier, and any constraint attached to
+it, and the FP16 and INT8 fields report what `export()` accepts for that
+combination: both are false on a blocked format or a family that exports FP32
+only, and INT8 is true only where the format's INT8 export covers that family
+and task. An unknown family, or a task the family does not support, is a usage
+error.
 
 Format aliases appear next to their canonical name: `engine` for `tensorrt`,
 `litert` for `tflite`.

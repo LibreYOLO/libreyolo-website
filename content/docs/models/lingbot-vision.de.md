@@ -114,7 +114,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Installation
@@ -157,7 +157,8 @@ Standardrezept entspricht der linearen Probe des Upstream-Berichts: Das
 ViT-Backbone ist eingefroren, und nur der dichte 1x1-Head wird trainiert. So
 wurden auch die oben von LibreYOLO gehosteten Gewichte erzeugt. Übergib
 `freeze_backbone=False`, um stattdessen das gesamte Netzwerk nachzutrainieren,
-und senke `lr0` entsprechend.
+und senke `lr0` entsprechend. `libreyolo train` startet mit demselben Rezept, und
+ohne `name=` landen die Läufe in `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

@@ -67,7 +67,7 @@ snippets:
         # đầu vào. Họ còn thiếu gói bổ sung được liệt kê kèm lệnh pip
         # để kích hoạt.
         libreyolo models
-source_hash: 3ad6bb09bf2f5434
+source_hash: a4a8cf3926eeb9bb
 ---
 ## Cài đặt
 
@@ -96,6 +96,7 @@ một đích xuất cần. Không có gì khác thay đổi: API giống nhau d�
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 trở lên |
 | `marigold` | Các phụ thuộc diffusion, tăng tốc và Transformers được ghim |
 | `molmo2` | `transformers==4.57.1`, `einops` và `accelerate` |
+| `gen` | `diffusers>=0.38.0`, `transformers>=5.1.0` và `accelerate>=1.7.0`, cho LibreGen và Speridlabs Idol |
 | `rfdetr` | `transformers`, cung cấp backbone RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, cung cấp encoder ViT-L/16 và EfficientNet-Lite3 của MiDaS |
@@ -169,11 +170,11 @@ trong một lệnh. Một số gói được cố ý để ngoài. `neptune` b�
 protobuf 7. `executorch` bị loại vì ExecuTorch giới hạn phiên bản PyTorch đi
 kèm, còn `coreai` vì `coreai-torch` cố định PyTorch ở 2.11.x và sẽ kéo toàn bộ
 môi trường sang phiên bản đó. `fast-eval`, `hub-kernels`, `clip-convert` và
-`siglip2-convert` cũng không được đưa vào. Hãy cài riêng theo tên nếu cần. `all` bao gồm `hf` và `llm`; `fiftyone`, `vla`, `marigold` và `molmo2` vẫn riêng biệt. FiftyOne mang theo OpenCV headless, trùng lặp với package `cv2` lõi.
+`siglip2-convert` cũng không được đưa vào. Hãy cài riêng theo tên nếu cần. `all` bao gồm `hf`, `llm` và `gen`; `fiftyone`, `vla`, `marigold` và `molmo2` vẫn riêng biệt. FiftyOne mang theo OpenCV headless, trùng lặp với package `cv2` lõi.
 
 Cài đặt lõi yêu cầu Python 3.10 trở lên và bổ sung `cloudpickle>=3.0.0` cho DDP do bộ điều phối quản lý.
 
-Dùng môi trường riêng cho Molmo2: phiên bản Transformers 4.57.1 được ghim xung đột với các bộ thư viện VLM, Hub và Marigold mới hơn. Marigold ghim diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 và Transformers 5.4.0, cùng bitsandbytes 0.49.2 trên Linux/Windows. Inference Marigold bốn bit mặc định cần CUDA. North Micro Vision cần Transformers 5.16 trở lên; Gemma 4 cần 5.10 trở lên, cao hơn mức tối thiểu chung của VLM.
+Dùng môi trường riêng cho Molmo2: phiên bản Transformers 4.57.1 được ghim xung đột với các bộ thư viện VLM, Hub và Marigold mới hơn, và `libreyolo[gen]` không thể cài cùng `libreyolo[molmo2]`. Marigold ghim diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 và Transformers 5.4.0, cùng bitsandbytes 0.49.2 trên Linux/Windows. Inference Marigold bốn bit mặc định cần CUDA. North Micro Vision cần Transformers 5.16 trở lên; Gemma 4 cần 5.10 trở lên, cao hơn mức tối thiểu chung của VLM.
 
 ## Ràng buộc nền tảng
 
