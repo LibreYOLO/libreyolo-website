@@ -113,7 +113,8 @@ exits with `config_unsupported` rather than being ignored.
 
 Support is per family and per task, not global. `libreyolo formats
 family=<family> task=<task>` prints the tier for each format for that
-combination, with the reason and any constraint attached. See
+combination, with the reason, any constraint attached, and whether `export()`
+accepts FP16 and INT8 there. See
 [`libreyolo formats`](/docs/cli/utilities) for the arguments.
 
 Some formats need an optional install and some need a toolchain. A missing

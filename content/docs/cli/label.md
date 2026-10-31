@@ -72,6 +72,18 @@ straight away, and the startup line reports the image count, the class count,
 and whether the dataset is writable. A read-only dataset still opens and says
 why it cannot be written to.
 
+### Label-Error Radar
+
+With AI assist on, the Radar button, or `Y`, runs the assist model over every
+labeled image and lists the images where the model disagrees with the labels,
+worst first: a box the model finds nothing in, a confident detection with no
+box, or a box whose class the model disputes. Radar writes nothing; every fix
+is a manual edit. `N` moves to the next flagged image in that worst-first order
+and wraps at the end. Pressing `Y` again reopens the last scan, with the time it
+ran and a Rescan button, instead of scanning again. Radar is not available on
+oriented-box projects, and both keys can be remapped in the `?` shortcuts
+dialog.
+
 ### Sharing, and what `host` does
 
 `share=true` binds the wildcard address, which lets other machines on your

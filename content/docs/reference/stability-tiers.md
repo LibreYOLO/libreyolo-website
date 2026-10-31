@@ -101,9 +101,9 @@ site uses for the same group on a model page header.
 | `g2` | Supported | 19 | Additional trainable-family coverage set |
 | `g3` | Inference only | 44 | Families without a training implementation |
 | `g4` | Museum | 5 | Historical families with inference coverage |
-| `s` | Sibling tier | 36 | Sibling APIs (SAM, open-vocab, VLM, grounding, zero-shot) covered separately |
+| `s` | Sibling tier | 40 | Sibling APIs (SAM, open-vocab, VLM, grounding, zero-shot) covered separately |
 
-That is 118 families across six groups. `g3` is the largest group, because
+That is 122 families across six groups. `g3` is the largest group, because
 much of the registry is inference-only lineage rather than actively trained
 detectors.
 
@@ -141,7 +141,7 @@ A family in `g3` or `g4` has no training implementation, and calling `train()`
 on one raises. That is a property of the family's code, not of its group: the
 group records the fact rather than causing it.
 
-Of the 118 families, 37 train: every `g0`, `g1` and `g2` family, plus Qwen3-VL
+Of the 122 families, 37 train: every `g0`, `g1` and `g2` family, plus Qwen3-VL
 through `LibreVLM` and SmolVLA, ACT and Diffusion Policy through `LibreVLA`.
 
 For a family that does train, whether an individual augmentation knob reaches

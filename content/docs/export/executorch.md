@@ -155,9 +155,10 @@ rejected during validation, and a device other than CPU is refused.
 
 `delegate` accepts `"xnnpack"` and nothing else in this version.
 
-Classification exports carry two extra metadata keys, `crop_pct` and
-`interpolation`, so the runtime can reproduce the family's resize and center-crop
-policy.
+Classification exports carry the model's evaluation preprocessing as metadata,
+`crop_pct` and `interpolation`, plus `norm_mean`, `norm_std` and `resize_mode`
+for families that set them, so the runtime reproduces the model's resize and
+center crop.
 
 The blocked entries name the concrete failure rather than a category. D-FINE
 detection and segmentation reach an unsupported `ContextVar` read in deformable
