@@ -45,6 +45,9 @@ export const LINEAGES = [
 
   // Added for the 1.7.0 documentation.
   { slug: 'speridlabs-idol', display: 'Speridlabs Idol', keys: ['speridlabs_idol'] },
+  { slug: 'flux2-klein', display: 'FLUX.2 klein', keys: ['flux2_klein'] },
+  { slug: 'sana-sprint', display: 'SANA-Sprint', keys: ['sana_sprint'] },
+  { slug: 'wevisone-vl', display: 'WeVisOne-VL', keys: ['wevisonevl'] },
 
   // g0, flagships
   { slug: 'yolov9', display: 'YOLOv9', keys: ['yolo9', 'yolo9_e2e', 'yolo9_p2'] },

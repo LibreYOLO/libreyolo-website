@@ -1,0 +1,13 @@
+{
+  "name": "FLUX.2 klein 4B",
+  "org": "Black Forest Labs",
+  "paper_title": "FLUX.2: Frontier Visual Intelligence",
+  "paper_url": "https://bfl.ai/blog/flux-2",
+  "code_url": "https://github.com/black-forest-labs/flux2",
+  "license": "Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so these weights can be used in commercial and closed-source products. It asks you to keep its license text and attribution notices with any copy of the weights you redistribute, and it grants a patent license. Black Forest Labs declares Apache-2.0 on the Hugging Face repository LibreYOLO downloads, black-forest-labs/FLUX.2-klein-4B, in its license tag and LICENSE.md, and its model card calls the model fully open under Apache 2.0. The license is not uniform across FLUX.2: Black Forest Labs releases the klein 9B models and FLUX.2 dev under its FLUX Non-Commercial License, and LibreYOLO does not load those. LibreYOLO's adapter is its own MIT code that calls the Apache-2.0 diffusers Flux2KleinPipeline; no upstream source is ported. The weights are not redistributed: they download from that repository at revision e7b7dc27f91deacad38e78976d1f2b499d76a294, component folders only.",
+  "bibtex": "@misc{flux-2-2025,\n    author={Black Forest Labs},\n    title={{FLUX.2: Frontier Visual Intelligence}},\n    year={2025},\n    howpublished={\\url{https://bfl.ai/blog/flux-2}},\n}",
+  "bibtex_source_url": "https://github.com/black-forest-labs/flux2#citation",
+  "bibtex_verified": "2026-10-31, copied verbatim from the Citation section of the black-forest-labs/flux2 README on branch main (commit 50fe5162777813d869182b139e83b10743caef15), which asks users of the repository's code or models, FLUX.2 klein 4B among them, to cite this entry. FLUX.2 was released without a paper: the entry cites Black Forest Labs' launch post, and neither the FLUX.2-klein-4B model card nor the klein blog post publishes a BibTeX of its own. The arXiv API returns no FLUX.2 record from Black Forest Labs (a search under that author name finds only FLUX.1 Kontext, 2506.15742), so there is no preprint to cross-check against. Checked instead against the page the entry's howpublished URL points to, https://bfl.ai/blog/flux-2: its title is 'FLUX.2: Frontier Visual Intelligence' and it is dated 2025-11-25, matching the entry's title, author and year. Do not hand-edit; a wrong citation misattributes someone's work."
+}

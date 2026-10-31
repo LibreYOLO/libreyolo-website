@@ -26,6 +26,7 @@ const TASK_LABELS = {
   mesh: { label: 'Body mesh', slug: 'body-mesh' },
   gaze: { label: 'Gaze', slug: 'gaze-estimation' },
   edge: { label: 'Edges', slug: 'edge-detection' },
+  generate: { label: 'Image generation', slug: 'image-generation' },
   generate3d: { label: '3D generation', slug: '3d-generation' },
 
 }
