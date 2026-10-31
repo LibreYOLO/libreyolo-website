@@ -11,14 +11,22 @@ const nextConfig = {
   turbopack: {
     root: '.',
   },
-  // The hand-written LibreVLM page predates the docs tree, which now covers
-  // the same ground at /docs/reference/vlm-api plus one page per VLM family.
+  // Hand-written pages that predate the docs tree, or are placeholders and
+  // past events. Each goes to the page that now covers its subject, in every
+  // locale.
   async redirects() {
-    const vlm = '/docs/reference/vlm-api'
-    return [
-      { source: '/docs/librevlm', destination: vlm, permanent: true },
-      { source: '/:locale(en|zh|es|it|pt|fr|ru|id|vi|de|pl|ja|ko|uk)/docs/librevlm', destination: `/:locale${vlm}`, permanent: true },
-    ]
+    const moved = {
+      '/docs/librevlm': '/docs/reference/vlm-api',
+      '/docs/experimental': '/docs/tasks',
+      '/science': '/docs/licensing',
+      '/datasets': '/docs/train/datasets',
+      '/cursor-hackathon': '/docs/quickstart',
+    }
+    const locales = 'en|zh|es|it|pt|fr|ru|id|vi|de|pl|ja|ko|uk'
+    return Object.entries(moved).flatMap(([from, to]) => [
+      { source: from, destination: to, permanent: true },
+      { source: `/:locale(${locales})${from}`, destination: `/:locale${to}`, permanent: true },
+    ])
   },
 }
 
