@@ -204,7 +204,9 @@ export async function DocsLandingView({ locale, source = currentDocs }) {
     .map((item) => {
       const family = families.find((f) => href(`/docs/models/${f.slug}`) === item.slug)
       if (!family) return { href: item.slug, label: item.label, note: '' }
-      const tasks = family.tasks.length === 1
+      // "Detection" names only a family whose one task is detection; any other
+      // single-task family (matting, body mesh, 3D generation) gets the count.
+      const tasks = family.tasks.length === 1 && family.tasks[0] === 'detect'
         ? t('detection')
         : t('familyTaskCount', { count: family.tasks.length })
       // A family with nothing in our org is not a broken row, it is a licensing
