@@ -1,0 +1,14 @@
+{
+  "name": "Speridlabs Idol",
+  "org": "Speridlabs",
+  "paper_title": "Idol: Single Image to 3D Gaussian Splats",
+  "paper_url": "https://speridlabs.com/research/idol",
+  "code_url": "https://github.com/speridlabs/idol-sdk",
+  "license": "Apache-2.0",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the Speridlabs Idol code and weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and notices, and the license grants a patent license. LibreYOLO's adapter is MIT; the Idol networks it ports from the Speridlabs SDK keep Apache-2.0, alongside the MIT code from TripoSplat that Idol builds on, with their notices in libreyolo/models/gen/speridlabs_idol/NOTICE. Idol's own weights download from Speridlabs' Hugging Face repository, speridlabs/idol, and the FLUX.2 VAE from black-forest-labs/FLUX.2-klein-4B, both Apache-2.0. The DINOv3 image encoder is the exception: it is Meta's, under the DINOv3 License, a custom agreement that is not OSI-approved. It permits redistribution with a copy of the agreement and passes through trade-control and end-use restrictions (military, weapons, espionage and nuclear uses among them). LibreYOLO mirrors that encoder in bfloat16 at LibreYOLO/LibreDINOv3vith16plus together with the agreement, so nothing is gated; read the agreement before shipping a product on it.",
+  "bibtex": "@misc{canada2026idol,\n  title  = {Idol: Single Image to 3D Gaussian Splats},\n  author = {Ca{\\~n}ada, Alejandro and Garabito, Chema},\n  year   = {2026},\n  url    = {https://speridlabs.com/research/idol}\n}",
+  "bibtex_source_url": "https://speridlabs.com/research/idol#citation",
+  "bibtex_verified": "2026-10-31, copied verbatim from the 'Cite this work' block (section id citation) of the Speridlabs research page. The Idol SDK README and the speridlabs/idol model card publish no BibTeX. The arXiv API returns no record for this title, so there is no preprint to cross-check against; the two authors, in the same order (Alejandro Cañada, Chema Garabito), match the credits in the SDK port's NOTICE at idol-sdk commit 4702a7f00850e34b6e83a2170cc123c3e9570744. Do not hand-edit; a wrong citation misattributes someone's work."
+}

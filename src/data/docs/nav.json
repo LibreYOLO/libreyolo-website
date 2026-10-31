@@ -840,6 +840,11 @@
           "built": true
         },
         {
+          "slug": "/docs/models/speridlabs-idol",
+          "label": "Speridlabs Idol",
+          "built": true
+        },
+        {
           "slug": "/docs/models/tinyformer",
           "label": "TinyFormer",
           "built": true
