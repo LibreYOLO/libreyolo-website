@@ -23,7 +23,7 @@ Two new tasks arrive with the `LibreGen` factory: `generate` (text to image) and
   Detect and segment `val()` return a confusion matrix and per-class P/R/F1 curves, classify `val()` a confusion matrix, and predict and val gain class-agnostic NMS.
 
 - **YOLO9 training fixes. (#930, #939)**
-  Fine-tunes no longer start with a randomly initialized PGI branch, gradients are clipped, labels are assigned in fp32, and label-assignment memory no longer grows with `max_labels`.
+  Fine-tunes no longer start with a randomly initialized PGI branch, gradients are clipped, labels are assigned in fp32, and label-assignment memory no longer grows with `max_labels`. Existing checkpoints load unchanged and predict the same boxes.
 
 ### Added
 
@@ -56,17 +56,17 @@ Two new tasks arrive with the `LibreGen` factory: `generate` (text to image) and
 - **YOLO9-family training gives different results than 1.6.0. (#930)**
   YOLO9, YOLO9-E2E and YOLO9-P2 clip the gradient norm at 10 by default (1.6.0 did not clip), and the training assigner scores anchors in fp32, so under fp16 AMP the chosen positives can differ. Plain YOLO9 fine-tunes from the published `LibreYOLO9{t,s,m,c}.pt` weights no longer attach a PGI branch at `aux_weight=0.25`. A YOLO9-family run started in 1.6.0 and resumed in 1.7.0 also clips from the resumed epoch, because its saved config has no `clip_max_norm`; pass `clip_max_norm=0` to resume it unchanged. The fixes behind these changes are listed under Fixed.
 
-- **YOLO9 internals use the MultimediaTechLab/YOLO module names. (#930)**
-  Code that reaches into the network sees `YOLO9Head` instead of `DDetect` (box and class towers in `anchor_convs` / `class_convs`, `anchor2vec` instead of `dfl`, `num_classes` instead of `nc`, `strides` (the level strides, a tuple) instead of the `stride` buffer and the per-anchor `strides` cache; `no`, `nl`, `anchors` and `dynamic` are gone), `RepConv` instead of `RepConvN`, `Bottleneck` instead of `RepNBottleneck` (the old plain-conv `Bottleneck` is gone), `Anchor2Vec` instead of `DFL`, and `convN` instead of `cvN` (`conv` instead of `cv` in AConv) and `bottleneck` instead of `m` inside blocks. Block constructors take the MultimediaTechLab arguments. In YOLO9-E2E, `YOLO9E2EHead` replaces `YOLO9E2EDetect`, and the one-to-one towers are `one_to_one_anchor_convs` / `one_to_one_class_convs` (were `one2one_cv2` / `one2one_cv3`). ONNX node names follow in the head, backbone and neck, e.g. `/head/anchor_convs.0/...` (update Hailo end-node configs; the `libreyolo-export-hailo` skill carries the new names). Model inputs, outputs and output names are unchanged. Freshly built YOLO9-t, YOLO9-E2E-t and YOLO9-P2-t/s models with more than 100 classes get class towers up to 128 channels wide instead of 100; other sizes are unchanged, and a loaded checkpoint keeps its stored width. `LibreYOLO9Model.fuse()`, `RepConvN.fuse_convs()`, `Conv.forward_without_bn()`, `Concat` and `yolo9.utils.decode_boxes` are removed; predict, val and export never called them. There are no compatibility aliases.
+- **YOLO9 internal module names changed. (#930)**
+  Code that reaches into the network sees `YOLO9Head` instead of `DDetect` (box and class towers in `anchor_convs` / `class_convs`, `anchor2vec` instead of `dfl`, `num_classes` instead of `nc`, `strides` (the level strides, a tuple) instead of the `stride` buffer and the per-anchor `strides` cache; `no`, `nl`, `anchors` and `dynamic` are gone), `RepConv` instead of `RepConvN`, `Bottleneck` instead of `RepNBottleneck` (the old plain-conv `Bottleneck` is gone), `Anchor2Vec` instead of `DFL`, and `convN` instead of `cvN` (`conv` instead of `cv` in AConv) and `bottleneck` instead of `m` inside blocks. Block constructors take new arguments. In YOLO9-E2E, `YOLO9E2EHead` replaces `YOLO9E2EDetect`, and the one-to-one towers are `one_to_one_anchor_convs` / `one_to_one_class_convs` (were `one2one_cv2` / `one2one_cv3`). ONNX node names follow in the head, backbone and neck, e.g. `/head/anchor_convs.0/...` (update Hailo end-node configs; the `libreyolo-export-hailo` skill carries the new names). Model inputs, outputs and output names are unchanged. Freshly built YOLO9-t, YOLO9-E2E-t and YOLO9-P2-t/s models with more than 100 classes get class towers up to 128 channels wide instead of 100; other sizes are unchanged, and a loaded checkpoint keeps its stored width. `LibreYOLO9Model.fuse()`, `RepConvN.fuse_convs()`, `Conv.forward_without_bn()`, `Concat` and `yolo9.utils.decode_boxes` are removed; predict, val and export never called them. There are no compatibility aliases.
 
-- **YOLO9-m and YOLO9-c build the MultimediaTechLab/YOLO auxiliary branch when PGI is attached. (#930)**
+- **YOLO9-m and YOLO9-c build the CBLinear/CBFuse auxiliary branch when PGI is attached. (#930)**
   The training-only PGI branch of these two sizes is now the one in the upstream `v9-m.yaml` / `v9-c.yaml`: `CBLinear` taps on the three backbone stages, a second backbone fed with the image whose stages are summed with those taps by `CBFuse`, and a detection head on its outputs. 1.6.0 built the YOLO9-t/s top-down branch for every size. Converting upstream `v9-m.pt` / `v9-c.pt` now keeps their auxiliary tensors (`aux.*`, `aux_head.*`) instead of skipping them, so fine-tunes from those conversions train with PGI. At 80 classes the branch and its head have 12.8M parameters for YOLO9-m (7.5M before) and 25.7M for YOLO9-c (10.2M before), so PGI training of these sizes uses more memory and time per step; inference, export and YOLO9-t/s are unchanged. Checkpoints that carry the previous m/c branch (`aux.spp.*`, `aux.elan_a4.*`, `aux.elan_a3.*`) still resume and fine-tune with that branch.
 
 - **`perspective` augmentation uses corner displacement. (#930)**
   With `perspective > 0`, the four corners of the augmentation canvas are each pulled inward by a random amount and the image and boxes are warped by the resulting homography, on top of the usual rotation, scale, shear and translation. `distortion_scale = min(perspective * 100, 0.2)` in the sense of torchvision's `RandomPerspective`, so `perspective=0.001` moves each corner by at most 5% of the canvas side, at any resolution. The same value therefore gives a different warp than in 1.6.0, and negative values raise `ValueError` when the first sample is warped. The default `perspective=0` is unchanged. Applies to every family that uses the shared affine warp: YOLO9 (and its E2E and P2 variants), YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR and RT-DETRv2.
 
 - **The YOLO9 mosaic pipeline samples the mixup ratio from Beta(1, 1). (#930)**
-  This is the MultimediaTechLab/YOLO recipe; the ratio was drawn from Beta(32, 32) before, which kept it close to 0.5. **Default YOLOv7 training changes**, because YOLOv7 shares this pipeline and enables mixup by default (`mixup_prob=1.0`). For YOLO9, YOLO9-E2E, YOLO9-P2, RT-DETR and RT-DETRv2 it applies only when mixup is enabled (`mixup_prob` is 0 by default; RT-DETR and RT-DETRv2 also need `mosaic_prob > 0`, which is 0 by default too).
+  The ratio was drawn from Beta(32, 32) before, which kept it close to 0.5. **Default YOLOv7 training changes**, because YOLOv7 shares this pipeline and enables mixup by default (`mixup_prob=1.0`). For YOLO9, YOLO9-E2E, YOLO9-P2, RT-DETR and RT-DETRv2 it applies only when mixup is enabled (`mixup_prob` is 0 by default; RT-DETR and RT-DETRv2 also need `mosaic_prob > 0`, which is 0 by default too).
 
 - **`libreyolo train` without `name=` uses the run name `model.train()` uses for more families. (#946)**
   EC, D-FINE, SegFormer and LingBot-Vision runs go to `runs/train/ec_exp`, `dfine_exp`, `segformer_exp` and `lingbotvision_exp` instead of `runs/train/exp`; V-JEPA 2 probes go to `runs/train/train`, and YOLO9-P2 to `runs/train/yolo9_exp` (was `yolo9_p2_exp`). Families with a registered training config already did this in 1.6.0. Pass `name=exp` for the old path, or `name=yolo9_p2_exp` for YOLO9-P2. Thanks @Emyyr.
@@ -148,7 +148,7 @@ Two new tasks arrive with the `LibreGen` factory: `generate` (text to image) and
   `increment_path(..., mkdir=True)` now reserves the directory by creating it, so two processes that save predictions (image, video or CLI `predict` and `val`) or generations at the same moment get separate numbered folders (`predict`, `predict2`, ..., or `exp`, `exp2`, ... for CLI `val`) instead of overwriting each other's files.
 
 - **YOLO9 training clips the gradient norm and assigns labels in fp32. (#930)**
-  YOLO9, YOLO9-E2E and YOLO9-P2 clip the gradient L2 norm at 10 before each optimizer step, as the MultimediaTechLab/YOLO recipe does (`clip_max_norm`, `0` to disable). The training assigner scores anchors in fp32, so fp16 autocast can no longer flush every class probability to zero and leave a batch without positives.
+  YOLO9, YOLO9-E2E and YOLO9-P2 clip the gradient L2 norm at 10 before each optimizer step (`clip_max_norm`, `0` to disable). The training assigner scores anchors in fp32, so fp16 autocast can no longer flush every class probability to zero and leave a batch without positives.
 
 - **YOLO9 fine-tuning no longer trains a randomly initialized PGI branch by default. (#930)**
   Since 1.6.0, `train()` attached the PGI auxiliary branch at `aux_weight=0.25` to every new plain-YOLO9 training run, but the published `LibreYOLO9{t,s,m,c}.pt` weights carry no PGI tensors, so the branch started from random weights on top of a converged model. The branch is now attached by default only when the loaded or `pretrained=` weights contain PGI tensors, or when training from scratch; otherwise the run trains the main head only, as in 1.5.0, and logs it. Passing `aux_weight` explicitly (Python or `libreyolo train aux_weight=0.25`) still attaches a new branch. Resumed runs keep their checkpoint's PGI setup. YOLO9-E2E and YOLO9-P2 have no PGI branch.
@@ -166,6 +166,9 @@ Two new tasks arrive with the `LibreGen` factory: `generate` (text to image) and
   `N` skipped flagged images because it followed image ids instead of the worst-first order shown in the Radar dialog; it now follows that order and wraps at the end. The Radar button (`Y`) reopens the last scan, with its time and a Rescan button, instead of scanning again.
 
 ### Security/Licensing
+
+- **Third-party notices for the YOLO9 family. (#930)**
+  `THIRD_PARTY_NOTICES.txt` gains entries for the DATE design (Apache-2.0) behind the YOLO9-E2E one-to-one head, and for the torchvision `RandomPerspective` design and batched-NMS coordinate trick (BSD-3-Clause); its MMDetection entry now also credits `filter_scores_and_topk` (Apache-2.0), and the RepVGG entry is removed with `fuse_convs()`.
 
 - **Notices for the new families. (#967)**
   `NOTICE` gains a WeVisOne-VL entry, and `weights/LICENSE_NOTICE.txt` gains entries for the Speridlabs Idol, FLUX.2 klein and SANA-Sprint weights, including the Gemma Terms of Use that cover SANA-Sprint's Gemma 2 text encoder. All three download from their publishers at pinned revisions.
@@ -197,7 +200,7 @@ Thanks to the people whose issues closed in this window: AnuarSv (#940, #950), c
 
 ### Stats
 
-116 commits, 202 files changed, +19,767 / -2,718 lines, 27 merged pull requests (#911-#967), 11 issues closed as completed. 14 new test modules (589 to 603). 3 new documentation pages.
+116 commits, 202 files changed, +19,764 / -2,718 lines, 27 merged pull requests (#911-#967), 11 issues closed as completed. 14 new test modules (589 to 603). 3 new documentation pages.
 
 ```bash
 pip install --upgrade libreyolo
