@@ -43,6 +43,9 @@ export const LINEAGES = [
   { slug: 'dome-detr', display: 'Dome-DETR', keys: ['domedetr'] },
   { slug: 'gtr', display: 'GTR', keys: ['gtr'] },
 
+  // Added for the 1.7.0 documentation.
+  { slug: 'speridlabs-idol', display: 'Speridlabs Idol', keys: ['speridlabs_idol'] },
+
   // g0, flagships
   { slug: 'yolov9', display: 'YOLOv9', keys: ['yolo9', 'yolo9_e2e', 'yolo9_p2'] },
   { slug: 'rf-detr', display: 'RF-DETR', keys: ['rfdetr'] },

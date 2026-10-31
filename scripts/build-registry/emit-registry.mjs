@@ -26,6 +26,7 @@ const TASK_LABELS = {
   mesh: { label: 'Body mesh', slug: 'body-mesh' },
   gaze: { label: 'Gaze', slug: 'gaze-estimation' },
   edge: { label: 'Edges', slug: 'edge-detection' },
+  generate3d: { label: '3D generation', slug: '3d-generation' },
 
 }
 const EXTRAS = { rfdetr: 'rfdetr', rtdetr: 'rtdetr' } // families needing a pip extra

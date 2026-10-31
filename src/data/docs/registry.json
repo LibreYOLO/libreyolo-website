@@ -182,6 +182,10 @@
     "edge": {
       "label": "Edges",
       "slug": "edge-detection"
+    },
+    "generate3d": {
+      "label": "3D generation",
+      "slug": "3d-generation"
     }
   },
   "families": {
@@ -10753,6 +10757,73 @@
         "bibtex": "@article{ye2026modus,\n  title   = {MODUS: Decoder-only Any-to-Any Modeling of Diverse Modalities},\n  author  = {Ye, Mingqiao and An, Zhaochong and Gao, Zhitong and Liu, Xian\n             and Fleuret, Fran\\c{c}ois and Li, Chuan and Zadeh, Amir\n             and Belongie, Serge and Dehghan, Afshin and Allardice, Jesse\n             and Mizrahi, David and Kar, O\\u{g}uzhan Fatih and Bachmann, Roman\n             and Zamir, Amir},\n  journal = {arXiv preprint arXiv:2607.25948},\n  year    = {2026},\n}",
         "bibtex_source_url": "https://github.com/EPFL-VILAB/Modus#citation",
         "bibtex_verified": "2026-08-08, copied verbatim from the Citation section of the upstream README on branch main. Cross-checked against the arXiv API for 2607.25948: fourteen authors in the same order, identical title, comment 'Accepted at ICML 2026'. The authors' own README citation block still gives it as @article with the arXiv preprint as the venue, unchanged since the ICML acceptance; reproduced here as published rather than reclassified to @inproceedings. Do not hand-edit; a wrong citation misattributes someone's work."
+      }
+    },
+    "speridlabs_idol": {
+      "key": "speridlabs_idol",
+      "slug": "speridlabs-idol",
+      "registry_keys": [
+        "speridlabs_idol"
+      ],
+      "display": "Speridlabs Idol",
+      "prefix": "LibreSperidlabsIdol",
+      "prefixes": {
+        "speridlabs_idol": "LibreSperidlabsIdol"
+      },
+      "tier": "s",
+      "tasks": [
+        "generate3d"
+      ],
+      "sizes_label": null,
+      "added_in": "1.7.0",
+      "task_added_in": {
+        "speridlabs_idol": "1.7.0"
+      },
+      "weights_hosted": false,
+      "extra": "gen",
+      "trainable": false,
+      "unsupported_train_params": {
+        "speridlabs_idol": []
+      },
+      "trainable_per_key": {
+        "speridlabs_idol": false
+      },
+      "capabilities": {
+        "train": false,
+        "val": false
+      },
+      "checkpoints": [],
+      "export": {
+        "generate3d": {
+          "onnx": "blocked",
+          "torchscript": "blocked",
+          "executorch": "blocked",
+          "tensorrt": "blocked",
+          "openvino": "blocked",
+          "paddle": "blocked",
+          "mnn": "blocked",
+          "rknn": "blocked",
+          "ncnn": "blocked",
+          "tflite": "blocked",
+          "coreml": "blocked",
+          "coreai": "blocked"
+        }
+      },
+      "benchmarks": {},
+      "va_embed": null,
+      "upstream": {
+        "name": "Speridlabs Idol",
+        "org": "Speridlabs",
+        "paper_title": "Idol: Single Image to 3D Gaussian Splats",
+        "paper_url": "https://speridlabs.com/research/idol",
+        "code_url": "https://github.com/speridlabs/idol-sdk",
+        "license": "Apache-2.0",
+        "code_license": "MIT and Apache-2.0",
+        "weights_license": "Apache-2.0",
+        "license_interpretation": "Apache-2.0 is a permissive license, so the Speridlabs Idol code and weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and notices, and the license grants a patent license. LibreYOLO's adapter is MIT; the Idol networks it ports from the Speridlabs SDK keep Apache-2.0, alongside the MIT code from TripoSplat that Idol builds on, with their notices in libreyolo/models/gen/speridlabs_idol/NOTICE. Idol's own weights download from Speridlabs' Hugging Face repository, speridlabs/idol, and the FLUX.2 VAE from black-forest-labs/FLUX.2-klein-4B, both Apache-2.0. The DINOv3 image encoder is the exception: it is Meta's, under the DINOv3 License, a custom agreement that is not OSI-approved. It permits redistribution with a copy of the agreement and passes through trade-control and end-use restrictions (military, weapons, espionage and nuclear uses among them). LibreYOLO mirrors that encoder in bfloat16 at LibreYOLO/LibreDINOv3vith16plus together with the agreement, so nothing is gated; read the agreement before shipping a product on it.",
+        "bibtex": "@misc{canada2026idol,\n  title  = {Idol: Single Image to 3D Gaussian Splats},\n  author = {Ca{\\~n}ada, Alejandro and Garabito, Chema},\n  year   = {2026},\n  url    = {https://speridlabs.com/research/idol}\n}",
+        "bibtex_source_url": "https://speridlabs.com/research/idol#citation",
+        "bibtex_verified": "2026-10-31, copied verbatim from the 'Cite this work' block (section id citation) of the Speridlabs research page. The Idol SDK README and the speridlabs/idol model card publish no BibTeX. The arXiv API returns no record for this title, so there is no preprint to cross-check against; the two authors, in the same order (Alejandro Cañada, Chema Garabito), match the credits in the SDK port's NOTICE at idol-sdk commit 4702a7f00850e34b6e83a2170cc123c3e9570744. Do not hand-edit; a wrong citation misattributes someone's work."
       }
     }
   },
