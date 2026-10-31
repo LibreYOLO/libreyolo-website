@@ -134,7 +134,9 @@ Left alone, the trainer follows the SegFormer paper's ADE20K recipe: AdamW at
 a backbone base learning rate with the decode head trained at 10x that rate,
 weight decay everywhere except LayerNorm and the Mix-FFN positional
 convolution, and a linear decay schedule with a warmup. Convergence for the
-larger sizes, b3 through b5, has not been validated end to end.
+larger sizes, b3 through b5, has not been validated end to end. `libreyolo train`
+starts from the same recipe, and without `name=` its runs go to
+`runs/train/segformer_exp`.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 

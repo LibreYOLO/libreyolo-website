@@ -170,9 +170,26 @@ base detection checkpoint instead.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
-New stock detection fine-tunes enable a training-only PGI branch with `aux_weight=0.25`. `max_labels=300`; SGD momentum warms from 0.8 to 0.937 over three epochs. Old single-head checkpoints resume with that graph. Prediction and export use the main head. `letterbox_pad=None` inherits the checkpoint stamp: unmarked weights use `topleft`, while new official conversions record `center`.
+The base model can train a PGI auxiliary branch next to its main head. The
+branch is training-only: prediction and export use the main head. A run attaches
+it when the starting weights carry PGI tensors or when it trains from scratch.
+The published base checkpoints carry none, so a fine-tune from them trains the
+main head only and logs that. `aux_weight=0.25` attaches a new branch at that
+loss weight anyway, and `aux_weight=0` keeps it off. A resumed run keeps its
+checkpoint's PGI setup. On the `m` and `c` sizes the branch is the upstream one:
+a second backbone on the input image, whose stages `CBFuse` sums with `CBLinear`
+taps of the main backbone, and its own head, 12.8M and 25.7M training-only
+parameters at 80 classes. The end-to-end and stride-4 models have no PGI branch.
 
-YOLO9 and YOLOX mosaic prefer annotated partners with at most 20 draws; YOLO9 MixUp uses the same policy. See [event histograms](/docs/train/event-histograms) for non-RGB input profiles.
+All three variants clip the gradient L2 norm at 10 before each optimizer step;
+`clip_max_norm=0` turns clipping off. Label assignment scores anchors in fp32,
+also under float16 autocast. `max_labels=300` caps the boxes kept per training
+image, and boxes past it are dropped with a one-time warning; assignment memory
+follows each image's real boxes, not the cap. SGD momentum warms from 0.8 to
+0.937 over three epochs. `letterbox_pad=None` inherits the checkpoint stamp:
+unmarked weights use `topleft`, while new official conversions record `center`.
+
+YOLO9 and YOLOX mosaic prefer annotated partners with at most 20 draws; YOLO9 MixUp uses the same policy. MixUp is off by default (`mixup_prob=0`). When it is on, the blend ratio is drawn from Beta(1, 1), uniform on [0, 1], as in MultimediaTechLab/YOLO. See [event histograms](/docs/train/event-histograms) for non-RGB input profiles.
 
 ## Validate
 
@@ -216,6 +233,13 @@ Every published weight file for this family.
 ## Licensing
 
 <provenance-box>
+
+The code of all three variants is ported from
+[MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) at commit
+`c4cb5f6f` (MIT). The end-to-end model's one-to-one predictor follows the design
+of [DATE](https://github.com/YiqunChen1999/date) by Yiqun Chen (Apache-2.0),
+implemented for LibreYOLO with no DATE code copied. The stride-4 level is
+LibreYOLO code.
 
 The stride-4 aerial checkpoint predicts the VisDrone classes. Use the publisher-declared license recorded on its weight repository.
 

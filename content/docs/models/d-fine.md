@@ -175,7 +175,11 @@ Training starts from a published checkpoint, for both tasks.
 <code-tabs name="train" />
 
 Left alone, the trainer runs 132 epochs at `lr0=2e-4` with `amp=True` and `amp_dtype="float16"`, a batch
-of 16 and early stopping after 50 epochs without improvement. Detect weights are
+of 16 and early stopping after 50 epochs without improvement. `libreyolo train`
+starts from the same recipe for both tasks: AdamW with a flat cosine schedule,
+`weight_decay=1e-4`, 2 warmup epochs, a gradient-norm clip of 0.1, and no
+mosaic, MixUp, HSV or affine augmentation. Without `name=`, its runs go to
+`runs/train/dfine_exp`. Detect weights are
 a legal starting point for segmentation training, but only as an explicit
 transfer, since the mask head begins untrained and would otherwise return
 meaningless masks. Passing `task=segment` to the CLI is what authorizes it. The

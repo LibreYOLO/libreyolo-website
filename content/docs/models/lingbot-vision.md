@@ -130,7 +130,8 @@ LibreYOLO does not host a `g` checkpoint of its own.
 upstream report's linear probe: the ViT backbone is frozen and only the 1x1
 dense head trains, matching how the LibreYOLO-hosted weights above were
 produced. Pass `freeze_backbone=False` to fine-tune the whole network instead,
-and expect to lower `lr0` accordingly.
+and expect to lower `lr0` accordingly. `libreyolo train` starts from the same
+recipe, and without `name=` its runs go to `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

@@ -30,6 +30,11 @@ snippets:
                 batch=32,     # global batch: 16 images per GPU on two GPUs
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -85,6 +90,10 @@ caller's model instance when the run finishes.
 
 `device` accepts `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` and
 `"auto"`. Only a list of more than one CUDA index triggers the spawn.
+
+`libreyolo train device=0,1`, or `device=[0,1]`, builds the model on the first
+listed GPU and passes the list to `train()`, which spawns the workers the same
+way.
 
 ## Automatic launch and the main guard
 

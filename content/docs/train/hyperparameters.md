@@ -209,6 +209,13 @@ backbone group against the head, `clip_max_norm` sets gradient clipping, and
 SegFormer uses `head_lr_mult` to run its decode head at ten times the backbone
 rate. These live on the family's config subclass, not the base one.
 
+`clip_max_norm` clips the gradient L2 norm to that value before each optimizer
+step, and `0` turns clipping off. YOLOv9, YOLOv9-E2E and YOLOv9-P2 default it to
+`10`. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2,
+RT-DETRv4, RF-DETR, DINOv2, GTR and EC default it to `0.1`. On the CLI it is
+`clip_max_norm=` or `--clip-max-norm`; see
+[`libreyolo train`](/docs/cli/train) for the families that accept it there.
+
 ## EMA
 
 `ema=True` keeps an exponential moving average of the weights alongside the

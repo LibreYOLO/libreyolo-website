@@ -129,11 +129,11 @@ YOLO-NAS is a shape of its own: no mosaic at all, an always-on per-sample affine
 and MixUp applied independently rather than gated. Its `mosaic_scale` value is
 reused as the affine scale range.
 
-SegFormer and NAFNet each run a task-specific pipeline whose randomness is fixed
-in the family rather than configurable. For SegFormer the live knobs are the
-class attributes `semantic_scale_jitter` and `semantic_hsv_prob`, not
-`mosaic_scale` and `hsv_prob`. NAFNet's crop and flips are coupled input and
-target operations at a fixed 0.5 probability.
+SegFormer, LingBot-Vision and NAFNet each run a task-specific pipeline whose
+randomness is fixed in the family rather than configurable. For SegFormer and
+LingBot-Vision the live knobs are the class attributes `semantic_scale_jitter`
+and `semantic_hsv_prob`, not `mosaic_scale` and `hsv_prob`. NAFNet's crop and
+flips are coupled input and target operations at a fixed 0.5 probability.
 
 ## Which family honors which knob
 
@@ -178,6 +178,20 @@ everywhere. On the mosaic pipelines it turns mosaic and MixUp off for the final
 epochs. On the DETR-style pipelines it stops the photometric, zoom-out and crop
 augmentations and shapes the schedule's tail. On classification pipelines it disables auto-augmentation, erasing, MixUp and CutMix; crop and flips remain.
 
+`perspective` adds a projective warp on top of the rotation, scale, shear and
+translation. Each canvas corner moves inward by a random amount of up to
+`min(perspective * 100, 0.2)` times half the canvas side, per axis, so
+`perspective=0.001` moves a corner by at most 5 percent of the side at any
+resolution, and every value from `0.002` up reaches the same maximum. The
+default `0` keeps the warp affine, and a negative value raises `ValueError` when
+the first sample is warped. YOLOv9 and its E2E and P2 variants, YOLOX, YOLOv7,
+YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR and RT-DETRv2 apply it.
+
+MixUp in the YOLOv9 mosaic pipeline, which YOLOv9 and its variants, YOLOv7,
+RT-DETR and RT-DETRv2 train through, draws the blend ratio from Beta(1, 1),
+uniform on [0, 1]. The YOLOX mosaic wrapper, used by YOLOX, RTMDet and PicoDet,
+blends at a fixed 0.5.
+
 ## The classification pack
 
 Four knobs drive the classification pipeline and nothing else. Detection families
@@ -210,13 +224,15 @@ they exist for that family only and have no CLI flag.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Copy-paste instance augmentation probability, `task="segment"` only |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` reuses the same sample mirrored, `"mixup"` pulls a second sample |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Random 90 degree rotation probability |
-| YOLOv9 | `max_labels` | Per-image ground-truth cap in the train transforms, default 100 |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Per-image ground-truth cap in the train transforms, default 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste for `task="segment"`, `"flip"` mode only |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Random crop-resize probability |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Pose-path jitter and keypoint-aware affine probabilities |
 
-`max_labels` is the one that silently loses data. Boxes past the cap are dropped
-without an error, so dense imagery such as aerial photography needs it raised.
+`max_labels` is the one that loses data. Boxes past the cap are dropped with a
+one-time warning rather than an error, so dense imagery such as aerial
+photography needs it raised. Label-assignment memory follows the densest image
+in the batch, not the cap.
 
 Mosaic and MixUp are disabled for oriented-box training regardless of the knobs,
 because corner-aware augmentation for rotated boxes is not implemented.

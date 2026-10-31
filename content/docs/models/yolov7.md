@@ -134,6 +134,10 @@ The one difference: YOLOX adds an L1 box-regression refinement during those
 final epochs that v7 skips, because v7's SimOTA loss carries no raw-offset L1
 branch to refine.
 
+Mosaic and MixUp are both on by default (`mosaic_prob=1.0`, `mixup_prob=1.0`).
+Samples go through the YOLOv9 mosaic pipeline, whose MixUp draws the blend ratio
+from Beta(1, 1), uniform on [0, 1], as MultimediaTechLab/YOLO does.
+
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 
 ## Validate

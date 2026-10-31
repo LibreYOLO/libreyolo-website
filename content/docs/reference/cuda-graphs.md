@@ -113,8 +113,7 @@ around 1e-7 while still being bit-identical on the probe that matters.
 
 ## Training support
 
-Training capture went from two families to 24 in this release, across five
-tasks.
+Training capture covers 24 families across five tasks.
 
 | Task | Families |
 |---|---|

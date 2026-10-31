@@ -50,7 +50,7 @@ map the short spellings onto them, so `mosaic` sets `mosaic_prob`.
 | `mosaic_scale` | Random-scale range for the affine warp |
 | `mixup_scale` | Jitter-scale range applied to the MixUp partner image |
 | `shear` | Random-shear range for the affine warp, in degrees |
-| `perspective` | Projective warp magnitude for the affine warp |
+| `perspective` | Projective warp strength added to the affine warp: canvas corners move inward by up to `min(perspective * 100, 0.2)` times half the canvas side, per axis; `0` disables |
 | `flipud` | Vertical-flip probability |
 | `no_aug_epochs` | Final epochs trained with strong augmentation disabled |
 | `auto_augment` | Classification AutoAugment policy: randaugment, autoaugment or augmix |
@@ -123,13 +123,13 @@ and auto-augmentation, erasing, MixUp and CutMix for classification. Classificat
 | Archetype | Families |
 |---|---|
 | YOLOX-style | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| DETR-style | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Classification | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Semantic | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| DETR-style | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Classification | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Semantic | `segformer`, `unet`, `lingbotvision` |
 | Restore | `nafnet` |
 
-Twenty-five families are covered. A family outside this list returns an empty
+Thirty-one families are covered. A family outside this list returns an empty
 ignored set, so no warning is emitted for it.
 
 ## Deviations
@@ -141,6 +141,8 @@ ignored set, so no warning is emitted for it.
 | `rtdetr` | `flipud` ignored |
 | `rtdetrv2` | `flipud` ignored |
 | `fomo` | `perspective` and `flipud` ignored |
+| `ppyoloe` | `flipud` ignored: the source recipe uses a random 90-degree rotation instead |
+| `gtr` | `mosaic_prob` and `mixup_prob` used, for the first `mosaic_epochs` epochs; `degrees`, `translate` and `mosaic_scale` shape the affine that follows the mosaic |
 | `ec` | `hsv_prob`, `degrees` and `translate` used, for `task="pose"` only; detect and segment use fixed photometric recipes |
 | `dinov2` | The classification pack is used, for `task="classify"` only |
 

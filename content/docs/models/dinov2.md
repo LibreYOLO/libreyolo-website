@@ -148,6 +148,9 @@ same extra.
 pip install "libreyolo[rfdetr]"
 ```
 
+Without it, loading a DINOv2 checkpoint or model name stops with an error that
+names this install line.
+
 ## Predict
 
 LibreYOLO does not publish a LibreDINOv2 checkpoint. Construct the wrapper
