@@ -56,7 +56,6 @@ export default function sitemap() {
     { path: '/science', priority: 0.8 },
     { path: '/datasets', priority: 0.7 },
     { path: '/articles', priority: 0.9 },
-    { path: '/docs/librevlm', priority: 0.8 },
     { path: '/docs/experimental', priority: 0.8 },
     { path: '/benchmarks', priority: 0.9 },
     { path: '/cursor-hackathon', priority: 0.4 },

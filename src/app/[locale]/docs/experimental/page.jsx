@@ -24,7 +24,7 @@ const sectionDefs = [
 
 const relatedLinkDefs = [
   { href: '/docs', labelKey: 'coreDocs' },
-  { href: '/docs/librevlm', labelKey: 'librevlm' },
+  { href: '/docs/reference/vlm-api', labelKey: 'librevlm' },
   { href: '/models', labelKey: 'modelZoo' },
 ]
 
@@ -362,7 +362,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
       <Callout icon={Crosshair} tone="libre" title={t('status.stableTitle')}>
         <p>{t.rich('status.stableBody', {
           docs: (chunks) => <a href="/docs" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
-          vlm: (chunks) => <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
+          vlm: (chunks) => <a href="/docs/reference/vlm-api" className="text-libre-600 dark:text-libre-400 hover:underline">{chunks}</a>,
         })}</p>
       </Callout>
 
@@ -398,7 +398,7 @@ const sectionsZh = [
 
 const relatedLinksZh = [
   { href: '/zh/docs', label: '核心文档' },
-  { href: '/docs/librevlm', label: 'LibreVLM' },
+  { href: '/docs/reference/vlm-api', label: 'LibreVLM' },
   { href: '/models', label: '模型库' },
 ]
 
@@ -822,7 +822,7 @@ libreyolo train --model rf-detr-nano.pth --data data.yaml --lora`}</CodeBlock>
         <p>
           对于生产工作，经过验证的核心是 YOLO9 检测以及 RF-DETR 检测与分割。相关内容请参阅{' '}
           <a href="/zh/docs" className="text-libre-600 dark:text-libre-400 hover:underline">核心文档</a>，
-          开放词表检测请参阅 <a href="/docs/librevlm" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>。
+          开放词表检测请参阅 <a href="/docs/reference/vlm-api" className="text-libre-600 dark:text-libre-400 hover:underline">LibreVLM</a>。
         </p>
       </Callout>
 

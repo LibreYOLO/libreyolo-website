@@ -64,7 +64,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/docs/librevlm" className="text-surface-500 dark:text-surface-400 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
+                <Link href="/docs/reference/vlm-api" className="text-surface-500 dark:text-surface-400 hover:text-libre-500 dark:hover:text-libre-400 text-sm transition-colors">
                   LibreVLM
                 </Link>
               </li>
