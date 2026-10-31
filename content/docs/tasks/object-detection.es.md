@@ -87,17 +87,26 @@ snippets:
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() devuelve un dict plano, no un objeto.
+
+        # Un dict de claves metrics/, con los resultados por clase como
+        atributos.
+
         metrics = model.val(data="coco128.yaml")
 
+
         print(metrics["metrics/mAP50-95"])
+
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
+
         print(metrics["metrics/AR100"])
+
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -131,7 +140,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## Definición
@@ -193,7 +202,8 @@ más las familias de visión y lenguaje
 [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) y
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) y
 [LibreMODUS](/docs/models/libremodus). Estas se cargan a través de su propia
 factory y sus extras; cada página de modelo lleva la llamada exacta.
 
@@ -208,8 +218,11 @@ Los pesos se descargan de Hugging Face en el primer uso y se cachean localmente.
 `conf` fija el umbral de confianza y `max_det` limita el número de filas.
 `iou` es el umbral de NMS, así que solo tiene efecto en una familia que ejecute
 NMS; RF-DETR y la cabeza end-to-end de YOLOv9 decodifican un conjunto fijo de
-predicciones y lo ignoran. Consulta la [predicción](/docs/predict) para las
-fuentes, el streaming y el manejo de resultados.
+predicciones y lo ignoran. `agnostic_nms=True` añade un paso de supresión
+agnóstico a la clase en `iou` que se aplica también a esos dos; consulta
+[umbrales y filtrado](/docs/predict/thresholds#agnostic_nms). Consulta la
+[predicción](/docs/predict) para las fuentes, el streaming y el manejo de
+resultados.
 
 ## Formato del dataset
 
@@ -274,8 +287,9 @@ Usa `classes=` para conservar los ID originales seleccionados del dataset; `sing
 
 ## Validación
 
-`val()` devuelve un diccionario plano de claves `metrics/`, calculadas con la
-evaluación COCO sobre el split que nombra `val` en el YAML del dataset.
+`val()` devuelve un diccionario de claves `metrics/`, calculadas con la
+evaluación COCO sobre el split que nombra `val` en el YAML del dataset, con los
+resultados por clase adjuntos como atributos.
 
 <code-tabs name="val" />
 
@@ -296,6 +310,13 @@ precisión y recall reporta el mismo número dos veces. Cuatro claves también s
 repiten con el sufijo `(B)`, de box, para que una clave de detección se lea
 igual en un modelo que también predice máscaras: `metrics/mAP50-95(B)`,
 `metrics/mAP50(B)`, `metrics/precision(B)` y `metrics/recall(B)`.
+
+El resultado también lleva `confusion_matrix`, indexada como `matrix[predicted, true]`
+con una fila y una columna `background`, y la precisión, el recall y el F1 por clase
+a través de las confianzas en `box`: `box.px`, `box.p_curve`, `box.r_curve`,
+`box.f1_curve`, una fila por clase en `box.ap_class_index`.
+[Validación y métricas](/docs/train/validation#confusion-matrix) cubre ambos,
+junto con `val(agnostic_nms=True)`.
 
 ## Exportación
 

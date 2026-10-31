@@ -75,7 +75,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## Definir los parámetros
@@ -143,11 +143,11 @@ muestra siempre activa y MixUp aplicado de forma independiente en lugar de
 condicionado. Su valor de `mosaic_scale` se reutiliza como rango de escala de esa
 transformación afín.
 
-SegFormer y NAFNet ejecutan cada uno un pipeline específico de su tarea cuya
-aleatoriedad está fijada en la familia en lugar de ser configurable. En SegFormer
-los parámetros activos son los atributos de clase `semantic_scale_jitter` y
-`semantic_hsv_prob`, no `mosaic_scale` ni `hsv_prob`. El recorte y los volteos de
-NAFNet son operaciones acopladas de entrada y objetivo con una probabilidad fija
+SegFormer, LingBot-Vision y NAFNet ejecutan cada uno un pipeline específico de su
+tarea cuya aleatoriedad está fijada en la familia en lugar de ser configurable. En
+SegFormer y LingBot-Vision los parámetros activos son los atributos de clase
+`semantic_scale_jitter` y `semantic_hsv_prob`, no `mosaic_scale` ni `hsv_prob`.
+El recorte y los volteos de NAFNet son operaciones acopladas de entrada y objetivo con una probabilidad fija
 de 0.5.
 
 ## Qué familia respeta qué parámetro
@@ -191,6 +191,20 @@ Excepciones dentro de esas columnas, todas ellas restrictivas:
 
 `no_aug_epochs` es `used` en todos los pipelines, pero su efecto varía. En los pipelines con mosaic desactiva mosaic y MixUp durante las últimas épocas. En los de estilo DETR detiene los aumentos fotométricos, de zoom-out y de recorte, y configura el tramo final del planificador. En clasificación desactiva el aumento automático, erasing, MixUp y CutMix; conserva el recorte y los volteos.
 
+`perspective` añade un warp proyectivo sobre la rotación, la escala, el shear y la
+traslación. Cada esquina del lienzo se desplaza hacia dentro una cantidad aleatoria
+de hasta `min(perspective * 100, 0.2)` veces la mitad del lado del lienzo, por eje,
+así que `perspective=0.001` desplaza una esquina como máximo un 5 por ciento del
+lado a cualquier resolución, y todo valor desde `0.002` alcanza el mismo máximo. El
+valor por defecto `0` mantiene el warp afín, y un valor negativo lanza `ValueError`
+cuando se deforma la primera muestra. YOLOv9 y sus variantes E2E y P2, YOLOX,
+YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR y RT-DETRv2 lo aplican.
+
+MixUp en el pipeline de mosaic de YOLOv9, por el que entrenan YOLOv9 y sus
+variantes, YOLOv7, RT-DETR y RT-DETRv2, toma la proporción de mezcla de Beta(1, 1),
+uniforme en [0, 1]. El wrapper de mosaic de YOLOX, usado por YOLOX, RTMDet y
+PicoDet, mezcla con un 0.5 fijo.
+
 ## El pack de clasificación
 
 Cuatro parámetros gobiernan el pipeline de clasificación y nada más. Las familias
@@ -226,14 +240,15 @@ CLI.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Probabilidad del aumento de instancias copy-paste, solo para `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` reutiliza la misma muestra reflejada, `"mixup"` trae una segunda muestra |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Probabilidad de rotación aleatoria de 90 grados |
-| YOLOv9 | `max_labels` | Límite de ground truth por imagen en las transformaciones de entrenamiento, 100 por defecto |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Límite de ground truth por imagen en las transformaciones de entrenamiento, 300 por defecto |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste para `task="segment"`, solo en modo `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilidad de recorte y redimensionado aleatorios |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Probabilidades del jitter de la ruta de pose y de la transformación afín que tiene en cuenta los keypoints |
 
-`max_labels` es el que pierde datos en silencio. Los bounding boxes que pasan del
-límite se descartan sin error, así que las imágenes densas como la fotografía
-aérea necesitan subirlo.
+`max_labels` es el que pierde datos. Los bounding boxes que pasan del
+límite se descartan con un aviso único en lugar de un error, así que las imágenes
+densas como la fotografía aérea necesitan subirlo. La memoria de asignación de
+etiquetas sigue a la imagen más densa del batch, no al límite.
 
 El mosaico y MixUp están desactivados en el entrenamiento con bounding boxes
 orientados independientemente de los parámetros, porque el aumento de datos que

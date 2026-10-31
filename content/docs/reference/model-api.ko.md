@@ -45,7 +45,7 @@ snippets:
         # stream=True는 프레임이나 이미지마다 하나의 Results를 반환하는 제너레이터를 반환합니다.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## 건설
@@ -72,6 +72,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -98,6 +99,7 @@ model(
 | `device` | `None` | 이 통화를 위한 장치 무시 |
 | `classes` | `None` | 이 클래스 ID만 유지하십시오 |
 | `max_det` | `300` | 이미지당 최대 탐지 수 |
+| `agnostic_nms` | `False` | `iou`를 넘어 겹치는 박스 중 클래스와 관계없이 점수가 가장 높은 것 하나만 유지합니다. 탐지, 분할, 자세, obb |
 | `augment` | `False` | 테스트 시 증강 |
 | `save` | `False` | 주석이 달린 이미지나 비디오를 작성하십시오 |
 | `batch` | `1` | 디렉토리 및 목록 소스에 대한 전달당 이미지 수 |
@@ -185,7 +187,11 @@ model.val(
 
 작업에 따라 키가 달라지는 메트릭 사전을 반환합니다; 탐지는 `metrics/precision`, `metrics/recall`, `metrics/mAP50` 및 `metrics/mAP50-95`를 반환합니다. `imgsz`는 정사각형 정수 또는 `(height, width)` 튜플을 허용하며 모델의 기본 입력 크기를 기본값으로 사용합니다. `data=None`은 체크포인트의 학습 설정에 저장된 데이터셋으로 검증하며, 공개된 가중치처럼 저장된 데이터셋이 없으면 예외를 발생시킵니다. `project`, `name`, `exist_ok`는 출력 디렉터리를 `project/name`으로 설정하며, `exist_ok=True`가 아니면 번호가 증가합니다. `plots`는 `save_plots`의 별칭입니다. `allow_download_scripts`는 데이터셋 YAML이 `download` 필드에 포함할 수 있는 내장 Python을 제어합니다.
 
+탐지와 분할에서 이 딕셔너리는 `dict`의 하위 클래스이며 `box`(이미지별 지표와 클래스별 정밀도, 재현율, F1 곡선)와 `confusion_matrix`도 담고, 분류에서는 `top1`, `top5`, `confusion_matrix`를 담습니다. [검증과 지표](/docs/train/validation)를 참조하십시오.
+
 `faster_coco_eval`는 `**kwargs`를 통해 허용되며 기본값은 `True`이며, 패키지가 설치되지 않은 경우 pycocotools로 대체됩니다. 실행된 백엔드는 `model.last_eval_backend`에 보고됩니다.
+
+역시 `**kwargs`를 통해 받는 `agnostic_nms=True`는 점수를 매기기 전에 `iou`에서 클래스를 구분하지 않는 NMS를 적용합니다. 탐지와 분할을 지원하며 다른 작업에서는 `ValueError`를 발생시킵니다.
 
 `obb` 및 `pose` 작업에 대한 증강 검증 인상이 있습니다.
 

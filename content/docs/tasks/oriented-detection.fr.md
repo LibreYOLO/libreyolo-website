@@ -170,7 +170,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## Définition
@@ -255,8 +255,9 @@ fonctionnement de bout en bout de votre pipeline. Tout autre domaine exige un
 entraînement sur vos propres étiquettes orientées et, pour les catégories
 aériennes qui font la réputation de DOTA, les checkpoints RT-DETRv2 sont ceux
 qui ont réellement été entraînés sur ces données. `conf` et `max_det`
-déterminent la sortie comme pour la détection. Consultez la page sur la
-[prédiction](/docs/predict) pour les sources, le streaming et la gestion des
+déterminent la sortie comme pour la détection, et `agnostic_nms=True` supprime
+les boîtes qui se chevauchent entre classes par IoU pivoté. Consultez la page sur
+la [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
 
 ## Format du dataset
@@ -359,7 +360,9 @@ figurent dans la même table. `metrics/mAP75` n'a aucun équivalent suffixé.
 
 Deux options n'ont aucun effet sur cette tâche. `save_json` et `save_plots`
 sont acceptées et journalisent un avertissement : les sorties de prédictions
-orientées et les graphiques de validation ne sont pas implémentés.
+orientées et les graphiques de validation ne sont pas implémentés. `agnostic_nms=True` lève
+`ValueError` ici ; il ne couvre que la validation de détection et de
+segmentation.
 
 ## Exporter
 

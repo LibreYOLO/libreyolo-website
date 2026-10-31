@@ -42,7 +42,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 ## Các điều khiển
 
@@ -60,7 +60,7 @@ xạ các cách viết ngắn vào chúng, nên `mosaic` đặt `mosaic_prob`.
 | `mosaic_scale` | Phạm vi scale ngẫu nhiên cho biến đổi affine |
 | `mixup_scale` | Phạm vi nhiễu scale áp dụng cho ảnh đối tác MixUp |
 | `shear` | Phạm vi shear ngẫu nhiên cho biến đổi affine, theo độ |
-| `perspective` | Độ lớn biến đổi phối cảnh cho biến đổi affine |
+| `perspective` | Cường độ biến đổi phối cảnh cộng thêm vào biến đổi affine: các góc canvas dịch vào trong tối đa `min(perspective * 100, 0.2)` lần nửa cạnh canvas, theo từng trục; `0` tắt |
 | `flipud` | Xác suất lật dọc |
 | `no_aug_epochs` | Các epoch cuối được huấn luyện khi tắt tăng cường dữ liệu mạnh |
 | `auto_augment` | Chính sách AutoAugment phân loại: randaugment, autoaugment hoặc augmix |
@@ -122,13 +122,13 @@ Pipeline kiểu DETR là phép biến đổi truyền qua không có mosaic. Bi�
 | Kiểu | Các họ |
 |---|---|
 | YOLOX-style | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| DETR-style | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Phân loại | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Semantic | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| DETR-style | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Phân loại | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Semantic | `segformer`, `unet`, `lingbotvision` |
 | Khôi phục | `nafnet` |
 
-Hai mươi lăm họ được bao quát. Họ ngoài danh sách trả về tập ignored rỗng, nên không phát cảnh báo.
+Ba mươi mốt họ được bao quát. Họ ngoài danh sách trả về tập ignored rỗng, nên không phát cảnh báo.
 
 ## Sai khác
 
@@ -139,6 +139,8 @@ Hai mươi lăm họ được bao quát. Họ ngoài danh sách trả về tập
 | `rtdetr` | Bỏ qua `flipud` |
 | `rtdetrv2` | Bỏ qua `flipud` |
 | `fomo` | Bỏ qua `perspective` và `flipud` |
+| `ppyoloe` | Bỏ qua `flipud`: công thức nguồn dùng phép xoay ngẫu nhiên 90 độ thay thế |
+| `gtr` | Dùng `mosaic_prob` và `mixup_prob`, trong `mosaic_epochs` epoch đầu; `degrees`, `translate` và `mosaic_scale` định hình phép affine theo sau mosaic |
 | `ec` | Dùng `hsv_prob`, `degrees` và `translate` chỉ cho `task="pose"`; detect và segment dùng công thức quang học cố định |
 | `dinov2` | Dùng gói phân loại chỉ cho `task="classify"` |
 

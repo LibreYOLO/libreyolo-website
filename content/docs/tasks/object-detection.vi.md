@@ -79,17 +79,26 @@ snippets:
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() trả về dict thuần, không phải đối tượng.
+
+        # Một dict các khóa metrics/, với kết quả theo từng lớp đối tượng dưới
+        dạng thuộc tính
+
         metrics = model.val(data="coco128.yaml")
 
+
         print(metrics["metrics/mAP50-95"])
+
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
+
         print(metrics["metrics/AR100"])
+
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -117,7 +126,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 ## Định nghĩa
 
@@ -172,7 +181,8 @@ cùng các vision-language family [Florence-2](/docs/models/florence-2),
 [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) và
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) và
 [LibreMODUS](/docs/models/libremodus). Chúng được nạp qua factory và thành phần
 bổ sung riêng; từng trang mô hình chứa lời gọi chính xác.
 
@@ -187,8 +197,10 @@ cục bộ.
 
 `conf` đặt ngưỡng độ tin cậy, còn `max_det` giới hạn số dòng. `iou` là ngưỡng
 NMS, vì vậy chỉ có tác dụng trên family chạy NMS; RF-DETR và head YOLOv9 đầu
-cuối decode một tập dự đoán cố định và bỏ qua nó. Xem [dự đoán](/docs/predict)
-để biết về nguồn, stream và cách xử lý kết quả.
+cuối decode một tập dự đoán cố định và bỏ qua nó. `agnostic_nms=True` thêm một
+bước loại bỏ không phân biệt lớp ở `iou`, áp dụng cả cho hai family đó; xem
+[ngưỡng và lọc](/docs/predict/thresholds#agnostic_nms). Xem
+[dự đoán](/docs/predict) để biết về nguồn, stream và cách xử lý kết quả.
 
 ## Định dạng dataset
 
@@ -249,8 +261,9 @@ Dùng `classes=` để giữ các ID gốc đã chọn của dataset; `single_cl
 
 ## Xác thực
 
-`val()` trả về dictionary thuần gồm các key `metrics/`, được tính bằng đánh giá
-COCO trên split do `val` trong YAML dataset đặt tên.
+`val()` trả về một dictionary gồm các key `metrics/`, được tính bằng đánh giá COCO
+trên split do `val` trong YAML dataset đặt tên, với kết quả theo từng lớp đối
+tượng được gắn vào dưới dạng thuộc tính.
 
 <code-tabs name="val" />
 
@@ -271,6 +284,13 @@ precision-recall sẽ báo cáo cùng một số hai lần. Bốn key còn đư�
 hậu tố `(B)` cho hộp, để key phát hiện đọc giống nhau trên mô hình cũng dự đoán
 mặt nạ: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`, `metrics/precision(B)` và
 `metrics/recall(B)`.
+
+Kết quả còn chứa `confusion_matrix`, lập chỉ mục `matrix[predicted, true]` với một
+hàng và cột `background`, cùng precision, recall và F1 theo từng lớp đối tượng
+trên các mức độ tin cậy ở `box`: `box.px`, `box.p_curve`, `box.r_curve`,
+`box.f1_curve`, mỗi lớp một hàng trong `box.ap_class_index`.
+[Xác thực và metric](/docs/train/validation#confusion-matrix) trình bày cả hai,
+cùng với `val(agnostic_nms=True)`.
 
 ## Xuất
 

@@ -90,11 +90,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val()은 객체가 아니라 일반 딕셔너리를 반환합니다.
+        # metrics/ 키의 딕셔너리이며, top1, top5, confusion_matrix도 담습니다.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -122,7 +123,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: "90aed355e0ddf5e3"
+source_hash: 7934244e90056e77
 ---
 
 ## 정의
@@ -179,15 +180,19 @@ dataset/
 
 ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2, DINOv2는 `cls_pw` 또는 `class_weights` 손실 가중치를 지원합니다. 분류의 `scale`은 크롭 면적을 제어하며 `crop_pct`는 평가 크롭을 제어합니다. [데이터 증강](/docs/train/augmentations)을 참조하십시오.
 
+리사이즈 필터는 모델의 일부입니다. 학습 전에 `model.interpolation`을 `"bilinear"`, `"bicubic"`, `"nearest"`, `"bilinear_no_antialias"` 중 하나로 설정합니다. 학습, `val()`, `predict()`, INT8 보정, 내보내기가 모두 이를 사용하고, `save()`, `best.pt`, `last.pt`가 이를 기록하므로 다시 불러와도 유지됩니다. 그 외의 이름은 `ValueError`를 발생시킵니다. `"bilinear_no_antialias"`는 안티앨리어싱 없는 런타임 리사이즈 뒤에서 실행될 모델을 위해, `RandomResizedCrop`을 포함한 모든 곳에서 안티앨리어싱 없이 단순 바이리니어로 리사이즈합니다. MobileNetV4, ResNet, ConvNeXt, ConvNeXt V2, EfficientNetV2, DeiT, Swin, ViT는 기본값이 바이큐빅이고, AlexNet과 VGG는 바이리니어입니다.
+
 ## 검증
 
-`val()`는 데이터셋 루트의 `val/` 분할에 대해 계산된 `metrics/` 키의 일반 사전을 반환합니다.
+`val()`는 데이터셋 루트의 `val/` 분할에 대해 계산된 `metrics/` 키의 사전을 반환합니다.
 
 <code-tabs name="val" />
 
 `metrics/accuracy_top1`는 가장 높은 점수를 받은 클래스가 실제 클래스인 이미지의 비율이며, 이는 주요 수치로, 학습에서 최적의 에포크를 선택할 때 사용됩니다. `metrics/accuracy_top5`는 상위 5개의 점수 높은 클래스 중 어느 곳에든 실제 클래스가 나타나는 이미지의 비율로, 데이터셋의 클래스 수가 적을수록 의미가 줄어듭니다. 사전에는 또한 `fitness`가 포함되어 있으며, 이는 top-1 값을 복사한 것입니다.
 
 ImageFolder 검증은 검증 정답에 있는 클래스의 평균을 구한 매크로 `metrics/precision`, `metrics/recall`, `metrics/f1`도 반환합니다. 예측되지 않은 클래스의 정밀도는 0으로 계산합니다. 기본 적합도는 top-1 정확도를 유지합니다. 검증과 보정은 모델의 평가 변환을 사용합니다.
+
+결과는 속성이 세 개 있는 `dict` 하위 클래스입니다. `top1`과 `top5`는 두 정확도 값을 담고, `confusion_matrix`는 각 이미지를 top-1 클래스와 레이블 기준으로 세며 `matrix[predicted, true]`로 인덱싱합니다. `plots=True`는 이를 개수로 `confusion_matrix.png`에, 레이블별 비율로 `confusion_matrix_normalized.png`에 기록합니다. 클래스가 2,000개를 넘으면 조밀 행렬과 그 그림은 사용할 수 없으며, `nonzero()`, `tp_fp()`, `class_accuracy()`가 대신 개수를 읽습니다. [검증과 지표](/docs/train/validation#confusion-matrix)를 참조하십시오.
 
 ## 내보내기
 

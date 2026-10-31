@@ -209,7 +209,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## Méthode de classification d'une source
@@ -414,7 +414,9 @@ dans le même répertoire, deux dossiers d'entrée contenant un fichier de même
 nom s'écrasent donc mutuellement. Les images en mémoire ne possèdent aucun nom
 de fichier à réutiliser. Une image seule est enregistrée sous `inference`, si
 bien que des appels répétés l'écrasent ; une liste ou un batch est numéroté
-`image0`, `image1` et ainsi de suite.
+`image0`, `image1` et ainsi de suite. Deux processus qui enregistrent au même
+instant obtiennent des répertoires numérotés distincts, car chaque exécution
+réserve son répertoire en le créant.
 
 Les sources vidéo et en direct sont écrites dans un seul fichier `.mp4` nommé
 d'après la source.

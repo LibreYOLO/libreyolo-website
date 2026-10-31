@@ -147,7 +147,7 @@ snippets:
         # 내보내기는 작업을 기준으로 파일명을 정하며 여기서는 LibreDINOv2s-sem.onnx입니다.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: "c89a9662d03fe6f7"
+source_hash: d6fa949f75a548c8
 ---
 
 ## 설치
@@ -157,6 +157,8 @@ LibreDINOv2는 RF-DETR의 DINOv2 백본에 필요한 것과 같은 선택적 종
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+이것이 없으면 DINOv2 체크포인트나 모델 이름을 불러올 때 이 설치 명령을 알려 주는 오류와 함께 멈춥니다.
 
 ## 예측
 

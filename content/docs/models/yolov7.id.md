@@ -119,7 +119,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 361e81de5614a571
+source_hash: 7104f0fd056896b9
 ---
 
 ## Instalasi
@@ -166,6 +166,11 @@ selama 15 epoch yang sama seperti YOLOX, disesuaikan untuk head berbasis anchor.
 perbedaannya: YOLOX menambahkan penyempurnaan regresi kotak L1 selama epoch akhir tersebut,
 sedangkan v7 melewatinya karena loss SimOTA v7 tidak memiliki cabang L1 raw-offset untuk
 disempurnakan.
+
+Mosaic dan MixUp keduanya aktif secara default (`mosaic_prob=1.0`,
+`mixup_prob=1.0`). Sampel melewati pipeline mosaic YOLOv9, yang MixUp-nya
+menarik rasio blend dari Beta(1, 1), seragam pada [0, 1], seperti
+MultimediaTechLab/YOLO.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 

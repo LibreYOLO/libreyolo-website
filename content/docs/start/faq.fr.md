@@ -13,7 +13,7 @@ keywords:
   - cli libreyolo
   - libreyolo hors ligne
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## Par quel modèle commencer ?
@@ -92,9 +92,13 @@ dans l'en-tête d'une page de modèle vous l'indique avant l'essai. Consultez le
 Un dictionnaire indexé par nom de métrique. Les clés de détection comprennent
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` et
 `metrics/mAP50-95`, et les résultats de détection et de segmentation portent
-aussi des résultats par image sur `metrics.box`. Les autres tâches renvoient les clés pertinentes, comme
-`metrics/accuracy_top1` pour la classification ou `metrics/PQ`, `metrics/SQ`
-et `metrics/RQ` pour la segmentation panoptique.
+aussi des résultats par image et des courbes de précision, rappel et F1 par
+classe sur `metrics.box`. Les résultats de détection, de segmentation et de
+classification portent `metrics.confusion_matrix`, et la classification ajoute
+`metrics.top1` et `metrics.top5`. Les autres tâches renvoient les clés
+pertinentes, comme `metrics/accuracy_top1` pour la classification ou
+`metrics/PQ`, `metrics/SQ` et `metrics/RQ` pour la segmentation panoptique. Voir
+[Validation et mesures](/docs/train/validation).
 
 ## Comment exécuter une prédiction sur un dossier, une vidéo ou une webcam ?
 

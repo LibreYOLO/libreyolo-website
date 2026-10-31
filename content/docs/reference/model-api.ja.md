@@ -41,7 +41,7 @@ snippets:
         # stream=Trueはジェネレーターを返し、フレームまたは画像ごとにResultsを1つ生成
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## 構築
@@ -73,6 +73,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -99,6 +100,7 @@ model(
 | `device` | `None` | この呼び出しで使用するデバイスの上書き |
 | `classes` | `None` | 指定したクラスIDのみを保持 |
 | `max_det` | `300` | 画像あたりの最大検出数 |
+| `agnostic_nms` | `False` | `iou`を超えて重なるボックスのうち、クラスにかかわらずスコアが最も高いものだけを残す。検出、セグメンテーション、姿勢推定、OBB |
 | `augment` | `False` | テスト時データ拡張 |
 | `save` | `False` | アノテーション付き画像または動画を書き出す |
 | `batch` | `1` | ディレクトリおよびリストのソースで、順伝播1回あたりの画像数 |
@@ -206,9 +208,13 @@ model.val(
 `plots`は`save_plots`の別名です。`allow_download_scripts`は、データセットYAMLの`download`
 フィールドに含まれる可能性がある埋め込みPythonの実行可否を制御します。
 
+detectとsegmentでは、この辞書は`dict`のサブクラスで、`box`（画像ごとの指標と、クラスごとの適合率・再現率・F1曲線）と`confusion_matrix`も持ちます。classifyでは`top1`、`top5`、`confusion_matrix`を持ちます。[検証と指標](/docs/train/validation)を参照してください。
+
 `faster_coco_eval`は`**kwargs`を通じて受け入れられ、デフォルトは`True`です。パッケージが
 インストールされていない場合はpycocotoolsへフォールバックします。実行されたバックエンドは
 `model.last_eval_backend`で報告されます。
+
+`agnostic_nms=True`も`**kwargs`を通じて指定でき、スコアリングの前に`iou`でクラス非依存NMSを適用します。対象はdetectとsegmentで、それ以外のタスクでは`ValueError`を送出します。
 
 拡張検証は、`obb`と`pose`タスクでは例外を発生させます。
 

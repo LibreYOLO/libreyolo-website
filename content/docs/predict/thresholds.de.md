@@ -2,9 +2,8 @@
 title: Schwellenwerte und Filterung
 seo_title: 'conf, iou und max_det in LibreYOLO'
 description: >-
-  Was conf, iou, max_det und classes bei der Vorhersage tatsächlich bewirken,
-  welche Familien iou ohne NMS ignorieren und warum agnostic_nms wirkungslos
-  ist.
+  Was conf, iou, max_det, classes und agnostic_nms bei der Vorhersage bewirken
+  und welche Familien iou ignorieren, weil sie kein eigenes NMS ausführen.
 lead: >-
   Vier Argumente bestimmen, welche Vorhersagen erhalten bleiben: conf, iou,
   max_det und classes. Nur zwei davon gelten für jede Familie, da ein
@@ -18,14 +17,15 @@ keywords:
   - NMS-freies DETR
   - Konfidenzschwellenwert Objekterkennung
   - Klassenfilter Inferenz
-last_verified: "1.6.0"
+last_verified: 1.6.0
 verification: >-
   Standardwerte aus InferenceRunner.__call__ in
   libreyolo/models/base/inference.py. Familienspezifisches NMS-Verhalten aus
   jedem Modul in libreyolo/postprocess/ gelesen und mit _is_nms_free_family in
   libreyolo/backends/base.py abgeglichen. Klassenfilterung aus
-  InferenceRunner._apply_classes_filter und _wrap_results. Status von
-  agnostic_nms aus NOOP_PREDICT_KWARGS in libreyolo/utils/predict_args.py.
+  InferenceRunner._apply_classes_filter und _wrap_results. agnostic_nms aus
+  check_agnostic_nms und postprocess_max_det in libreyolo/utils/predict_args.py
+  sowie dem Agnostic-Schritt in InferenceRunner._wrap_results.
   Open-Vocabulary-Verhalten aus NMS_THRESHOLD in
   libreyolo/models/openvocab/base.py. Validierungsstandardwerte aus
   BaseModel.val.
@@ -109,7 +109,31 @@ snippets:
         conf und max_det.
 
         print(len(loose.boxes), len(tight.boxes))
-source_hash: "849650629e58c9e1"
+  agnostic:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+
+        per_class = model(SAMPLE_IMAGE)
+
+        agnostic = model(SAMPLE_IMAGE, agnostic_nms=True)
+
+
+        # Überlappende Boxen verschiedener Klassen fallen auf die am höchsten
+        bewertete zusammen.
+
+        print(len(per_class.boxes), len(agnostic.boxes))
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: fa0e6cee02b3e336
 ---
 
 ## Die vier Argumente
@@ -149,12 +173,15 @@ Die meisten weisen in den Docstrings ihrer Nachverarbeitung darauf hin. Zur Lauf
 
 Diese Familien verwenden den Wert: YOLOv1 bis YOLOv4, YOLOv7, YOLOv9, YOLOX, YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet und SSD.
 
-Zwei Optionen zum Vorhersagezeitpunkt machen `iou` selbst für einen Set-Predictor relevant, da beide Boxen nach Abschluss des Modells zusammenführen:
+Drei Optionen zum Vorhersagezeitpunkt machen `iou` selbst für einen Set-Predictor relevant, da alle drei auf Boxen wirken, nachdem das Modell fertig ist:
 
 - `tiling=True` gleicht überlappende Kacheln mit klassenweisem NMS bei `iou` ab
 - `augment=True` führt gespiegelte Ansichten mit klassenweisem NMS bei `iou` zusammen
 
-Beide werden unter [Inferenzleistung](/docs/predict/performance) behandelt.
+- `agnostic_nms=True` unterdrückt überlappende Boxen klassenübergreifend bei `iou`,
+  [weiter unten](#agnostic_nms) beschrieben
+
+Die ersten beiden werden unter [Inferenzleistung](/docs/predict/performance) behandelt.
 
 Für Open-Vocabulary-Detektoren gilt eine eigene Regel. Eine Familie, deren Prozessor NMS ausführt, definiert einen eigenen Standardschwellenwert und berücksichtigt `iou`. Dies trifft auf OMDet-Turbo zu. Familien ohne Unterdrückung, also Grounding DINO, OWLv2 und OV-DEIM, geben bei Übergabe von `iou` eine Warnung aus. Diese Warnung ist einzigartig in der Bibliothek.
 
@@ -162,9 +189,9 @@ Für Open-Vocabulary-Detektoren gilt eine eigene Regel. Eine Familie, deren Proz
 
 `max_det` begrenzt die Anzahl der Vorhersagen je Bild. Es gilt überall, wird jedoch über unterschiedliche Mechanismen umgesetzt. Eine NMS-Familie kürzt nach der Unterdrückung, ein Set-Predictor verwendet den Wert als Größe seiner Top-k-Auswahl.
 
-Einige Familien begrenzen unterhalb des angeforderten Werts, da dies ihrer Upstream-Referenzkonfiguration entspricht. SSD begrenzt auf 200, RTMDet bei der Instanzsegmentierung auf 100 und FCOS auf sein eigenes Erkennungslimit je Bild. Eine Erhöhung von `max_det` darüber hinaus hat keine Wirkung.
+Einige Familien begrenzen unterhalb des angeforderten Werts, da dies ihrer Upstream-Referenzkonfiguration entspricht. SSD begrenzt auf 200 und FCOS auf sein eigenes Erkennungslimit je Bild. Eine Erhöhung von `max_det` darüber hinaus hat keine Wirkung.
 
-Nur bei der Kachelinferenz wird `max_det` zentral statt familienbezogen angewendet. Dort wird die zusammengeführte Liste nach dem Abgleich der Kacheln gekürzt.
+`max_det` wird in zwei Fällen zentral statt familienbezogen angewendet: bei der Kachelinferenz, wo die zusammengeführte Liste nach dem Abgleich der Kacheln gekürzt wird, und bei Aufrufen mit `classes` oder `agnostic_nms=True`, wo der Schnitt nach dem Filter oder der Unterdrückung erfolgt.
 
 ## Klassenfilterung
 
@@ -181,18 +208,31 @@ libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubuserco
 libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
 ```
 
-Filterung erzeugt keine kostenlose Genauigkeit. Das Modell verwendet weiterhin seine Kapazität für die Vorhersage von Klassen, die du anschließend verwirfst. `max_det` wird von der Familie vor dem Filter angewendet. Ein Bild mit vielen unerwünschten Klassen kann daher das Limit erreichen, bevor deine Klasse berücksichtigt wird. Senke in diesem Fall `conf` oder erhöhe `max_det`.
+Filterung erzeugt keine kostenlose Genauigkeit. Das Modell verwendet weiterhin seine Kapazität für die Vorhersage von Klassen, die du anschließend verwirfst. Ist `classes` gesetzt, behält die Familie ein Kandidatenbudget von 300 Boxen oder `max_det`, wenn dieser Wert höher ist, und der Schnitt auf `max_det` erfolgt nach dem Filter, sodass ein kleines `max_det` deine Klasse nicht verdrängt. Exportierte Backends verwenden dasselbe Budget, auch gebatchte TensorRT-Engines. Ein Bild mit mehr als 300 höher bewerteten Boxen unerwünschter Klassen kann das Budget dennoch füllen, bevor deine Klasse berücksichtigt wird; erhöhe in diesem Fall `max_det` über 300.
 
 ## agnostic_nms
 
-`agnostic_nms` wird akzeptiert, hat aber keine Wirkung. Bei der Übergabe erscheint eine Warnung, dass es zur Kompatibilität mit der Befehlszeile wirkungslos ist. Anschließend wird das Argument verworfen.
+Das NMS jeder Familie ist klassenbewusst. Standardmäßig bleiben daher zwei überlappende Boxen unterschiedlicher Klassen bei jedem `iou` erhalten. `agnostic_nms=True` fügt einen klassenunabhängigen Schritt hinzu: Von Boxen, die sich über `iou` hinaus überlappen, überlebt nur die am höchsten bewertete, gleich welcher Klasse.
 
-Es gibt keinen klassenunabhängigen Unterdrückungsmodus. Jeder NMS-Aufruf in der Bibliothek ist klassenbewusst. Zwei überlappende Boxen unterschiedlicher Klassen bleiben daher bei jedem Wert von `iou` erhalten. Wenn dies problematisch ist, filtere zuerst mit `classes` oder unterdrücke klassenübergreifend direkt auf `result.boxes`.
+<code-tabs name="agnostic" />
+
+Der Schritt läuft auf den fertigen Erkennungen der Familie, nach dem `classes`-Filter und vor dem Schnitt auf `max_det`. Er verhält sich deshalb gleich bei Set-Predictors, die kein eigenes NMS ausführen, bei exportierten Backends sowie mit `augment=True` und `tiling=True`. Masken und Keypoints fallen mit ihrer Box weg, und orientierte Boxen werden über die gedrehte IoU verglichen. Er deckt die Aufgaben ab, die Boxen zurückgeben: detect, segment, pose und obb.
+
+Die Familie behält für den Schritt ein Kandidatenbudget von 300 Boxen oder `max_det`, wenn dieser Wert höher ist. Liegt `max_det` unter 300, füllen niedriger bewertete Kandidaten die Plätze auf, die die Unterdrückung freigibt. Ab 300, also auch beim Standardwert, bleiben diese Plätze leer.
+
+Wo er nicht greift:
+
+- Auf dem Standard-Vorhersagepfad löst eine Aufgabe ohne Boxen `ValueError` aus.
+- `LibreEnsemble` und [HRNet](/docs/models/hrnet) lösen `NotImplementedError` aus.
+- `LibreSAM`-Modelle und die [3D-Detektoren](/docs/tasks/3d-object-detection), WildDet3D, 3D-MOOD, FCOS3D und DetAny3D, nehmen kein solches Argument an und lösen `TypeError` aus.
+- [L2CS-Net](/docs/models/l2cs), [PP-OCRv5](/docs/models/pp-ocrv5), [SAM 3D Body](/docs/models/sam-3d-body) und [LibreFaceRec](/docs/models/librefacerec) laufen auf ihrem eigenen Vorhersagepfad und ignorieren es.
+
+`val(agnostic_nms=True)` wendet denselben Schritt bei der Validierung von Erkennung und Segmentierung an; siehe [Validierung und Metriken](/docs/train/validation).
 
 ## Von predict abgelehnte Argumente
 
-Zwei Argumente lösen statt einer Warnung einen Fehler aus: `visualize` und `embed` lösen beide `NotImplementedError` aus. Für Embeddings lädst du das Modell mit `task="embed"` und rufst `predict` oder `embed` wie gewohnt auf.
+Zwei Argumente lösen statt einer Warnung einen Fehler aus: `visualize` und `embed` lösen beide `NotImplementedError` aus. Für Embeddings lädst du das Modell mit `task="embed"` und rufst `predict` oder `embed` wie gewohnt auf. `agnostic_nms=True` löst dort einen Fehler aus, wo es nicht greift, wie oben aufgeführt.
 
 Jedes unbekannte Argument löst `TypeError` mit den unterstützten Optionen aus. Ein Tippfehler schlägt dadurch sofort fehl, statt unbemerkt ignoriert zu werden.
 
-Die folgenden Argumente werden akzeptiert, mit einer Warnung versehen und verworfen: `agnostic_nms`, `boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` und `verbose`.
+Die folgenden Argumente werden akzeptiert, mit einer Warnung versehen und verworfen: `boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` und `verbose`.

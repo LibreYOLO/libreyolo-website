@@ -22,7 +22,6 @@ keywords:
   - извлечение признаков изображения
   - Meta AI
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Семантическая сегментация
@@ -159,7 +158,7 @@ snippets:
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
 
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## Установка
@@ -171,6 +170,9 @@ LibreDINOv2 регистрируется, только когда установ
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Без неё загрузка чекпойнта или имени модели DINOv2 останавливается с ошибкой,
+в которой указана эта строка установки.
 
 ## Предсказание
 

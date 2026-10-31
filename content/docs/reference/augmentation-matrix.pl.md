@@ -43,7 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## Parametry
@@ -62,7 +62,7 @@ krótkie zapisy na te pola, dlatego `mosaic` ustawia `mosaic_prob`.
 | `mosaic_scale` | Zakres losowej zmiany skali dla transformacji afinicznej |
 | `mixup_scale` | Zakres losowej zmiany skali stosowany do obrazu partnerskiego MixUp |
 | `shear` | Zakres losowego ścinania dla transformacji afinicznej, w stopniach |
-| `perspective` | Wielkość transformacji projekcyjnej dla transformacji afinicznej |
+| `perspective` | Siła transformacji projekcyjnej dodawanej do transformacji afinicznej: narożniki płótna przesuwają się do środka najwyżej o `min(perspective * 100, 0.2)` połowy boku płótna, na każdej osi; `0` wyłącza |
 | `flipud` | Prawdopodobieństwo odbicia pionowego |
 | `no_aug_epochs` | Końcowe epoki trenowane z wyłączoną silną augmentacją |
 | `auto_augment` | Polityka AutoAugment dla klasyfikacji: randaugment, autoaugment lub augmix |
@@ -136,13 +136,13 @@ uczenia w stylu DETR oraz automatyczną augmentację, erasing, MixUp i CutMix w 
 | Archetyp | Rodziny |
 |---|---|
 | Styl YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| Styl DETR | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Klasyfikacja | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Semantyczny | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| Styl DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Klasyfikacja | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Semantyczny | `segformer`, `unet`, `lingbotvision` |
 | Przywracanie | `nafnet` |
 
-Uwzględniono dwadzieścia pięć rodzin. Rodzina spoza tej listy zwraca pusty
+Uwzględniono trzydzieści jeden rodzin. Rodzina spoza tej listy zwraca pusty
 zbiór ignorowanych parametrów, więc nie jest dla niej emitowane ostrzeżenie.
 
 ## Odchylenia
@@ -154,6 +154,8 @@ zbiór ignorowanych parametrów, więc nie jest dla niej emitowane ostrzeżenie.
 | `rtdetr` | `flipud` ignorowany |
 | `rtdetrv2` | `flipud` ignorowany |
 | `fomo` | `perspective` i `flipud` ignorowane |
+| `ppyoloe` | `flipud` ignorowane: receptura źródłowa używa zamiast tego losowego obrotu o 90 stopni |
+| `gtr` | `mosaic_prob` i `mixup_prob` używane, przez pierwsze `mosaic_epochs` epok; `degrees`, `translate` i `mosaic_scale` kształtują transformację afiniczną po mosaic |
 | `ec` | `hsv_prob`, `degrees` i `translate` używane tylko dla `task="pose"`; detect i segment korzystają ze stałych receptur fotometrycznych |
 | `dinov2` | Pakiet klasyfikacyjny używany tylko dla `task="classify"` |
 

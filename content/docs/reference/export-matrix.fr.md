@@ -14,7 +14,7 @@ keywords:
   - commande libreyolo formats
   - seuil parité export
   - NotImplementedError export
-last_verified: "1.6.0"
+last_verified: 1.6.0
 verification: "Formats, niveaux, ordre de repli, blocages de tâches et familles et blocages NCNN lus dans libreyolo/export/support.py\_; alias et arguments partagés lus dans libreyolo/export/exporter.py\_; définitions des niveaux lues dans docs/adr/0011-export-support-tiers.md\_; seuils de parité lus dans docs/export_support.md, le tout en v1.6.0. Les cellules par combinaison ne sont pas retranscrites ici\_; interrogez-les avec l'extrait ci-dessous."
 snippets:
   usage:
@@ -63,7 +63,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## Structure de la matrice
@@ -138,6 +138,11 @@ Ces tâches sont bloquées pour toute famille sans entrée explicite.
 
 | Tâche | Raison |
 |---|---|
+| `albedo` | L'export d'albedo n'a pas de contrat de runtime de backend en RGB linéaire |
+| `act` | La boucle d'échantillonnage de la politique n'a ni graphe exportable ni contrat de runtime de backend |
+| `generate` | La génération d'images exécute une boucle d'échantillonnage sur plusieurs réseaux, qui n'a ni graphe exportable ni contrat de runtime de backend |
+| `generate3d` | La génération 3D exécute une boucle d'échantillonnage sur plusieurs réseaux, qui n'a ni graphe exportable ni contrat de runtime de backend |
+| `detect3d` | Les sorties de graphe, les métadonnées de caméra et le contrat de runtime de la détection 3D ne sont pas définis |
 | `ocr` | Deux réseaux avec recadrage dynamique par région ne correspondent pas au contrat d'export en graphe unique |
 | `point` | La famille n'est pas reliée au contrat partagé de heatmap de points et de décodage des pics par le backend |
 | `semantic` | La famille n'est pas reliée au contrat partagé des logits denses et de l'argmax dans le backend |
@@ -160,7 +165,7 @@ reliée au contrat peut tout de même être exportée.
 | `hrnet` | Tout format autre que ONNX, TorchScript, OpenVINO et TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Tous les formats ; l'export de modèles guidables est hors périmètre du contrat de runtime v1 |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Tous les formats ; l'export du runtime à vocabulaire ouvert est hors périmètre de la v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Tous les formats ; l'export de VLM génératifs est hors périmètre de la v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Tous les formats ; l'export de VLM génératifs est hors périmètre de la v1 |
 
 PicoSAM3 est l'exception du niveau guidable : il exporte son réseau ROI brut de
 96 pixels vers ONNX.

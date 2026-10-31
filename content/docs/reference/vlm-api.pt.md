@@ -49,7 +49,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## Instalação
@@ -84,15 +84,17 @@ listando todos os aliases.
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Snapshot upstream fixado |
 
 O alias padrão é `qwen3-vl-4b`. Os tamanhos do alias padrão de cada família são
 os listados primeiro: `qwen3-vl` resolve para `4b`, `lfm2-vl` para `450m`,
-`internvl3` para `2b`, `smolvlm2` para `2.2b`, `florence-2` para `base`.
+`internvl3` para `2b`, `smolvlm2` para `2.2b`, `florence-2` para `base`,
+`wevisone-vl` para `2b`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` e `LibreMODUS`
-(também escrito `LibreModus`) são exportados no nível do pacote.
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL`
+e `LibreMODUS` (também escrito `LibreModus`) são exportados no nível do pacote.
 
 Detecção também inclui `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` e `lfm2-vl-3b`. O alias simples `gemma-4` seleciona E4B. Os aliases de Molmo2 são `molmo2-4b`, `molmo2-8b` e `molmo2-o-7b`; seu padrão é 4B. Os aliases definem o roteamento, não garantem que cada snapshot remoto tenha sido baixado e testado. `moondream-3` não carrega na 1.6.0: faltam shards de pesos no espelho dele.
 
@@ -104,6 +106,7 @@ O suporte a tarefas depende da família. Estes adaptadores suportam várias tare
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 Como a tarefa é dirigida por prompt em vez de embutida em um checkpoint, ela
 pode ser trocada em um modelo já carregado:
@@ -116,7 +119,7 @@ A tarefa é validada contra a lista de suportadas da família, é persistente na
 chamadas posteriores de `predict()` e `track()`, e o modelo é retornado para que
 as chamadas possam ser encadeadas.
 
-Molmo2 retorna pontos e exige `{label}` em templates personalizados de apontamento. Moondream suporta detecção, pontos e chat nativo. Use [LibreGround](/docs/reference/ground-api) para consultas de instrução para clique.
+Molmo2 retorna pontos e exige `{label}` em templates personalizados de apontamento. O `referring=True` do WeVisOne-VL faz o `detect` enviar uma geração por frase, e o seu `segment`, `matte` e a detecção referencial levantam `ValueError` sem um vocabulário. Moondream suporta detecção, pontos e chat nativo. Use [LibreGround](/docs/reference/ground-api) para consultas de instrução para clique.
 
 ## set_classes
 

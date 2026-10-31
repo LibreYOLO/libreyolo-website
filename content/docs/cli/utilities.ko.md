@@ -40,7 +40,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## 개요
@@ -126,9 +126,12 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | stdout으로 JSON 출력 |
 | `quiet` | `false` | stderr 억제 |
 
-`family` 없이 실행하면 출력은 형식 목록뿐입니다. 함께 지정하면 각 형식에 그 계열과
-작업의 지원 등급, 그 등급의 이유, 그리고 등급에 붙은 제약이 추가됩니다. 알 수 없는
-계열이나 계열이 지원하지 않는 작업은 사용 오류입니다.
+`family` 없이 실행하면 출력은 형식 목록뿐이며, FP16과 INT8 필드는 형식 자체를
+설명합니다. 함께 지정하면 각 형식에 그 계열과 작업의 지원 등급, 그 등급의 이유,
+그리고 등급에 붙은 제약이 추가되고, FP16과 INT8 필드는 그 조합에서 `export()`가
+받는 것을 보고합니다: 차단된 형식이나 FP32로만 내보내는 계열에서는 둘 다 false이고,
+INT8은 그 형식의 INT8 내보내기가 해당 계열과 작업을 지원하는 경우에만 true입니다.
+알 수 없는 계열이나 계열이 지원하지 않는 작업은 사용 오류입니다.
 
 형식 별칭은 정식 이름 옆에 표시됩니다: `tensorrt`에는 `engine`, `tflite`에는
 `litert`입니다.

@@ -140,7 +140,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: "afc2a4900f773c9d"
+source_hash: bfc9280d61063ff7
 ---
 
 ## 설치
@@ -181,7 +181,7 @@ pip install "libreyolo[lora]"
 
 <code-tabs name="train" />
 
-별도로 설정하지 않으면 트레이너는 `lr0=2e-4`, `amp=True`, `amp_dtype="float16"`, 배치 16으로 132 에폭 동안 실행하며, 50 에폭 동안 개선이 없으면 조기 종료합니다. 탐지 가중치는 분할 학습의 시작점으로 사용할 수 있지만, 명시적인 전이가 필요합니다. 마스크 헤드가 학습되지 않은 상태로 시작하므로 그렇지 않으면 의미 없는 마스크를 반환하기 때문입니다. CLI에 `task=segment`를 전달하면 이 전이를 허용합니다. Python에서는 방법이 더 제한적입니다. `LibreYOLO()` 팩토리는 해당 인수를 받지 않으므로 `allow_detect_to_segment_transfer=True`로 `LibreDFINE`을 직접 생성해야 하며, 직접 생성은 다운로드하지 않으므로 가중치 파일이 이미 디스크에 있어야 합니다.
+별도로 설정하지 않으면 트레이너는 `lr0=2e-4`, `amp=True`, `amp_dtype="float16"`, 배치 16으로 132 에폭 동안 실행하며, 50 에폭 동안 개선이 없으면 조기 종료합니다. `libreyolo train`은 두 작업 모두 같은 레시피로 시작합니다: 평탄한 코사인 스케줄의 AdamW, `weight_decay=1e-4`, 워밍업 2 에폭, 그래디언트 노름 클리핑 0.1이며, 모자이크, MixUp, HSV, 아핀 증강은 쓰지 않습니다. `name=`이 없으면 실행 결과는 `runs/train/dfine_exp`에 저장됩니다. 탐지 가중치는 분할 학습의 시작점으로 사용할 수 있지만, 명시적인 전이가 필요합니다. 마스크 헤드가 학습되지 않은 상태로 시작하므로 그렇지 않으면 의미 없는 마스크를 반환하기 때문입니다. CLI에 `task=segment`를 전달하면 이 전이를 허용합니다. Python에서는 방법이 더 제한적입니다. `LibreYOLO()` 팩토리는 해당 인수를 받지 않으므로 `allow_detect_to_segment_transfer=True`로 `LibreDFINE`을 직접 생성해야 하며, 직접 생성은 다운로드하지 않으므로 가중치 파일이 이미 디스크에 있어야 합니다.
 
 `lora=True`는 탐지에 적용됩니다. 분할 학습은 어댑터로 테스트하지 않은 마스크 헤드 때문에 이를 거부하고 대신 `freeze='backbone'`을 안내합니다. Apple silicon에서는 Integral의 binned matmul 역전파가 Metal 컴파일 오류를 일으키므로 학습 전체를 CPU로 이동합니다. MPS 추론은 영향을 받지 않습니다.
 

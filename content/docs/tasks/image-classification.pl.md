@@ -105,11 +105,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() zwraca zwykły słownik, a nie obiekt.
+        # Słownik kluczy metrics/ oraz top1, top5 i confusion_matrix.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -143,7 +144,7 @@ snippets:
 
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 90aed355e0ddf5e3
+source_hash: 7934244e90056e77
 ---
 
 ## Definicja
@@ -245,9 +246,11 @@ augmentacji, wielu GPU i modułach rejestrujących zawiera strona
 
 ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 i DINOv2 obsługują ważenie funkcji straty przez `cls_pw` lub `class_weights`. `scale` w klasyfikacji kontroluje obszar wycinka, a `crop_pct` wycinanie podczas ewaluacji. Zobacz [augmentacje](/docs/train/augmentations).
 
+Filtr zmiany rozmiaru jest częścią modelu. Przed trenowaniem należy ustawić `model.interpolation` na `"bilinear"`, `"bicubic"`, `"nearest"` lub `"bilinear_no_antialias"`: trenowanie, `val()`, `predict()`, kalibracja INT8 i eksport używają go wszystkie, a `save()`, `best.pt` i `last.pt` go zapisują, więc ponowne wczytanie go zachowuje. Każda inna nazwa zgłasza `ValueError`. `"bilinear_no_antialias"` zmienia rozmiar zwykłą interpolacją dwuliniową bez antyaliasingu wszędzie, w tym w `RandomResizedCrop`, dla modeli, które będą działać za zmianą rozmiaru w środowisku uruchomieniowym bez antyaliasingu. MobileNetV4, ResNet, ConvNeXt, ConvNeXt V2, EfficientNetV2, DeiT, Swin i ViT domyślnie używają bicubic; AlexNet i VGG bilinear.
+
 ## Walidacja
 
-Funkcja `val()` zwraca zwykły słownik kluczy `metrics/`, obliczany na podziale
+Funkcja `val()` zwraca słownik kluczy `metrics/`, obliczany na podziale
 `val/` katalogu głównego zbioru danych.
 
 <code-tabs name="val" />
@@ -260,6 +263,14 @@ Metryka mówi tym mniej, im mniej klas zawiera zbiór danych. Słownik obejmuje
 również `fitness`, kopię wartości top-1.
 
 Walidacja ImageFolder zwraca też makrośrednie `metrics/precision`, `metrics/recall` i `metrics/f1`, liczone po klasach obecnych w etykietach walidacyjnych. Klasy bez predykcji wnoszą zerową precyzję. Domyślną funkcją fitness pozostaje dokładność top-1. Walidacja i kalibracja używają transformacji ewaluacyjnej modelu.
+
+Wynik jest podklasą `dict` z trzema atrybutami: `top1` i `top5` przechowują dwie
+wartości dokładności, a `confusion_matrix` zlicza każdy obraz według jego klasy
+top-1 względem etykiety, indeksowana `matrix[predicted, true]`. `plots=True`
+zapisuje ją jako liczności w `confusion_matrix.png` oraz jako udziały każdej
+etykiety w `confusion_matrix_normalized.png`. Powyżej 2000 klas gęsta macierz i
+jej wykresy są niedostępne, a `nonzero()`, `tp_fp()` i `class_accuracy()`
+odczytują liczności; zobacz [walidacja i metryki](/docs/train/validation#confusion-matrix).
 
 ## Eksport
 

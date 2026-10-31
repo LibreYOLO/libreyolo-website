@@ -42,7 +42,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Export-Support-Stufen
@@ -121,9 +121,9 @@ verwendet.
 | `g2` | Supported | 19 | Zusätzlicher Abdeckungssatz trainierbarer Familien |
 | `g3` | Inference only | 44 | Familien ohne Trainingsimplementierung |
 | `g4` | Museum | 5 | Historische Familien mit Inferenzabdeckung |
-| `s` | Sibling tier | 36 | Benachbarte APIs (SAM, Open-Vocabulary, VLM, Grounding, Zero-Shot), getrennt abgedeckt |
+| `s` | Sibling tier | 40 | Benachbarte APIs (SAM, Open-Vocabulary, VLM, Grounding, Zero-Shot), getrennt abgedeckt |
 
-Das sind 118 Familien in sechs Gruppen. `g3` ist die größte Gruppe, weil ein
+Das sind 122 Familien in sechs Gruppen. `g3` ist die größte Gruppe, weil ein
 großer Teil des Registers aus Inferenzlinien statt aktiv trainierten Detektoren
 besteht.
 
@@ -164,7 +164,7 @@ Aufruf von `train()` löst einen Fehler aus. Dies ist eine Eigenschaft des
 Familiencodes und keine Wirkung der Gruppe. Die Gruppe dokumentiert den
 Umstand lediglich.
 
-Von den 118 Familien trainieren 37: jede Familie aus `g0`, `g1` und `g2` sowie
+Von den 122 Familien trainieren 37: jede Familie aus `g0`, `g1` und `g2` sowie
 Qwen3-VL über `LibreVLM` und SmolVLA, ACT und Diffusion Policy über `LibreVLA`.
 
 Bei einer trainierbaren Familie ist es eine getrennte Frage, ob ein bestimmter

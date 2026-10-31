@@ -135,11 +135,11 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 ## Một đối tượng, một slot cho mỗi payload
 
-Dự đoán trên một ảnh trả về một `Results`. Đối tượng chứa hai mươi mốt slot payload,
+Dự đoán trên một ảnh trả về một `Results`. Đối tượng chứa hai mươi ba slot payload,
 và mô hình chỉ điền các slot do tác vụ tạo ra. Mọi slot khác là `None`, nên đọc
 `result.masks` trên detector sẽ nhận `None` thay vì lỗi.
 
@@ -166,6 +166,8 @@ và mô hình chỉ điền các slot do tác vụ tạo ra. Mọi slot khác l�
 | `albedo` | `AlbedoMap` | `(H, W, 3)` RGB tuyến tính | Ước lượng albedo |
 | `boxes3d` | `Boxes3D` | `(N, 14)` khối hộp trong hệ camera, căn theo hàng với `boxes` | Phát hiện 3D đơn mắt |
 | `actions` | `Actions` | `(T, D)` đoạn hành động | Chính sách robot |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB cùng prompt, seed và thiết lập | Sinh ảnh |
+| `gaussians` | `Gaussians` | `N` Gaussian dưới dạng `xyz`, `scales`, `rotations`, `opacities` và `sh`, cùng camera và seed | Sinh 3D |
 
 Bên cạnh đó là các trường có trong mọi kết quả: `orig_shape` dưới dạng
 `(height, width)`, `path` (đường dẫn nguồn hoặc `None` cho đầu vào trong bộ nhớ),
@@ -174,9 +176,11 @@ Bên cạnh đó là các trường có trong mọi kết quả: `orig_shape` d�
 
 `result.normals` là bí danh của `result.normal_map`.
 
-`result.speed` tồn tại trên mọi kết quả nhưng chỉ được điền bởi
-[ensemble](/docs/predict/ensembling), với các khóa `member_0`, `member_1` và
-`fusion` theo mili giây. Với mô hình đơn, nó vẫn là dict rỗng.
+`result.speed` tồn tại trên mọi kết quả. [Ensemble](/docs/predict/ensembling)
+điền nó bằng `member_0`, `member_1` và `fusion` theo mili giây, các mô hình
+LibreGen bằng `inference`, là số mili giây cho mỗi ảnh hoặc đối tượng được sinh
+ra, và FCOS3D bằng `preprocess`, `inference` và `postprocess`. Các mô hình khác
+để nó là dict rỗng.
 
 ## Box
 
@@ -249,7 +253,8 @@ thể cắt vector xác suất xuống một lớp, còn cắt lát kết quả 
 hỏng bố cục `(H, W)`.
 
 `len(result)` đếm instance: box, điểm, embedding, vùng OCR hoặc mesh. Mọi
-payload toàn ảnh dày đặc được tính là `1`. Kết quả không chứa gì có giá trị `0`.
+payload toàn ảnh dày đặc được tính là `1`, và một ảnh được sinh ra hoặc đối tượng
+3D cũng vậy. Kết quả không chứa gì có giá trị `0`.
 
 `to()`, `cpu()`, `cuda()` và `numpy()` đều trả về `Results` mới với mọi slot đã
 điền được chuyển đổi. Chúng không sửa bản gốc.
@@ -274,7 +279,8 @@ Khi không có box, một payload quyết định các hàng: OCR phát một h�
 cùng `text`, điểm phát một hàng cho mỗi điểm, panoptic phát một hàng cho mỗi
 segment cùng `pixel_count` và `pixel_fraction`, semantic phát một hàng cho mỗi
 lớp xuất hiện, còn phân loại phát năm lớp đứng đầu. Độ sâu, pháp tuyến, cạnh, khôi
-phục và matting đều phát một hàng tóm tắt mô tả bản đồ thay vì các pixel.
+phục và matting đều phát một hàng tóm tắt mô tả bản đồ thay vì các pixel, còn một ảnh được sinh ra hoặc đối tượng 3D phát
+một hàng cùng seed và thiết lập của nó.
 
 Hai payload được cố ý rút gọn. Vector embedding chỉ được báo cáo dưới dạng
 `embedding_dim` vì một hàng 512 số thực chiếm khoảng 2 KB cho mỗi khuôn mặt;
@@ -292,16 +298,17 @@ dạng trực quan hóa độ sâu, kết quả panoptic với các segment, mat
 RGBA nền trong suốt, còn detector dưới dạng box với mask bên dưới. Đường dẫn đã
 ghi được gắn vào kết quả dưới dạng `result.saved_path`.
 
-`Results.save(path)` cũng có phạm vi hẹp: phương thức ghi kết quả matte thành ảnh
-cắt PNG RGBA nền trong suốt và phát sinh `NotImplementedError` trong trường hợp
-khác. `Results.cutout()` trả về cùng mảng RGBA mà không ghi. Cả hai cần ảnh nguồn,
-lấy từ `result.path` hoặc được truyền dưới dạng `image=`.
+`Results.save(path)` cũng có phạm vi hẹp: phương thức ghi một ảnh được sinh ra
+hoặc đối tượng 3D, chọn định dạng theo phần mở rộng, và ghi kết quả matte thành
+ảnh cắt PNG RGBA nền trong suốt, còn lại phát sinh `NotImplementedError`.
+`Results.cutout()` trả về cùng mảng RGBA mà không ghi. Với matte, cả hai cần ảnh
+nguồn, lấy từ `result.path` hoặc được truyền dưới dạng `image=`.
 
 Hai payload có trình ghi riêng: `result.restored.save(path)` cho ảnh đã khôi phục và `result.meshes.save_obj(path, index=0)` cho mesh.
 
 Để biết tệp được đặt ở đâu và `output_path` cùng `output_file_format` hoạt động thế nào, hãy xem [Nguồn dự đoán](/docs/predict/sources).
 
-`plot()` hỗ trợ dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định trả về BGR uint8 HxWx3 liên tục; `pil=True` yêu cầu PIL. Bản đồ độ sâu, pháp tuyến, biên và albedo, khối hộp 3D và đoạn hành động mặc định trả về ảnh PIL; `pil=False` trả về mảng. `orig_img` giữ pixel BGR cho nguồn trong bộ nhớ và URL; có thể mở lại tệp cục bộ và khung hình đã thu từ video hữu hạn.
+`plot()` hỗ trợ dữ liệu của mọi tác vụ. Lớp phủ ảnh mặc định trả về BGR uint8 HxWx3 liên tục; `pil=True` yêu cầu PIL. Bản đồ độ sâu, pháp tuyến, biên và albedo, khối hộp 3D, đoạn hành động, ảnh được sinh ra và bản render điểm của một đối tượng 3D được sinh ra mặc định trả về ảnh PIL; `pil=False` trả về mảng. `orig_img` giữ pixel BGR cho nguồn trong bộ nhớ và URL; có thể mở lại tệp cục bộ và khung hình đã thu từ video hữu hạn.
 
 Các điều khiển gồm `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` và `filename`. Ảnh phân loại đã lưu chứa năm nhãn đứng đầu. Lưu matte ghi ảnh tách nền RGBA.
 

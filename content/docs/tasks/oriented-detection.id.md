@@ -167,7 +167,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## Definisi
@@ -235,7 +235,8 @@ berorientasi pada kendaraan yang terlihat dari atas dan untuk memverifikasi bahw
 pipeline berjalan end-to-end. Domain lain memerlukan pelatihan pada label
 berorientasi Anda sendiri, dan untuk kategori aerial yang dikenal dari DOTA,
 checkpoint RT-DETRv2 adalah yang benar-benar dilatih pada data tersebut. `conf`
-dan `max_det` membentuk output seperti pada deteksi. Lihat
+dan `max_det` membentuk output seperti pada deteksi, dan `agnostic_nms=True` menekan
+kotak yang tumpang tindih lintas kelas dengan IoU terotasi. Lihat
 [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
 ## Format dataset
@@ -326,7 +327,8 @@ hasil sejajar sumbu saat keduanya berada dalam tabel yang sama.
 
 Dua opsi tidak berpengaruh pada task ini. `save_json` dan `save_plots` diterima
 dan mencatat warning: dump prediksi berorientasi dan plot validasi belum
-diimplementasikan.
+diimplementasikan. `agnostic_nms=True` memunculkan `ValueError` di sini; opsi itu hanya
+mencakup validasi detect dan segment.
 
 ## Ekspor
 

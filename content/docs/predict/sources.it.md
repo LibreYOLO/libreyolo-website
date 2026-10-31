@@ -222,7 +222,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## Come viene classificata una sorgente
@@ -422,7 +422,8 @@ cartelle di input che contengono lo stesso nome di file si sovrascrivono a
 vicenda. Le immagini in memoria non hanno un nome di file da riutilizzare.
 Un'immagine singola viene salvata come `inference`, quindi le chiamate ripetute la
 sovrascrivono; una lista o un batch vengono numerati `image0`, `image1` e così
-via.
+via. Due processi che salvano nello stesso istante ottengono directory numerate
+distinte, perché ogni esecuzione riserva la propria directory creandola.
 
 Le sorgenti video e live vengono scritte come un unico `.mp4` che prende il nome
 dalla sorgente.

@@ -1,20 +1,56 @@
 ---
-title: 1.6.0으로 업그레이드
-seo_title: LibreYOLO 1.5.0에서 1.6.0으로 업그레이드
-description: 'LibreYOLO 1.6.0의 전처리, 학습 기본값, 실행 디렉터리, 고정 파일, QAT, 데이터 로더 마이그레이션 절차입니다.'
+title: 1.7.0으로 업그레이드
+seo_title: LibreYOLO 1.6.0에서 1.7.0으로 업그레이드
+description: >-
+  LibreYOLO 1.7.0의 YOLO9 체크포인트, 모듈 이름, 학습 레시피, CLI 실행 폴더, 혼동 행렬, 새 오류에 대한 마이그레이션
+  절차입니다.
 lead: >-
-  1.6.0은 전처리, 학습 기본값, 체크포인트 처리를 변경합니다. 저장한 베이스라인을 다시 검증하고 이전 실행을 재현할 때는 이전 기본값을
-  명시적으로 설정합니다.
+  1.7.0은 이전 YOLO9 체크포인트를 같은 float 박스로 계속 불러옵니다. YOLO9 계열의 학습, 코드가 네트워크 내부에서 보는
+  이름, 그리고 몇 가지 검증과 예측 계약이 바뀝니다.
 keywords:
   - libreyolo 업그레이드
-  - libreyolo 1.5.0 마이그레이션
-  - allow_experimental 제거됨
+  - libreyolo 1.6.0 마이그레이션
   - libreyolo 주요 변경 사항
-  - yolox bn eps
-  - faster-coco-eval 기본값
-last_verified: 1.6.0
-source_hash: e9c7cb5271aa4a81
+  - yolo9 모듈 이름
+  - clip_max_norm
+  - 혼동 행렬 confusion matrix
+last_verified: 1.7.0
+source_hash: 895bcd7425f0052f
 ---
+
+## 1.6.0에서 1.7.0으로
+
+- 1.7.0이 저장한 YOLO9, YOLO9-E2E, YOLO9-P2 체크포인트는 새 텐서 이름을 사용하며 1.6.x에서 불러올 수 없습니다. 1.6.x는 YOLO9와 YOLO9-P2 체크포인트를 누락된 키 경고와 함께 불러오고 박스를 하나도 예측하지 않으며, YOLO9-E2E 체크포인트에는 `model_family` 불일치 오류를 발생시킵니다. 이를 읽는 모든 환경을 업그레이드합니다. 이전 릴리스가 기록한 float, 양자화, 학습 체크포인트는 1.7.0에서 불러올 수 있으며 ONNX 내보내기는 영향을 받지 않습니다.
+
+- YOLO9 계열 모델의 `model.model`에 접근하는 코드는 별칭 없이 MultimediaTechLab/YOLO 모듈 이름을 보게 됩니다. `DDetect`는 `YOLO9Head`(`anchor_convs` / `class_convs`), `RepConvN`은 `RepConv`, `RepNBottleneck`은 `Bottleneck`, `DFL`은 `Anchor2Vec`(`anchor2vec`), `nc`는 `num_classes`이며, 블록 하위 레이어는 `conv1`/`conv2`/`bottleneck`입니다. YOLO9-E2E에서는 `YOLO9E2EDetect`가 `YOLO9E2EHead`, `one2one_cv2` / `one2one_cv3`가 `one_to_one_anchor_convs` / `one_to_one_class_convs`입니다. `LibreYOLO9Model.fuse()`, `RepConvN.fuse_convs()`, `Conv.forward_without_bn()`, `Concat`, `yolo9.utils.decode_boxes`는 제거되었습니다. 모든 이름 변경은 [변경 이력](/docs/changelog)에 나열되어 있습니다.
+
+- ONNX 노드 이름은 헤드, 백본, 넥에서 새 모듈 이름을 따르며, 예를 들어 `/head/anchor_convs.0/...`입니다. Hailo 끝 노드 설정처럼 노드 이름을 기준으로 하는 도구를 갱신합니다. 모델 입력, 출력, 출력 이름은 바뀌지 않습니다.
+
+- PGI 텐서가 없는 가중치에서 시작하는 YOLO9 파인튜닝은 공개된 `LibreYOLO9{t,s,m,c}.pt`를 포함해 1.5.0처럼 기본 헤드만 학습합니다. 1.6.0은 `aux_weight=0.25`에서 무작위로 초기화된 PGI 분기를 붙였습니다. PGI 텐서가 있는 가중치와 처음부터 학습하는 실행은 여전히 PGI로 학습합니다. 그래도 새 분기를 붙이려면 `aux_weight=0.25`를, 확실히 끄려면 `aux_weight=0`을 전달합니다.
+
+- PGI가 붙으면 YOLO9-m과 YOLO9-c는 MultimediaTechLab의 보조 분기를 만듭니다. 클래스 80개 기준으로 학습 전용 파라미터가 기존 7.5M과 10.2M에서 12.8M(m)과 25.7M(c)으로 늘어나므로, 이 크기의 PGI 학습은 스텝당 메모리와 시간이 더 필요합니다. 1.6.0 m/c 학습 체크포인트는 학습에 사용한 분기 그대로 학습을 재개하고 파인튜닝합니다. 추론과 YOLO9-t/s는 바뀌지 않습니다.
+
+- YOLO9, YOLO9-E2E, YOLO9-P2는 그래디언트 L2 노름을 10으로 클리핑하며, 학습 할당기는 앵커 점수를 fp32로 계산하므로 fp16 AMP에서 선택되던 양성 샘플이 달라질 수 있습니다. 1.6.0의 클리핑을 쓰려면 `clip_max_norm=0`을 전달합니다. 1.6.0에서 시작해 1.7.0에서 재개한 실행도 이를 전달하지 않으면 클리핑합니다. fp32 할당을 되돌리는 설정은 없습니다.
+
+- 0이 아닌 `perspective`는 공유 아핀 워프를 쓰는 모든 계열(YOLO9와 그 E2E, P2 변형, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR, RT-DETRv2)에서 모서리 변위로 왜곡하며, 이를 설정한 1.6.0 체크포인트에서 재개한 실행도 마찬가지입니다. `0.002` 이상의 값은 같은 최대 왜곡을 주고, 음수 값은 `ValueError`를 발생시킵니다. 1.6.0의 왜곡을 재현하는 설정은 없으며, 기본값 `perspective=0`은 바뀌지 않습니다.
+
+- YOLO9 모자이크 파이프라인은 mixup 비율을 Beta(32, 32) 대신 Beta(1, 1)에서 추출하며, 이전 값을 위한 설정은 없습니다. YOLOv7은 mixup을 기본으로 켜므로 기본 YOLOv7 학습이 달라집니다. YOLO9, YOLO9-E2E, YOLO9-P2, RT-DETR, RT-DETRv2는 mixup을 켠 경우에만 달라집니다.
+
+- `name=` 없이 `libreyolo train`을 실행하면 EC, D-FINE, SegFormer, LingBot-Vision 실행은 `runs/train/exp` 대신 `runs/train/ec_exp`, `dfine_exp`, `segformer_exp`, `lingbotvision_exp`에, V-JEPA 2 프로브는 `runs/train/train`에, YOLO9-P2 실행은 `runs/train/yolo9_exp`에 기록됩니다. 이전 경로를 쓰려면 `name=exp`를, YOLO9-P2에는 `name=yolo9_p2_exp`를 전달합니다.
+
+- `libreyolo train`은 D-FINE, SegFormer, LingBot-Vision을 각자의 레시피로 시작합니다. D-FINE의 경우 132 에폭, `lr0=2e-4`, `weight_decay=1e-4`, 워밍업 2 에폭이며 모자이크, mixup, HSV, 아핀 증강은 없습니다. 1.6.0이 보내던 값을 보내려면 `epochs=300 optimizer=sgd lr0=0.01 weight_decay=5e-4 warmup_epochs=5 mosaic=1.0 mixup=1.0 hsv_prob=1.0 degrees=10 translate=0.1 shear=2.0`을 전달합니다.
+
+- `libreyolo.validation.ConfusionMatrix`는 `matrix[predicted, true]`로 인덱싱하고(이전에는 `[actual, predicted]`), `conf_thres=0.25`에서 탐지를 세며(이전에는 0.15), `names=`와 `task=`는 키워드 인자로만 받고, `matrix`는 더 이상 다시 할당할 수 없습니다. 이전 행렬을 인덱싱하던 코드는 전치하고, 이전 집계를 쓰려면 `conf_thres=0.15`를 전달합니다. `plots=True`는 개수를 `confusion_matrix.png`에, 정규화된 그림을 `confusion_matrix_normalized.png`에 기록합니다.
+
+- `predict(agnostic_nms=True)`는 경고하는 대신 클래스에 걸쳐 겹치는 박스를 억제합니다. 박스가 없는 작업은 `ValueError`를, `LibreEnsemble`과 HRNet은 `NotImplementedError`를 발생시키고, SAM 계층은 이 키워드를 `TypeError`로 거부하므로 해당 호출에서는 이 인자를 제거합니다.
+
+- 알 수 없는 분류기 `interpolation`은 torchvision 모드인 `LANCZOS`, `BOX`, `HAMMING`, `NEAREST_EXACT`를 포함해 `ValueError`를 발생시킵니다. `bilinear`, `bicubic`, `nearest`, `bilinear_no_antialias`를 사용합니다.
+
+- 1.6.0 수치와 비교하기 전에 여러 클래스로 학습한 모델의 `val(single_cls=True)`, 박스만 있는 행과 폴리곤 행이 섞인 분할 데이터셋, 그리고 기본적으로 이미지당 최대 `max_det=300`개의 마스크를 유지하는 RTMDet-Ins에서 검증을 다시 실행합니다. MMDetection의 설정을 쓰려면 `max_det=100`을 전달합니다.
+
+- `libreyolo[rfdetr]`가 없으면 RF-DETR 또는 DINOv2 모델 이름으로 CLI를 호출할 때 `model_not_found` 대신 JSON 오류 코드 `model_load_failed`로 종료하며, 메시지는 `pip install libreyolo[rfdetr]`를 알려 줍니다.
+
+전체 릴리스는 [변경 이력](/docs/changelog)을 참조하십시오.
 
 ## 1.5.0에서 1.6.0으로
 

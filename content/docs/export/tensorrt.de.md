@@ -157,7 +157,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cb90fc98ab735233
+source_hash: a51a22d3ffbd0d84
 ---
 
 ## Installation
@@ -239,6 +239,13 @@ gegen Portabilität über Ampere und neuer. Der Wert `"same_compute_capability"`
 auf `NONE` abgebildet und warnt: Die Engine ist nur für die aktuelle GPU optimiert,
 und der Export sagt das, statt eine Portabilität zu behaupten, die er nicht
 angewendet hat.
+
+Das Extra `tensorrt` installiert TensorRT 10.16. Unter TensorRT 11, das das
+Netzwerk-Flag `EXPLICIT_BATCH` entfernt hat, erzeugt der Export das Netzwerk
+ohne dieses Flag. Dieser Schritt ist der einzige Teil, der unter TensorRT 11
+geprüft ist, und auch nur gegen ein gemocktes TensorRT-Modul: Dort ist noch kein
+Engine-Build in FP32, FP16 oder INT8 gelaufen, und die Builder-Flags für FP16
+und INT8 können dort weiterhin fehlschlagen.
 
 Profiliert wird nur die Batch-Achse. Ein Build mit dynamischen räumlichen
 Dimensionen gehört nicht zu diesem Vertrag, deshalb ist FCOS blockiert: Es braucht

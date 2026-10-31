@@ -16,8 +16,14 @@ keywords:
   - libreyolo formats Befehl
   - Export Parität Schwellenwert
   - NotImplementedError Export
-last_verified: "1.6.0"
-verification: "Formate, Stufen, Fallback-Reihenfolge, Aufgaben- und Familienblöcke sowie NCNN-Blöcke aus libreyolo/export/support.py gelesen; Aliasse und gemeinsame Argumente aus libreyolo/export/exporter.py; Stufendefinitionen aus docs/adr/0011-export-support-tiers.md; Paritätsschwellenwerte aus docs/export_support.md, jeweils in v1.6.0. Einzelne Kombinationszellen werden hier nicht wiedergegeben; frage sie mit dem folgenden Snippet ab."
+last_verified: 1.6.0
+verification: >-
+  Formate, Stufen, Fallback-Reihenfolge, Aufgaben- und Familienblöcke sowie
+  NCNN-Blöcke aus libreyolo/export/support.py gelesen; Aliasse und gemeinsame
+  Argumente aus libreyolo/export/exporter.py; Stufendefinitionen aus
+  docs/adr/0011-export-support-tiers.md; Paritätsschwellenwerte aus
+  docs/export_support.md, jeweils in v1.6.0. Einzelne Kombinationszellen werden
+  hier nicht wiedergegeben; frage sie mit dem folgenden Snippet ab.
 snippets:
   usage:
     - label: Matrix ohne Modell abfragen
@@ -65,7 +71,7 @@ snippets:
         print(blocked.tier)
 
         print(blocked.reason)
-source_hash: "70b9541fb8949352"
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## Aufbau der Matrix
@@ -119,6 +125,11 @@ Diese Aufgaben sind bei jeder Familie ohne ausdrücklichen Eintrag gesperrt.
 
 | Aufgabe | Grund |
 |---|---|
+| `albedo` | Der Albedo-Export hat keinen Laufzeitvertrag für Linear-RGB im Backend |
+| `act` | Die Sampling-Schleife der Policy hat weder einen exportierbaren Graphen noch einen Laufzeitvertrag im Backend |
+| `generate` | Die Bildgenerierung führt eine Sampling-Schleife über mehrere Netzwerke aus, die weder einen exportierbaren Graphen noch einen Laufzeitvertrag im Backend hat |
+| `generate3d` | Die 3D-Generierung führt eine Sampling-Schleife über mehrere Netzwerke aus, die weder einen exportierbaren Graphen noch einen Laufzeitvertrag im Backend hat |
+| `detect3d` | Graphausgaben, Kamerametadaten und Laufzeitvertrag der 3D-Erkennung sind nicht definiert |
 | `ocr` | Zwei Netzwerke mit dynamischem Beschnitt je Region passen nicht in den Exportvertrag eines einzelnen Graphen |
 | `point` | Die Familie ist nicht mit dem gemeinsamen Vertrag für Punkt-Heatmaps und Peak-Decodierung im Backend verbunden |
 | `semantic` | Die Familie ist nicht mit dem gemeinsamen Vertrag für dichte Logits und Argmax im Backend verbunden |
@@ -140,7 +151,7 @@ Ein ausdrücklicher Eintrag überschreibt diese Regeln. So kann beispielsweise e
 | `hrnet` | Alles außer ONNX, TorchScript, OpenVINO und TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Jedes Format; der Export promptbarer Modelle liegt außerhalb des v1-Laufzeitvertrags |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Jedes Format; der Export für Open-Vocabulary-Laufzeitumgebungen liegt außerhalb von v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Jedes Format; der Export generativer VLMs liegt außerhalb von v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Jedes Format; der Export generativer VLMs liegt außerhalb von v1 |
 
 PicoSAM3 ist die Ausnahme in der promptbaren Stufe. Es exportiert sein rohes ROI-Netzwerk mit 96 px nach ONNX.
 

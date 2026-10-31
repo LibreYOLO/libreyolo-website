@@ -20,6 +20,8 @@ keywords:
   - miou
   - kualitas panoptic
   - akurasi top1
+  - confusion matrix
+  - nms class-agnostic
 last_verified: 1.6.0
 snippets:
   val:
@@ -63,7 +65,40 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: da1e3ccfd1efba73
+  confusion:
+    - label: Confusion matrix
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+        metrics = model.val(data="coco8.yaml")
+
+
+        cm = metrics.confusion_matrix
+
+        print(cm.matrix.shape)      # (81, 81): 80 kelas ditambah background
+
+        print(cm.class_accuracy())  # nama kelas: proporsi objek yang ditemukan
+        dan diberi kelas itu
+
+        tp, fp = cm.tp_fp()
+  curves:
+    - label: Kurva per kelas
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        box = metrics.box
+        print(box.px.shape, box.f1_curve.shape)  # (1000,) dan (classes, 1000)
+        for index, f1 in zip(box.ap_class_index, box.f1):
+            print(model.names[int(index)], round(float(f1), 3))
+source_hash: a5704354163337cf
 ---
 
 ## Jalankan validasi
@@ -72,8 +107,10 @@ source_hash: da1e3ccfd1efba73
 
 <code-tabs name="val" />
 
-Nilai kembaliannya adalah `dict[str, float]`. Setiap kunci bersifat literal, jadi bacalah
-berdasarkan nama daripada posisi.
+Nilai kembaliannya adalah `dict` datar dari kunci metrik ke angka. Setiap kunci bersifat
+literal, jadi bacalah berdasarkan nama daripada posisi. Untuk detect, segment, dan
+classify, nilai ini adalah subclass `dict` yang juga membawa hasil per kelas sebagai
+atribut, dijelaskan di bawah.
 
 Argumen utama adalah `data`, `split`, `batch`, `imgsz`, `conf`, `iou`,
 `workers`, `device`, `augment`, `save_json` dan `verbose`. `conf` secara default adalah
@@ -84,8 +121,23 @@ dan tidak ada lainnya. Tanpa `data`, checkpoint hasil pelatihan divalidasi pada
 dataset tempat ia dilatih; bobot rilis tidak membawa dataset dan memerlukan `data=`.
 
 Setiap bidang lain dari konfigurasi validasi diteruskan sebagai argumen kata kunci,
-termasuk `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`
-dan `save_plots`.
+termasuk `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`,
+`save_plots`, `single_cls`, dan `agnostic_nms`. Dengan `half=True` di CUDA,
+validasi berjalan di bawah autocast dalam `amp_dtype`, dan output bfloat16 dikonversi
+ke float32 sebelum pascapemrosesan; pelatihan dengan `amp_dtype="bfloat16"` divalidasi
+dengan cara yang sama.
+
+`agnostic_nms=True` hanya mempertahankan box dengan skor tertinggi di antara box yang
+tumpang tindih di atas `iou`, apa pun kelasnya. Langkah ini berjalan pada deteksi akhir
+milik family, setelah `classes=`, sehingga mAP, confusion matrix, kurva, dan hitungan
+per gambar semuanya menilai box yang sama. Ini mencakup detect dan segment, dan task lain
+mana pun memunculkan `ValueError`. Sisi predict ada di
+[Ambang batas dan pemfilteran](/docs/predict/thresholds).
+
+`single_cls=True` menilai deteksi sebagai satu kelas. Ground truth diciutkan ke kelas 0,
+dan deteksi model dipertahankan sesuai `classes=` dalam ruang label model itu sendiri,
+lalu dilabeli ulang 0, sehingga checkpoint yang dilatih pada beberapa kelas dinilai
+sebagai detektor satu kelas.
 
 ## Kunci metrik per task
 
@@ -137,6 +189,8 @@ seperti `(B)` dan `(M)` di atas.
 
 `accuracy_top5` sebenarnya top-`min(5, num_classes)`, jadi pada dataset tiga kelas
 itu adalah top-3, yang dipenuhi setiap sampel dan akibatnya terbaca 1,0.
+Hasil klasifikasi juga menyediakan kedua nilai itu sebagai atribut `top1` dan `top5`,
+di samping `confusion_matrix`.
 
 Kunci sweep titik task dibangun dari ambang jarak, jadi dengan
 secara default terbaca `metrics/mAP@[0.01:0.10]` dan tombol ambang tunggal terbaca
@@ -149,6 +203,69 @@ kembali. Pose tidak mengembalikan `fitness` maupun `metrics/mAP50-95`; pelatihny
 atur `best_metric_key` ke `metrics/keypoints_mAP50-95` sebagai gantinya.
 
 Klasifikasi ImageFolder menambahkan makro `metrics/precision`, `metrics/recall`, dan `metrics/f1`, dirata-ratakan atas kelas yang ada dalam target validasi. Top-1 tetap menjadi fitness default. Deteksi juga mengembalikan `metrics/best_conf` dan `metrics/best_conf_f1`, memilih ambang optimal micro-F1 pada IoU 0.50, dan menaruh ambang dengan nama kelas sebagai kunci di `metrics.box.best_conf_per_class`. Deteksi dengan skor sama tetap dikelompokkan; hasil seri memilih ambang yang lebih tinggi. Jika tidak ada F1 positif, hasilnya 0.0. Segmentasi tidak menyediakan kunci ambang ini.
+
+## Confusion matrix
+
+Hasil detect, segment, dan classify membawa `results.confusion_matrix`. Matriks ini
+dihitung pada setiap validasi, baik plot ditulis maupun tidak, dan `matrix`-nya adalah
+array integer yang diindeks `matrix[predicted, true]`.
+
+<code-tabs name="confusion" />
+
+Untuk detect dan segment, prediksi pada confidence 0.25, atau `conf` bila lebih tinggi,
+dipasangkan satu lawan satu dengan box ground truth dari kelas apa pun pada IoU 0.5,
+dimulai dari IoU tertinggi. Sepasang dihitung pada kelas prediksi dan kelas sebenarnya,
+sehingga box yang posisinya tepat tetapi kelasnya salah jatuh di luar diagonal. Matriks
+memiliki baris dan kolom tambahan `background`: ground truth yang tidak berpasangan
+dihitung di baris `background`, prediksi yang tidak berpasangan di kolom `background`.
+Segmentasi memasangkan box, bukan mask. Dengan `classes=`, ground truth dari kelas lain
+dikeluarkan.
+
+Wilayah crowd COCO (`iscrowd=1`) mengikuti aturan yang diterapkan mAP. Prediksi yang tidak
+dicocokkan dengan ground truth mana pun dari kelasnya, yang berada setidaknya setengah di
+dalam wilayah crowd dengan kelas yang sama (irisan terhadap luas prediksi itu sendiri),
+diabaikan, bukan dihitung. `box.image_metrics` dan gambar `visualize=True` memakai ambang
+dan aturan crowd yang sama. Label berformat YOLO tidak punya wilayah crowd.
+
+Untuk classify, setiap gambar dihitung sekali, pada kelas top-1-nya terhadap labelnya,
+dan tidak ada `background`.
+
+| Metode | Mengembalikan |
+|---|---|
+| `summary(normalize=False)` | Satu dict per kelas prediksi, `{"Predicted": name, <true class>: value}`; dengan `normalize`, proporsi tiap kelas sebenarnya |
+| `to_csv()`, `to_json()` | Ringkasan sebagai teks CSV atau JSON |
+| `to_df()` | Ringkasan sebagai DataFrame Polars; memerlukan `pip install polars` |
+| `tp_fp()` | True positive per kelas (diagonal) dan false positive (sisa baris prediksi) |
+| `nonzero()` | Sel yang terisi sebagai array `(predicted, true, count)` yang sejajar |
+| `class_accuracy()` | Per kelas, proporsi instance-nya yang diberi kelas itu; untuk deteksi, hanya dari objek yang ditemukan |
+| `plot(normalize=True, save_dir="")` | Menulis `confusion_matrix_normalized.png`, atau `confusion_matrix.png` dengan `normalize=False`, dan mengembalikan path-nya |
+
+Di atas 2.000 kelas, matriks klasifikasi padat tidak dibangun: `matrix`, `summary()`,
+ekspor `to_*()`, dan `plot()` memunculkan error, sedangkan `tp_fp()`, `nonzero()`, dan
+`class_accuracy()` tetap berfungsi.
+
+Kelasnya adalah `libreyolo.validation.ConfusionMatrix`, dibangun sebagai
+`ConfusionMatrix(nc, iou_thres=0.5, conf_thres=0.25, *, names=None, task="detect")`,
+dengan `task` berupa `"detect"` atau `"classify"`.
+
+## Presisi, recall, dan F1 per kelas
+
+Hasil detect dan segment membawa presisi, recall, dan F1 tiap kelas di berbagai ambang
+confidence, dicocokkan pada IoU 0.5.
+
+<code-tabs name="curves" />
+
+`box.px` menyimpan 1000 nilai confidence, berjarak sama di atas `[0, 1]`.
+`box.p_curve`, `box.r_curve`, dan `box.f1_curve` adalah array `(classes, 1000)`,
+satu baris per entri `box.ap_class_index`, yaitu indeks kelas yang punya ground truth
+di split tersebut, dalam urutan menaik. `box.p`, `box.r`, dan `box.f1` adalah nilai per
+kelas pada confidence yang memaksimalkan rata-rata F1 atas kelas-kelas itu. Segmentasi
+menghitung semuanya dari box. Semuanya berupa array kosong bila run tidak menghasilkan
+kurva.
+
+## Metrik kotak per gambar
+
+Hasil deteksi dan segmentasi tetap kompatibel dengan dictionary dan juga menyediakan `results.box.image_metrics`. Setiap nama berkas dipetakan ke `precision`, `recall`, `f1`, `tp`, `fp`, dan `fn` dengan aturan pencocokan visualisasi, bahkan saat visualisasi mati. Segmentasi menghitung kotak di sini. Nama dasar yang duplikat memakai path lengkap setelah kemunculan pertama. Penyebut nol menghasilkan 0.0. Catatan ini tidak dikumpulkan antar rank terdistribusi.
 
 ## Tombol pintas
 
@@ -253,12 +370,17 @@ meningkatkan.
 `predictions_bbox.json` ditambah `predictions_masks.json` untuk segmentasi. OBB tidak
 mendukungnya dan menyatakannya.
 
-`save_plots=True` menulis ke dalam subdirektori `plots/`. Deteksi mendapatkan
-`box_metrics.png`, AP per kelas dan grafik recall, presisi-recall dan
-kurva kepercayaan, matriks kebingungan, dan contoh gambar beranotasi ketika OpenCV
-terpasang. Segmentasi menambahkan salinan sisi mask dari masing-masing, dan pose mendapatkan miliknya sendiri
-. Validator lain tidak mengimplementasikan plot; klasifikasi,
-semantik, panoptik, kedalaman, normal, tepi, pemulihan, matte, OCR, OBB, dan poin semuanya
+`save_plots=True`, atau aliasnya `plots=True`, menulis ke dalam subdirektori `plots/`
+dan memerlukan matplotlib, yang dipasang oleh `pip install "libreyolo[plots]"`. Deteksi
+mendapatkan `box_metrics.png`, AP per kelas dan grafik recall, kurva presisi-recall dan
+kepercayaan, kurva F1 per kelas di `f1_conf_box.png`, confusion matrix sebagai hitungan di
+`confusion_matrix.png` dan sebagai proporsi tiap kelas sebenarnya di
+`confusion_matrix_normalized.png`, dan contoh gambar beranotasi ketika OpenCV terpasang.
+Segmentasi menambahkan salinan sisi mask dari grafik metrik, grafik per kelas, serta
+kurva presisi-recall dan kepercayaan; kurva F1 dan confusion matrix tetap di tingkat box.
+Pose mendapatkan set metrik dan kurva miliknya sendiri. Klasifikasi menulis kedua berkas
+confusion matrix, kecuali di atas 2.000 kelas. Validator lain tidak mengimplementasikan
+plot; semantik, panoptik, kedalaman, normal, tepi, pemulihan, matte, OCR, OBB, dan poin semuanya
 tidak menulis apa pun di sana. Kegagalan plot akan memberi peringatan dan tidak pernah menghentikan jalannya.
 
 `visualize=True` menulis gambar kotak TP/FP/FN dengan memperhitungkan kelas untuk deteksi dan segmentasi, atau gambar label-versus-top-1 untuk klasifikasi ImageFolder, ke `visualize/errors/` dan `visualize/correct/`. Pencocokan memakai IoU 0.5 dan skor keyakinan `max(0.25, conf)`. Nilai default adalah `visualize=False`, `show_labels=True`, dan `show_conf=True`. Task yang tidak didukung dan validasi klip V-JEPA 2 menolak visualisasi.
@@ -280,7 +402,3 @@ di mana angkanya pergi.
 ## Terkait
 
 - [Dataset](/docs/train/datasets) untuk kunci split dan validator format dibaca.
-
-## Metrik kotak per gambar
-
-Hasil deteksi dan segmentasi tetap kompatibel dengan dictionary dan juga menyediakan `results.box.image_metrics`. Setiap nama berkas dipetakan ke `precision`, `recall`, `f1`, `tp`, `fp`, dan `fn` dengan aturan pencocokan visualisasi, bahkan saat visualisasi mati. Segmentasi menghitung kotak di sini. Nama dasar yang duplikat memakai path lengkap setelah kemunculan pertama. Penyebut nol menghasilkan 0.0. Catatan ini tidak dikumpulkan antar rank terdistribusi.

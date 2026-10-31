@@ -49,7 +49,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## Sinopse
@@ -77,6 +77,7 @@ palavra da tarefa é descartada antes da análise.
 | `imgsz` | | Tamanho da imagem de entrada: `640` (quadrada) ou `480x640` (altura x largura). O tamanho de entrada do próprio modelo quando não definido |
 | `classes` | | Filtra por IDs de classe, p. ex. `[0,2,5]`. Um inteiro solto é aceito |
 | `max_det` | `300` | Máximo de detecções por imagem |
+| `agnostic_nms` | `false` | NMS agnóstico de classe: entre boxes que se sobrepõem acima de `iou`, mantém só o de maior score, sejam quais forem as classes. Detect, segment, pose e OBB |
 | `half` | `false` | Inferência em FP16 (somente CUDA, exige suporte do modelo) |
 | `save` | `false` | Salva as imagens anotadas |
 | `batch` | `1` | Imagens por passada para fontes do tipo diretório. Acima de 1 roda inferência em batch de verdade nos modelos que suportam |

@@ -49,7 +49,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## Instalacja
@@ -84,15 +84,17 @@ aliasów.
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Przypięta migawka ze źródła nadrzędnego |
 
 Domyślny alias to `qwen3-vl-4b`. Rozmiary domyślnego aliasu każdej rodziny są
 wymienione jako pierwsze: `qwen3-vl` rozwiązuje się do `4b`, `lfm2-vl` do
-`450m`, `internvl3` do `2b`, `smolvlm2` do `2.2b`, a `florence-2` do `base`.
+`450m`, `internvl3` do `2b`, `smolvlm2` do `2.2b`, a `florence-2` do `base`,
+`wevisone-vl` do `2b`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` i `LibreMODUS`
-(zapisywane również jako `LibreModus`) są eksportowane na poziomie pakietu.
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL`
+i `LibreMODUS` (zapisywane również jako `LibreModus`) są eksportowane na poziomie pakietu.
 
 Detekcja obejmuje też `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` i `lfm2-vl-3b`. Sam alias `gemma-4` wybiera E4B. Aliasy Molmo2 to `molmo2-4b`, `molmo2-8b` i `molmo2-o-7b`; domyślny to 4B. Aliasy ustalają kierowanie wywołań, ale nie oznaczają, że każdy zdalny snapshot został pobrany i przetestowany. `moondream-3` nie wczytuje się w wersji 1.6.0: w jego kopii lustrzanej brakuje shardów wag.
 
@@ -104,6 +106,7 @@ Obsługa zadań zależy od rodziny. Te adaptery obsługują wiele zadań:
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 Ponieważ zadanie jest sterowane podpowiedzią, a nie zapisane w checkpoincie,
 można je przełączyć we wczytanym modelu:
@@ -116,7 +119,7 @@ Zadanie jest walidowane względem listy obsługiwanej przez rodzinę, pozostaje
 ustawione w kolejnych wywołaniach `predict()` i `track()`, a model jest zwracany,
 aby wywołania można było łączyć w łańcuch.
 
-Molmo2 zwraca punkty i wymaga `{label}` we własnych szablonach wskazywania. Moondream obsługuje detekcję, punkty i natywny czat. Do zapytań przekształcających instrukcję w kliknięcie służy [LibreGround](/docs/reference/ground-api).
+Molmo2 zwraca punkty i wymaga `{label}` we własnych szablonach wskazywania. `referring=True` w WeVisOne-VL sprawia, że `detect` wysyła jedno generowanie na frazę, a jego `segment`, `matte` i detekcja referencyjna zgłaszają `ValueError` bez słownika. Moondream obsługuje detekcję, punkty i natywny czat. Do zapytań przekształcających instrukcję w kliknięcie służy [LibreGround](/docs/reference/ground-api).
 
 ## set_classes
 

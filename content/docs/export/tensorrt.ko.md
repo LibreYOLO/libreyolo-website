@@ -150,7 +150,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cb90fc98ab735233
+source_hash: a51a22d3ffbd0d84
 ---
 
 ## 설치
@@ -196,6 +196,8 @@ INT8은 LibreYOLO 보정 로더 대신 TensorRT의 엔트로피 보정기를 사
 ## 제약
 
 직렬화된 엔진은 GPU 아키텍처, 드라이버 스택 및 엔진을 빌드한 TensorRT 버전에 연결되어 있습니다. 워크스테이션에서 빌드된 엔진은 다른 아키텍처에서는 로드되지 않기 때문에 빌드 단계가 배포 머신에서 실행됩니다. `hardware_compatibility="ampere_plus"`는 성능의 일부를 포기하는 대신 Ampere 이후 모델 간의 이식성을 제공합니다. `"same_compute_capability"` 값은 `NONE`에 매핑되며, 엔진이 현재 GPU에만 최적화되어 있음을 경고하고, 내보내기 시 적용되지 않은 이식성을 주장하지 않습니다.
+
+`tensorrt` extra는 TensorRT 10.16을 설치합니다. `EXPLICIT_BATCH` 네트워크 플래그가 제거된 TensorRT 11에서는 내보내기가 이 플래그 없이 네트워크를 만듭니다. TensorRT 11에서 확인된 부분은 이 단계뿐이며, 그것도 모의(mock) TensorRT 모듈에 대해서만 확인했습니다: 그곳에서 FP32, FP16, INT8 엔진 빌드는 실행된 적이 없으며, FP16과 INT8 빌더 플래그는 여전히 실패할 수 있습니다.
 
 배치 축만 프로파일링됩니다. 동적 공간 차원을 가진 빌드는 이 계약에 포함되지 않기 때문에 FCOS가 차단됩니다: FCOS는 800x1333 비율 변환을 유지하기 위해 동적 패딩된 높이와 너비가 필요합니다.
 

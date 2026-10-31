@@ -16,7 +16,7 @@ keywords:
   - 全局批大小
   - nccl gloo 后端
   - windows 多卡训练
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   train:
     - label: Python
@@ -34,6 +34,11 @@ snippets:
                 batch=32,     # 全局批大小：两个 GPU 时，每个 GPU 16 张图像
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -71,7 +76,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # 在 GPU 0 上探测一次，再放大到 world size 的整数倍
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 
 ## 在两张 GPU 上训练
@@ -81,6 +86,8 @@ source_hash: e339072d5d8e71ea
 <code-tabs name="train" />
 
 指定多个设备且没有 torchrun 环境时，模型的 `train()` 会将权重保存到临时文件，按需解析 autobatch，然后启动由协调器管理的 worker 进程，每个 GPU 一个。每个 worker 重新导入模型类，从保存的权重重建模型，并运行普通单设备路径，因为启动后的 worker 内部已经设置了 torchrun 环境变量。训练结束后，rank 0 的最佳检查点会加载回调用者的模型实例。
+
+`libreyolo train device=0,1` 或 `device=[0,1]` 会在列出的第一块 GPU 上构建模型，并把这个列表传给 `train()`，由它以同样的方式派生 worker。
 
 `device` 接受 `"0,1"`、`[0, 1]`、`0`、`"cuda:0"`、`"cpu"`、`"mps"` 和 `"auto"`。
 只有超过一个 CUDA 索引的列表才会触发派生。

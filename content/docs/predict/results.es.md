@@ -135,12 +135,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 
 ## Un objeto, un slot por payload
 
-Una predicción sobre una imagen devuelve un `Results`. Lleva veintiún slots de
+Una predicción sobre una imagen devuelve un `Results`. Lleva veintitrés slots de
 payload, y un modelo rellena solo los que su tarea produce. Todos los demás
 quedan a `None`, así que leer `result.masks` en un detector da `None` en lugar
 de un error.
@@ -168,6 +168,8 @@ de un error.
 | `albedo` | `AlbedoMap` | `(H, W, 3)` RGB lineal | Estimación de albedo |
 | `boxes3d` | `Boxes3D` | `(N, 14)` cuboides en coordenadas de cámara, con las filas alineadas con `boxes` | Detección 3D monocular |
 | `actions` | `Actions` | `(T, D)` secuencia de acciones | Políticas robóticas |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB más prompt, semilla y ajustes | Generación de imágenes |
+| `gaussians` | `Gaussians` | `N` gaussianas como `xyz`, `scales`, `rotations`, `opacities` y `sh`, más cámara y semilla | Generación 3D |
 
 Junto a ellos están los campos que todo resultado tiene: `orig_shape` como
 `(alto, ancho)`, `path` (la ruta de origen, o `None` para entrada en memoria),
@@ -177,9 +179,10 @@ entero de escalado de un resultado de restauración.
 
 `result.normals` es un alias de `result.normal_map`.
 
-`result.speed` existe en todo resultado pero solo lo rellenan los
-[ensembles](/docs/predict/ensembling), donde sus claves son `member_0`,
-`member_1` y `fusion` en milisegundos. Para un modelo individual queda como un
+`result.speed` existe en todo resultado. Los [ensembles](/docs/predict/ensembling)
+lo rellenan con `member_0`, `member_1` y `fusion` en milisegundos, los modelos
+LibreGen con `inference`, los milisegundos por imagen u objeto generado, y FCOS3D
+con `preprocess`, `inference` y `postprocess`. Los demás modelos lo dejan como un
 dict vacío.
 
 ## Boxes
@@ -262,8 +265,8 @@ vector de probabilidad a una sola clase, y hacer slicing de un resultado de
 profundidad no puede corromper la disposición `(H, W)`.
 
 `len(result)` cuenta instancias: boxes, puntos, embeddings, regiones OCR o
-mallas. Cualquier payload denso de imagen completa cuenta como `1`. Un
-resultado sin nada dentro es `0`.
+mallas. Cualquier payload denso de imagen completa cuenta como `1`, y también una
+imagen generada o un objeto 3D. Un resultado sin nada dentro es `0`.
 
 `to()`, `cpu()`, `cuda()` y `numpy()` devuelven cada uno un nuevo `Results` con
 todos los slots rellenos convertidos. No modifican el original.
@@ -291,7 +294,8 @@ región con su `text`, puntos una fila por punto, panóptico una fila por
 segmento con `pixel_count` y `pixel_fraction`, semántico una fila por clase
 presente, clasificación las cinco clases principales. Profundidad, normales,
 bordes, restauración y matting emiten cada uno una única fila resumen que
-describe el mapa en lugar de sus píxeles.
+describe el mapa en lugar de sus píxeles, y una imagen generada o un objeto 3D una
+fila con su semilla y sus ajustes.
 
 Dos payloads se abrevian deliberadamente. Un vector de embedding se reporta
 solo como `embedding_dim`, porque una fila de 512 floats son unos 2 KB por
@@ -313,11 +317,11 @@ ruta escrita se adjunta al resultado como `result.saved_path`.
 
 
 
-`Results.save(path)` es igual de estrecho: escribe un resultado de matte como
-recorte PNG RGBA con fondo transparente y lanza `NotImplementedError` en los
-demás casos. `Results.cutout()` devuelve ese mismo array RGBA sin escribirlo.
-Ambos necesitan la imagen de origen, tomada de `result.path` o pasada como
-`image=`.
+`Results.save(path)` es igual de estrecho: escribe una imagen generada o un objeto
+3D, eligiendo el formato por la extensión, y un resultado de matte como recorte
+PNG RGBA con fondo transparente, y lanza `NotImplementedError` en los demás casos.
+`Results.cutout()` devuelve ese mismo array RGBA sin escribirlo. En un matte, ambos
+necesitan la imagen de origen, tomada de `result.path` o pasada como `image=`.
 
 Dos payloads llevan sus propios escritores: `result.restored.save(path)` para
 una imagen restaurada, y `result.meshes.save_obj(path, index=0)` para una
@@ -326,7 +330,7 @@ malla.
 Para saber dónde acaban los archivos y cómo se comportan `output_path` y
 `output_file_format`, mira [Fuentes de predicción](/docs/predict/sources).
 
-`plot()` cubre los payloads de todas las tareas. Las superposiciones sobre imágenes devuelven arrays contiguos HxWx3 uint8 BGR por defecto; `pil=True` solicita PIL. Los mapas de profundidad, normales, bordes y albedo, los cuboides 3D y las secuencias de acciones devuelven una imagen PIL por defecto; `pil=False` devuelve el array. `orig_img` conserva los píxeles BGR de fuentes en memoria y URL; los archivos locales y los fotogramas recopilados de vídeos finitos pueden reabrirse.
+`plot()` cubre los payloads de todas las tareas. Las superposiciones sobre imágenes devuelven arrays contiguos HxWx3 uint8 BGR por defecto; `pil=True` solicita PIL. Los mapas de profundidad, normales, bordes y albedo, los cuboides 3D, las secuencias de acciones, las imágenes generadas y el render de puntos de un objeto 3D generado devuelven una imagen PIL por defecto; `pil=False` devuelve el array. `orig_img` conserva los píxeles BGR de fuentes en memoria y URL; los archivos locales y los fotogramas recopilados de vídeos finitos pueden reabrirse.
 
 Los controles incluyen `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` y `filename`. Las imágenes de clasificación guardadas incluyen las cinco etiquetas principales. El guardado de matte escribe un recorte RGBA.
 

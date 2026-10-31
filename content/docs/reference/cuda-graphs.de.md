@@ -73,7 +73,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## Aufgezeichnete Arbeit
@@ -117,7 +117,7 @@ Die Prüfung erfolgt bitweise und nicht näherungsweise. Eine frühere Version d
 
 ## Trainingsunterstützung
 
-Die Trainingsaufzeichnung wurde in dieser Veröffentlichung von zwei auf 24 Familien über fünf Aufgaben erweitert.
+Die Trainingsaufzeichnung deckt 24 Familien über fünf Aufgaben ab.
 
 | Aufgabe | Familien |
 |---|---|

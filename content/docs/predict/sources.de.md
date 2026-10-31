@@ -225,7 +225,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## Klassifizierung einer Quelle
@@ -363,7 +363,7 @@ Ein Einzelbild gibt das `Results`-Objekt selbst zurück. Seine Indizierung wähl
 
 `save=True` schreibt die annotierte Ausgabe in ein Laufverzeichnis, statt sie zurückzugeben.
 
-Bilder werden unter einem automatisch hochgezählten Pfad wie `runs/detect/predict`, `runs/detect/predict2` und so weiter gespeichert. Der Quelldateiname bleibt erhalten. Alle Bilder eines Prozesses landen im selben Verzeichnis. Enthalten zwei Eingabeordner denselben Dateinamen, überschreiben sie sich deshalb gegenseitig. Bilder im Arbeitsspeicher besitzen keinen wiederverwendbaren Namen. Ein einzelnes Bild wird als `inference` gespeichert, wiederholte Aufrufe überschreiben es also; eine Liste oder ein Batch wird als `image0`, `image1` und so weiter nummeriert.
+Bilder werden unter einem automatisch hochgezählten Pfad wie `runs/detect/predict`, `runs/detect/predict2` und so weiter gespeichert. Der Quelldateiname bleibt erhalten. Alle Bilder eines Prozesses landen im selben Verzeichnis. Enthalten zwei Eingabeordner denselben Dateinamen, überschreiben sie sich deshalb gegenseitig. Bilder im Arbeitsspeicher besitzen keinen wiederverwendbaren Namen. Ein einzelnes Bild wird als `inference` gespeichert, wiederholte Aufrufe überschreiben es also; eine Liste oder ein Batch wird als `image0`, `image1` und so weiter nummeriert. Zwei Prozesse, die im selben Moment speichern, erhalten getrennte nummerierte Verzeichnisse, weil jeder Lauf sein Verzeichnis durch dessen Anlegen reserviert.
 
 Video- und Live-Quellen werden als einzelne `.mp4`-Datei mit dem Namen der Quelle geschrieben.
 

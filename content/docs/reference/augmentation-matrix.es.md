@@ -43,7 +43,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## Los parámetros
@@ -63,7 +63,7 @@ define `mosaic_prob`.
 | `mosaic_scale` | Rango de escala aleatoria para el warp afín |
 | `mixup_scale` | Rango de escala de jitter aplicado a la imagen compañera de MixUp |
 | `shear` | Rango de cizalladura aleatoria para el warp afín, en grados |
-| `perspective` | Magnitud del warp proyectivo para el warp afín |
+| `perspective` | Intensidad del warp proyectivo añadido al warp afín: las esquinas del lienzo se desplazan hacia dentro hasta `min(perspective * 100, 0.2)` veces la mitad del lado del lienzo, por eje; `0` lo desactiva |
 | `flipud` | Probabilidad de volteo vertical |
 | `no_aug_epochs` | Épocas finales entrenadas con el aumento de datos fuerte desactivado |
 | `auto_augment` | Política AutoAugment de clasificación: randaugment, autoaugment o augmix |
@@ -128,13 +128,13 @@ El pipeline de estilo DETR es una transformación sin mosaic. La distorsión fot
 | Arquetipo | Familias |
 |---|---|
 | Estilo YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| Estilo DETR | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Clasificación | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Semántica | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| Estilo DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Clasificación | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Semántica | `segformer`, `unet`, `lingbotvision` |
 | Restauración | `nafnet` |
 
-Hay veinticinco familias cubiertas. Una familia que no esté en esta lista
+Hay treinta y una familias cubiertas. Una familia que no esté en esta lista
 devuelve un conjunto de ignorados vacío, así que no se emite ningún aviso para
 ella.
 
@@ -147,6 +147,8 @@ ella.
 | `rtdetr` | `flipud` ignorado |
 | `rtdetrv2` | `flipud` ignorado |
 | `fomo` | `perspective` y `flipud` ignorados |
+| `ppyoloe` | `flipud` ignorado: la receta de origen usa en su lugar una rotación aleatoria de 90 grados |
+| `gtr` | `mosaic_prob` y `mixup_prob` se usan, durante las primeras `mosaic_epochs` épocas; `degrees`, `translate` y `mosaic_scale` dan forma al afín que sigue al mosaic |
 | `ec` | `hsv_prob`, `degrees` y `translate` se usan, solo para `task="pose"`; detect y segment usan recetas fotométricas fijas |
 | `dinov2` | El pack de clasificación se usa, solo para `task="classify"` |
 

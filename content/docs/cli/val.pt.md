@@ -41,7 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: a0446a47e0f89b27
+source_hash: 587851b0988347c3
 ---
 
 ## Sinopse
@@ -65,6 +65,7 @@ Os argumentos são pares `key=value`, e a forma POSIX também funciona, então
 | `imgsz` | | Tamanho da imagem: `640` (quadrada) ou `480x640` (altura x largura). O tamanho de entrada do próprio modelo quando não definido |
 | `conf` | `0.001` | Limiar de confiança |
 | `iou` | `0.6` | Limiar de IoU do NMS |
+| `agnostic_nms` | `false` | NMS agnóstico de classe: entre boxes que se sobrepõem acima de `iou`, mantém só o de maior score, sejam quais forem as classes. Só detect e segment |
 | `max_det` | `300` | Máximo de predições por imagem após o NMS |
 | `eval_max_det` | | Teto do avaliador COCO. A convenção AP@100 do pycocotools quando não definido |
 | `faster_coco_eval` | `true` | Usa o backend C++ do faster-coco-eval para as métricas COCO quando instalado; volta para o pycocotools |

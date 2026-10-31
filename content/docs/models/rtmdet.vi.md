@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Cài đặt
@@ -136,8 +136,11 @@ Trọng số được tải từ Hugging Face ở lần dùng đầu tiên và l
 Đối tượng `Results` trả về là loại mà mọi họ đều trả về, nên việc đổi sang
 detector khác chỉ cần sửa một dòng. Tên tệp có `-seg` tự phân giải thành tác vụ
 RTMDet-Ins, và khi đó `result.masks` chứa các mask instance bên cạnh các box.
-`conf` đặt ngưỡng độ tin cậy và `iou` đặt ngưỡng NMS. Xem
-[dự đoán](/docs/predict) để biết về nguồn, streaming và xử lý kết quả.
+`conf` đặt ngưỡng độ tin cậy và `iou` đặt ngưỡng NMS. `max_det` được áp dụng
+nguyên giá trị cho cả hai tác vụ, tối đa 300 box hoặc mask mỗi ảnh theo mặc định;
+cấu hình test RTMDet-Ins của MMDetection giữ 100, và `max_det=100` tái tạo đúng
+giá trị đó. Xem [dự đoán](/docs/predict) để biết về nguồn, streaming và xử lý kết
+quả.
 
 ## Các biến thể
 

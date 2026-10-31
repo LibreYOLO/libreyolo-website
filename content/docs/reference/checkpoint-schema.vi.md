@@ -2,12 +2,13 @@
 title: Lược đồ checkpoint
 seo_title: Lược đồ metadata checkpoint LibreYOLO v1.0
 description: >-
-  Metadata có trong mọi checkpoint .pt của LibreYOLO: các khóa bắt buộc, phần bổ sung theo tác vụ, khóa
-  runtime khi xuất, manifest lượng tử hóa (quantization) và các trường huấn luyện.
+  Metadata có trong mọi checkpoint .pt của LibreYOLO: các khóa bắt buộc, phần bổ
+  sung theo tác vụ, khóa runtime khi xuất, manifest lượng tử hóa (quantization)
+  và các trường huấn luyện.
 lead: >-
-  Tệp .pt của LibreYOLO là một dictionary phẳng được lưu bằng torch.save. Khóa model chứa state dict; các khóa
-  cấp cao nhất khác là metadata dùng để xác định checkpoint mà không cần phân tích tên tệp hay dò xét state
-  dict.
+  Tệp .pt của LibreYOLO là một dictionary phẳng được lưu bằng torch.save. Khóa
+  model chứa state dict; các khóa cấp cao nhất khác là metadata dùng để xác định
+  checkpoint mà không cần phân tích tên tệp hay dò xét state dict.
 keywords:
   - lược đồ checkpoint libreyolo
   - schema_version 1.0
@@ -17,27 +18,38 @@ keywords:
   - wrap_libreyolo_checkpoint
 last_verified: 1.6.0
 verification: >-
-  Phản ánh docs/checkpoint_schema.md trong repo libreyolo tại v1.6.0, được đối chiếu với
-  libreyolo/utils/serialization.py và BaseModel.save.
+  Phản ánh docs/checkpoint_schema.md trong repo libreyolo tại v1.6.0, được đối
+  chiếu với libreyolo/utils/serialization.py và BaseModel.save.
 snippets:
   usage:
     - label: Đọc metadata từ checkpoint
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
         from libreyolo.utils.serialization import unwrap_libreyolo_checkpoint
+
         import torch
 
+
         # Tải checkpoint xuống, rồi lưu lại để có đường dẫn cục bộ
+
         LibreYOLO("LibreYOLO9t.pt").save("roundtrip.pt")
 
-        loaded = torch.load("roundtrip.pt", map_location="cpu", weights_only=False)
+
+        loaded = torch.load("roundtrip.pt", map_location="cpu",
+        weights_only=False)
+
         state_dict, metadata = unwrap_libreyolo_checkpoint(loaded)
 
+
         print(metadata["schema_version"], metadata["model_family"])
-        print(metadata["size"], metadata["task"], metadata["nc"], metadata["imgsz"])
+
+        print(metadata["size"], metadata["task"], metadata["nc"],
+        metadata["imgsz"])
+
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 ## Lược đồ v1.0
 
@@ -82,6 +94,15 @@ thành `max(imgsz_h, imgsz_w)`, đồng thời ghi thêm `imgsz_h` và `imgsz_w`
 kích thước thực. Trình đọc hiểu các trường hình chữ nhật phải ưu tiên chúng
 thay vì giá trị vô hướng. Các họ có hợp đồng hình chữ nhật cố định, chẳng hạn
 HRNet pose, sẽ từ chối kích thước runtime không tương thích.
+
+Checkpoint phân loại có thể thêm `interpolation`, bộ lọc resize của mô hình:
+`"bilinear"`, `"bicubic"`, `"nearest"` hoặc `"bilinear_no_antialias"`. `save()`,
+`best.pt` và `last.pt` ghi nó và việc nạp khôi phục nó, nên huấn luyện, `val()`,
+`predict()`, hiệu chỉnh INT8 và xuất đều giữ bộ lọc mà checkpoint được lưu cùng.
+Checkpoint không có khóa này giữ mặc định của họ, và mọi giá trị khác đều không
+hợp lệ. Ba giá trị đầu resize bằng Pillow, vốn khử răng cưa khi thu nhỏ;
+`"bilinear_no_antialias"` là bilinear thuần với tâm nửa pixel và không khử răng
+cưa.
 
 Lược đồ được thiết kế dạng phẳng, và `model` được thiết kế là một state dict.
 
@@ -188,9 +209,9 @@ nghĩa là graph nhận một vùng cắt đã được trích xuất và không
 Bản xuất runtime HRNet yêu cầu giá trị đó.
 
 Bản xuất phân loại có thể thêm `crop_pct`, tỷ lệ crop giữa dạng float có kích
-thước đích trước khi crop là `round(imgsz / crop_pct)` và mặc định là `0.875`
-khi không có, cùng với `interpolation`, `"bilinear"` hoặc `"bicubic"`,
-mặc định là `"bilinear"`.
+thước đích trước khi crop là `floor(imgsz / crop_pct)` và mặc định là `0.875`
+khi không có, cùng với `interpolation`, một trong bốn giá trị checkpoint ở trên,
+mặc định là `"bilinear"` khi không có; trình đọc từ chối mọi giá trị khác.
 
 Bản xuất ExecuTorch ghi metadata phẳng vào một tệp phụ `<program>.pte.json`
 bắt buộc. Hợp đồng v1 là CPU, FP32, batch 1 và canvas đầu vào cố định, đồng thời

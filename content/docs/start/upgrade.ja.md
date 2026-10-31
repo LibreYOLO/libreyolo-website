@@ -1,19 +1,53 @@
 ---
-title: 1.6.0へのアップグレード
-seo_title: LibreYOLO 1.5.0から1.6.0へのアップグレード
-description: LibreYOLO 1.6.0の前処理、学習のデフォルト、実行ディレクトリ、固定されたアセット、QAT、データローダーの移行手順を説明します。
+title: 1.7.0へのアップグレード
+seo_title: LibreYOLO 1.6.0から1.7.0へのアップグレード
+description: LibreYOLO 1.7.0のYOLO9チェックポイント、モジュール名と学習レシピ、CLIの実行フォルダー、混同行列、新しいエラーの移行手順を説明します。
 lead: >-
-  バージョン1.6.0は、前処理、学習のデフォルト、チェックポイントの処理を変更します。保存済みのベースラインを再検証し、古い実行を再現するときは以前のデフォルトを明示してください。
+  バージョン1.7.0でも、以前のYOLO9チェックポイントは同じ浮動小数点のボックスで読み込めます。一方で、YOLO9ファミリーの学習、ネットワーク内部でコードから見える名前、検証と推論のいくつかの契約が変わります。
 keywords:
   - LibreYOLO アップグレード
-  - LibreYOLO 1.5.0 移行
-  - allow_experimental 廃止
+  - LibreYOLO 1.6.0 移行
   - LibreYOLO 破壊的変更
-  - YOLOX BN eps
-  - faster-coco-eval デフォルト
-last_verified: 1.6.0
-source_hash: e9c7cb5271aa4a81
+  - YOLO9 モジュール名
+  - clip_max_norm
+  - YOLO 混同行列
+last_verified: 1.7.0
+source_hash: 895bcd7425f0052f
 ---
+
+## 1.6.0から1.7.0
+
+- 1.7.0で保存したYOLO9、YOLO9-E2E、YOLO9-P2のチェックポイントは新しいテンソル名を使うため、1.6.xでは読み込めません。1.6.xはYOLO9とYOLO9-P2のチェックポイントを欠落キーの警告付きで読み込んでボックスを1つも推論せず、YOLO9-E2Eのチェックポイントには`model_family`の不一致エラーを送出します。これらを読み込むすべての環境をアップグレードしてください。以前のリリースが書き出した浮動小数点、量子化済み、学習用のチェックポイントは1.7.0で読み込め、ONNXエクスポートには影響しません。
+
+- YOLO9ファミリーのモデルの`model.model`に直接アクセスするコードからは、MultimediaTechLab/YOLOのモジュール名がエイリアスなしで見えます。`DDetect`は`YOLO9Head`（`anchor_convs` / `class_convs`）、`RepConvN`は`RepConv`、`RepNBottleneck`は`Bottleneck`、`DFL`は`Anchor2Vec`（`anchor2vec`）、`nc`は`num_classes`になり、ブロックのサブレイヤーは`conv1`/`conv2`/`bottleneck`になりました。YOLO9-E2Eでは、`YOLO9E2EDetect`は`YOLO9E2EHead`に、`one2one_cv2` / `one2one_cv3`は`one_to_one_anchor_convs` / `one_to_one_class_convs`になりました。`LibreYOLO9Model.fuse()`、`RepConvN.fuse_convs()`、`Conv.forward_without_bn()`、`Concat`、`yolo9.utils.decode_boxes`は削除されました。すべての名前変更は[変更履歴](/docs/changelog)に掲載されています。
+
+- ONNXのノード名は、ヘッド、バックボーン、ネックで新しいモジュール名に従います。たとえば`/head/anchor_convs.0/...`のようになります。Hailoのエンドノード設定など、ノード名をキーにするツールを更新してください。モデルの入力、出力、出力名は変わりません。
+
+- PGIテンソルを持たない重み（公開済みの`LibreYOLO9{t,s,m,c}.pt`を含む）からのYOLO9のファインチューニングは、1.5.0と同様に主ヘッドだけを学習します。1.6.0は`aux_weight=0.25`でランダムに初期化したPGI分岐を付けていました。PGIテンソルを含む重みと、ゼロからの実行は、引き続きPGI付きで学習します。それでも新しい分岐を付けるには`aux_weight=0.25`を、強制的に無効にするには`aux_weight=0`を渡してください。
+
+- PGIを付けた場合、YOLO9-mとYOLO9-cはMultimediaTechLabの補助分岐を構築します。80クラスでの学習時のみのパラメータは12.8M（m）と25.7M（c）で、以前の7.5Mと10.2Mから増えるため、これらのサイズのPGI学習ではステップあたりのメモリと時間が増えます。1.6.0のm/cの学習チェックポイントは、学習時の分岐のまま再開とファインチューニングができます。推論とYOLO9-t/sは変わりません。
+
+- YOLO9、YOLO9-E2E、YOLO9-P2は勾配のL2ノルムを10でクリップし、学習用アサイナーはアンカーをfp32でスコアリングするため、fp16のAMPで選ばれる正例が変わる場合があります。1.6.0のクリッピングにするには`clip_max_norm=0`を渡してください。1.6.0で開始して1.7.0で再開した実行も、この引数を渡さない限りクリップします。fp32の割り当てを切り替える設定はありません。
+
+- 0以外の`perspective`は、共有アフィン変換を使うすべてのファミリー（YOLO9とそのE2E・P2バリアント、YOLOX、YOLOv7、YOLO-NAS、PP-YOLOE、RTMDet、PicoDet、RT-DETR、RT-DETRv2）で、これを設定した1.6.0のチェックポイントから再開した実行も含め、コーナーの変位によって変形します。`0.002`以上の値は同じ最大変形になり、負の値は`ValueError`を送出します。1.6.0の変形を再現する設定はありません。デフォルトの`perspective=0`は変わりません。
+
+- YOLO9のモザイクパイプラインは、mixupの比率をBeta(32, 32)ではなくBeta(1, 1)から抽出し、以前の値に戻す設定はありません。YOLOv7はデフォルトでmixupを有効にするため、YOLOv7のデフォルトの学習が変わります。YOLO9、YOLO9-E2E、YOLO9-P2、RT-DETR、RT-DETRv2は、mixupを有効にした場合だけ変わります。
+
+- `name=`なしの`libreyolo train`は、EC、D-FINE、SegFormer、LingBot-Visionの実行を`runs/train/exp`ではなく`runs/train/ec_exp`、`dfine_exp`、`segformer_exp`、`lingbotvision_exp`に、V-JEPA 2のプローブを`runs/train/train`に、YOLO9-P2の実行を`runs/train/yolo9_exp`に書き込みます。以前のパスにするには`name=exp`を、YOLO9-P2では`name=yolo9_p2_exp`を渡してください。
+
+- `libreyolo train`は、D-FINE、SegFormer、LingBot-Visionをそれぞれ独自のレシピで開始します。D-FINEでは132エポック、`lr0=2e-4`、`weight_decay=1e-4`、2エポックのウォームアップで、モザイク、mixup、HSV、アフィンのデータ拡張は使いません。1.6.0が送っていた値を送るには、`epochs=300 optimizer=sgd lr0=0.01 weight_decay=5e-4 warmup_epochs=5 mosaic=1.0 mixup=1.0 hsv_prob=1.0 degrees=10 translate=0.1 shear=2.0`を渡してください。
+
+- `libreyolo.validation.ConfusionMatrix`は`matrix[predicted, true]`でインデックスし（以前は`[actual, predicted]`）、`conf_thres=0.25`で検出を数え（以前は0.15）、`names=`と`task=`をキーワード引数としてのみ受け取り、その`matrix`は再代入できなくなりました。以前の行列をインデックスしていたコードは転置し、以前の件数を得るには`conf_thres=0.15`を渡してください。`plots=True`は件数を`confusion_matrix.png`に、正規化したプロットを`confusion_matrix_normalized.png`に書き出します。
+
+- `predict(agnostic_nms=True)`は警告を出す代わりに、クラスをまたいで重なるボックスを抑制します。ボックスを持たないタスクは`ValueError`を、`LibreEnsemble`とHRNetは`NotImplementedError`を送出し、SAM系のモデルはこのキーワードを`TypeError`で拒否します。これらの呼び出しからは引数を削除してください。
+
+- torchvisionのモードである`LANCZOS`、`BOX`、`HAMMING`、`NEAREST_EXACT`を含め、分類器の未知の`interpolation`は`ValueError`を送出します。`bilinear`、`bicubic`、`nearest`、`bilinear_no_antialias`のいずれかを使ってください。
+
+- 複数クラスで学習したモデルでの`val(single_cls=True)`、ボックスだけの行とポリゴンの行が混在するセグメンテーションデータセット、デフォルトで画像あたり最大`max_det=300`個のマスクを保持するRTMDet-Insについては、1.6.0の数値と比較する前に検証をやり直してください。MMDetectionの設定にするには`max_det=100`を渡してください。
+
+- `libreyolo[rfdetr]`がない場合、RF-DETRまたはDINOv2のモデル名を指定したCLI呼び出しは、`model_not_found`ではなくJSONエラーコード`model_load_failed`で終了し、メッセージには`pip install libreyolo[rfdetr]`が示されます。
+
+リリース全体は[変更履歴](/docs/changelog)を参照してください。
 
 ## 1.5.0から1.6.0
 

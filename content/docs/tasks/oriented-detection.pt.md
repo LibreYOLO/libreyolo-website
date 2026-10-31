@@ -171,7 +171,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## Definição
@@ -243,8 +243,9 @@ pipeline roda de ponta a ponta. Qualquer outro domínio significa treinar com os
 seus próprios rótulos orientados, e para as categorias aéreas pelas quais o
 DOTA é conhecido, os checkpoints do RT-DETRv2 são os que de fato foram
 treinados nesses dados. `conf` e `max_det` moldam a saída como fazem na
-detecção. Veja [predição](/docs/predict) para fontes, streaming e tratamento de
-resultados.
+detecção, e `agnostic_nms=True` suprime caixas sobrepostas entre classes por IoU
+rotacionado. Veja [predição](/docs/predict) para fontes, streaming e tratamento
+de resultados.
 
 ## Formato do dataset
 
@@ -336,7 +337,8 @@ quando os dois estão na mesma tabela. `metrics/mAP75` não tem gêmeo com sufix
 
 Duas opções não fazem nada nesta tarefa. `save_json` e `save_plots` são aceitas
 e registram um aviso: dumps de predição orientada e gráficos de validação não
-estão implementados.
+estão implementados. `agnostic_nms=True` levanta `ValueError` aqui; ele cobre
+apenas a validação de detect e segment.
 
 ## Exportação
 

@@ -50,7 +50,7 @@ snippets:
         # Las filas, como dicts planos, y luego como JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## El objeto Results
@@ -96,6 +96,8 @@ cada familia lo decide su tarea.
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, con una galería |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` es un alias de lectura y escritura de `result.normal_map`.
 
@@ -324,3 +326,54 @@ la cadena JSON.
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` representa una secuencia de acciones float32 `(T, D)`. `first` devuelve la primera fila; el slicing selecciona pasos temporales. Los valores conservan las unidades del dataset de la política. `names` describe las dimensiones de acción, `fps` la frecuencia de control e `instruction` el texto de condicionamiento.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+contiene una imagen sintetizada, `(H, W, 3)` uint8 RGB. `array` devuelve la vista
+numpy e `image` una `PIL.Image`. `prompt` es el texto que produjo la imagen y
+`seed` el entero que la reproduce con el mismo modelo y los mismos ajustes;
+`params` registra el resto de la llamada: `model`, `imgsz` y cada ajuste de la
+familia vigente. `save(path)` escribe la imagen, y un PNG guarda además
+`to_dict()`, la forma, el prompt, la semilla y los params, como JSON en un chunk
+de texto `libreyolo`.
+
+En un resultado generado, `Results.boxes` y `Results.path` son `None`,
+`orig_shape` es el `(H, W)` de la propia imagen y `len(result)` es 1.
+`Results.save(path)` escribe la imagen, `plot()` la devuelve como imagen PIL y
+`summary()` devuelve una fila con el registro del payload.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+contiene un objeto 3D generado como splats gaussianos, en el sistema de
+coordenadas del propio objeto: z hacia arriba, centrado en el cubo
+`[-0.5, 0.5]^3`. Cada fila es una gaussiana.
+
+| Miembro | Devuelve |
+|---|---|
+| `xyz` | `(N, 3)` posiciones en el sistema del objeto |
+| `scales` | `(N, 3)` desviaciones típicas a lo largo de los ejes locales, lineales, no en log |
+| `rotations` | `(N, 4)` cuaterniones unitarios `(w, x, y, z)`, de los ejes locales al sistema del objeto |
+| `opacities` | `(N,)` en `[0, 1]` |
+| `sh` | `(N, K, 3)` coeficientes de color en armónicos esféricos, primero el grado 0 |
+| `colors` | `(N, 3)` RGB en `[0, 1]`, a partir del término de grado 0 |
+| `camera` | La vista de entrada inferida: `yaw` y `pitch` en radianes, `radius` en unidades del objeto, `fov` vertical en grados y el `margin` del recorte |
+| `seed`, `params` | La semilla y los ajustes de la llamada que reproducen el objeto |
+| `input_image` | La imagen RGB que vio el modelo tras su propio preprocesado |
+
+`len(gaussians)` es `N`, y `gaussians[gaussians.opacities > 0.1]` devuelve un
+nuevo `Gaussians` con las filas seleccionadas. `save(path)` escribe según la
+extensión. `.ply` es el formato estándar de 3D Gaussian Splatting, con escalas en
+log y opacidades en logit, girado a y hacia arriba como esperan los visores de
+splats, y una línea de cabecera `comment libreyolo` con la semilla, la cámara y
+los params como JSON. Un payload con color de orden superior (`K > 1`) lanza
+`NotImplementedError` para `.ply`. `.splat` es el formato web compacto, de 32
+bytes por gaussiana. `render(size=512, background=(0, 0, 0))` devuelve un render
+de puntos desde la vista de entrada inferida como `PIL.Image`, un vistazo rápido
+y no una rasterización de gaussianas.
+
+En un resultado 3D generado, `Results.boxes` es `None`; `path`, `orig_shape` y
+`orig_img` describen la imagen de origen, y `len(result)` es 1.
+`Results.save(path)` escribe el objeto, `plot()` devuelve ese render de puntos y
+`summary()` devuelve una fila con el registro del payload.

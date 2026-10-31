@@ -65,7 +65,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
-source_hash: 58ad5305c9dd458c
+source_hash: d6ec02dfdb1a69a8
 ---
 
 ## 定义
@@ -83,7 +83,7 @@ source_hash: 58ad5305c9dd458c
 
 ## 模型
 
-有两个家族支持 `ocr`。
+有三个家族支持 `ocr`。
 
 [PP-OCRv5](/docs/models/pp-ocrv5) 是专门的流水线：一个可微二值化（differentiable
 binarization）检测器找出文字四边形，一个 SVTR/CTC 识别器把它们读出来，两个阶段连
@@ -94,6 +94,8 @@ binarization）检测器找出文字四边形，一个 SVTR/CTC 识别器把它�
 个任务的同一个 7B 检查点（checkpoint）里，把这些词生成为带标签的文本，用
 `LibreVLM("sensenova-vision", task="ocr")` 加载。它需要 `sensenova` extra，而且它的
 权重仅限非商业用途；许可证写在它的模型页上。
+
+[WeVisOne-VL](/docs/models/wevisone-vl) 同样把答案生成为带标签的文本，用 `LibreVLM("wevisone-vl", task="ocr")` 加载。它发布的指令要求以框格式输出每一个词，每个框返回为一个轴对齐的四边形，带上它的转写文本。`.conf` 和 `.det_conf` 恒为 1.0，因为模型不输出分数。它需要 `vlm` extra，权重采用 Apache-2.0 许可。
 
 ## 预测
 
@@ -133,8 +135,8 @@ my-ocr-dataset/
 
 ## 训练
 
-两个 OCR 家族都没有训练实现：在它们上面调用 `train()` 都会抛出
-`NotImplementedError`，OCR 支持只覆盖预测和验证。PP-OCRv5 的模型页指明了采用
+没有任何 OCR 家族有训练实现：在这三个家族上调用 `train()` 都会抛出
+`NotImplementedError`。验证只覆盖 PP-OCRv5；在那两个视觉语言家族上，`val()` 会抛错。PP-OCRv5 的模型页指明了采用
 Apache-2.0 许可的上游训练代码，以及把微调后的检查点带回 LibreYOLO 的转换脚本。
 
 ## 验证
@@ -157,5 +159,5 @@ Apache-2.0 许可的上游训练代码，以及把微调后的检查点带回 Li
 ## 导出
 
 这个任务没有可用的导出格式。PP-OCRv5 是两个网络配合着一起跑，而不是一张可追踪的计
-算图，两个家族上的 `export()` 对每一种格式都会抛异常。要在 LibreYOLO 之外部署，就到
+算图，三个家族上的 `export()` 对每一种格式都会抛异常。要在 LibreYOLO 之外部署，就到
 上游去微调，并走上游的部署路径。

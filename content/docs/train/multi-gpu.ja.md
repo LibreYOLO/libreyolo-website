@@ -33,6 +33,11 @@ snippets:
                 batch=32,     # グローバルバッチ 2GPUなら各GPUに16枚
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -70,7 +75,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # GPU 0で一度調査しworld sizeの倍数に調整する
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 
 ## 2台のGPUで実行
@@ -82,6 +87,8 @@ source_hash: e339072d5d8e71ea
 複数のデバイスが指定され、torchrun環境ではない場合、モデルの`train()`は重みを一時ファイルへ保存します。要求されていればautobatchを解決し、コーディネーターが管理するワーカープロセスをGPUごとに1つ起動します。各ワーカーはモデルクラスを再インポートし、保存済みの重みから再構築して、通常の単一デバイス経路を実行します。起動済みワーカー内部ではtorchrunの環境変数が設定されるためです。実行が終わると、ランク0の最良チェックポイントが呼び出し元のモデルインスタンスへ読み戻されます。
 
 `device`には`"0,1"`、`[0, 1]`、`0`、`"cuda:0"`、`"cpu"`、`"mps"`、`"auto"`を指定できます。複数のCUDAインデックスを含むリストだけが起動処理を開始します。
+
+`libreyolo train device=0,1`（または`device=[0,1]`）は、リストの最初のGPU上にモデルを構築し、リストを`train()`に渡します。`train()`は同じ方法でワーカーを起動します。
 
 ## 自動起動とmainガード
 

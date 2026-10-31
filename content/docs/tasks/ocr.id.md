@@ -20,16 +20,24 @@ snippets:
   predict:
     - label: Baca teks dalam gambar
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Tier t adalah yang lebih ringan dan dibuat untuk CPU. SAMPLE_IMAGE
-        # menjaga contoh dapat dijalankan; arahkan ke gambar berisi teks sendiri.
+
+        # menjaga contoh dapat dijalankan; arahkan ke gambar berisi teks
+        sendiri.
+
         model = LibreYOLO("LibrePPOCRt-ocr.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         regions = result.ocr
+
         print(len(regions), "regions")
+
         for text, score in zip(regions.texts, regions.conf):
             print(repr(text), float(score))
     - label: Baca quad
@@ -71,7 +79,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
-source_hash: 58ad5305c9dd458c
+source_hash: d6ec02dfdb1a69a8
 ---
 
 ## Definisi
@@ -91,7 +99,7 @@ array skor bersama geometri.
 
 ## Model
 
-Dua family melayani `ocr`.
+Tiga family melayani `ocr`.
 
 [PP-OCRv5](/docs/models/pp-ocrv5) adalah pipeline khusus: detektor
 differentiable-binarization menemukan quad teks dan recognizer SVTR/CTC
@@ -105,6 +113,13 @@ menghasilkan kata sebagai teks bertag dari checkpoint 7B yang sama dengan enam
 task lain, dimuat melalui `LibreVLM("sensenova-vision", task="ocr")`. Model
 memerlukan ekstra `sensenova`, dan bobotnya terbatas untuk penggunaan
 nonkomersial; lisensi tersedia pada halamannya.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) juga menghasilkan jawabannya sebagai teks
+bertag, dimuat dengan `LibreVLM("wevisone-vl", task="ocr")`. Instruksi rilisnya
+meminta setiap kata dalam format box, dan setiap box kembali sebagai quad sejajar
+sumbu beserta transkripnya. `.conf` dan `.det_conf` bernilai konstan 1.0, karena
+model tidak mengeluarkan skor. Model ini memerlukan ekstra `vlm`, dan bobotnya
+berlisensi Apache-2.0.
 
 ## Prediksi
 
@@ -152,9 +167,9 @@ mengembalikan `Results.ocr`, bukan deteksi. Lihat
 
 ## Pelatihan
 
-Kedua family OCR tidak memiliki implementasi pelatihan: `train()` memunculkan
-`NotImplementedError`, dan dukungan OCR mencakup prediksi serta validasi.
-Halaman PP-OCRv5 menyebut kode pelatihan upstream Apache-2.0 dan script konversi
+Tidak ada family OCR yang memiliki implementasi pelatihan: `train()` memunculkan
+`NotImplementedError` pada ketiganya. Validasi mencakup PP-OCRv5; `val()` memunculkan
+error pada dua family vision-language. Halaman PP-OCRv5 menyebut kode pelatihan upstream Apache-2.0 dan script konversi
 untuk membawa checkpoint hasil fine-tuning kembali ke LibreYOLO.
 
 ## Validasi
@@ -182,7 +197,7 @@ berbeda satu karakter mendapat skor mendekati 1 ketika F1 end-to-end menilainya
 
 Tidak ada format ekspor untuk task ini. PP-OCRv5 terdiri dari dua jaringan yang
 bergerak bersama, bukan satu graph yang dapat diproses dengan tracing, dan `export()`
-memunculkan error untuk setiap format pada kedua family. Untuk deployment di
+memunculkan error untuk setiap format pada ketiga family. Untuk deployment di
 luar LibreYOLO, lakukan fine-tuning dan gunakan jalur deployment upstream.
 
 

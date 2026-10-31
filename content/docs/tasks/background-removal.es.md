@@ -102,7 +102,7 @@ snippets:
 
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## Definición
@@ -140,6 +140,12 @@ de los modelos, y la licencia del repositorio de Hugging Face del checkpoint
 concreto es la autoritativa.
 
 [BEN2](/docs/models/ben2) añade eliminación de fondo a una resolución fija de 1024. [ViTMatte](/docs/models/vitmatte) recibe una imagen y un `trimap=` de tres niveles que marca los píxeles de fondo, desconocidos y de primer plano.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) se guía con texto:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` devuelve la unión de los
+mattes alfa de cada instancia que coincide con la frase. Es un modelo de visión y
+lenguaje que necesita el extra `vlm`, y su `val()` y su `export()` lanzan una
+excepción.
 
 ## Predicción
 

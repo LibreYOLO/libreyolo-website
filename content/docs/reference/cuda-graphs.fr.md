@@ -73,7 +73,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## Éléments capturés
@@ -147,8 +147,7 @@ sur l'entrée de test pertinente.
 
 ## Prise en charge de l'entraînement
 
-Dans cette version, la capture de l'entraînement est passée de deux à 24
-familles, réparties entre cinq tâches.
+La capture de l'entraînement couvre 24 familles, réparties entre cinq tâches.
 
 | Tâche | Familles |
 |---|---|

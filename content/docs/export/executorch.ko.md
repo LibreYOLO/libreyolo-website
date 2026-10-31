@@ -121,7 +121,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## 설치
@@ -174,8 +174,9 @@ Windows에서는 로어링 단계가 ExecuTorch에 함께 포함된 `flatc` 실�
 
 `delegate`는 이 버전에서 `"xnnpack"` 외의 값을 받지 않습니다.
 
-분류 내보내기에는 `crop_pct`와 `interpolation`이라는 메타데이터 키 두 개가 추가로
-들어가므로, 런타임이 해당 계열의 리사이즈와 센터 크롭 정책을 재현할 수 있습니다.
+분류 내보내기에는 모델의 평가 전처리가 메타데이터로 들어갑니다. `crop_pct`와
+`interpolation`, 그리고 이를 설정하는 계열에서는 `norm_mean`, `norm_std`,
+`resize_mode`까지 들어가므로, 런타임이 모델의 리사이즈와 센터 크롭을 재현합니다.
 
 차단된 항목은 범주가 아니라 구체적인 실패를 명시합니다. D-FINE의 탐지와 분할은
 strict 캡처에서 디포머블 어텐션의 지원되지 않는 `ContextVar` 읽기에 도달하고, 수동

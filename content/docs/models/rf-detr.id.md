@@ -219,7 +219,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 3238696a4e1ab6c2
+source_hash: 1b6651371762ad63
 ---
 
 ## Instalasi
@@ -229,6 +229,9 @@ RF-DETR memerlukan komponen tambahannya sendiri, yang memasang `transformers` un
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Tanpa extra itu, memuat checkpoint atau nama model RF-DETR, dari Python maupun
+CLI, berhenti dengan error yang menyebutkan baris instalasi ini.
 
 ## Prediksi
 
@@ -268,6 +271,11 @@ di bawah `1e-4`, karena detektor transformer mengalami divergensi pada learning 
 masih dapat ditoleransi model YOLO. Biarkan `imgsz` pada resolusi native checkpoint kecuali
 ada alasan untuk mengubahnya. Input harus habis dibagi ukuran patch backbone dikalikan jumlah
 window; LibreYOLO memeriksanya sebelum proses dimulai dan menyebutkan ukuran valid terdekat.
+
+Fine-tuning segment dimulai dari checkpoint segment, karena RF-DETR tidak punya
+transfer dari detect ke segment. `libreyolo train model=LibreRFDETRn-seg.pt task=segment`
+memuat checkpoint itu, dan checkpoint deteksi dengan `task=segment` berhenti
+dengan error.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 

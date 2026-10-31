@@ -43,7 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## Synopsis
@@ -136,11 +136,15 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | JSON-Ausgabe nach stdout |
 | `quiet` | `false` | stderr unterdrücken |
 
-Ohne `family` ist die Ausgabe allein das Formatinventar. Mit `family` bekommt
-jedes Format zusätzlich die Support-Stufe für diese Familie und Aufgabe, den
-Grund für die Stufe und jede daran hängende Einschränkung. Eine unbekannte
-Familie oder eine Aufgabe, die die Familie nicht unterstützt, ist ein
-Nutzungsfehler.
+Ohne `family` ist die Ausgabe allein das Formatinventar, und die Felder für
+FP16 und INT8 beschreiben das Format. Mit `family` bekommt jedes Format
+zusätzlich die Support-Stufe für diese Familie und Aufgabe, den Grund für die
+Stufe und jede daran hängende Einschränkung, und die Felder für FP16 und INT8
+geben an, was `export()` für diese Kombination akzeptiert: Beide sind false bei
+einem blockierten Format oder einer Familie, die nur in FP32 exportiert, und
+INT8 ist nur dort true, wo der INT8-Export des Formats diese Familie und
+Aufgabe abdeckt. Eine unbekannte Familie oder eine Aufgabe, die die Familie
+nicht unterstützt, ist ein Nutzungsfehler.
 
 Format-Aliase stehen neben ihrem kanonischen Namen: `engine` für `tensorrt`,
 `litert` für `tflite`.

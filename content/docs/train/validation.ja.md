@@ -14,6 +14,8 @@ keywords:
   - mIoU
   - Panoptic Quality
   - Top-1 Accuracy
+  - 混同行列
+  - class-agnostic nms
 last_verified: 1.6.0
 snippets:
   val:
@@ -57,7 +59,33 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: da1e3ccfd1efba73
+  confusion:
+    - label: 混同行列
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        cm = metrics.confusion_matrix
+        print(cm.matrix.shape)      # (81, 81) 80クラスと背景
+        print(cm.class_accuracy())  # クラス名ごとに 検出された物体のうちそのクラスが付いた割合
+        tp, fp = cm.tp_fp()
+  curves:
+    - label: クラスごとの曲線
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        box = metrics.box
+        print(box.px.shape, box.f1_curve.shape)  # (1000,) と (classes, 1000)
+        for index, f1 in zip(box.ap_class_index, box.f1):
+            print(model.names[int(index)], round(float(f1), 3))
+source_hash: a5704354163337cf
 ---
 
 ## 検証の実行
@@ -66,11 +94,15 @@ source_hash: da1e3ccfd1efba73
 
 <code-tabs name="val" />
 
-戻り値は`dict[str, float]`です。すべてのキーはリテラルなので、位置ではなく名前で読み取ってください。
+戻り値は指標キーを数値に対応付けるフラットな`dict`です。すべてのキーはリテラルなので、位置ではなく名前で読み取ってください。detect、segment、classifyでは、後述するクラスごとの結果も属性として持つ`dict`のサブクラスです。
 
 主な引数は`data`、`split`、`batch`、`imgsz`、`conf`、`iou`、`workers`、`device`、`augment`、`save_json`、`verbose`です。`conf`のデフォルトは`0.001`、`iou`は`0.6`で、どちらも予測時のデフォルトより大幅に緩くなっています。mAPのsweepには信頼度の低い末尾まで必要なためです。`imgsz`は固定値ではなくモデル自身の入力サイズがデフォルトです。`split`は`val`、`test`、`train`だけを受け付けます。`data`を指定しない場合、学習で得たチェックポイントは学習に使ったデータセットで検証し、公開済みの重みはデータセットを持たないため`data=`が必要です。
 
-検証構成のその他のフィールドはキーワード引数として渡せます。`save_dir`、`max_det`、`eval_max_det`、`half`、`amp_dtype`、`cache`、`save_plots`も含まれます。
+検証構成のその他のフィールドはキーワード引数として渡せます。`save_dir`、`max_det`、`eval_max_det`、`half`、`amp_dtype`、`cache`、`save_plots`、`single_cls`、`agnostic_nms`も含まれます。CUDAで`half=True`を指定すると、検証は`amp_dtype`のautocast下で実行され、bfloat16の出力は後処理の前にfloat32へキャストされます。`amp_dtype="bfloat16"`で学習した場合も同じ方法で検証します。
+
+`agnostic_nms=True`は、`iou`を超えて重なるボックスのうち、クラスに関係なく最もスコアの高いボックスだけを残します。これはファミリーの完成した検出結果に対して`classes=`の後に実行されるため、mAP、混同行列、曲線、画像ごとのカウントはすべて同じボックスを評価します。対象はdetectとsegmentで、それ以外のタスクでは`ValueError`が発生します。推論側については[しきい値とフィルタリング](/docs/predict/thresholds)を参照してください。
+
+`single_cls=True`は物体検出を1クラスとして評価します。正解データはクラス0にまとめられ、モデルの検出結果はモデル自身のラベル空間で`classes=`に絞り込まれた後に0へ付け替えられるため、複数クラスで学習したチェックポイントも1クラスの検出器として評価されます。
 
 ## タスク別の指標キー
 
@@ -108,13 +140,51 @@ metrics/precision(B)  metrics/recall(B)  metrics/mAP50(B)  metrics/mAP50-95(B)
 
 OBBの`metrics/precision`と`metrics/recall`はエイリアスではありません。IoU 0.50における実際のprecisionとrecallで、最も緩い動作点、つまり`conf`（デフォルト`0.001`）を通過したすべての予測から取得します。`(OBB)`サフィックス付きのコピーは、上記の`(B)`や`(M)`と同じ規則で、同じ4つの値をタスク固有名の下に繰り返します。
 
-`accuracy_top5`は実際にはtop-`min(5, num_classes)`です。3クラスのデータセットではtop-3となり、すべてのサンプルが条件を満たすため1.0になります。
+`accuracy_top5`は実際にはtop-`min(5, num_classes)`です。3クラスのデータセットではtop-3となり、すべてのサンプルが条件を満たすため1.0になります。分類の結果は、この2つの値を`confusion_matrix`と並ぶ属性`top1`と`top5`としても公開します。
 
 pointタスクのsweepキーは距離しきい値から構築されます。デフォルトでは`metrics/mAP@[0.01:0.10]`となり、単一しきい値のキーは`metrics/mAP@0.01`です。`dist_thresholds`を渡すと両方の文字列が変わります。
 
 ほとんどのタスクは、最良チェックポイント選択でデフォルト使用する単一値の`fitness`キーも返します。物体検出、セグメンテーション、OBBはこのキーを持ちません。それらのファミリーでは辞書が返す`metrics/mAP50-95`を使って選択します。姿勢推定は`fitness`も`metrics/mAP50-95`も返さず、代わりにトレーナーが`best_metric_key`を`metrics/keypoints_mAP50-95`へ設定します。
 
 ImageFolder分類は、検証対象に存在するクラスで平均したマクロ平均の`metrics/precision`、`metrics/recall`、`metrics/f1`を追加します。デフォルトの適合度は引き続きtop-1です。物体検出は`metrics/best_conf`と`metrics/best_conf_f1`も返してIoU 0.50でマイクロF1が最良となるしきい値を選択し、クラス名をキーとするしきい値を`metrics.box.best_conf_per_class`に格納します。同じスコアの検出はまとめて扱い、同点の場合は高いしきい値を選びます。正のF1がない場合は0.0を返します。セグメンテーションはこれらのしきい値キーを公開しません。
+
+## 混同行列
+
+detect、segment、classifyの結果は`results.confusion_matrix`を持ちます。プロットを書き出すかどうかに関係なく毎回の検証で計算され、その`matrix`は`matrix[predicted, true]`でインデックス付けされる整数配列です。
+
+<code-tabs name="confusion" />
+
+detectとsegmentでは、信頼度0.25（`conf`の方が高ければ`conf`）以上の予測を、クラスを問わず正解ボックスとIoU 0.5で、IoUの高い順に1対1で組み合わせます。組は予測クラスと正解クラスの位置に数えられるため、位置は正しくてもクラスが誤っているボックスは対角線の外に入ります。行列には追加の`background`行と列があります：組にならなかった正解データは`background`行に、組にならなかった予測は`background`列に数えられます。セグメンテーションはマスクではなくボックスで組み合わせます。`classes=`を指定すると、それ以外のクラスの正解データは除外されます。
+
+COCOのcrowd領域（`iscrowd=1`）は、mAPが適用する規則に従います。同じクラスのどの正解データとも一致しなかった予測が、同じクラスのcrowd領域の内側に半分以上（予測自身の面積に対する交差部分の割合）入っている場合、その予測は数えずに無視します。`box.image_metrics`と`visualize=True`の画像も、同じしきい値と同じcrowd規則を使います。YOLO形式のラベルにはcrowd領域がありません。
+
+classifyでは、各画像はtop-1クラスとラベルの組として1回だけ数えられ、`background`はありません。
+
+| メソッド | 戻り値 |
+|---|---|
+| `summary(normalize=False)` | 予測クラスごとに1つの辞書`{"Predicted": name, <true class>: value}`。`normalize`を指定すると各正解クラスに対する割合 |
+| `to_csv()`、`to_json()` | CSVまたはJSONテキストとしてのサマリー |
+| `to_df()` | Polars DataFrameとしてのサマリー。`pip install polars`が必要 |
+| `tp_fp()` | クラスごとの真陽性（対角成分）と偽陽性（予測行の残り） |
+| `nonzero()` | 値の入ったセルを位置を揃えた`(predicted, true, count)`配列として |
+| `class_accuracy()` | クラスごとに、そのインスタンスのうちそのクラスが付いた割合。物体検出では検出された物体だけが対象 |
+| `plot(normalize=True, save_dir="")` | `confusion_matrix_normalized.png`（`normalize=False`では`confusion_matrix.png`）を書き出し、そのパスを返す |
+
+クラス数が2,000を超えると、分類用の密な行列は構築されません：`matrix`、`summary()`、`to_*()`によるエクスポート、`plot()`は例外を発生させますが、`tp_fp()`、`nonzero()`、`class_accuracy()`は引き続き動作します。
+
+クラスは`libreyolo.validation.ConfusionMatrix`で、`ConfusionMatrix(nc, iou_thres=0.5, conf_thres=0.25, *, names=None, task="detect")`として構築し、`task`には`"detect"`または`"classify"`を指定します。
+
+## クラスごとの適合率、再現率、F1
+
+detectとsegmentの結果は、IoU 0.5で照合した各クラスの適合率、再現率、F1を、信頼度しきい値全体にわたって持ちます。
+
+<code-tabs name="curves" />
+
+`box.px`は`[0, 1]`を等間隔に区切った1000個の信頼度を保持します。`box.p_curve`、`box.r_curve`、`box.f1_curve`は`(classes, 1000)`の配列で、分割内に正解データを持つクラスのインデックスを昇順に並べた`box.ap_class_index`の各要素に1行ずつ対応します。`box.p`、`box.r`、`box.f1`は、それらのクラスにわたる平均F1が最大となる信頼度での、クラスごとの値です。セグメンテーションはこれらすべてをボックスから計算します。実行で曲線が生成されなかった場合は空の配列になります。
+
+## 画像ごとのボックス指標
+
+物体検出とセグメンテーションの結果は辞書との互換性を維持し、`results.box.image_metrics`も公開します。可視化が無効でも、可視化の照合規則を使って、各ファイル名に`precision`、`recall`、`f1`、`tp`、`fp`、`fn`を対応付けます。セグメンテーションでも、ここではボックスを数えます。同じベース名が重複する場合、2つ目以降は完全なパスを使います。分母が0の場合は0.0を返します。これらの記録は分散ランク間では集約しません。
 
 ## 速度キー
 
@@ -189,7 +259,7 @@ FOMOは動作が変わらない例外です。バリデーターが常にこのl
 
 `save_json=True`は、物体検出では`predictions.json`、セグメンテーションでは`predictions_bbox.json`と`predictions_masks.json`を書き込みます。OBBは対応しておらず、その旨を報告します。
 
-`save_plots=True`は`plots/`サブディレクトリへ書き込みます。OpenCVがインストールされている場合、物体検出では`box_metrics.png`、クラスごとのAPとrecallのチャート、precision-recallと信頼度の曲線、confusion matrix、アノテーション付きサンプル画像を生成します。セグメンテーションは各項目のマスク版を追加し、姿勢推定には独自の指標と曲線一式があります。その他のバリデーターはプロットを実装していません。画像分類、セマンティック、panoptic、深度、法線、エッジ、復元、matte、OCR、OBB、pointはいずれも何も書き込みません。プロットの失敗は警告され、実行を中止しません。
+`save_plots=True`（またはエイリアスの`plots=True`）は`plots/`サブディレクトリへ書き込み、`pip install "libreyolo[plots]"`でインストールされるmatplotlibを必要とします。物体検出では、`box_metrics.png`、クラスごとのAPと再現率のチャート、適合率・再現率曲線と信頼度曲線、`f1_conf_box.png`のクラスごとのF1曲線、件数で表した`confusion_matrix.png`と各正解クラスに対する割合で表した`confusion_matrix_normalized.png`の混同行列、さらにOpenCVがインストールされている場合はアノテーション付きのサンプル画像を生成します。セグメンテーションは、指標チャート、クラスごとのチャート、適合率・再現率曲線と信頼度曲線のマスク版を追加します。F1曲線と混同行列はボックス単位のままです。姿勢推定には独自の指標と曲線一式があります。画像分類は、クラス数が2,000を超える場合を除き、2つの混同行列ファイルを書き込みます。その他のバリデーターはプロットを実装していません。セマンティック、panoptic、深度、法線、エッジ、復元、matte、OCR、OBB、pointはいずれも何も書き込みません。プロットの失敗は警告され、実行を中止しません。
 
 `visualize=True`は、物体検出とセグメンテーションではクラスを考慮したボックスのTP/FP/FN画像を、ImageFolder分類ではラベルとtop-1の比較画像を、`visualize/errors/`と`visualize/correct/`に書き出します。照合にはIoU 0.5と信頼度`max(0.25, conf)`を使います。デフォルトは`visualize=False`、`show_labels=True`、`show_conf=True`です。未対応タスクとV-JEPA 2のクリップ検証は可視化を拒否します。
 
@@ -204,7 +274,3 @@ FOMOは動作が変わらない例外です。バリデーターが常にこのl
 ## 関連項目
 
 - バリデーターが読み取る分割キーと形式については[データセット](/docs/train/datasets)を参照してください。
-
-## 画像ごとのボックス指標
-
-物体検出とセグメンテーションの結果は辞書との互換性を維持し、`results.box.image_metrics`も公開します。可視化が無効でも、可視化の照合規則を使って、各ファイル名に`precision`、`recall`、`f1`、`tp`、`fp`、`fn`を対応付けます。セグメンテーションでも、ここではボックスを数えます。同じベース名が重複する場合、2つ目以降は完全なパスを使います。分母が0の場合は0.0を返します。これらの記録は分散ランク間では集約しません。

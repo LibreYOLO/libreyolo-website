@@ -44,7 +44,7 @@ snippets:
         # 行を通常のdictで取得し、次にJSONへ変換
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## Resultsオブジェクト
@@ -89,6 +89,8 @@ source_hash: 173c542fb675892e
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | galleryを伴うembed |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals`は`result.normal_map`の読み書き可能な別名です。
 
@@ -296,3 +298,29 @@ dictを返し、`save_obj(path, index=0)`は1つのメッシュを書き出し�
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)`は、float32のアクションチャンク`(T, D)`を表します。`first`は最初の行を返し、スライスでタイムステップを選択します。値はポリシーのデータセットの単位を維持します。`names`はアクションの各次元、`fps`は制御レート、`instruction`は条件付けのテキストを表します。
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`は、合成された1枚の画像を`(H, W, 3)`のuint8 RGBとして保持します。`array`はnumpyビューを、`image`は`PIL.Image`を返します。`prompt`は画像を生成したテキスト、`seed`は同じモデルと設定でその画像を再現する整数です。`params`は呼び出しの残りの内容、つまり`model`、`imgsz`、有効なすべてのファミリー設定を記録します。`save(path)`は画像を書き出し、PNGの場合は`to_dict()`（形状、プロンプト、シード、params）もJSONとして`libreyolo`テキストチャンクに格納します。
+
+生成結果では、`Results.boxes`と`Results.path`は`None`、`orig_shape`は画像自身の`(H, W)`、`len(result)`は1です。`Results.save(path)`は画像を書き出し、`plot()`はそれをPIL画像として返し、`summary()`はペイロードの記録を含む1行を返します。
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`は、生成された1つの3Dオブジェクトを、オブジェクト自身の座標系でのガウシアンスプラットとして保持します：z軸が上で、立方体`[-0.5, 0.5]^3`の中心に配置されます。各行が1つのガウシアンです。
+
+| メンバー | 戻り値 |
+|---|---|
+| `xyz` | オブジェクト座標系での`(N, 3)`の位置 |
+| `scales` | ローカル軸に沿った`(N, 3)`の標準偏差（対数ではなく線形） |
+| `rotations` | `(N, 4)`の単位クォータニオン`(w, x, y, z)`。ローカル軸からオブジェクト座標系への回転 |
+| `opacities` | `[0, 1]`の範囲の`(N,)` |
+| `sh` | `(N, K, 3)`の球面調和関数の色係数。0次が先頭 |
+| `colors` | 0次の項から求めた`[0, 1]`の範囲の`(N, 3)`のRGB |
+| `camera` | 推定された入力ビュー：ラジアン単位の`yaw`と`pitch`、オブジェクト単位の`radius`、度単位の垂直`fov`、切り抜きの`margin` |
+| `seed`、`params` | オブジェクトを再現するシードと呼び出し設定 |
+| `input_image` | モデル自身の前処理を経てモデルが受け取ったRGB画像 |
+
+`len(gaussians)`は`N`で、`gaussians[gaussians.opacities > 0.1]`は選択した行を保持する新しい`Gaussians`を返します。`save(path)`は拡張子に応じて書き出します。`.ply`は標準の3D Gaussian Splattingレイアウトで、対数スケールとロジットの不透明度を使い、スプラットビューアーが想定するとおりy軸が上になるよう回転し、シード、カメラ、paramsをJSONとして保持する`comment libreyolo`ヘッダー行を含みます。高次の色（`K > 1`）を持つペイロードは、`.ply`では`NotImplementedError`を送出します。`.splat`はガウシアンあたり32バイトのコンパクトなWeb形式です。`render(size=512, background=(0, 0, 0))`は、ガウシアンのラスタライズではなく簡易確認用として、推定された入力ビューからの点レンダリングを`PIL.Image`で返します。
+
+生成された3D結果では、`Results.boxes`は`None`です。`path`、`orig_shape`、`orig_img`はソース画像を表し、`len(result)`は1です。`Results.save(path)`はオブジェクトを書き出し、`plot()`はその点レンダリングを返し、`summary()`はペイロードの記録を含む1行を返します。

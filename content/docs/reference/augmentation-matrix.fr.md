@@ -39,7 +39,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## Réglages
@@ -59,7 +59,7 @@ définit donc `mosaic_prob`.
 | `mosaic_scale` | Plage d'échelle aléatoire de la transformation affine |
 | `mixup_scale` | Plage de variation d'échelle appliquée à l'image partenaire MixUp |
 | `shear` | Plage de cisaillement aléatoire de la transformation affine, en degrés |
-| `perspective` | Amplitude de la transformation projective de la transformation affine |
+| `perspective` | Force de la transformation projective ajoutée à la transformation affine : les coins du canevas se déplacent vers l'intérieur d'au plus `min(perspective * 100, 0.2)` fois la moitié du côté du canevas, par axe ; `0` la désactive |
 | `flipud` | Probabilité de retournement vertical |
 | `no_aug_epochs` | Dernières époques entraînées sans augmentation forte |
 | `auto_augment` | Politique AutoAugment de classification : randaugment, autoaugment ou augmix |
@@ -125,13 +125,13 @@ Le pipeline de type DETR est une transformation sans mosaic. La distorsion photo
 | Archétype | Familles |
 |---|---|
 | Style YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| Style DETR | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Classification | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Sémantique | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| Style DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Classification | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Sémantique | `segformer`, `unet`, `lingbotvision` |
 | Restauration | `nafnet` |
 
-Vingt-cinq familles sont couvertes. Une famille absente de cette liste renvoie
+Trente et une familles sont couvertes. Une famille absente de cette liste renvoie
 un ensemble ignored vide, aucun avertissement n'est donc émis à son sujet.
 
 ## Écarts
@@ -143,6 +143,8 @@ un ensemble ignored vide, aucun avertissement n'est donc émis à son sujet.
 | `rtdetr` | `flipud` ignoré |
 | `rtdetrv2` | `flipud` ignoré |
 | `fomo` | `perspective` et `flipud` ignorés |
+| `ppyoloe` | `flipud` ignoré : la recette source utilise à la place une rotation aléatoire de 90 degrés |
+| `gtr` | `mosaic_prob` et `mixup_prob` utilisés, pendant les `mosaic_epochs` premières époques ; `degrees`, `translate` et `mosaic_scale` façonnent la transformation affine qui suit le mosaic |
 | `ec` | `hsv_prob`, `degrees` et `translate` utilisés pour `task="pose"` uniquement ; detect et segment utilisent des recettes photométriques fixes |
 | `dinov2` | Le groupe de classification est utilisé pour `task="classify"` uniquement |
 

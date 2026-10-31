@@ -48,7 +48,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## Синтаксис
@@ -76,6 +76,7 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `imgsz` | | Розмір вхідного зображення: `640` (квадрат) або `480x640` (HxW). Якщо не задано, береться власний розмір входу моделі |
 | `classes` | | Фільтр за ID класів, напр. `[0,2,5]`. Приймається й одне ціле число |
 | `max_det` | `300` | Максимум виявлень на зображення |
+| `agnostic_nms` | `false` | NMS без урахування класів: з рамок, що перекриваються понад `iou`, лишається тільки та, що має найвищу оцінку, незалежно від їхніх класів. Для detect, segment, pose і OBB |
 | `half` | `false` | Інференс у FP16 (лише CUDA, потрібна підтримка з боку моделі) |
 | `save` | `false` | Зберігати анотовані зображення |
 | `batch` | `1` | Кількість зображень на один прямий прохід для джерел-каталогів. Значення понад 1 вмикає справжній батчевий інференс на моделях, які його підтримують |

@@ -114,7 +114,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## Cài đặt
@@ -160,7 +160,9 @@ Khi giữ mặc định, trainer theo công thức ADE20K trong bài báo SegFor
 ở learning rate cơ sở của backbone với decode head được huấn luyện ở mức gấp 10
 lần, weight decay ở mọi nơi trừ LayerNorm và convolution vị trí Mix-FFN, cùng
 lịch suy giảm tuyến tính có warmup. Khả năng hội tụ đầu cuối của các kích thước
-lớn b3 đến b5 chưa được xác thực.
+lớn b3 đến b5 chưa được xác thực. `libreyolo train` bắt đầu từ cùng công thức đó,
+và khi không có `name=` các lần chạy của nó được ghi vào
+`runs/train/segformer_exp`.
 
 Xem [huấn luyện](/docs/train) để biết dataset, augmentation, multi-GPU và logger.
 

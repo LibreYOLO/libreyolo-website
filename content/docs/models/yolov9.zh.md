@@ -14,7 +14,7 @@ keywords:
   - 小目标检测
   - yolov9 导出 onnx
   - GELAN
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -122,7 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 624f3e70d2937683
+source_hash: c322dd68d42cdf24
 ---
 
 ## 安装
@@ -175,9 +175,11 @@ stride-4 模型没有自己已发布的 COCO 检查点，所以 `True` 在这里
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 
-新的标准检测微调会启用仅用于训练的 PGI 分支，`aux_weight=0.25`。`max_labels=300`；SGD 动量在三轮内从 0.8 预热到 0.937。旧的单 head 检查点继续使用原计算图续训。预测和导出使用主 head。`letterbox_pad=None` 继承检查点记录：未标记的权重使用 `topleft`，新的官方转换权重记录为 `center`。
+基础模型可以在主 head 旁边训练一个 PGI 辅助分支。这个分支只用于训练：预测和导出使用主 head。起始权重带有 PGI 张量，或者从头训练时，运行就会挂上它。已发布的基础检查点都不带，所以从它们微调只训练主 head，并会记录一条日志说明这一点。`aux_weight=0.25` 无论如何都会按这个损失权重挂上一个新分支，`aux_weight=0` 则保持关闭。断点续训的运行沿用它检查点里的 PGI 设置。在 `m` 和 `c` 尺寸上，这个分支就是上游的那个：输入图像上的第二个骨干，它的各个阶段由 `CBFuse` 与主骨干的 `CBLinear` 抽头相加，再加上它自己的 head，在 80 个类别下有 12.8M 和 25.7M 仅用于训练的参数。端到端模型和步幅为 4 的模型没有 PGI 分支。
 
-YOLO9 和 YOLOX 的 mosaic 最多抽取 20 次，优先选择有标注的搭配图像；YOLO9 MixUp 使用相同策略。非 RGB 输入配置见[事件直方图](/docs/train/event-histograms)。
+三个变体在每个优化器步之前都把梯度 L2 范数裁剪到 10；`clip_max_norm=0` 关闭裁剪。标签分配用 fp32 给锚点打分，在 float16 autocast 下也是如此。`max_labels=300` 限制每张训练图像保留的检测框数，超过的检测框会被丢掉，只发出一次警告；分配所用的内存取决于每张图像真实的检测框，而不是这个上限。SGD 动量在三轮内从 0.8 预热到 0.937。`letterbox_pad=None` 继承检查点记录：未标记的权重使用 `topleft`，新的官方转换权重记录为 `center`。
+
+YOLO9 和 YOLOX 的 mosaic 最多抽取 20 次，优先选择有标注的搭配图像；YOLO9 MixUp 使用相同策略。MixUp 默认关闭（`mixup_prob=0`）。开启时，混合比例从 Beta(1, 1) 中抽取，即在 [0, 1] 上均匀分布，与 MultimediaTechLab/YOLO 一致。非 RGB 输入配置见[事件直方图](/docs/train/event-histograms)。
 
 ## 验证
 
@@ -216,6 +218,8 @@ mAP 50-95，在任何采用你训练时所用格式的数据集上测量。
 ## 许可证
 
 <provenance-box>
+
+这三个变体的代码都移植自 [MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) 的提交 `c4cb5f6f`（MIT）。端到端模型的一对一预测器沿用 Yiqun Chen 的 [DATE](https://github.com/YiqunChen1999/date)（Apache-2.0）的设计，为 LibreYOLO 重新实现，没有复制任何 DATE 代码。步幅为 4 的层级是 LibreYOLO 自己的代码。
 
 步幅为 4 的航拍检查点预测 VisDrone 类别。请遵循权重仓库记录的发布者许可声明。
 

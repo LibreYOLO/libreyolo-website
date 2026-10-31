@@ -11,7 +11,7 @@ keywords:
   - libreyolo 命令行
   - libreyolo 离线使用
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## 我该从哪个模型开始？
@@ -53,7 +53,7 @@ CNN 检测器选 YOLOv9，transformer 检测器选 RF-DETR。两者都在旗舰�
 
 一个以指标名为键的字典。检测任务的键包括
 `metrics/precision`、`metrics/recall`、`metrics/mAP50` 和
-`metrics/mAP50-95`，检测和分割的结果还会在 `metrics.box` 上携带逐图像结果。其他任务返回对它们有意义的键，比如分类的 `metrics/accuracy_top1`，或者全景分割的 `metrics/PQ`、`metrics/SQ` 和 `metrics/RQ`。
+`metrics/mAP50-95`，检测和分割的结果还会在 `metrics.box` 上携带逐图像结果以及逐类别的查准率、查全率和 F1 曲线。检测、分割和分类的结果带有 `metrics.confusion_matrix`，分类还会加上 `metrics.top1` 和 `metrics.top5`。其他任务返回对它们有意义的键，比如分类的 `metrics/accuracy_top1`，或者全景分割的 `metrics/PQ`、`metrics/SQ` 和 `metrics/RQ`。见[验证与指标](/docs/train/validation)。
 
 ## 怎么对文件夹、视频或摄像头运行？
 

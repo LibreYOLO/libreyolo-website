@@ -4,11 +4,12 @@ families:
   - dfine
 seo_title: 'D-FINE: tinh chỉnh, xác thực và xuất theo MIT'
 description: >-
-  Dùng D-FINE trong LibreYOLO để phát hiện đối tượng và phân đoạn thực thể. Cài đặt, dự đoán, tinh chỉnh, xác
-  thực và xuất với mã nguồn dùng giấy phép MIT.
+  Dùng D-FINE trong LibreYOLO để phát hiện đối tượng và phân đoạn thực thể. Cài
+  đặt, dự đoán, tinh chỉnh, xác thực và xuất với mã nguồn dùng giấy phép MIT.
 lead: >-
-  Một detection transformer biểu diễn lại hồi quy box thành phân phối xác suất trên từng cạnh của box, được
-  tinh chỉnh qua các lớp decoder. LibreYOLO hỗ trợ mô hình này cho phát hiện và phân đoạn thực thể.
+  Một detection transformer biểu diễn lại hồi quy box thành phân phối xác suất
+  trên từng cạnh của box, được tinh chỉnh qua các lớp decoder. LibreYOLO hỗ trợ
+  mô hình này cho phát hiện và phân đoạn thực thể.
 keywords:
   - D-FINE
   - detection transformer
@@ -49,11 +50,14 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("LibreDFINEn.pt")
-        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8, lr0=2e-4)
+
+        model.train(data="my-dataset.yaml", epochs=50, imgsz=640, batch=8,
+        lr0=2e-4)
     - label: CLI
       language: bash
       code: |
@@ -67,10 +71,15 @@ snippets:
           task=segment epochs=50 imgsz=640
     - label: Phân đoạn từ trọng số phát hiện
       language: bash
-      code: |
-        # Trọng số phát hiện không có mask head, vì vậy đây là một transfer rõ ràng:
-        # head bắt đầu khi chưa được huấn luyện và chỉ hữu ích sau khi huấn luyện. Việc
+      code: >
+        # Trọng số phát hiện không có mask head, vì vậy đây là một transfer rõ
+        ràng:
+
+        # head bắt đầu khi chưa được huấn luyện và chỉ hữu ích sau khi huấn
+        luyện. Việc
+
         # chỉ định task=segment ở đây chính là thao tác cho phép transfer.
+
         libreyolo train model=LibreDFINEn.pt data=my-dataset.yaml \
           task=segment epochs=50 imgsz=640
     - label: LoRA
@@ -121,9 +130,11 @@ snippets:
         model.export(format="tensorrt", imgsz=640, half=True)
     - label: CLI
       language: bash
-      code: |
+      code: >
         libreyolo export model=LibreDFINEn.pt format=onnx imgsz=640
-        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640 half=True
+
+        libreyolo export model=LibreDFINEn.pt format=tensorrt imgsz=640
+        half=True
     - label: Dùng tệp đã xuất
       language: python
       code: |
@@ -135,7 +146,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 ## Cài đặt
 
@@ -175,7 +186,7 @@ Quá trình huấn luyện bắt đầu từ checkpoint đã phát hành cho c�
 
 <code-tabs name="train" />
 
-Khi giữ nguyên thiết lập, trainer chạy 132 epoch ở `lr0=2e-4` với `amp=True` và `amp_dtype="float16"`, batch 16 và early stopping sau 50 epoch không có cải thiện. Trọng số phát hiện là điểm bắt đầu hợp lệ cho huấn luyện phân đoạn, nhưng chỉ dưới dạng transfer rõ ràng vì mask head bắt đầu khi chưa được huấn luyện và nếu không sẽ trả về các mặt nạ vô nghĩa. Truyền `task=segment` cho CLI chính là thao tác cho phép điều này. Tuyến Python hẹp hơn: phải khởi tạo trực tiếp `LibreDFINE` với `allow_detect_to_segment_transfer=True` vì factory `LibreYOLO()` không nhận đối số này, và việc khởi tạo trực tiếp không tải xuống nên tệp trọng số phải có sẵn trên đĩa.
+Khi giữ nguyên thiết lập, trainer chạy 132 epoch ở `lr0=2e-4` với `amp=True` và `amp_dtype="float16"`, batch 16 và early stopping sau 50 epoch không có cải thiện. `libreyolo train` bắt đầu từ cùng công thức đó cho cả hai tác vụ: AdamW với lịch cosine phẳng, `weight_decay=1e-4`, 2 epoch warmup, cắt chuẩn gradient ở 0.1, và không dùng tăng cường mosaic, MixUp, HSV hay affine. Khi không có `name=`, các lần chạy của nó được ghi vào `runs/train/dfine_exp`. Trọng số phát hiện là điểm bắt đầu hợp lệ cho huấn luyện phân đoạn, nhưng chỉ dưới dạng transfer rõ ràng vì mask head bắt đầu khi chưa được huấn luyện và nếu không sẽ trả về các mặt nạ vô nghĩa. Truyền `task=segment` cho CLI chính là thao tác cho phép điều này. Tuyến Python hẹp hơn: phải khởi tạo trực tiếp `LibreDFINE` với `allow_detect_to_segment_transfer=True` vì factory `LibreYOLO()` không nhận đối số này, và việc khởi tạo trực tiếp không tải xuống nên tệp trọng số phải có sẵn trên đĩa.
 
 `lora=True` áp dụng cho tác vụ phát hiện. Huấn luyện phân đoạn từ chối tùy chọn này và hướng đến `freeze='backbone'` thay thế vì mask head chưa được kiểm thử với adapter. Trên Apple silicon, trainer chuyển toàn bộ lượt chạy sang CPU: backward pass của phép nhân ma trận theo bin của Integral gặp lỗi biên dịch Metal. Inference trên MPS không bị ảnh hưởng.
 

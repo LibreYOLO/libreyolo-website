@@ -15,7 +15,6 @@ keywords:
   - прозрачный png вырезать объект
   - dichotomous image segmentation
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Предсказание матте
@@ -97,7 +96,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 69fbc1d967b2d546
+source_hash: 4079231f6f41f236
 ---
 
 ## Определение
@@ -133,6 +132,11 @@ FeyNobg свои.
 считается лицензия в репозитории Hugging Face конкретного чекпойнта.
 
 [BEN2](/docs/models/ben2) добавляет удаление фона при фиксированном размере 1024. [ViTMatte](/docs/models/vitmatte) принимает изображение и трёхуровневую `trimap=`, отмечающую фон, неизвестные пиксели и передний план.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) управляется текстом:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` возвращает объединение
+альфа-матов всех экземпляров, которые соответствуют фразе. Это vision-language
+модель, которой нужен extra `vlm`, а её `val()` и `export()` вызывают ошибку.
 
 ## Предсказание
 

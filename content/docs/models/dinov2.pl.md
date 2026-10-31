@@ -174,7 +174,7 @@ snippets:
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
 
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## Instalacja
@@ -186,6 +186,9 @@ backbone DINOv2, dlatego potrzebny jest ten sam dodatek.
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Bez niego wczytanie checkpointu lub nazwy modelu DINOv2 kończy się błędem, który
+podaje tę linię instalacji.
 
 ## Predykcja
 

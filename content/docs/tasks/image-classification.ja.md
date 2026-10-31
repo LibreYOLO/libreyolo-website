@@ -88,11 +88,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val()はオブジェクトではなく通常のdictを返す
+        # metrics/キーのdictで、top1、top5、confusion_matrixも保持
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -120,7 +121,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 90aed355e0ddf5e3
+source_hash: 7934244e90056e77
 ---
 
 ## 定義
@@ -177,15 +178,19 @@ dataset/
 
 ResNet、ConvNeXt、ConvNeXt V2、MobileNetV4、EfficientNetV2、DINOv2は、`cls_pw`または`class_weights`による損失の重み付けに対応します。分類の`scale`はクロップ面積、`crop_pct`は評価時のクロップを制御します。[データ拡張](/docs/train/augmentations)を参照してください。
 
+リサイズフィルターはモデルの一部です。学習の前に`model.interpolation`を`"bilinear"`、`"bicubic"`、`"nearest"`、`"bilinear_no_antialias"`のいずれかに設定してください。学習、`val()`、`predict()`、INT8キャリブレーション、エクスポートがすべてこれを使い、`save()`、`best.pt`、`last.pt`が記録するため、再読み込みしても維持されます。それ以外の名前は`ValueError`を送出します。`"bilinear_no_antialias"`は、`RandomResizedCrop`も含めてあらゆる場所でアンチエイリアスなしのプレーンなバイリニアでリサイズします。アンチエイリアスなしのランタイムリサイズの後ろで動かすモデル向けです。MobileNetV4、ResNet、ConvNeXt、ConvNeXt V2、EfficientNetV2、DeiT、Swin、ViTはデフォルトがバイキュービックで、AlexNetとVGGはバイリニアです。
+
 ## 検証
 
-`val()`はデータセットルートの`val/`分割に対して計算した`metrics/`キーを持つ通常の辞書を返します。
+`val()`はデータセットルートの`val/`分割に対して計算した`metrics/`キーを持つ辞書を返します。
 
 <code-tabs name="val" />
 
 `metrics/accuracy_top1`は、最高スコアのクラスが正解だった画像の割合です。主要な数値であり、学習でも最良エポックの選択に使用します。`metrics/accuracy_top5`は、正解クラスが上位5クラスのどこかに含まれた画像の割合です。データセットのクラス数が少ないほど情報量も少なくなります。辞書にはtop-1値のコピーである`fitness`も含まれます。
 
 ImageFolderの検証では、マクロ平均の`metrics/precision`、`metrics/recall`、`metrics/f1`も返します。検証対象に存在するクラスで平均し、一度も予測されなかったクラスの適合率は0として計算します。デフォルトの適合度は引き続きtop-1精度です。検証とキャリブレーションではモデルの評価用変換を使います。
+
+結果は3つの属性を持つ`dict`のサブクラスです。`top1`と`top5`は2つの精度の値を保持し、`confusion_matrix`は各画像をtop-1クラスとラベルの組で数え、`matrix[predicted, true]`でインデックスします。`plots=True`は、件数を`confusion_matrix.png`に、各ラベルに対する割合を`confusion_matrix_normalized.png`に書き出します。クラス数が2,000を超えると、密な行列とそのプロットは使えず、代わりに`nonzero()`、`tp_fp()`、`class_accuracy()`が件数を読み取ります。[検証と指標](/docs/train/validation#confusion-matrix)を参照してください。
 
 ## エクスポート
 

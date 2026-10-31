@@ -1,25 +1,59 @@
 ---
-title: Actualizar a 1.6.0
-seo_title: Actualizar LibreYOLO de 1.5.0 a 1.6.0
+title: Actualizar a 1.7.0
+seo_title: Actualizar LibreYOLO de 1.6.0 a 1.7.0
 description: >-
-  Pasos de migración para preprocesamiento, valores por defecto de
-  entrenamiento, directorios de ejecución, archivos fijados, QAT y cargadores de
-  datos en LibreYOLO 1.6.0.
+  Pasos de migración para checkpoints de YOLO9, nombres de módulos y recetas de
+  entrenamiento, carpetas de ejecución del CLI, la matriz de confusión y los
+  nuevos errores en LibreYOLO 1.7.0.
 lead: >-
-  La versión 1.6.0 cambia el preprocesamiento, los valores por defecto de
-  entrenamiento y el manejo de checkpoints. Vuelve a validar las referencias
-  guardadas y fija explícitamente los valores anteriores para reproducir una
-  ejecución antigua.
+  La versión 1.7.0 mantiene la carga de los checkpoints antiguos de YOLO9 con
+  los mismos boxes en float. Cambia el entrenamiento de la familia YOLO9, los
+  nombres que el código ve dentro de la red y algunos contratos de validación y
+  predicción.
 keywords:
   - actualizar libreyolo
-  - migrar libreyolo 1.5.0
+  - migrar libreyolo 1.6.0
   - libreyolo cambios incompatibles
-  - allow_experimental eliminado
-  - yolox bn eps
-  - faster-coco-eval por defecto
-last_verified: 1.6.0
-source_hash: e9c7cb5271aa4a81
+  - nombres de módulos yolo9
+  - clip_max_norm
+  - matriz de confusión
+last_verified: 1.7.0
+source_hash: 895bcd7425f0052f
 ---
+
+## De 1.6.0 a 1.7.0
+
+- Los checkpoints de YOLO9, YOLO9-E2E y YOLO9-P2 guardados por 1.7.0 usan nombres de tensor nuevos y no cargan en 1.6.x: 1.6.x carga los de YOLO9 y YOLO9-P2 con un aviso de claves ausentes y no predice ningún box, y lanza un error de discrepancia de `model_family` con los de YOLO9-E2E. Actualiza todos los entornos que los lean. Los checkpoints float, cuantizados y de entrenamiento escritos por versiones anteriores cargan en 1.7.0, y las exportaciones ONNX no se ven afectadas.
+
+- El código que accede a `model.model` de un modelo de la familia YOLO9 ve los nombres de módulo de MultimediaTechLab/YOLO, sin alias. `DDetect` es `YOLO9Head` (`anchor_convs` / `class_convs`), `RepConvN` es `RepConv`, `RepNBottleneck` es `Bottleneck`, `DFL` es `Anchor2Vec` (`anchor2vec`), `nc` es `num_classes`, y las subcapas de bloque son `conv1`/`conv2`/`bottleneck`. En YOLO9-E2E, `YOLO9E2EDetect` es `YOLO9E2EHead` y `one2one_cv2` / `one2one_cv3` son `one_to_one_anchor_convs` / `one_to_one_class_convs`. `LibreYOLO9Model.fuse()`, `RepConvN.fuse_convs()`, `Conv.forward_without_bn()`, `Concat` y `yolo9.utils.decode_boxes` se han eliminado. El [changelog](/docs/changelog) lista cada renombrado.
+
+- Los nombres de nodo de ONNX siguen los nuevos nombres de módulo en la cabeza, el backbone y el neck, por ejemplo `/head/anchor_convs.0/...`. Actualiza las herramientas que dependen de nombres de nodo, como las configuraciones de nodos finales de Hailo. Las entradas, las salidas y los nombres de salida del modelo no cambian.
+
+- Un fine-tuning de YOLO9 a partir de pesos sin tensores PGI, lo que incluye los `LibreYOLO9{t,s,m,c}.pt` publicados, entrena solo la cabeza principal, como en 1.5.0; 1.6.0 añadía una rama PGI con inicialización aleatoria con `aux_weight=0.25`. Los pesos que traen tensores PGI, y las ejecuciones desde cero, siguen entrenando con PGI. Pasa `aux_weight=0.25` para añadir una rama nueva de todos modos, o `aux_weight=0` para forzar que no se añada.
+
+- Cuando se añade PGI, YOLO9-m y YOLO9-c construyen la rama auxiliar de MultimediaTechLab: 12.8M (m) y 25.7M (c) de parámetros exclusivos del entrenamiento con 80 clases, frente a 7.5M y 10.2M, así que el entrenamiento PGI de estos tamaños necesita más memoria y tiempo por paso. Un checkpoint de entrenamiento m/c de 1.6.0 se reanuda y se ajusta con la rama con la que se entrenó. La inferencia y YOLO9-t/s no cambian.
+
+- YOLO9, YOLO9-E2E y YOLO9-P2 recortan la norma L2 del gradiente a 10, y su asignador de entrenamiento puntúa los anchors en fp32, así que los positivos elegidos bajo AMP en fp16 pueden diferir. Pasa `clip_max_norm=0` para el recorte de 1.6.0; una ejecución iniciada en 1.6.0 y reanudada en 1.7.0 también recorta salvo que lo pases. La asignación en fp32 no tiene interruptor.
+
+- Un `perspective` distinto de cero deforma por desplazamiento de esquinas en cada familia que usa el warp afín compartido (YOLO9 y sus variantes E2E y P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR y RT-DETRv2), incluidas las ejecuciones reanudadas desde un checkpoint de 1.6.0 que lo fijaba. Los valores de `0.002` y superiores dan la misma deformación máxima, y los valores negativos lanzan `ValueError`. Ningún ajuste reproduce el warp de 1.6.0; el valor por defecto `perspective=0` no cambia.
+
+- El pipeline de mosaic de YOLO9 toma la proporción de mixup de Beta(1, 1) en lugar de Beta(32, 32), sin ajuste para el valor antiguo. El entrenamiento por defecto de YOLOv7 cambia, porque YOLOv7 activa mixup por defecto. YOLO9, YOLO9-E2E, YOLO9-P2, RT-DETR y RT-DETRv2 cambian solo cuando mixup está activado.
+
+- `libreyolo train` sin `name=` escribe las ejecuciones de EC, D-FINE, SegFormer y LingBot-Vision en `runs/train/ec_exp`, `dfine_exp`, `segformer_exp` y `lingbotvision_exp` en lugar de `runs/train/exp`, los probes de V-JEPA 2 en `runs/train/train`, y las ejecuciones de YOLO9-P2 en `runs/train/yolo9_exp`. Pasa `name=exp` para la ruta antigua, o `name=yolo9_p2_exp` para YOLO9-P2.
+
+- `libreyolo train` arranca D-FINE, SegFormer y LingBot-Vision desde sus propias recetas. Para D-FINE eso es 132 épocas, `lr0=2e-4`, `weight_decay=1e-4`, 2 épocas de calentamiento y sin aumento de mosaic, mixup, HSV ni afín. Para enviar los valores que enviaba 1.6.0, pasa `epochs=300 optimizer=sgd lr0=0.01 weight_decay=5e-4 warmup_epochs=5 mosaic=1.0 mixup=1.0 hsv_prob=1.0 degrees=10 translate=0.1 shear=2.0`.
+
+- `libreyolo.validation.ConfusionMatrix` indexa `matrix[predicted, true]` (antes `[actual, predicted]`), cuenta las detecciones con `conf_thres=0.25` (antes 0.15), recibe `names=` y `task=` solo como argumentos de palabra clave, y su `matrix` ya no se puede reasignar. Transpón el código que indexaba la matriz antigua, y pasa `conf_thres=0.15` para los recuentos antiguos. `plots=True` escribe los recuentos en `confusion_matrix.png` y el gráfico normalizado en `confusion_matrix_normalized.png`.
+
+- `predict(agnostic_nms=True)` suprime los boxes solapados entre clases en lugar de avisar. Las tareas sin boxes lanzan `ValueError`, `LibreEnsemble` y HRNet lanzan `NotImplementedError`, y el nivel SAM rechaza la palabra clave con `TypeError`; quita el argumento de esas llamadas.
+
+- Un `interpolation` de clasificador desconocido lanza `ValueError`, incluidos los modos de torchvision `LANCZOS`, `BOX`, `HAMMING` y `NEAREST_EXACT`. Usa `bilinear`, `bicubic`, `nearest` o `bilinear_no_antialias`.
+
+- Vuelve a ejecutar la validación antes de comparar con los números de 1.6.0 para `val(single_cls=True)` en un modelo entrenado con varias clases, los datasets de segmentación que mezclan filas solo de box y de polígono, y RTMDet-Ins, que conserva hasta `max_det=300` máscaras por imagen por defecto; pasa `max_det=100` para el ajuste de MMDetection.
+
+- Sin `libreyolo[rfdetr]`, las llamadas del CLI con un nombre de modelo RF-DETR o DINOv2 salen con el código de error JSON `model_load_failed` en lugar de `model_not_found`, y el mensaje nombra `pip install libreyolo[rfdetr]`.
+
+Consulta el [changelog](/docs/changelog) para la versión completa.
 
 ## De 1.5.0 a 1.6.0
 

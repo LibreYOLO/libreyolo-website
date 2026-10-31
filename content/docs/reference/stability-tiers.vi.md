@@ -41,7 +41,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Cấp hỗ trợ xuất
@@ -111,9 +111,9 @@ Cột Nhãn là tên ngắn mà website dùng cho cùng nhóm ở đầu trang m
 | `g2` | Supported | 19 | Tập phạm vi họ có thể huấn luyện bổ sung |
 | `g3` | Chỉ inference | 44 | Các họ không có bản triển khai huấn luyện |
 | `g4` | Museum | 5 | Họ lịch sử có phạm vi inference |
-| `s` | Cấp sibling | 36 | API sibling (SAM, open-vocab, VLM, grounding, zero-shot) được kiểm tra riêng |
+| `s` | Cấp sibling | 40 | API sibling (SAM, open-vocab, VLM, grounding, zero-shot) được kiểm tra riêng |
 
-Tổng cộng 118 họ trong sáu nhóm. `g3` là nhóm lớn nhất, vì một phần lớn
+Tổng cộng 122 họ trong sáu nhóm. `g3` là nhóm lớn nhất, vì một phần lớn
 registry là dòng chỉ inference thay vì detector đang được huấn luyện tích cực.
 
 Với người đọc chọn mô hình, nhóm cho biết nơi kỳ vọng ưu tiên kỹ thuật, không
@@ -146,7 +146,7 @@ Họ trong `g3` hoặc `g4` không có bản triển khai huấn luyện và g�
 báo lỗi. Đây là thuộc tính mã của họ, không phải do nhóm gây ra; nhóm ghi nhận
 sự thật đó.
 
-Trong 118 họ, 37 họ có thể huấn luyện: mọi họ `g0`, `g1` và `g2`, cộng thêm
+Trong 122 họ, 37 họ có thể huấn luyện: mọi họ `g0`, `g1` và `g2`, cộng thêm
 Qwen3-VL qua `LibreVLM` và SmolVLA, ACT và Diffusion Policy qua `LibreVLA`.
 
 Với họ có thể huấn luyện, việc một nút augmentation có đến pipeline hay không

@@ -122,7 +122,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## Instalación
@@ -178,9 +178,10 @@ rechazan durante la validación, y se rechaza cualquier dispositivo que no sea l
 
 `delegate` acepta `"xnnpack"` y nada más en esta versión.
 
-Las exportaciones de clasificación llevan dos claves de metadatos extra, `crop_pct` e
-`interpolation`, para que el runtime pueda reproducir la política de redimensionado y
-recorte central de la familia.
+Las exportaciones de clasificación llevan el preprocesado de evaluación del modelo
+como metadatos, `crop_pct` e `interpolation`, además de `norm_mean`, `norm_std` y
+`resize_mode` en las familias que los definen, para que el runtime reproduzca el
+redimensionado y el recorte central del modelo.
 
 Las entradas bloqueadas nombran el fallo concreto en lugar de una categoría. La
 detección y la segmentación de D-FINE llegan a una lectura de `ContextVar` no

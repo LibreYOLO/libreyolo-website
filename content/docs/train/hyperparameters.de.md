@@ -131,7 +131,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Argumente festlegen
@@ -243,6 +243,8 @@ die Backbone-Gruppe relativ zum Kopf, `clip_max_norm` legt die
 Gradientenbegrenzung fest und SegFormer führt seinen Decoder-Kopf mit
 `head_lr_mult` bei der zehnfachen Lernrate des Backbones aus. Diese Felder gehören
 zur Konfigurationsunterklasse der Familie, nicht zur Basisklasse.
+
+`clip_max_norm` beschneidet die L2-Norm des Gradienten vor jedem Optimizer-Schritt auf diesen Wert, und `0` schaltet das Clipping ab. YOLOv9, YOLOv9-E2E und YOLOv9-P2 setzen den Standard auf `10`. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4, RF-DETR, DINOv2, GTR und EC setzen ihn auf `0.1`. In der CLI heißt er `clip_max_norm=` oder `--clip-max-norm`; die Familien, die ihn dort akzeptieren, findest du unter [`libreyolo train`](/docs/cli/train).
 
 ## EMA
 

@@ -16,7 +16,7 @@ keywords:
   - localisation points FOMO
   - compter objets images
   - localisation par points
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Prédire les points et les compter
@@ -137,7 +137,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Définition
@@ -178,7 +178,7 @@ La latence par image est donc nettement plus élevée que celle d'un détecteur
 spécialisé. Ses poids sont réservés à un usage non commercial. Leur licence
 figure sur sa page.
 
-[Molmo2](/docs/models/molmo2) et [Moondream](/docs/models/moondream) fournissent des points conditionnés par du texte. [LibreGround](/docs/reference/ground-api) utilise une instruction pour sélectionner au plus un clic par requête avec ShowUI, Florence-2 ou Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) et [WeVisOne-VL](/docs/models/wevisone-vl) fournissent des points conditionnés par du texte. [LibreGround](/docs/reference/ground-api) utilise une instruction pour sélectionner au plus un clic par requête avec ShowUI, Florence-2 ou Qwen3-VL.
 
 ## Prédire
 

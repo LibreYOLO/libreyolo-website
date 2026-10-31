@@ -108,7 +108,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Cài đặt
@@ -147,7 +147,8 @@ và tinh chỉnh trong LibreYOLO, nhưng LibreYOLO không lưu trữ checkpoint 
 probe trong báo cáo thượng nguồn: backbone ViT được đóng băng và chỉ head dày đặc
 1x1 được huấn luyện, khớp với cách tạo ra các trọng số do LibreYOLO lưu trữ ở
 trên. Truyền `freeze_backbone=False` để tinh chỉnh toàn bộ mạng và giảm `lr0`
-cho phù hợp.
+cho phù hợp. `libreyolo train` bắt đầu từ cùng công thức đó, và khi không có
+`name=` các lần chạy của nó được ghi vào `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

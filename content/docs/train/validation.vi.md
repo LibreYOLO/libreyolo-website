@@ -18,6 +18,8 @@ keywords:
   - miou
   - chất lượng panoptic
   - độ chính xác top1
+  - confusion matrix yolo
+  - nms không phân biệt lớp
 last_verified: 1.6.0
 snippets:
   val:
@@ -61,7 +63,40 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9s.pt")
         model.val(data="coco8.yaml", save_json=True, save_dir="runs/val/exp")
-source_hash: da1e3ccfd1efba73
+  confusion:
+    - label: Confusion matrix
+      language: python
+      code: >
+        from libreyolo import LibreYOLO
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+        metrics = model.val(data="coco8.yaml")
+
+
+        cm = metrics.confusion_matrix
+
+        print(cm.matrix.shape)      # (81, 81): 80 lớp đối tượng cộng background
+
+        print(cm.class_accuracy())  # tên lớp: tỉ lệ đối tượng tìm thấy được gán
+        lớp đó
+
+        tp, fp = cm.tp_fp()
+  curves:
+    - label: Đường cong theo từng lớp đối tượng
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+        metrics = model.val(data="coco8.yaml")
+
+        box = metrics.box
+        print(box.px.shape, box.f1_curve.shape)  # (1000,) và (classes, 1000)
+        for index, f1 in zip(box.ap_class_index, box.f1):
+            print(model.names[int(index)], round(float(f1), 3))
+source_hash: a5704354163337cf
 ---
 ## Chạy xác thực
 
@@ -69,8 +104,10 @@ source_hash: da1e3ccfd1efba73
 
 <code-tabs name="val" />
 
-Giá trị trả về là `dict[str, float]`. Mọi key đều là literal, vì vậy hãy
-đọc theo tên thay vì vị trí.
+Giá trị trả về là một `dict` phẳng ánh xạ các key metric tới số. Mọi key đều là
+literal, vì vậy hãy đọc theo tên thay vì vị trí. Với detect, segment và classify
+nó là một lớp con của `dict` có thêm kết quả theo từng lớp đối tượng dưới dạng
+thuộc tính, được mô tả bên dưới.
 
 Các đối số chính là `data`, `split`, `batch`, `imgsz`, `conf`, `iou`, `workers`,
 `device`, `augment`, `save_json` và `verbose`. `conf` mặc định là `0.001` và
@@ -82,8 +119,22 @@ hoặc `train` và không nhận giá trị nào khác. Khi không có `data`, m
 phát hành không mang dataset nào và cần `data=`.
 
 Mọi trường khác của cấu hình xác thực được truyền qua dưới dạng đối số keyword,
-gồm `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache` và
-`save_plots`.
+gồm `save_dir`, `max_det`, `eval_max_det`, `half`, `amp_dtype`, `cache`,
+`save_plots`, `single_cls` và `agnostic_nms`. Với `half=True` trên CUDA, việc xác
+thực chạy dưới autocast ở `amp_dtype`, và đầu ra bfloat16 được ép sang float32
+trước khi hậu xử lý; huấn luyện với `amp_dtype="bfloat16"` cũng xác thực theo cách
+đó.
+
+`agnostic_nms=True` chỉ giữ box có điểm cao nhất trong các box chồng lấn vượt
+`iou`, bất kể lớp của chúng. Nó chạy trên các phát hiện đã hoàn tất của family,
+sau `classes=`, nên mAP, confusion matrix, các đường cong và số đếm theo từng ảnh
+đều chấm điểm cùng các box. Nó bao phủ detect và segment, và mọi tác vụ khác phát
+sinh `ValueError`. Phía predict nằm ở [Ngưỡng và lọc](/docs/predict/thresholds).
+
+`single_cls=True` chấm điểm phát hiện như một lớp đối tượng duy nhất. Ground truth
+được gộp về lớp 0, và các phát hiện của mô hình được giữ theo `classes=` trong
+không gian nhãn của chính mô hình, rồi gán lại nhãn 0, nên một checkpoint được
+huấn luyện trên nhiều lớp đối tượng được chấm điểm như một detector một lớp.
 
 ## Key metric theo từng tác vụ
 
@@ -134,6 +185,8 @@ cùng bốn giá trị dưới tên theo tác vụ, cùng quy ước với `(B)`
 
 `accuracy_top5` thực ra là top-`min(5, num_classes)`, vì vậy trên dataset ba lớp,
 nó là top-3 mà mọi sample đều thỏa mãn, nên giá trị là 1.0.
+Kết quả phân loại cũng cung cấp hai giá trị này dưới dạng các thuộc tính `top1` và
+`top5`, bên cạnh `confusion_matrix`.
 
 Key quét của tác vụ point được dựng từ các ngưỡng khoảng cách, vì vậy với giá
 trị mặc định, nó là `metrics/mAP@[0.01:0.10]` và key một ngưỡng là
@@ -146,6 +199,68 @@ về. Tư thế không trả về `fitness` lẫn `metrics/mAP50-95`; thay vào 
 của tác vụ đặt `best_metric_key` thành `metrics/keypoints_mAP50-95`.
 
 Phân loại ImageFolder bổ sung macro `metrics/precision`, `metrics/recall` và `metrics/f1`, lấy trung bình trên các lớp đối tượng có trong nhãn đích đánh giá. Top-1 vẫn là fitness mặc định. Phát hiện còn trả về `metrics/best_conf` và `metrics/best_conf_f1`, chọn ngưỡng tối ưu micro-F1 tại IoU 0.50, và đặt các ngưỡng với khóa là tên lớp đối tượng trên `metrics.box.best_conf_per_class`. Các phát hiện cùng điểm vẫn được nhóm chung; khi hòa chọn ngưỡng cao hơn. Không có F1 dương sẽ cho 0.0. Phân đoạn không cung cấp các khóa ngưỡng này.
+
+## Confusion matrix
+
+Kết quả detect, segment và classify mang `results.confusion_matrix`. Nó được tính
+ở mọi lần xác thực, dù có ghi biểu đồ hay không, và `matrix` của nó là một mảng
+số nguyên lập chỉ mục `matrix[predicted, true]`.
+
+<code-tabs name="confusion" />
+
+Với detect và segment, các dự đoán ở độ tin cậy 0.25, hoặc `conf` nếu cao hơn, được
+ghép một-một với các box ground truth thuộc bất kỳ lớp nào ở IoU 0.5, theo thứ tự
+IoU cao nhất trước. Một cặp được đếm ở lớp dự đoán và lớp thật của nó, nên một box
+đặt đúng chỗ nhưng sai lớp rơi ra ngoài đường chéo. Ma trận có thêm một hàng và
+cột `background`: một ground truth không được ghép cặp được đếm ở hàng
+`background`, một dự đoán không được ghép cặp ở cột `background`. Segmentation
+ghép cặp box, không phải mặt nạ. Với `classes=`, ground truth của các lớp khác bị
+bỏ ra.
+
+Các vùng crowd của COCO (`iscrowd=1`) theo quy tắc mà mAP áp dụng. Một dự đoán mà
+không ground truth nào cùng lớp khớp, nằm ít nhất một nửa bên trong một vùng crowd
+cùng lớp (phần giao chia cho diện tích của chính dự đoán), bị bỏ qua thay vì được
+đếm. `box.image_metrics` và các ảnh `visualize=True` dùng cùng ngưỡng và cùng quy
+tắc crowd. Nhãn định dạng YOLO không có vùng crowd.
+
+Với classify, mỗi ảnh được đếm một lần, ở lớp top-1 của nó so với nhãn, và không
+có `background`.
+
+| Phương thức | Trả về |
+|---|---|
+| `summary(normalize=False)` | Một dict cho mỗi lớp dự đoán, `{"Predicted": name, <true class>: value}`; với `normalize`, tỉ lệ của mỗi lớp thật |
+| `to_csv()`, `to_json()` | Phần tóm tắt dưới dạng văn bản CSV hoặc JSON |
+| `to_df()` | Phần tóm tắt dưới dạng Polars DataFrame; cần `pip install polars` |
+| `tp_fp()` | True positive theo từng lớp (đường chéo) và false positive (phần còn lại của hàng dự đoán) |
+| `nonzero()` | Các ô có giá trị dưới dạng các mảng `(predicted, true, count)` thẳng hàng |
+| `class_accuracy()` | Theo từng lớp, tỉ lệ các instance của nó được gán lớp đó; với detection, chỉ tính các đối tượng tìm thấy |
+| `plot(normalize=True, save_dir="")` | Ghi `confusion_matrix_normalized.png`, hoặc `confusion_matrix.png` với `normalize=False`, và trả về đường dẫn |
+
+Trên 2,000 lớp đối tượng, ma trận phân loại dày đặc không được dựng: `matrix`,
+`summary()`, các hàm xuất `to_*()` và `plot()` phát sinh lỗi, trong khi `tp_fp()`,
+`nonzero()` và `class_accuracy()` vẫn hoạt động.
+
+Lớp này là `libreyolo.validation.ConfusionMatrix`, được dựng bằng
+`ConfusionMatrix(nc, iou_thres=0.5, conf_thres=0.25, *, names=None, task="detect")`,
+trong đó `task` là `"detect"` hoặc `"classify"`.
+
+## Precision, recall và F1 theo từng lớp đối tượng
+
+Kết quả detect và segment mang precision, recall và F1 của từng lớp đối tượng qua
+các ngưỡng độ tin cậy, ghép cặp ở IoU 0.5.
+
+<code-tabs name="curves" />
+
+`box.px` giữ 1000 độ tin cậy, cách đều nhau trên `[0, 1]`. `box.p_curve`,
+`box.r_curve` và `box.f1_curve` là các mảng `(classes, 1000)`, mỗi hàng ứng với một
+phần tử của `box.ap_class_index`, là các chỉ số lớp đối tượng có ground truth trong
+split, theo thứ tự tăng dần. `box.p`, `box.r` và `box.f1` là các giá trị theo từng
+lớp ở độ tin cậy làm cực đại F1 trung bình trên các lớp đó. Segmentation tính tất
+cả từ box. Chúng là các mảng rỗng khi lượt chạy không tạo ra đường cong nào.
+
+## Chỉ số bounding box theo ảnh
+
+Kết quả phát hiện và phân đoạn vẫn tương thích dictionary và còn cung cấp `results.box.image_metrics`. Mỗi tên tệp ánh xạ đến `precision`, `recall`, `f1`, `tp`, `fp` và `fn` theo quy tắc ghép cặp của trực quan hóa, kể cả khi tắt trực quan hóa. Phân đoạn đếm bounding box ở đây. Tên tệp trùng dùng đường dẫn đầy đủ sau lần xuất hiện đầu. Mẫu số bằng 0 cho kết quả 0.0. Các bản ghi này không được tổng hợp qua các rank phân tán.
 
 ## Key tốc độ
 
@@ -250,12 +365,17 @@ với hậu tố tăng dần trừ khi `exist_ok=True`.
 `predictions_bbox.json` cùng `predictions_masks.json`. OBB không hỗ trợ và sẽ
 báo rõ.
 
-`save_plots=True` ghi vào thư mục con `plots/`. Phát hiện tạo
+`save_plots=True`, hoặc alias `plots=True` của nó, ghi vào thư mục con `plots/` và
+cần matplotlib, được cài bằng `pip install "libreyolo[plots]"`. Phát hiện tạo
 `box_metrics.png`, biểu đồ AP và recall theo từng lớp, đường cong
-precision-recall và confidence, confusion matrix, cùng ảnh sample đã chú thích
-khi cài OpenCV. Phân đoạn thêm bản sao tương ứng cho mặt nạ, còn tư thế có bộ
-metric và đường cong riêng. Các validator khác không triển khai biểu đồ; phân
-loại, ngữ nghĩa, toàn cảnh, độ sâu, pháp tuyến, cạnh, phục hồi, matting, OCR, OBB
+precision-recall và confidence, các đường cong F1 theo từng lớp trong
+`f1_conf_box.png`, confusion matrix dưới dạng số đếm trong `confusion_matrix.png`
+và dưới dạng tỉ lệ của mỗi lớp thật trong `confusion_matrix_normalized.png`, cùng
+ảnh sample đã chú thích khi cài OpenCV. Phân đoạn thêm bản sao phía mặt nạ của
+biểu đồ metric, các biểu đồ theo từng lớp và các đường cong precision-recall và
+confidence; các đường cong F1 và confusion matrix vẫn ở mức box. Tư thế có bộ
+metric và đường cong riêng. Phân loại ghi hai tệp confusion matrix, trừ khi trên
+2,000 lớp đối tượng. Các validator khác không triển khai biểu đồ; ngữ nghĩa, toàn cảnh, độ sâu, pháp tuyến, cạnh, phục hồi, matting, OCR, OBB
 và point đều không ghi gì ở đó. Lỗi vẽ biểu đồ sẽ cảnh báo và không bao giờ dừng
 lượt chạy.
 
@@ -280,7 +400,3 @@ các con số được đưa tới đâu.
 
 - Xem [Dataset](/docs/train/datasets) để biết các key split và định dạng mà
   validator đọc.
-
-## Chỉ số bounding box theo ảnh
-
-Kết quả phát hiện và phân đoạn vẫn tương thích dictionary và còn cung cấp `results.box.image_metrics`. Mỗi tên tệp ánh xạ đến `precision`, `recall`, `f1`, `tp`, `fp` và `fn` theo quy tắc ghép cặp của trực quan hóa, kể cả khi tắt trực quan hóa. Phân đoạn đếm bounding box ở đây. Tên tệp trùng dùng đường dẫn đầy đủ sau lần xuất hiện đầu. Mẫu số bằng 0 cho kết quả 0.0. Các bản ghi này không được tổng hợp qua các rank phân tán.

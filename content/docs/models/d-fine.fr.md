@@ -19,7 +19,7 @@ keywords:
   - segmentation d'instances python
   - DETR
   - fine-tuning D-FINE
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -151,7 +151,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: afc2a4900f773c9d
+source_hash: bfc9280d61063ff7
 ---
 
 ## Installation
@@ -210,7 +210,10 @@ L'entraînement démarre depuis un checkpoint publié, pour les deux tâches.
 
 Laissé à ses réglages par défaut, l'entraîneur fait 132 époques à `lr0=2e-4`
 avec `amp=True` et `amp_dtype="float16"`, un batch de 16 et un early stopping après 50 époques sans
-amélioration. Les poids de détection sont un point de départ légitime pour un
+amélioration. `libreyolo train` part de la même recette pour les deux tâches :
+AdamW avec un schedule cosinus plat, `weight_decay=1e-4`, 2 époques de warmup,
+un écrêtage de la norme du gradient à 0.1, et aucune augmentation mosaic, MixUp,
+HSV ou affine. Sans `name=`, ses runs vont dans `runs/train/dfine_exp`. Les poids de détection sont un point de départ légitime pour un
 entraînement de segmentation, mais seulement comme transfert explicite, puisque
 la tête de masques démarre non entraînée et renverrait sinon des masques sans
 signification. C'est le passage de `task=segment` à la CLI qui l'autorise. La

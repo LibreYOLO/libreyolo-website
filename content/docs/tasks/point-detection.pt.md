@@ -135,7 +135,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Definição
@@ -175,7 +175,7 @@ cada predição é uma passagem de geração sobre um modelo de 7B, então esper
 latência por imagem bem mais alta que a de um detector feito sob medida. Seus
 pesos são não comerciais; a licença está na página dele.
 
-[Molmo2](/docs/models/molmo2) e [Moondream](/docs/models/moondream) fornecem pontos condicionados por texto. [LibreGround](/docs/reference/ground-api) usa uma instrução para selecionar no máximo um clique por consulta com ShowUI, Florence-2 ou Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) e [WeVisOne-VL](/docs/models/wevisone-vl) fornecem pontos condicionados por texto. [LibreGround](/docs/reference/ground-api) usa uma instrução para selecionar no máximo um clique por consulta com ShowUI, Florence-2 ou Qwen3-VL.
 
 ## Predição
 

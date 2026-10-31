@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## Установка
@@ -161,7 +161,8 @@ pip install libreyolo
 AdamW с базовой скоростью обучения для бэкбона и в 10 раз большей
 для декодирующей головы, weight decay везде, кроме LayerNorm и позиционной
 свёртки Mix-FFN, и линейно затухающий планировщик с прогревом. Сходимость для
-больших размеров, от b3 до b5, не проверялась от начала до конца.
+больших размеров, от b3 до b5, не проверялась от начала до конца. `libreyolo train` стартует с того же
+рецепта, а без `name=` его запуски попадают в `runs/train/segformer_exp`.
 
 Про датасеты, аугментацию, multi-GPU и логгеры см. [обучение](/docs/train).
 

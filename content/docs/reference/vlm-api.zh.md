@@ -44,7 +44,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## 安装
@@ -77,15 +77,16 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | 固定的上游快照 |
 
 默认别名是 `qwen3-vl-4b`。每个家族默认别名对应的尺寸，就是列表里排在最前面的那
 个：`qwen3-vl` 解析为 `4b`，`lfm2-vl` 为 `450m`，`internvl3` 为 `2b`，`smolvlm2`
-为 `2.2b`，`florence-2` 为 `base`。
+为 `2.2b`，`florence-2` 为 `base`，`wevisone-vl` 为 `2b`。
 
 `LibreVLM`、`LibreLFM2VL`、`LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、
-`LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything` 和 `LibreMODUS`
-（也可以写成 `LibreModus`）在包级别导出。
+`LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything`、`LibreWeVisOneVL`
+和 `LibreMODUS`（也可以写成 `LibreModus`）在包级别导出。
 
 检测还包括 `north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3` 和 `lfm2-vl-3b`。不带后缀的 `gemma-4` 别名选择 E4B。Molmo2 别名为 `molmo2-4b`、`molmo2-8b` 和 `molmo2-o-7b`；默认选择 4B。别名确定路由，并不表示每个远程快照都已下载并测试。`moondream-3` 在 1.6.0 中无法加载：它的镜像缺少权重分片。
 
@@ -97,6 +98,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 因为任务是提示词驱动的，而不是固化进检查点（checkpoint）里的，所以可以在一个已经
 加载好的模型上切换：
@@ -108,7 +110,7 @@ model.set_task(task: str) -> LibreVLMModel
 任务会按家族支持的列表做校验，并且在之后的 `predict()` 和 `track()` 调用中一直
 沿用；模型本身会被返回，所以调用可以链起来。
 
-Molmo2 返回点，自定义指点模板必须包含 `{label}`。Moondream 支持检测、点和原生聊天。指令到点击位置的查询请使用 [LibreGround](/docs/reference/ground-api)。
+Molmo2 返回点，自定义指点模板必须包含 `{label}`。WeVisOne-VL 的 `referring=True` 会让 `detect` 对每个短语各发送一次生成请求，它的 `segment`、`matte` 和指代检测在没有词表时会抛出 `ValueError`。Moondream 支持检测、点和原生聊天。指令到点击位置的查询请使用 [LibreGround](/docs/reference/ground-api)。
 
 ## set_classes
 

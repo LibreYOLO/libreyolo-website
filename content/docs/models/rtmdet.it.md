@@ -120,7 +120,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Installazione
@@ -142,8 +142,10 @@ L'oggetto `Results` restituito è lo stesso che restituisce ogni famiglia, quind
 passare a un rilevatore diverso è una modifica di una riga. Un nome di file con
 `-seg` risolve da solo al task RTMDet-Ins, e `result.masks` porta allora le
 maschere di istanza accanto ai box. `conf` imposta la soglia di confidenza e
-`iou` la soglia NMS. Vedi [predizione](/docs/predict) per sorgenti, streaming e
-gestione dei risultati.
+`iou` la soglia NMS. `max_det` si applica così com'è a entrambi i task, fino a 300
+box o maschere per immagine di default; la configurazione di test RTMDet-Ins di
+MMDetection ne mantiene 100, cosa che `max_det=100` riproduce. Vedi
+[predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
 ## Varianti
 

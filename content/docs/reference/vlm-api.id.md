@@ -48,7 +48,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## Instal
@@ -82,15 +82,17 @@ yang mengambil `device`, `names` (kosakata awal, setara dengan memanggil
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Snapshot hulu yang dipasang |
 
 Alias default adalah `qwen3-vl-4b`. Ukuran untuk alias default masing-masing family
 adalah yang tercantum pertama: `qwen3-vl` mengarah ke `4b`, `lfm2-vl` ke `450m`,
-`internvl3` ke `2b`, `smolvlm2` ke `2.2b`, `florence-2` ke `base`.
+`internvl3` ke `2b`, `smolvlm2` ke `2.2b`, `florence-2` ke `base`,
+`wevisone-vl` ke `2b`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` dan `LibreMODUS`
-(juga dieja `LibreModus`) diekspor pada tingkat paket.
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL`
+dan `LibreMODUS` (juga dieja `LibreModus`) diekspor pada tingkat paket.
 
 Deteksi juga mencakup `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3`, dan `lfm2-vl-3b`. Alias `gemma-4` tanpa akhiran memilih E4B. Alias Molmo2 adalah `molmo2-4b`, `molmo2-8b`, dan `molmo2-o-7b`; default-nya 4B. Alias menentukan routing, bukan menandakan bahwa setiap snapshot jarak jauh sudah diunduh dan diuji. `moondream-3` tidak dapat dimuat di 1.6.0: mirror-nya kehilangan sebagian shard bobot.
 
@@ -102,6 +104,7 @@ Dukungan task bergantung pada family. Adaptor berikut mendukung beberapa task:
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 Karena task digerakkan oleh prompt daripada tertanam dalam checkpoint, itu dapat
 diaktifkan pada model yang sudah dimuat:
@@ -114,7 +117,7 @@ task divalidasi terhadap daftar yang didukung oleh family, tetap lengket di selu
 panggilan `predict()` dan `track()` berikutnya, dan model dikembalikan sehingga panggilan dapat
 berantai.
 
-Molmo2 mengembalikan titik dan memerlukan `{label}` dalam template penunjukan kustom. Moondream mendukung deteksi, titik, dan chat native. Gunakan [LibreGround](/docs/reference/ground-api) untuk kueri instruksi-ke-klik.
+Molmo2 mengembalikan titik dan memerlukan `{label}` dalam template penunjukan kustom. `referring=True` pada WeVisOne-VL membuat `detect` mengirim satu generasi per frasa, dan `segment`, `matte`, serta deteksi referring-nya memunculkan `ValueError` tanpa vocabulary. Moondream mendukung deteksi, titik, dan chat native. Gunakan [LibreGround](/docs/reference/ground-api) untuk kueri instruksi-ke-klik.
 
 ## set_classes
 

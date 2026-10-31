@@ -36,7 +36,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## 参数一览
@@ -55,7 +55,7 @@ source_hash: f0d31511715e3cc4
 | `mosaic_scale` | 仿射变换的随机缩放范围 |
 | `mixup_scale` | 施加在 MixUp 配对图像上的抖动缩放范围 |
 | `shear` | 仿射变换的随机错切范围，单位为度 |
-| `perspective` | 仿射变换的投影变换强度 |
+| `perspective` | 叠加在仿射变换上的投影变换强度：画布四角每个轴向内移动，最多为 `min(perspective * 100, 0.2)` 乘以画布边长的一半；`0` 表示关闭 |
 | `flipud` | 垂直翻转概率 |
 | `no_aug_epochs` | 训练末尾关闭强增强的轮数 |
 | `auto_augment` | 分类的 AutoAugment 策略：randaugment、autoaugment 或 augmix |
@@ -115,13 +115,13 @@ DETR 风格流水线是没有 mosaic 的直通变换。光度畸变、缩小和 
 | 原型 | 家族 |
 |---|---|
 | YOLOX 式 | `yolox`、`yolo7`、`yolo9`、`yolo9_e2e`、`yolo9_p2`、`rtmdet`、`picodet`、`rtdetr`、`rtdetrv2`、`fomo` |
-| YOLO-NAS | `yolonas` |
-| DETR 式 | `dfine`、`domedetr`、`deim`、`deimv2`、`rtdetrv4`、`rfdetr`、`ec`、`dinov2` |
-| 分类 | `resnet`、`convnext`、`mobilenetv4`、`efficientnetv2` |
-| 语义分割 | `segformer` |
+| YOLO-NAS | `yolonas`、`ppyoloe` |
+| DETR 式 | `dfine`、`gtr`、`domedetr`、`deim`、`deimv2`、`tinyformer`、`rtdetrv4`、`rfdetr`、`ec`、`dinov2` |
+| 分类 | `resnet`、`convnext`、`convnextv2`、`mobilenetv4`、`efficientnetv2` |
+| 语义分割 | `segformer`、`unet`、`lingbotvision` |
 | 复原 | `nafnet` |
 
-一共覆盖二十五个家族。不在这份列表里的家族会返回一个空的忽略集合，所以不会为它发出
+一共覆盖三十一个家族。不在这份列表里的家族会返回一个空的忽略集合，所以不会为它发出
 任何警告。
 
 ## 偏差
@@ -133,6 +133,8 @@ DETR 风格流水线是没有 mosaic 的直通变换。光度畸变、缩小和 
 | `rtdetr` | 忽略 `flipud` |
 | `rtdetrv2` | 忽略 `flipud` |
 | `fomo` | 忽略 `perspective` 和 `flipud` |
+| `ppyoloe` | 忽略 `flipud`：源配方改用随机 90 度旋转 |
+| `gtr` | 会使用 `mosaic_prob` 和 `mixup_prob`，作用于前 `mosaic_epochs` 轮；`degrees`、`translate` 和 `mosaic_scale` 决定 mosaic 之后的仿射 |
 | `ec` | 会使用 `hsv_prob`、`degrees` 和 `translate`，但仅限 `task="pose"`；detect 和 segment 使用固定的光度配方 |
 | `dinov2` | 会使用分类那一组，但仅限 `task="classify"` |
 

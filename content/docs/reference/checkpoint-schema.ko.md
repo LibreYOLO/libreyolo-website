@@ -15,7 +15,9 @@ keywords:
   - 양적 현시
   - wrap_libreyolo_체크포인트
 last_verified: 1.6.0
-verification: 'v1.6.0에서 libreyolo 저장소의 docs/checkpoint_schema.md를 반영하며, libreyolo/utils/serialization.py 및 BaseModel.save와 교차 확인됨.'
+verification: >-
+  v1.6.0에서 libreyolo 저장소의 docs/checkpoint_schema.md를 반영하며,
+  libreyolo/utils/serialization.py 및 BaseModel.save와 교차 확인됨.
 snippets:
   usage:
     - label: 체크포인트에서 메타데이터를 읽으십시오
@@ -45,7 +47,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## 스키마 v1.0
@@ -83,6 +85,8 @@ source_hash: 177904564cf0a488
 공식 검문소는 모든 `names` 키를 기록합니다. 리더기는 레거시 희소 매핑을 위해 누락된 키를 `class_i` 레이블로 채울 수 있지만, 범위를 벗어난 키는 유효하지 않습니다.
 
 직사각형 체크포인트는 레거시 리더를 위해 스칼라 `imgsz`를 유지하며, `max(imgsz_h, imgsz_w)`로 설정하고 추가로 실제 치수와 함께 `imgsz_h`와 `imgsz_w`를 기록합니다. 직사각형 필드를 이해하는 리더는 스칼라보다 이를 선호해야 합니다. HRNet 포즈와 같은 고정 직사각형 계약을 가진 계열는 호환되지 않는 런타임 크기를 거부합니다.
+
+분류 체크포인트는 모델의 리사이즈 필터인 `interpolation`을 추가할 수 있습니다: `"bilinear"`, `"bicubic"`, `"nearest"`, `"bilinear_no_antialias"` 중 하나입니다. `save()`, `best.pt`, `last.pt`가 이를 기록하고 불러올 때 복원하므로, 학습, `val()`, `predict()`, INT8 보정, 내보내기는 체크포인트가 저장될 때의 필터를 유지합니다. 이 키가 없는 체크포인트는 계열 기본값을 유지하며, 그 외의 값은 유효하지 않습니다. 앞의 셋은 축소할 때 안티앨리어싱을 하는 Pillow로 리사이즈하고, `"bilinear_no_antialias"`는 하프 픽셀 중심을 쓰고 안티앨리어싱을 하지 않는 단순 바이리니어입니다.
 
 스키마는 의도적으로 평면이며, `model`는 의도적으로 상태 딕트입니다.
 
@@ -159,7 +163,7 @@ RF-DETR은 `kpt_names`와 함께 `num_keypoints_per_class`를 기록할 수 있�
 
 포즈 내보내기는 `num_keypoints`; `keypoint_dim`를 추가할 수 있으며, GroupPose 스타일의 원시 내보내기는 텐서에 정밀도 또는 클래스 로짓 필드가 포함된 경우 `8`와 같은 더 큰 값을 사용할 수 있습니다; JSON으로 인코딩된 목록인 `num_keypoints_per_class`이며, 제로 키포인트 클래스 슬롯은 스키마를 정의하므로 유지해야 합니다; 그리고 `pose_input`, 여기서 `"person_crop"`는 그래프가 이미 추출된 하나의 크롭을 사용하며 디텍터를 포함하지 않음을 의미합니다. HRNet 런타임 내보내기는 해당 값을 필요로 합니다.
 
-분류 내보내기는 `crop_pct`를 추가할 수 있으며, 이는 사전 자르기 리사이즈 목표가 `round(imgsz / crop_pct)`인 float 중심 자르기 비율이며, 없을 경우 기본값은 `0.875`입니다. 또한 `interpolation`, `"bilinear"` 또는 `"bicubic"`를 추가할 수 있으며, 기본값은 `"bilinear"`입니다.
+분류 내보내기는 `crop_pct`를 추가할 수 있으며, 이는 사전 자르기 리사이즈 목표가 `floor(imgsz / crop_pct)`인 float 중심 자르기 비율이며, 없을 경우 기본값은 `0.875`입니다. 또한 위의 체크포인트 값 네 가지 중 하나인 `interpolation`을 추가할 수 있으며, 없을 경우 기본값은 `"bilinear"`이고 리더는 그 외의 값을 거부합니다.
 
 ExecuTorch 내보내기는 평면 메타데이터를 필수 `<program>.pte.json` 사이드카에 작성합니다. v1 계약은 CPU, FP32, 배치 1 및 고정 입력 캔버스를 사용하며, 추가적으로 `executorch_version`, `executorch_delegate`가 `"xnnpack"`와 같고, 양수 `executorch_delegate_partitions`가 필요합니다. 로더는 다른 대리인, 동적 형태, 또는 비 FP32 정밀도를 주장하는 사이드카를 거부합니다.
 

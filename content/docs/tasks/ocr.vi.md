@@ -70,7 +70,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
-source_hash: 58ad5305c9dd458c
+source_hash: d6ec02dfdb1a69a8
 ---
 
 ## Định nghĩa
@@ -90,7 +90,7 @@ thẳng trục của mỗi polygon. Vì các tứ giác là polygon thực, chú
 
 ## Mô hình
 
-Hai family phục vụ `ocr`.
+Ba family phục vụ `ocr`.
 
 [PP-OCRv5](/docs/models/pp-ocrv5) là pipeline chuyên dụng: detector
 differentiable binarization tìm tứ giác văn bản và recognizer SVTR/CTC đọc chúng,
@@ -104,6 +104,12 @@ dưới dạng văn bản có tag từ cùng checkpoint 7B phục vụ sáu tác
 bằng `LibreVLM("sensenova-vision", task="ocr")`. Nó cần thành phần bổ sung
 `sensenova`, còn trọng số bị giới hạn cho mục đích phi thương mại; giấy phép nằm
 trên trang của mô hình.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) cũng sinh câu trả lời dưới dạng văn bản có
+tag, được nạp bằng `LibreVLM("wevisone-vl", task="ocr")`. Chỉ dẫn được phát hành
+của nó yêu cầu mọi từ ở định dạng box, và mỗi box trả về là một tứ giác song song
+với trục kèm transcript của nó. `.conf` và `.det_conf` là hằng số 1.0, vì mô hình
+không phát ra điểm. Nó cần extra `vlm`, và trọng số của nó dùng Apache-2.0.
 
 ## Dự đoán
 
@@ -152,8 +158,8 @@ dataset](/docs/reference/dataset-formats) để biết hợp đồng đầy đ�
 ## Huấn luyện
 
 Không family OCR nào có implementation huấn luyện: `train()` phát sinh
-`NotImplementedError` trên cả hai, còn hỗ trợ OCR chỉ bao gồm dự đoán và xác
-thực. Trang PP-OCRv5 nêu tên mã huấn luyện upstream dùng Apache-2.0 và script
+`NotImplementedError` trên cả ba. Xác thực bao phủ PP-OCRv5; `val()` phát sinh lỗi
+trên hai family vision-language. Trang PP-OCRv5 nêu tên mã huấn luyện upstream dùng Apache-2.0 và script
 chuyển đổi đưa checkpoint đã tinh chỉnh trở lại LibreYOLO.
 
 ## Xác thực
@@ -179,5 +185,5 @@ gần 1 trong khi F1 đầu cuối cho điểm 0.
 
 Tác vụ này không có định dạng xuất. PP-OCRv5 là hai mạng di chuyển cùng nhau
 thay vì một graph có thể trace, và `export()` phát sinh lỗi cho mọi định dạng
-trên cả hai family. Để triển khai bên ngoài LibreYOLO, hãy tinh chỉnh ở upstream
+trên cả ba family. Để triển khai bên ngoài LibreYOLO, hãy tinh chỉnh ở upstream
 và dùng đường dẫn triển khai upstream.

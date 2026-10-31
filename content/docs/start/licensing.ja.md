@@ -11,14 +11,14 @@ keywords:
   - model checkpoint license
   - apache-2.0 物体検出
 last_verified: 1.6.0
-source_hash: 03e83b82bd2da258
+source_hash: 3204f1f80370c85a
 ---
 
 ## LibreYOLO独自のコード
 
 ライブラリはMITです。Python API、CLI、trainer、validator、exporter、データセットloader、`weights/` 以下の変換スクリプトが対象です。商用またはクローズドソース製品で使用でき、再配布するコピーに著作権表示とライセンステキストを含めれば、それ以上の義務はありません。
 
-許諾の対象はコードまでです。[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE)ファイルには明確に記載されています。
+許諾の対象はコードまでです。[`LICENSE`](https://github.com/LibreYOLO/libreyolo/blob/release/LICENSE)にはMITのテキストだけがあり、[`NOTICE`](https://github.com/LibreYOLO/libreyolo/blob/release/NOTICE)の冒頭にある重みに関する注記が、これを明確に述べています。
 
 > それらのライセンスはさまざまで、すべてが寛容なライセンスではありません。一部の公開済み重みは非商用または別の制限があり、このMIT Licenseはそれらには適用されません。モデルを選ぶことは、そのライセンスを選ぶことでもあります。
 
@@ -30,7 +30,7 @@ Apache-2.0はDETRの系譜とTransformer関連の多くに適用されます。M
 
 BSD-3-Clauseはtorchvisionから派生したすべてのものに適用されます。Faster R-CNN、Mask R-CNN、FCOS、RetinaNet、SSD300、AlexNet、VGG、FCN、DeepLabv3です。
 
-MITは、MegviiのNAFNet、Xingyi ZhouのCenterNet、作者のKin-Yiu WongとHao-Tang TsuiがMultimediaTechLabで再公開したYOLOv7など、より小さなグループに適用されます。YOLOv1からYOLOv4のファミリーは、Joseph Redmon、およびYOLOv4ではAlexey BochkovskiyによるDarknetプロジェクトのアーキテクチャを再現します。Darknetはpublic domainなので、それらには義務がありません。
+MITは、MegviiのNAFNet、Xingyi ZhouのCenterNet、作者のKin-Yiu WongとHao-Tang TsuiがMultimediaTechLabで再公開したYOLOv7とYOLOv9など、より小さなグループに適用されます。YOLOv9のビルディングブロック、YOLO9-E2EとYOLO9-P2が共有する検出ヘッドのタワー、PGI分岐、YOLOv9のmixupブレンドは、このMIT版から移植しています。YOLOv1からYOLOv4のファミリーは、Joseph Redmon、およびYOLOv4ではAlexey BochkovskiyによるDarknetプロジェクトのアーキテクチャを再現します。Darknetはpublic domainなので、それらには義務がありません。
 
 同梱される1つのsubtreeには、オープンソースライセンスではないものがあります。DEIMv2ファミリーには、Meta PlatformsのDINOv3 License Agreementという独自の非OSIライセンスが適用されるDINOv3バックボーンコードが含まれます。そのコードを再配布する場合はagreementのコピーを同梱する必要があり、ITARの対象となる活動、軍事・戦争目的、原子力産業、諜報、兵器開発での利用が禁止されています。これらの条件はそのsubtreeだけに適用されます。
 
@@ -57,7 +57,7 @@ SAM 3は、Meta独自のSAM Licenseに基づくアクセス制限付きのアッ
 
 複数のtorchvisionチェックポイントには独自のライセンスファイルがありません。LibreYOLOは、リリース元プロジェクトが使うライセンスに基づいてmirroringし、各model cardにその根拠がチェックポイントごとの明示的許諾ではなく推定であると記載し、学習済みモデルの条件が学習データに由来する可能性があるというtorchvision独自の警告を繰り返します。
 
-ConvNeXt V2とLeVJEPAの学習済み重みにはCC-BY-NC-4.0が適用されます。Moondream 3はBSL 1.1を使い、Dome-DETRのミラーは学術研究に限定され、EdgeCrafterの`obj2coco`バリアントとDetAny3Dの重みには制限付きの条件が適用されます。各モデルページでは、コードのライセンスとともにこれらの宣言を記載しています。元のEdgeCrafterのCOCOチェックポイントは、記録されたApache-2.0の許諾を維持します。MiDaSのミラーは、公開元のMITの許諾を維持します。
+ConvNeXt V2とLeVJEPAの学習済み重みにはCC-BY-NC-4.0が適用されます。Moondream 3はBSL 1.1を使い、Dome-DETRのミラーは学術研究に限定され、EdgeCrafterの`obj2coco`バリアントとDetAny3Dの重みには制限付きの条件が適用されます。SANA-Sprintに同梱されるGemma 2テキストエンコーダーはGoogleのGemma利用規約のままで、Speridlabs Idolが`LibreYOLO/LibreDINOv3vith16plus`ミラーから読み込むDINOv3エンコーダーはMetaのDINOv3 Licenseのままです。各モデルページでは、コードのライセンスとともにこれらの宣言を記載しています。元のEdgeCrafterのCOCOチェックポイントは、記録されたApache-2.0の許諾を維持します。MiDaSのミラーは、公開元のMITの許諾を維持します。
 
 重みの概要は、チェックポイントの公開元が宣言したライセンスに従います。学習データセットの名前だけで、追加のチェックポイントライセンスが成立するわけではありません。
 

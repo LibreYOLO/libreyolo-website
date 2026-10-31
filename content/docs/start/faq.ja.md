@@ -11,7 +11,7 @@ keywords:
   - libreyolo cli
   - libreyolo オフライン
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## 最初にどのモデルを使えばよいですか。
@@ -50,7 +50,7 @@ CNN検出器にはYOLOv9、Transformer検出器にはRF-DETRを使用します�
 
 ## valは何を返しますか。
 
-指標名をキーとする辞書を返します。検出のキーには `metrics/precision`、`metrics/recall`、`metrics/mAP50`、`metrics/mAP50-95` が含まれ、検出とセグメンテーションの結果は `metrics.box` に画像ごとの結果も保持します。その他のタスクは、分類の `metrics/accuracy_top1`、パノプティックセグメンテーションの `metrics/PQ`、`metrics/SQ`、`metrics/RQ` など、それぞれに適したキーを返します。
+指標名をキーとする辞書を返します。検出のキーには `metrics/precision`、`metrics/recall`、`metrics/mAP50`、`metrics/mAP50-95` が含まれ、検出とセグメンテーションの結果は `metrics.box` に画像ごとの結果と、クラスごとの適合率・再現率・F1曲線も保持します。検出、セグメンテーション、分類の結果は `metrics.confusion_matrix` を持ち、分類ではさらに `metrics.top1` と `metrics.top5` が加わります。その他のタスクは、分類の `metrics/accuracy_top1`、パノプティックセグメンテーションの `metrics/PQ`、`metrics/SQ`、`metrics/RQ` など、それぞれに適したキーを返します。詳しくは[検証と指標](/docs/train/validation)を参照してください。
 
 ## フォルダー、動画、Webカメラで実行するにはどうすればよいですか。
 

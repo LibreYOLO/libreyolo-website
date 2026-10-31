@@ -12,7 +12,7 @@ keywords:
   - FOMO 点定位
   - 图像目标计数
   - 点定位
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: 预测点并计数
@@ -115,7 +115,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## 定义
@@ -146,7 +146,7 @@ source_hash: 5c3cfe7a606cd7aa
 每次预测都是在一个 7B 模型上跑一遍生成，所以单图延迟会明显高于专门设计的检测器。它的
 权重是非商业的；许可证在它自己的页面上。
 
-[Molmo2](/docs/models/molmo2) 和 [Moondream](/docs/models/moondream) 提供以文本为条件的点。[LibreGround](/docs/reference/ground-api) 使用 ShowUI、Florence-2 或 Qwen3-VL，根据指令为每次查询选择至多一个点击位置。
+[Molmo2](/docs/models/molmo2)、[Moondream](/docs/models/moondream) 和 [WeVisOne-VL](/docs/models/wevisone-vl) 提供以文本为条件的点。[LibreGround](/docs/reference/ground-api) 使用 ShowUI、Florence-2 或 Qwen3-VL，根据指令为每次查询选择至多一个点击位置。
 
 ## 预测
 

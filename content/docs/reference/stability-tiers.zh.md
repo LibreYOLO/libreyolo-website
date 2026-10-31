@@ -36,7 +36,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## 导出支持层级
@@ -101,9 +101,9 @@ SmolVLA、ACT 和 Diffusion Policy。SAM 和开放词汇层级的 `track()` 也�
 | `g2` | 已支持 | 19 | 额外的可训练家族覆盖集合 |
 | `g3` | 仅推理 | 44 | 没有训练实现的家族 |
 | `g4` | 博物馆 | 5 | 有推理覆盖的历史家族 |
-| `s` | 兄弟层级 | 36 | 单独覆盖的兄弟 API（SAM、开放词汇、VLM、定位、零样本） |
+| `s` | 兄弟层级 | 40 | 单独覆盖的兄弟 API（SAM、开放词汇、VLM、定位、零样本） |
 
-一共是六个分组、118 个家族。`g3` 是最大的分组，因为注册表（registry）里很大一
+一共是六个分组、122 个家族。`g3` 是最大的分组，因为注册表（registry）里很大一
 部分是仅推理的谱系，而不是持续训练的检测器。
 
 对正在挑模型的读者来说，分组说明的是工程投入落在哪里，而不是一个家族有多精
@@ -131,7 +131,7 @@ SmolVLA、ACT 和 Diffusion Policy。SAM 和开放词汇层级的 `track()` 也�
 `g3` 或 `g4` 里的家族没有训练实现，对它们调用 `train()` 会抛异常。这是家族代
 码的性质，不是分组的性质：分组只是记录这个事实，而不是造成它。
 
-在 118 个家族中，有 37 个能训练：`g0`、`g1` 和 `g2` 的每个家族，外加通过
+在 122 个家族中，有 37 个能训练：`g0`、`g1` 和 `g2` 的每个家族，外加通过
 `LibreVLM` 训练的 Qwen3-VL，以及通过 `LibreVLA` 训练的 SmolVLA、ACT 和
 Diffusion Policy。
 

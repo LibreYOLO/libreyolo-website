@@ -55,7 +55,7 @@ snippets:
         # トークンスコアで絞り込む。未設定時はどちらもデフォルトで0.25
         # text_thresholdを受け付けるのはGrounding DINOだけで、ほかは例外を送出
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## 定義
@@ -90,7 +90,7 @@ pip install "libreyolo[openvocab]"
 
 別の階層もテキスト語彙を受け取ります。`LibreVLM()` は[Qwen3-VL](/docs/models/qwen3-vl)や[Florence-2](/docs/models/florence-2)などの生成型視覚言語モデルを読み込み、その出力を同じ `Results` に変換します。`set_classes()` という同じインターフェースを共有します。異なるのはボックスを生成するものです。このページのファミリーはスコアを直接出力する識別的検出器ですが、VLM階層はボックスを生成します。
 
-[Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream)、[North Micro Vision](/docs/models/northmicrovision)は、`LibreVLM`の物体検出の選択肢を増やします。[Molmo2](/docs/models/molmo2)は点を返します。検出する語彙ではなく、指示からクリック位置を得るクエリには[LibreGround](/docs/reference/ground-api)を使ってください。
+[Gemma 4](/docs/models/gemma-4)、[Moondream](/docs/models/moondream)、[North Micro Vision](/docs/models/northmicrovision)、[WeVisOne-VL](/docs/models/wevisone-vl)は、`LibreVLM`の物体検出の選択肢を増やします。[Molmo2](/docs/models/molmo2)は点を返します。検出する語彙ではなく、指示からクリック位置を得るクエリには[LibreGround](/docs/reference/ground-api)を使ってください。
 
 ## 推論
 

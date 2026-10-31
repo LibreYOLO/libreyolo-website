@@ -152,7 +152,7 @@ snippets:
         # exportação nomeia o arquivo pela tarefa, aqui LibreDINOv2s-sem.onnx.
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## Instalação
@@ -164,6 +164,9 @@ precisa do mesmo extra.
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Sem ele, carregar um checkpoint ou nome de modelo DINOv2 para com um erro que
+nomeia esta linha de instalação.
 
 ## Predição
 

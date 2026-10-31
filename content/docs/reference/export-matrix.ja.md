@@ -53,7 +53,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## マトリックスの構造
@@ -107,6 +107,11 @@ validatedの項目を追加するには一致度テストと`since`フィール�
 
 | タスク | 理由 |
 |---|---|
+| `albedo` | アルベドのエクスポートには、線形RGBのバックエンドランタイム契約がない |
+| `act` | ポリシーのサンプリングループには、エクスポート可能なグラフもバックエンドランタイム契約もない |
+| `generate` | 画像生成は複数のネットワークにわたるサンプリングループを実行するため、エクスポート可能なグラフもバックエンドランタイム契約もない |
+| `generate3d` | 3D生成は複数のネットワークにわたるサンプリングループを実行するため、エクスポート可能なグラフもバックエンドランタイム契約もない |
+| `detect3d` | 3D検出のグラフ出力、カメラメタデータ、ランタイム契約が定義されていない |
 | `ocr` | 動的な領域ごとのクロップを持つ2つのネットワークは単一グラフのエクスポート契約に収まらない |
 | `point` | ファミリーが共通の点ヒートマップとバックエンドのピークデコード契約に接続されていない |
 | `semantic` | ファミリーが共通の密なロジットとバックエンドのargmax契約に接続されていない |
@@ -128,7 +133,7 @@ validatedの項目を追加するには一致度テストと`since`フィール�
 | `hrnet` | ONNX、TorchScript、OpenVINO、TensorRT以外 |
 | `sam`、`sam2`、`sam3`、`edgetam`、`mobilesam` | 全形式。プロンプト可能モデルのエクスポートはv1ランタイム契約の対象外 |
 | `grounding_dino`、`owlv2`、`omdet_turbo`、`ov_deim` | 全形式。オープンボキャブラリーのランタイムエクスポートはv1の対象外 |
-| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything` | 全形式。生成VLMのエクスポートはv1の対象外 |
+| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything`、`northmicrovision`、`gemma4`、`moondream`、`sensenovavision`、`libremodus`、`wevisonevl` | 全形式。生成VLMのエクスポートはv1の対象外 |
 
 PicoSAM3はプロンプト可能ティアの例外で、生の96px ROIネットワークをONNXへエクスポートします。
 

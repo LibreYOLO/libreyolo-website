@@ -123,7 +123,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Instalasi
@@ -143,8 +143,10 @@ Bobot diunduh dari Hugging Face saat pertama kali digunakan dan disimpan dalam c
 Objek `Results` yang dikembalikan sama dengan yang dikembalikan setiap family, jadi mengganti
 detektor hanya memerlukan perubahan satu baris. Nama berkas `-seg` menentukan task
 RTMDet-Ins dengan sendirinya, kemudian `result.masks` menyimpan mask instance di samping
-kotak. `conf` menetapkan ambang batas confidence dan `iou` menetapkan ambang NMS.
-Lihat [prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
+kotak. `conf` menetapkan ambang batas confidence dan `iou` menetapkan ambang NMS. `max_det` berlaku apa adanya untuk kedua task, hingga 300
+box atau mask per gambar secara default; konfigurasi uji RTMDet-Ins di
+MMDetection memakai 100, yang bisa direproduksi dengan `max_det=100`. Lihat
+[prediksi](/docs/predict) untuk sumber, streaming, dan penanganan hasil.
 
 ## Varian
 

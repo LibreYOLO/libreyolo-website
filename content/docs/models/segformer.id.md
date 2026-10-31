@@ -122,7 +122,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## Instalasi
@@ -167,7 +167,8 @@ pretrained (lihat [Lisensi](#licensing)).
 Jika dibiarkan, pelatih mengikuti resep ADE20K dari makalah SegFormer: AdamW pada learning
 rate dasar backbone dengan decode head dilatih pada 10x laju tersebut, weight decay di semua
 bagian kecuali LayerNorm dan konvolusi posisi Mix-FFN, serta jadwal decay linear dengan
-warmup. Konvergensi untuk ukuran lebih besar, b3 hingga b5, belum divalidasi secara end-to-end.
+warmup. Konvergensi untuk ukuran lebih besar, b3 hingga b5, belum divalidasi secara end-to-end. `libreyolo train` memulai dari resep yang
+sama, dan tanpa `name=` run-nya masuk ke `runs/train/segformer_exp`.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 

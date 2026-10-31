@@ -4,11 +4,12 @@ families:
   - yolo9
 seo_title: 'YOLOv9: dự đoán, huấn luyện và xuất theo MIT'
 description: >-
-  Chạy YOLOv9 trong LibreYOLO, gồm head đầu cuối không NMS và head stride-4 cho đối tượng nhỏ. Cài đặt, dự
-  đoán, huấn luyện, đánh giá và xuất.
+  Chạy YOLOv9 trong LibreYOLO, gồm head đầu cuối không NMS và head stride-4 cho
+  đối tượng nhỏ. Cài đặt, dự đoán, huấn luyện, đánh giá và xuất.
 lead: >-
-  Một detector tích chập một giai đoạn: một lượt chấm điểm lưới box dày đặc và NMS loại các bản trùng lặp.
-  LibreYOLO cung cấp ba biến thể, trong đó một biến thể không có bước NMS.
+  Một detector tích chập một giai đoạn: một lượt chấm điểm lưới box dày đặc và
+  NMS loại các bản trùng lặp. LibreYOLO cung cấp ba biến thể, trong đó một biến
+  thể không có bước NMS.
 keywords:
   - YOLOv9
   - YOLO9
@@ -62,14 +63,20 @@ snippets:
           epochs=100 imgsz=640 batch=16
     - label: Đối tượng nhỏ
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO9P2
 
+
         # Biến thể stride-4 không có checkpoint COCO riêng, nên hãy chỉ định một
+
         # checkpoint phát hiện cơ sở: backbone và neck được tải không đổi, còn
+
         # tower của head stride-4 bắt đầu từ khởi tạo ngẫu nhiên.
+
         model = LibreYOLO9P2(None, size="s")
-        model.train(data="my-dataset.yaml", epochs=100, pretrained="LibreYOLO9s.pt")
+
+        model.train(data="my-dataset.yaml", epochs=100,
+        pretrained="LibreYOLO9s.pt")
   val:
     - label: Python
       language: python
@@ -87,9 +94,12 @@ snippets:
         libreyolo val model=LibreYOLO9s.pt data=my-dataset.yaml
     - label: Trên COCO
       language: bash
-      code: |
-        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ ràng
+      code: >
+        # YAML COCO đi kèm chứa script tải xuống nhúng sẵn, nên cần quyền rõ
+        ràng
+
         # trừ khi tập dữ liệu đã có cục bộ.
+
         libreyolo val model=LibreYOLO9c.pt data=coco.yaml imgsz=640 \
           allow_download_scripts=True
   export:
@@ -120,7 +130,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 624f3e70d2937683
+source_hash: c322dd68d42cdf24
 ---
 ## Cài đặt
 
@@ -179,9 +189,29 @@ hiện cơ sở thay thế.
 
 Xem [huấn luyện](/docs/train) để biết về tập dữ liệu, tăng cường dữ liệu, multi-GPU và logger.
 
-Các lần tinh chỉnh phát hiện tiêu chuẩn mới bật nhánh PGI chỉ dùng khi huấn luyện với `aux_weight=0.25`. `max_labels=300`; momentum SGD tăng từ 0.8 lên 0.937 trong ba epoch. Checkpoint cũ có một head tiếp tục với đồ thị đó. Dự đoán và xuất dùng head chính. `letterbox_pad=None` kế thừa dấu ghi trong checkpoint: trọng số không có dấu dùng `topleft`, còn các bản chuyển đổi chính thức mới ghi `center`.
+Mô hình cơ sở có thể huấn luyện một nhánh phụ PGI bên cạnh head chính. Nhánh này
+chỉ dùng khi huấn luyện: dự đoán và xuất dùng head chính. Một lần chạy gắn nhánh
+này khi trọng số khởi đầu có chứa tensor PGI hoặc khi huấn luyện từ đầu. Các
+checkpoint cơ sở đã công bố không chứa tensor nào, nên một lần tinh chỉnh từ
+chúng chỉ huấn luyện head chính và ghi log điều đó. `aux_weight=0.25` vẫn gắn một
+nhánh mới với trọng số loss đó, còn `aux_weight=0` giữ nhánh này tắt. Một lần
+chạy được tiếp tục giữ nguyên thiết lập PGI của checkpoint. Trên các kích thước
+`m` và `c`, nhánh này là nhánh của upstream: một backbone thứ hai trên ảnh đầu
+vào, có các stage được `CBFuse` cộng với các điểm lấy `CBLinear` từ backbone
+chính, cùng head riêng của nó, lần lượt là 12.8M và 25.7M tham số chỉ dùng khi
+huấn luyện ở 80 lớp đối tượng. Các mô hình đầu cuối và stride-4 không có nhánh
+PGI.
 
-Mosaic của YOLO9 và YOLOX ưu tiên ảnh ghép có nhãn với tối đa 20 lần lấy mẫu; MixUp của YOLO9 dùng cùng chính sách. Xem [histogram sự kiện](/docs/train/event-histograms) để biết hồ sơ đầu vào không phải RGB.
+Cả ba biến thể cắt chuẩn L2 của gradient ở 10 trước mỗi bước optimizer;
+`clip_max_norm=0` tắt việc cắt. Việc gán nhãn chấm điểm các anchor ở fp32, kể cả
+dưới autocast float16. `max_labels=300` giới hạn số box được giữ trên mỗi ảnh
+huấn luyện, và các box vượt giới hạn bị bỏ kèm một cảnh báo một lần; bộ nhớ gán
+nhãn theo số box thực của từng ảnh, không theo giới hạn này. Momentum SGD tăng từ
+0.8 lên 0.937 trong ba epoch. `letterbox_pad=None` kế thừa dấu ghi trong
+checkpoint: trọng số không có dấu dùng `topleft`, còn các bản chuyển đổi chính
+thức mới ghi `center`.
+
+Mosaic của YOLO9 và YOLOX ưu tiên ảnh ghép có nhãn với tối đa 20 lần lấy mẫu; MixUp của YOLO9 dùng cùng chính sách. MixUp tắt theo mặc định (`mixup_prob=0`). Khi bật, tỉ lệ trộn được lấy từ Beta(1, 1), đồng đều trên [0, 1], như trong MultimediaTechLab/YOLO. Xem [histogram sự kiện](/docs/train/event-histograms) để biết hồ sơ đầu vào không phải RGB.
 
 ## Đánh giá
 
@@ -222,6 +252,13 @@ Mọi tệp trọng số đã công bố cho họ này.
 ## Giấy phép
 
 <provenance-box>
+
+Mã của cả ba biến thể được chuyển từ
+[MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) ở commit
+`c4cb5f6f` (MIT). Bộ dự đoán một-đối-một của mô hình đầu cuối theo thiết kế của
+[DATE](https://github.com/YiqunChen1999/date) của Yiqun Chen (Apache-2.0), được
+triển khai cho LibreYOLO mà không sao chép mã DATE. Cấp stride-4 là mã của
+LibreYOLO.
 
 Checkpoint ảnh trên không có stride 4 dự đoán các lớp đối tượng VisDrone. Dùng giấy phép do nhà phát hành công bố và ghi trong repo trọng số.
 

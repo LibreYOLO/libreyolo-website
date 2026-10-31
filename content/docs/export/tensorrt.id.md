@@ -163,7 +163,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: cb90fc98ab735233
+source_hash: a51a22d3ffbd0d84
 ---
 
 ## Instalasi
@@ -245,6 +245,12 @@ dengan portabilitas di Ampere dan yang lebih baru. Nilai
 `"same_compute_capability"` dipetakan ke `NONE` dan memunculkan peringatan: engine
 hanya dioptimalkan untuk GPU saat ini, dan ekspornya menyatakan hal itu alih-alih
 mengklaim portabilitas yang tidak ia terapkan.
+
+Extra `tensorrt` memasang TensorRT 10.16. Pada TensorRT 11, yang menghapus flag
+jaringan `EXPLICIT_BATCH`, ekspor membuat jaringan tanpa flag itu. Langkah
+tersebut satu-satunya bagian yang diperiksa di TensorRT 11, dan hanya terhadap
+modul TensorRT tiruan: belum ada build engine FP32, FP16 atau INT8 yang berjalan
+di sana, dan flag builder FP16 dan INT8 mungkin masih gagal.
 
 Hanya sumbu batch yang diprofilkan. Build dengan dimensi spasial dinamis bukan
 bagian dari kontrak ini, dan karena itu FCOS diblokir: ia butuh tinggi dan lebar

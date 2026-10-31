@@ -177,7 +177,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 3238696a4e1ab6c2
+source_hash: 1b6651371762ad63
 ---
 
 ## 설치
@@ -187,6 +187,8 @@ RF-DETR에는 백본용 `transformers`를 설치하는 전용 extra가 필요합
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+이것이 없으면 Python이나 CLI에서 RF-DETR 체크포인트나 모델 이름을 불러올 때 이 설치 명령을 알려 주는 오류와 함께 멈춥니다.
 
 ## 예측
 
@@ -213,6 +215,8 @@ pip install "libreyolo[rfdetr]"
 <code-tabs name="train" />
 
 두 인수는 CNN 탐지기보다 더 중요합니다. transformer 탐지기는 YOLO 모델이 견디는 학습률에서 발산하므로 `lr0`를 `1e-4` 이하로 유지합니다. 변경할 이유가 없다면 `imgsz`를 체크포인트 기본 해상도로 유지합니다. 입력 크기는 백본 패치 크기와 창 개수의 곱으로 나누어떨어져야 합니다. LibreYOLO는 실행 전에 이를 검사하고 가장 가까운 유효 크기를 알려줍니다.
+
+분할 파인튜닝은 분할 체크포인트에서 시작합니다. RF-DETR에는 탐지에서 분할로의 전이가 없기 때문입니다. `libreyolo train model=LibreRFDETRn-seg.pt task=segment`는 그 체크포인트를 불러오며, 탐지 체크포인트에 `task=segment`를 쓰면 오류와 함께 멈춥니다.
 
 데이터셋, 증강, 다중 GPU, 로거는 [학습](/docs/train)을 참조합니다.
 

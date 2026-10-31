@@ -141,7 +141,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 624f3e70d2937683
+source_hash: c322dd68d42cdf24
 ---
 
 ## Instalasi
@@ -201,9 +201,11 @@ gantinya.
 
 Lihat [pelatihan](/docs/train) untuk dataset, augmentasi, multi-GPU, dan logger.
 
-Fine-tuning deteksi standar yang baru mengaktifkan cabang PGI khusus pelatihan dengan `aux_weight=0.25`. `max_labels=300`; momentum SGD naik dari 0.8 ke 0.937 selama warmup tiga epoch. Checkpoint lama dengan satu head melanjutkan pelatihan dengan graf tersebut. Prediksi dan ekspor memakai head utama. `letterbox_pad=None` mewarisi penanda checkpoint: bobot tanpa penanda memakai `topleft`, sedangkan konversi resmi baru mencatat `center`.
+Model dasar dapat melatih cabang auxiliary PGI di samping head utamanya. Cabang itu hanya untuk pelatihan: prediksi dan ekspor memakai head utama. Sebuah run memasangnya bila bobot awal membawa tensor PGI atau bila melatih dari nol. Checkpoint dasar yang dipublikasikan tidak membawanya, sehingga fine-tuning dari checkpoint itu hanya melatih head utama dan mencatat hal tersebut di log. `aux_weight=0.25` tetap memasang cabang baru dengan bobot loss itu, dan `aux_weight=0` membiarkannya mati. Run yang dilanjutkan mempertahankan pengaturan PGI checkpoint-nya. Pada ukuran `m` dan `c`, cabang itu adalah cabang upstream: backbone kedua pada gambar input, yang stage-nya dijumlahkan `CBFuse` dengan tap `CBLinear` dari backbone utama, beserta head-nya sendiri, masing-masing 12.8M dan 25.7M parameter khusus pelatihan pada 80 kelas. Model end-to-end dan stride-4 tidak punya cabang PGI.
 
-Mosaic YOLO9 dan YOLOX mengutamakan gambar pasangan beranotasi dengan maksimal 20 pengambilan sampel; MixUp YOLO9 memakai kebijakan yang sama. Lihat [histogram peristiwa](/docs/train/event-histograms) untuk profil input non-RGB.
+Ketiga varian memotong norma L2 gradien pada 10 sebelum setiap langkah optimizer; `clip_max_norm=0` mematikan pemotongan. Penetapan label menilai anchor dalam fp32, termasuk di bawah autocast float16. `max_labels=300` membatasi jumlah box yang dipertahankan per gambar pelatihan, dan box di luar batas itu dibuang dengan satu peringatan; memori penetapan mengikuti box nyata tiap gambar, bukan batas tersebut. Momentum SGD naik dari 0.8 ke 0.937 selama tiga epoch. `letterbox_pad=None` mewarisi penanda checkpoint: bobot tanpa penanda memakai `topleft`, sedangkan konversi resmi baru mencatat `center`.
+
+Mosaic YOLO9 dan YOLOX mengutamakan gambar pasangan beranotasi dengan maksimal 20 pengambilan sampel; MixUp YOLO9 memakai kebijakan yang sama. MixUp nonaktif secara default (`mixup_prob=0`). Bila aktif, rasio blend ditarik dari Beta(1, 1), seragam pada [0, 1], seperti di MultimediaTechLab/YOLO. Lihat [histogram peristiwa](/docs/train/event-histograms) untuk profil input non-RGB.
 
 ## Validasi
 
@@ -247,6 +249,8 @@ Setiap berkas bobot yang dipublikasikan untuk family ini.
 ## Lisensi
 
 <provenance-box>
+
+Kode ketiga varian di-port dari [MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) pada commit `c4cb5f6f` (MIT). Predictor one-to-one pada model end-to-end mengikuti desain [DATE](https://github.com/YiqunChen1999/date) oleh Yiqun Chen (Apache-2.0), diimplementasikan untuk LibreYOLO tanpa menyalin kode DATE. Level stride-4 adalah kode LibreYOLO.
 
 Checkpoint aerial stride-4 memprediksi kelas VisDrone. Gunakan lisensi yang dinyatakan penerbit dan tercatat di repositori bobotnya.
 

@@ -113,7 +113,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 361e81de5614a571
+source_hash: 7104f0fd056896b9
 ---
 
 ## Instalación
@@ -165,6 +165,11 @@ cabeza basada en anchors. La única diferencia: YOLOX añade durante esas época
 finales un refinamiento L1 de la regresión de boxes que v7 se salta, porque la
 función de pérdida SimOTA de v7 no lleva una rama L1 de offsets crudos que
 refinar.
+
+Mosaic y MixUp están activados por defecto (`mosaic_prob=1.0`, `mixup_prob=1.0`).
+Las muestras pasan por el pipeline de mosaic de YOLOv9, cuyo MixUp toma la
+proporción de mezcla de Beta(1, 1), uniforme en [0, 1], como hace
+MultimediaTechLab/YOLO.
 
 Consulta [entrenamiento](/docs/train) para datasets, aumento de datos,
 multi-GPU y loggers.

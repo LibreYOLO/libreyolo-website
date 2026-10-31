@@ -126,7 +126,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 ## Thiết lập đối số
 
@@ -228,6 +228,13 @@ Một số family thêm nút learning rate riêng. `backbone_lr_mult` điều ch
 nhóm backbone so với head, `clip_max_norm` đặt gradient clipping, còn SegFormer
 dùng `head_lr_mult` để chạy decode head ở tốc độ gấp mười backbone. Các nút này
 nằm trên subclass cấu hình của family, không phải class cơ sở.
+
+`clip_max_norm` cắt chuẩn L2 của gradient về giá trị đó trước mỗi bước optimizer,
+và `0` tắt việc cắt. YOLOv9, YOLOv9-E2E và YOLOv9-P2 mặc định là `10`. D-FINE,
+Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4, RF-DETR,
+DINOv2, GTR và EC mặc định là `0.1`. Trên CLI nó là `clip_max_norm=` hoặc
+`--clip-max-norm`; xem [`libreyolo train`](/docs/cli/train) để biết những family
+chấp nhận nó ở đó.
 
 ## EMA
 

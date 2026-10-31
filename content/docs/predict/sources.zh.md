@@ -188,7 +188,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## 输入源是如何分类的
@@ -326,7 +326,7 @@ pip install mss
 
 `save=True` 会把带标注的输出写进一个运行目录，而不是把它返回。
 
-图像写入自动递增的 `runs/detect/predict`、`runs/detect/predict2` 等目录，并保留源文件名。同一个进程里的每张图像都落在同一个目录下，所以两个输入文件夹里有同名文件时会互相覆盖。内存中的图像没有文件名可以复用。单张图像会保存为 `inference`，所以重复调用会覆盖它；列表或批次则依次编号为 `image0`、`image1` 等。
+图像写入自动递增的 `runs/detect/predict`、`runs/detect/predict2` 等目录，并保留源文件名。同一个进程里的每张图像都落在同一个目录下，所以两个输入文件夹里有同名文件时会互相覆盖。内存中的图像没有文件名可以复用。单张图像会保存为 `inference`，所以重复调用会覆盖它；列表或批次则依次编号为 `image0`、`image1` 等。两个进程在同一时刻保存时，会得到各自编号的目录，因为每次运行都是通过创建目录来预留它的。
 
 视频源和实时源写成单个 `.mp4`，以输入源命名。
 

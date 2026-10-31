@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## インストール
@@ -129,7 +129,7 @@ pip install libreyolo
 
 <code-tabs name="predict" />
 
-返される`Results`オブジェクトはすべてのファミリーに共通するため、別の検出器への切り替えは1行の変更で済みます。ファイル名に`-seg`があるとRTMDet-Insタスクとして自動的に解決され、`result.masks`にはボックスとともにインスタンスマスクが格納されます。`conf`は信頼度のしきい値、`iou`はNMSのしきい値を設定します。ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+返される`Results`オブジェクトはすべてのファミリーに共通するため、別の検出器への切り替えは1行の変更で済みます。ファイル名に`-seg`があるとRTMDet-Insタスクとして自動的に解決され、`result.masks`にはボックスとともにインスタンスマスクが格納されます。`conf`は信頼度のしきい値、`iou`はNMSのしきい値を設定します。`max_det`は両タスクにそのまま適用され、デフォルトでは画像あたり最大300個のボックスまたはマスクです。MMDetectionのRTMDet-Insのテスト設定は100を保持しており、`max_det=100`で再現できます。ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## バリアント
 

@@ -48,7 +48,7 @@ snippets:
         # stream=True devolve um gerador, um Results por frame ou imagem.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Construção
@@ -80,6 +80,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -106,6 +107,7 @@ model(
 | `device` | `None` | Sobrescreve o dispositivo para esta chamada |
 | `classes` | `None` | Mantém apenas estes IDs de classe |
 | `max_det` | `300` | Máximo de detecções por imagem |
+| `agnostic_nms` | `False` | Mantém só a caixa de maior score entre as caixas que se sobrepõem acima de `iou`, quaisquer que sejam as classes. Detect, segment, pose e obb |
 | `augment` | `False` | Data augmentation em tempo de teste |
 | `save` | `False` | Escreve uma imagem ou vídeo anotado |
 | `batch` | `1` | Imagens por forward pass para fontes de diretório e lista |
@@ -217,9 +219,18 @@ incrementado a menos que `exist_ok=True`. `plots` é um alias para `save_plots`.
 Python embutido que o YAML de um dataset pode carregar no seu campo
 `download`.
 
+Para detect e segment o dicionário é uma subclasse de `dict` que também carrega
+`box` (métricas por imagem e curvas de precisão, recall e F1 por classe) e
+`confusion_matrix`; para classify ele carrega `top1`, `top5` e
+`confusion_matrix`. Veja [Validação e métricas](/docs/train/validation).
+
 `faster_coco_eval` é aceito através de `**kwargs` e tem `True` como default,
 caindo de volta para o pycocotools quando o pacote não está instalado. O
 backend que rodou é reportado em `model.last_eval_backend`.
+
+`agnostic_nms=True`, também através de `**kwargs`, aplica NMS agnóstico a classes
+em `iou` antes de pontuar. Ele cobre detect e segment e levanta `ValueError` em
+qualquer outra tarefa.
 
 A validação com data augmentation levanta erro para as tarefas `obb` e `pose`.
 

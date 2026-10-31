@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## Festlegen der Einstellungen
@@ -116,7 +116,7 @@ Die ImageFolder-Pipeline für Klassifikation hat eigene Augmentierungsparameter.
 
 YOLO-NAS bildet eine eigene Form: kein Mosaic, eine immer aktive affine Transformation je Sample und unabhängiges statt gekoppeltes MixUp. Der Wert `mosaic_scale` wird als affiner Skalierungsbereich wiederverwendet.
 
-SegFormer und NAFNet führen jeweils eine aufgabenspezifische Pipeline aus, deren Zufälligkeit fest in der Familie definiert und nicht konfigurierbar ist. Bei SegFormer sind die Klassenattribute `semantic_scale_jitter` und `semantic_hsv_prob` aktiv, nicht `mosaic_scale` und `hsv_prob`. Beschnitt und Spiegelungen von NAFNet koppeln Eingabe- und Zieloperationen mit einer festen Wahrscheinlichkeit von 0,5.
+SegFormer, LingBot-Vision und NAFNet führen jeweils eine aufgabenspezifische Pipeline aus, deren Zufälligkeit fest in der Familie definiert und nicht konfigurierbar ist. Bei SegFormer und LingBot-Vision sind die Klassenattribute `semantic_scale_jitter` und `semantic_hsv_prob` aktiv, nicht `mosaic_scale` und `hsv_prob`. Beschnitt und Spiegelungen von NAFNet koppeln Eingabe- und Zieloperationen mit einer festen Wahrscheinlichkeit von 0,5.
 
 ## Berücksichtigte Einstellungen je Familie
 
@@ -150,6 +150,10 @@ Innerhalb dieser Spalten gibt es ausschließlich einschränkende Ausnahmen:
 
 `no_aug_epochs` ist überall `used`, wirkt aber je nach Pipeline anders. In Mosaic-Pipelines schaltet es Mosaic und MixUp für die letzten Epochen ab. In DETR-Pipelines beendet es photometrische Augmentierung, Zoom-out und Cropping und steuert die Schlussphase des Zeitplans. Bei Klassifikation schaltet es automatische Augmentierung, Erasing, MixUp und CutMix ab; Cropping und Spiegeln bleiben aktiv.
 
+`perspective` fügt zusätzlich zu Rotation, Skalierung, Scherung und Translation eine projektive Verzerrung hinzu. Jede Ecke der Leinwand wandert pro Achse um einen zufälligen Betrag von bis zu `min(perspective * 100, 0.2)` mal die halbe Leinwandseite nach innen, sodass `perspective=0.001` eine Ecke bei jeder Auflösung um höchstens 5 Prozent der Seite verschiebt und jeder Wert ab `0.002` dasselbe Maximum erreicht. Der Standard `0` hält die Verzerrung affin, und ein negativer Wert löst `ValueError` aus, sobald das erste Sample verzerrt wird. YOLOv9 samt E2E- und P2-Varianten, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR und RT-DETRv2 wenden sie an.
+
+MixUp in der YOLOv9-Mosaic-Pipeline, über die YOLOv9 und seine Varianten, YOLOv7, RT-DETR und RT-DETRv2 trainieren, zieht das Mischverhältnis aus Beta(1, 1), gleichverteilt auf [0, 1]. Der Mosaic-Wrapper von YOLOX, den YOLOX, RTMDet und PicoDet verwenden, mischt mit festen 0.5.
+
 ## Klassifizierungspaket
 
 Vier Einstellungen steuern ausschließlich die Klassifizierungspipeline. Erkennungsfamilien ignorieren alle vier.
@@ -177,12 +181,12 @@ Einige Einstellungen liegen in der Konfigurationsunterklasse einer Familie statt
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Wahrscheinlichkeit der Copy-Paste-Instanzaugmentation, nur für `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` verwendet dasselbe Sample gespiegelt, `"mixup"` lädt ein zweites Sample |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Wahrscheinlichkeit einer zufälligen Drehung um 90 Grad |
-| YOLOv9 | `max_labels` | Obergrenze der Ground-Truth-Labels je Bild in den Trainingstransformationen, Standard 100 |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Obergrenze der Ground-Truth-Labels je Bild in den Trainingstransformationen, Standard 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-Paste für `task="segment"`, nur Modus `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Wahrscheinlichkeit für zufälliges Beschneiden und Skalieren |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Jitter im Pose-Pfad und Wahrscheinlichkeit einer Keypoint-bewussten affinen Transformation |
 
-`max_labels` ist die einzige Einstellung, durch die unbemerkt Daten verloren gehen. Boxen oberhalb der Grenze werden ohne Fehler verworfen. Für dichte Bilder wie Luftaufnahmen muss der Wert daher erhöht werden.
+`max_labels` ist die einzige Einstellung, durch die Daten verloren gehen. Boxen oberhalb der Grenze werden mit einer einmaligen Warnung statt mit einem Fehler verworfen. Für dichte Bilder wie Luftaufnahmen muss der Wert daher erhöht werden. Der Speicherbedarf der Label-Zuweisung folgt dem dichtesten Bild im Batch, nicht der Obergrenze.
 
 Mosaic und MixUp sind beim Training orientierter Boxen unabhängig von den Einstellungen deaktiviert, da eine eckenbewusste Augmentation für gedrehte Boxen nicht implementiert ist.
 

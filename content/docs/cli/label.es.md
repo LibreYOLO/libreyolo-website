@@ -41,7 +41,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## Sinopsis
@@ -88,6 +88,19 @@ dataset se elige o se crea desde el navegador. Pasar `data=path/to/data.yaml`
 abre ese dataset directamente, y la línea de arranque informa del número de
 imágenes, del número de clases y de si el dataset es escribible. Un dataset de
 solo lectura también se abre e indica por qué no se puede escribir en él.
+
+### Label-Error Radar
+
+Con la asistencia de IA activada, el botón Radar, o `Y`, ejecuta el modelo de
+asistencia sobre cada imagen etiquetada y lista las imágenes en las que el
+modelo discrepa de las etiquetas, de peor a mejor: un box en el que el modelo
+no encuentra nada, una detección con confianza alta sin box, o un box cuya
+clase el modelo cuestiona. Radar no escribe nada; cada corrección es una
+edición manual. `N` pasa a la siguiente imagen señalada en ese orden de peor a
+mejor y vuelve al principio al llegar al final. Pulsar `Y` otra vez reabre el
+último análisis, con la hora en que se ejecutó y un botón Rescan, en lugar de
+volver a analizar. Radar no está disponible en proyectos de boxes orientados, y
+ambas teclas se pueden reasignar en el diálogo de atajos `?`.
 
 ### Compartir, y qué hace `host`
 

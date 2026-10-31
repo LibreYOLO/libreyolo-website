@@ -119,7 +119,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Instalasi
@@ -161,7 +161,8 @@ checkpoint `g` miliknya sendiri.
 default adalah linear probe dari laporan upstream: backbone ViT dibekukan dan
 hanya head padat 1x1 yang dilatih, sesuai cara bobot yang dihosting LibreYOLO di
 atas dibuat. Teruskan `freeze_backbone=False` untuk melakukan fine-tuning pada
-seluruh jaringan dan turunkan `lr0` sesuai kebutuhan.
+seluruh jaringan dan turunkan `lr0` sesuai kebutuhan. `libreyolo train` memulai dari resep yang sama,
+dan tanpa `name=` run-nya masuk ke `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

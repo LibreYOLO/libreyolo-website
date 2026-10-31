@@ -2,8 +2,8 @@
 title: 임계값과 필터링
 seo_title: 'LibreYOLO에서 conf, iou 및 max_det'
 description: >-
-  예측 시 conf, iou, max_det, classes가 실제로 무엇을 하는지, 어떤 계열이 NMS를 실행하지 않아 iou를 무시하는지,
-  agnostic_nms가 왜 아무 효과가 없는지.
+  예측 시 conf, iou, max_det, classes, agnostic_nms가 실제로 무엇을 하는지, 그리고 어떤 계열이 자체
+  NMS를 실행하지 않아 iou를 무시하는지.
 lead: >-
   네 가지 인자가 어떤 예측이 살아남는지를 결정합니다: conf, iou, max_det 및 classes. 그 중 두 가지만 모든 계열에
   적용되는데, 이는 세트 예측기가 고정된 쿼리 세트를 디코딩하고 NMS를 절대 실행하지 않기 때문입니다.
@@ -96,7 +96,25 @@ snippets:
 
         # 어느 쪽이든 동일한 수치입니다. conf와 max_det가 작동하는 제어값입니다.
         print(len(loose.boxes), len(tight.boxes))
-source_hash: "849650629e58c9e1"
+  agnostic:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+        per_class = model(SAMPLE_IMAGE)
+        agnostic = model(SAMPLE_IMAGE, agnostic_nms=True)
+
+        # 클래스가 다른 겹치는 박스는 점수가 가장 높은 하나로 합쳐집니다.
+        print(len(per_class.boxes), len(agnostic.boxes))
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: fa0e6cee02b3e336
 ---
 
 ## 네 가지 논점
@@ -136,12 +154,14 @@ CenterNet, DEIM, DETR, Deformable DETR, D-FINE, DINO-DETR, EdgeCrafter, Faster R
 
 이 계열들은 이것을 사용합니다: YOLOv1부터 YOLOv4, YOLOv7, YOLOv9, YOLOX, YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet 그리고 SSD.
 
-두 가지 예측 시 옵션은 모델이 끝난 후 두 가지 모두 상자를 병합하기 때문에 세트 예측기에서도 `iou`를 중요하게 만듭니다:
+세 가지 예측 시 옵션은 셋 모두 모델이 끝난 후 박스에 작용하기 때문에 세트 예측기에서도 `iou`를 중요하게 만듭니다:
 
 - `tiling=True`은 `iou`에서 클래스별 NMS로 겹치는 타일을 조정합니다
 - `augment=True`는 각 클래스 NMS와 뒤집힌 뷰를 `iou`에서 병합합니다
+- `agnostic_nms=True`는 `iou`에서 클래스에 걸쳐 겹치는 박스를 억제하며,
+  [아래](#agnostic_nms)에서 설명합니다
 
-둘 다 [추론 성능](/docs/predict/performance)에 포함되어 있습니다.
+앞의 둘은 [추론 성능](/docs/predict/performance)에 포함되어 있습니다.
 
 오픈-어휘 탐지기는 자체 규칙을 가지고 있습니다. 프로세서가 NMS를 실행하는 계열는 자체 기본 임계값을 선언하고 `iou`를 준수하며, 이는 OMDet-Turbo의 경우에 해당합니다. 아무 것도 억제하지 않는 계열인 Grounding DINO, OWLv2 및 OV-DEIM은 `iou`가 전달되면 경고를 발생시킵니다. 그 경고는 라이브러리에서 유일한 경고입니다.
 
@@ -149,9 +169,9 @@ CenterNet, DEIM, DETR, Deformable DETR, D-FINE, DINO-DETR, EdgeCrafter, Faster R
 
 `max_det`는 한 이미지에 대해 몇 개의 예측이 반환되는지를 제한합니다. 이는 모든 곳에 적용되지만, 서로 다른 메커니즘을 통해 적용됩니다: NMS 계열은 억제 후에 잘라내고, 세트 예측기는 이를 상위 k 선택의 크기로 사용합니다.
 
-어떤 계열들은 업스트림 참조 구성 때문에 요청하는 것과 상관없이 아래로 제한합니다. SSD는 200으로 한정되고, RTMDet 인스턴스 분할은 100으로 한정되며, FCOS는 이미지당 자체 탐지 한도에 따라 제한됩니다. `max_det`를 그 이상으로 올려도 효과가 없습니다.
+어떤 계열들은 업스트림 참조 구성 때문에 요청하는 것과 상관없이 아래로 제한합니다. SSD는 200으로 한정되고, FCOS는 이미지당 자체 탐지 한도에 따라 제한됩니다. `max_det`를 그 이상으로 올려도 효과가 없습니다.
 
-`max_det`가 각 계열별이 아니라 중앙에서 적용되는 한 곳은 타일 추론이며, 여기서 병합된 목록은 타일이 조정된 후 잘립니다.
+`max_det`가 각 계열별이 아니라 중앙에서 적용되는 경우는 두 가지입니다. 하나는 타일 추론으로, 병합된 목록이 타일이 조정된 후 잘립니다. 다른 하나는 `classes`나 `agnostic_nms=True`를 쓰는 호출로, 필터나 억제 뒤에 잘립니다.
 
 ## 클래스 필터링
 
@@ -168,18 +188,31 @@ libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubuserco
 libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
 ```
 
-필터링이 정확도를 저절로 높이지는 않습니다. 모델은 여전히 나중에 버리는 클래스를 예측하는 데 연산 예산을 사용하며, `max_det`는 필터링 전에 계열별로 적용되므로 원치 않는 클래스로 가득 찬 이미지가 관심 클래스에 도달하기 전에 한도에 이를 수 있습니다. 그런 경우 `conf`를 낮추거나 `max_det`를 높이십시오.
+필터링이 정확도를 저절로 높이지는 않습니다. 모델은 여전히 나중에 버리는 클래스를 예측하는 데 연산 예산을 사용합니다. `classes`를 설정하면 계열은 박스 300개, 또는 `max_det`가 더 크면 `max_det`만큼의 후보 예산을 유지하며, `max_det`로 자르는 것은 필터 뒤에 이루어지므로 작은 `max_det`가 관심 클래스를 밀어내지 않습니다. 내보낸 백엔드도 배치 TensorRT 엔진을 포함해 같은 예산을 사용합니다. 점수가 더 높은 원치 않는 클래스의 박스가 300개를 넘는 이미지는 관심 클래스에 도달하기 전에 여전히 예산을 채울 수 있습니다. 그런 경우 `max_det`를 300보다 높이십시오.
 
 ## 애그노스틱_nms
 
-`agnostic_nms`는 허용되며 아무 작업도 하지 않습니다. 이를 전달하면 명령줄 호환성을 위한 아무 작업도 하지 않는 옵션이라는 경고가 표시되며, 해당 인자는 무시됩니다.
+모든 계열의 자체 NMS는 클래스를 구분하므로, 기본적으로 클래스가 다른 두 개의 겹치는 박스는 어떤 `iou`에서든 모두 살아남습니다. `agnostic_nms=True`는 클래스를 구분하지 않는 단계를 하나 추가합니다. `iou`를 넘어 겹치는 박스 중 클래스와 관계없이 점수가 가장 높은 것 하나만 남습니다.
 
-클래스에 무관한 억제 모드는 없습니다. 라이브러리의 모든 NMS 호출은 클래스 인식을 기반으로 하므로, 서로 다른 클래스의 두 개의 겹치는 상자도 어떤 `iou`에서든 모두 살아남습니다. 이것이 문제가 되는 경우, 먼저 `classes`로 필터링하거나 `result.boxes`에서 직접 클래스 간 억제를 수행하십시오.
+<code-tabs name="agnostic" />
+
+이 단계는 계열이 끝낸 탐지 결과에 대해 `classes` 필터 뒤, `max_det`로 자르기 전에 실행됩니다. 따라서 자체 NMS를 실행하지 않는 세트 예측기, 내보낸 백엔드, `augment=True`와 `tiling=True`에서도 똑같이 동작합니다. 마스크와 키포인트는 해당 박스와 함께 제거되고, 회전 박스는 회전 IoU로 비교됩니다. 박스를 반환하는 작업인 탐지, 분할, 자세, OBB를 지원합니다.
+
+계열은 이 단계가 처리할 후보로 박스 300개, 또는 `max_det`가 더 크면 `max_det`만큼의 예산을 유지합니다. `max_det`가 300보다 작으면 점수가 더 낮은 후보가 억제로 비게 된 자리를 다시 채웁니다. 기본값을 포함해 300 이상이면 그 자리는 빈 채로 남습니다.
+
+적용되지 않는 경우는 다음과 같습니다.
+
+- 표준 predict 경로에서 박스가 없는 작업은 `ValueError`를 발생시킵니다.
+- `LibreEnsemble`과 [HRNet](/docs/models/hrnet)은 `NotImplementedError`를 발생시킵니다.
+- `LibreSAM` 모델과 [3D 탐지기](/docs/tasks/3d-object-detection)인 WildDet3D, 3D-MOOD, FCOS3D, DetAny3D는 이런 인자를 받지 않으며 `TypeError`를 발생시킵니다.
+- [L2CS-Net](/docs/models/l2cs), [PP-OCRv5](/docs/models/pp-ocrv5), [SAM 3D Body](/docs/models/sam-3d-body), [LibreFaceRec](/docs/models/librefacerec)은 자체 predict 경로를 실행하며 이를 무시합니다.
+
+`val(agnostic_nms=True)`는 탐지와 분할 검증에 같은 단계를 적용합니다. [검증과 지표](/docs/train/validation)를 참조하십시오.
 
 ## 무엇을 예측이 거부하는가
 
-두 개의 인수가 경고 대신 발생합니다: `visualize`와 `embed`는 둘 다 `NotImplementedError`를 발생시킵니다. 임베딩의 경우, `task="embed"`로 모델을 로드하고 `predict` 또는 `embed`를 정상적으로 호출하십시오.
+두 개의 인수가 경고 대신 발생합니다: `visualize`와 `embed`는 둘 다 `NotImplementedError`를 발생시킵니다. 임베딩의 경우, `task="embed"`로 모델을 로드하고 `predict` 또는 `embed`를 정상적으로 호출하십시오. `agnostic_nms=True`는 위에 나열한 대로 적용되지 않는 곳에서 예외를 발생시킵니다.
 
 인식되지 않는 항목은 지원되는 옵션을 나열하는 `TypeError`를 발생시키므로, 오타는 조용히 무시되는 대신 즉시 실패합니다.
 
-다음은 수락되었고, 경고되었으며, 폐기되었습니다: `agnostic_nms`, `boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` 및 `verbose`.
+다음은 수락되었고, 경고되었으며, 폐기되었습니다: `boxes`, `dnn`, `half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` 및 `verbose`.

@@ -116,7 +116,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## 定義
@@ -135,7 +135,7 @@ source_hash: 577cd3c8c2d5d6fe
 
 [EoMT](/docs/models/eomt)はマスクの推論と検証に対応しますが、学習はできません。エクスポートの範囲はさらに狭く、`export()`が受け付けるのはsemanticタスクだけです。`segment`と`panoptic`に必要なクエリマスクのランタイム契約が定義されていないため、これらでは`NotImplementedError`を送出します。EoMTのインスタンスマスクはエクスポート済みグラフではなくPythonで使用してください。
 
-別のグループはクラスリストではなくプロンプトからセグメンテーションします。クリック、ボックス、フレーズで物体を選び、モデルがそのマスクを返します。[SAM](/docs/models/sam)、[SAM 2](/docs/models/sam-2)、[SAM 3](/docs/models/sam-3)、[MobileSAM](/docs/models/mobilesam)、[EdgeTAM](/docs/models/edgetam)、[PicoSAM3](/docs/models/picosam3)がこの方法を使います。[SenseNova-Vision](/docs/models/sensenova-vision)も同様ですが、そのセグメンテーションは参照式で、1つの物体を指すフレーズを受け取ります。これらは固有のファクトリと追加パッケージを通して読み込まれ、正確な呼び出しは各モデルページに記載されています。
+別のグループはクラスリストではなくプロンプトからセグメンテーションします。クリック、ボックス、フレーズで物体を選び、モデルがそのマスクを返します。[SAM](/docs/models/sam)、[SAM 2](/docs/models/sam-2)、[SAM 3](/docs/models/sam-3)、[MobileSAM](/docs/models/mobilesam)、[EdgeTAM](/docs/models/edgetam)、[PicoSAM3](/docs/models/picosam3)がこの方法を使います。[SenseNova-Vision](/docs/models/sensenova-vision)も同様ですが、そのセグメンテーションは参照式で、1つの物体を指すフレーズを受け取ります。[WeVisOne-VL](/docs/models/wevisone-vl)は`names=`で指定した各フレーズをセグメンテーションし、ボックスとバイナリマスクを返します。これらは固有のファクトリと追加パッケージを通して読み込まれ、正確な呼び出しは各モデルページに記載されています。
 
 ## 推論
 
@@ -143,7 +143,7 @@ source_hash: 577cd3c8c2d5d6fe
 
 <code-tabs name="predict" />
 
-`conf`と`max_det`は検出と同じように出力を絞り込み、マスクも対応するボックスとともにフィルタリングされます。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
+`conf`と`max_det`は検出と同じように出力を絞り込み、マスクも対応するボックスとともに、`agnostic_nms=True`による場合も含めてフィルタリングされます。入力ソース、ストリーミング、結果の処理については[推論](/docs/predict)を参照してください。
 
 ## データセット形式
 
@@ -189,7 +189,7 @@ names:
 
 ## 検証
 
-`val()`は`metrics/`キーを持つ通常の辞書を返します。ボックスとマスクはどちらもCOCO評価で別々に採点され、マスクの数値が主要な結果です。
+`val()`は`metrics/`キーを持つ辞書を返します。ボックスとマスクはどちらもCOCO評価で別々に採点され、マスクの数値が主要な結果です。5フィールドのボックスだけのラベル行は、セグメンテーション学習がその行から読み取るのと同じ矩形マスクとして採点されます。
 
 <code-tabs name="val" />
 
@@ -198,6 +198,8 @@ names:
 どの数値をファミリーが主要としたかに依存せず比較できるよう、4つの数値はマスクを表す`(M)`とボックスを表す`(B)`の明示的な接尾辞付きでも公開されます。`metrics/mAP50-95(M)`と`metrics/mAP50-95(B)`、`metrics/mAP50(M)`と`metrics/mAP50(B)`、`metrics/precision(M)`と`metrics/precision(B)`、`metrics/recall(M)`と`metrics/recall(B)`です。このタスクには接尾辞なしの`metrics/precision`や`metrics/recall`はありません。
 
 適合率と再現率のキーは注意して解釈してください。後方互換性のために維持された別名であり、ある運用点の値ではありません。`metrics/precision(M)`は`metrics/mAP50-95(M)`と同じ値を、`metrics/recall(M)`は検出数100でのマスク平均再現率と同じ値を保持します。`(B)`もボックスについて同様です。この2つをペアとして描画すると同じ数値を二重に報告することになります。
+
+結果には`confusion_matrix`と、`box`上のクラス別の適合率、再現率、F1の曲線も含まれます。どちらもマスクではなくボックスから計算されます。[検証と指標](/docs/train/validation#confusion-matrix)を参照してください。このタスクでは`val(agnostic_nms=True)`に対応しています。
 
 ## エクスポート
 

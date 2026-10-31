@@ -126,7 +126,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Definindo argumentos
@@ -232,6 +232,13 @@ Algumas famílias acrescentam seus próprios parâmetros de learning rate.
 define o clipping de gradiente, e o SegFormer usa `head_lr_mult` para rodar sua
 cabeça de decodificação a dez vezes a taxa do backbone. Eles ficam na subclasse de
 config da família, não na base.
+
+`clip_max_norm` limita a norma L2 do gradiente a esse valor antes de cada passo do
+otimizador, e `0` desliga o clipping. YOLOv9, YOLOv9-E2E e YOLOv9-P2 usam `10`
+como padrão. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2,
+RT-DETRv4, RF-DETR, DINOv2, GTR e EC usam `0.1`. Na CLI é `clip_max_norm=` ou
+`--clip-max-norm`; veja [`libreyolo train`](/docs/cli/train) para as famílias que
+o aceitam ali.
 
 ## EMA
 

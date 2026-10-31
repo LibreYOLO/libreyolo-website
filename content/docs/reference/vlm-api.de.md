@@ -49,7 +49,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## Installation
@@ -84,16 +84,17 @@ unbekannter Alias löst einen `ValueError` aus, der alle Aliasse aufführt.
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Festgelegter Upstream-Snapshot |
 
 Der Standardalias lautet `qwen3-vl-4b`. Der jeweilige Standardalias einer
 Familie verwendet die zuerst aufgeführte Größe: `qwen3-vl` wird zu `4b`,
-`lfm2-vl` zu `450m`, `internvl3` zu `2b`, `smolvlm2` zu `2.2b` und
-`florence-2` zu `base`.
+`lfm2-vl` zu `450m`, `internvl3` zu `2b`, `smolvlm2` zu `2.2b`,
+`florence-2` zu `base` und `wevisone-vl` zu `2b`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` und `LibreMODUS` (auch
-`LibreModus` geschrieben) werden auf Paketebene exportiert.
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL`
+und `LibreMODUS` (auch `LibreModus` geschrieben) werden auf Paketebene exportiert.
 
 Die Erkennung umfasst außerdem `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` und `lfm2-vl-3b`. Der Alias `gemma-4` ohne Zusatz wählt E4B. Molmo2-Aliasse sind `molmo2-4b`, `molmo2-8b` und `molmo2-o-7b`; Standard ist 4B. Aliasse legen die Weiterleitung fest, sagen aber nicht aus, dass jeder entfernte Snapshot heruntergeladen und getestet wurde. `moondream-3` lädt in 1.6.0 nicht: Seinem Mirror fehlen Gewichts-Shards.
 
@@ -105,6 +106,7 @@ Die unterstützten Aufgaben hängen von der Modellfamilie ab. Diese Adapter unte
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 Da die Aufgabe durch einen Prompt gesteuert und nicht fest in einen Checkpoint
 integriert ist, kann sie bei einem geladenen Modell gewechselt werden:
@@ -117,7 +119,7 @@ Die Aufgabe wird anhand der von der Familie unterstützten Liste validiert,
 bleibt für spätere Aufrufe von `predict()` und `track()` aktiv und gibt das
 Modell zurück, damit Aufrufe verkettet werden können.
 
-Molmo2 liefert Punkte und benötigt `{label}` in eigenen Pointing-Vorlagen. Moondream unterstützt Erkennung, Punkte und nativen Chat. Verwende [LibreGround](/docs/reference/ground-api) für Anweisung-zu-Klick-Anfragen.
+Molmo2 liefert Punkte und benötigt `{label}` in eigenen Pointing-Vorlagen. Bei WeVisOne-VL sendet `referring=True` in `detect` eine Generierung je Phrase, und sein `segment`, `matte` sowie die referenzierende Erkennung lösen ohne Vokabular `ValueError` aus. Moondream unterstützt Erkennung, Punkte und nativen Chat. Verwende [LibreGround](/docs/reference/ground-api) für Anweisung-zu-Klick-Anfragen.
 
 ## set_classes
 

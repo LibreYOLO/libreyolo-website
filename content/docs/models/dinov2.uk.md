@@ -21,7 +21,7 @@ keywords:
   - ембединг зображення
   - виділення ознак
   - Meta AI
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Семантична сегментація
@@ -177,7 +177,7 @@ snippets:
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
 
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## Встановлення
@@ -189,6 +189,9 @@ LibreDINOv2 реєструється, лише якщо встановлено `
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Без нього завантаження контрольної точки або назви моделі DINOv2 завершується
+помилкою, яка називає цей рядок встановлення.
 
 ## Передбачення
 

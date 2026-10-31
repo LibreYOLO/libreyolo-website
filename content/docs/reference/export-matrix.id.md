@@ -17,10 +17,13 @@ keywords:
   - ambang batas paritas ekspor
   - NotImplementedError ekspor
 last_verified: 1.6.0
-verification: Format, tingkat, urutan fallback, blok task dan family, serta blok NCNN dibaca dari
-  libreyolo/export/support.py; alias dan argumen bersama dari libreyolo/export/exporter.py; definisi
-  tingkat dari docs/adr/0011-export-support-tiers.md; ambang paritas dari docs/export_support.md,
-  semuanya pada v1.6.0. Sel per kombinasi tidak disalin di sini; kueri dengan snippet di bawah.
+verification: >-
+  Format, tingkat, urutan fallback, blok task dan family, serta blok NCNN dibaca
+  dari libreyolo/export/support.py; alias dan argumen bersama dari
+  libreyolo/export/exporter.py; definisi tingkat dari
+  docs/adr/0011-export-support-tiers.md; ambang paritas dari
+  docs/export_support.md, semuanya pada v1.6.0. Sel per kombinasi tidak disalin
+  di sini; kueri dengan snippet di bawah.
 snippets:
   usage:
     - label: Lakukan query pada matriks tanpa model
@@ -47,19 +50,28 @@ snippets:
   export:
     - label: Ekspor dan baca penolakan
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
         from libreyolo.export.support import get_support
 
+
         model = LibreYOLO("LibreYOLO9t.pt")
+
         print(model.export(format="onnx"))
 
-        # Periksa sebelum memanggil: kombinasi blocked memunculkan error saat preflight
+
+        # Periksa sebelum memanggil: kombinasi blocked memunculkan error saat
+        preflight
+
         # dan pesan memuat alasan ini.
+
         blocked = get_support("domedetr", "detect", "onnx")
+
         print(blocked.tier)
+
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## Bentuk matriks
@@ -132,6 +144,11 @@ Task berikut diblokir untuk setiap family tanpa entri eksplisit.
 
 | Task | Alasan |
 |---|---|
+| `albedo` | Ekspor albedo tidak punya kontrak runtime backend linear-RGB |
+| `act` | Loop sampling policy tidak punya graph yang dapat diekspor maupun kontrak runtime backend |
+| `generate` | Pembuatan gambar menjalankan loop sampling di beberapa jaringan, yang tidak punya graph yang dapat diekspor maupun kontrak runtime backend |
+| `generate3d` | Pembuatan 3D menjalankan loop sampling di beberapa jaringan, yang tidak punya graph yang dapat diekspor maupun kontrak runtime backend |
+| `detect3d` | Output graph deteksi 3D, metadata kamera, dan kontrak runtime belum didefinisikan |
 | `ocr` | Dua jaringan dengan cropping dinamis per region tidak sesuai dengan kontrak ekspor satu graph |
 | `point` | Family belum dihubungkan ke kontrak heatmap titik bersama dan peak-decoding backend |
 | `semantic` | Family belum dihubungkan ke kontrak dense-logits bersama dan argmax backend |
@@ -154,7 +171,7 @@ terhubung untuk tetap diekspor.
 | `hrnet` | Semua selain ONNX, TorchScript, OpenVINO, dan TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Setiap format; ekspor promptable model berada di luar cakupan kontrak runtime v1 |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Setiap format; ekspor runtime open-vocabulary berada di luar cakupan v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Setiap format; ekspor VLM generatif berada di luar cakupan v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Setiap format; ekspor VLM generatif berada di luar cakupan v1 |
 
 PicoSAM3 adalah pengecualian dalam tier promptable: model ini mengekspor jaringan
 ROI mentah 96 piksel ke ONNX.

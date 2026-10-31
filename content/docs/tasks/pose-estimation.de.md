@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## Definition
@@ -184,7 +184,7 @@ Die Gewichte werden bei der ersten Verwendung von Hugging Face heruntergeladen u
 
 <code-tabs name="predict" />
 
-Keypoint-Anzahl und -Reihenfolge sind Eigenschaften des Checkpoints, nicht der Bibliothek. Ein auf einem anderen Skelett trainiertes Modell gibt daher ein anderes `K` und eine andere Bedeutung je Index zurück. Auch der Inhalt der dritten Keypoint-Spalte hängt vom Checkpoint ab. EdgeCrafter schreibt dort statt einer punktweisen Bewertung eine Konstante. Es besitzt überhaupt keinen Boxkopf, weshalb jede Pose-Box die Begrenzung der eigenen Keypoints dieser Instanz darstellt. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
+Keypoint-Anzahl und -Reihenfolge sind Eigenschaften des Checkpoints, nicht der Bibliothek. Ein auf einem anderen Skelett trainiertes Modell gibt daher ein anderes `K` und eine andere Bedeutung je Index zurück. Auch der Inhalt der dritten Keypoint-Spalte hängt vom Checkpoint ab. EdgeCrafter schreibt dort statt einer punktweisen Bewertung eine Konstante. Es besitzt überhaupt keinen Boxkopf, weshalb jede Pose-Box die Begrenzung der eigenen Keypoints dieser Instanz darstellt. `agnostic_nms=True` unterdrückt überlappende Boxen klassenübergreifend und entfernt die Keypoints jeder unterdrückten Instanz zusammen mit ihrer Box; HRNet löst dafür `NotImplementedError` aus. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
 
 ## Datensatzformat
 
@@ -237,7 +237,7 @@ Das Training wird mit einem veröffentlichten `-pose`-Checkpoint fortgesetzt, de
 
 <code-tabs name="val" />
 
-`metrics/keypoints_mAP50-95` ist die wichtigste Kennzahl. Sie entspricht der Mean Average Precision über OKS-Schwellenwerte von 0,50 bis 0,95 und wird vom Training zur Auswahl der besten Epoche verwendet. `metrics/keypoints_mAP50` und `metrics/keypoints_mAP75` sind die Varianten bei einem einzelnen Schwellenwert. `metrics/keypoints_mAP_M` und `metrics/keypoints_mAP_L` teilen den Mittelwert nach mittlerer und großer Instanzfläche auf. Die COCO-Keypoint-Auswertung definiert keine kleine Gruppe. Die entsprechenden Average-Recall-Werte heißen `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`, `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` und `metrics/keypoints_AR_L`. Jeder Schlüssel dieser Aufgabe trägt das Präfix `keypoints_`. Die von einem Detektor zurückgegebenen Box-`mAP`-Schlüssel erscheinen nicht.
+`metrics/keypoints_mAP50-95` ist die wichtigste Kennzahl. Sie entspricht der Mean Average Precision über OKS-Schwellenwerte von 0,50 bis 0,95 und wird vom Training zur Auswahl der besten Epoche verwendet. `metrics/keypoints_mAP50` und `metrics/keypoints_mAP75` sind die Varianten bei einem einzelnen Schwellenwert. `metrics/keypoints_mAP_M` und `metrics/keypoints_mAP_L` teilen den Mittelwert nach mittlerer und großer Instanzfläche auf. Die COCO-Keypoint-Auswertung definiert keine kleine Gruppe. Die entsprechenden Average-Recall-Werte heißen `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`, `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` und `metrics/keypoints_AR_L`. Jeder Schlüssel dieser Aufgabe trägt das Präfix `keypoints_`. Die von einem Detektor zurückgegebenen Box-`mAP`-Schlüssel erscheinen nicht. `val(agnostic_nms=True)` löst bei dieser Aufgabe `ValueError` aus.
 
 ## Export
 

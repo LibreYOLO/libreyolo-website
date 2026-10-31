@@ -17,7 +17,7 @@ keywords:
   - détection petits objets
   - programmable gradient information
   - GELAN
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -145,7 +145,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 624f3e70d2937683
+source_hash: c322dd68d42cdf24
 ---
 
 ## Installer
@@ -216,9 +216,31 @@ base.
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.
 
-Les nouveaux fine-tunings de détection standard activent une branche PGI réservée à l'entraînement avec `aux_weight=0.25`. `max_labels=300` ; le momentum SGD passe de 0.8 à 0.937 pendant trois époques de warmup. Les anciens checkpoints à une seule tête reprennent avec ce graphe. La prédiction et l'export utilisent la tête principale. `letterbox_pad=None` hérite de l'indication du checkpoint : les poids non marqués utilisent `topleft`, tandis que les nouvelles conversions officielles enregistrent `center`.
+Le modèle de base peut entraîner une branche auxiliaire PGI à côté de sa tête
+principale. La branche sert uniquement à l'entraînement : la prédiction et
+l'export utilisent la tête principale. Un run l'attache lorsque les poids de
+départ contiennent des tenseurs PGI ou lorsqu'il s'entraîne à partir de zéro.
+Les checkpoints de base publiés n'en contiennent aucun, donc un fine-tuning à
+partir d'eux n'entraîne que la tête principale et le consigne dans les logs.
+`aux_weight=0.25` attache malgré tout une nouvelle branche avec ce poids de loss,
+et `aux_weight=0` la garde désactivée. Un run repris conserve la configuration
+PGI de son checkpoint. Sur les tailles `m` et `c`, la branche est celle
+d'origine : un second backbone sur l'image d'entrée, dont `CBFuse` somme les
+étapes avec les prises `CBLinear` du backbone principal, et sa propre tête, soit
+12.8M et 25.7M de paramètres réservés à l'entraînement avec 80 classes. Les
+modèles de bout en bout et à stride 4 n'ont pas de branche PGI.
 
-Les mosaïques YOLO9 et YOLOX privilégient les partenaires annotés, avec au plus 20 tirages ; MixUp dans YOLO9 utilise la même politique. Consultez les [histogrammes d'événements](/docs/train/event-histograms) pour les profils d'entrée non RGB.
+Les trois variantes écrêtent la norme L2 du gradient à 10 avant chaque pas de
+l'optimiseur ; `clip_max_norm=0` désactive l'écrêtage. L'affectation des labels
+évalue les ancres en fp32, y compris sous autocast float16. `max_labels=300`
+plafonne les boîtes conservées par image d'entraînement, et les boîtes au-delà
+sont ignorées avec un avertissement unique ; la mémoire d'affectation suit les
+boîtes réelles de chaque image, pas le plafond. Le momentum SGD passe de 0.8 à
+0.937 pendant trois époques. `letterbox_pad=None` hérite de l'indication du
+checkpoint : les poids non marqués utilisent `topleft`, tandis que les nouvelles
+conversions officielles enregistrent `center`.
+
+Les mosaïques YOLO9 et YOLOX privilégient les partenaires annotés, avec au plus 20 tirages ; MixUp dans YOLO9 utilise la même politique. MixUp est désactivé par défaut (`mixup_prob=0`). Lorsqu'il est activé, le ratio de mélange est tiré selon Beta(1, 1), uniforme sur [0, 1], comme dans MultimediaTechLab/YOLO. Consultez les [histogrammes d'événements](/docs/train/event-histograms) pour les profils d'entrée non RGB.
 
 ## Valider
 
@@ -265,6 +287,13 @@ Tous les fichiers de poids publiés pour cette famille.
 ## Licence
 
 <provenance-box>
+
+Le code des trois variantes est porté depuis
+[MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) au commit
+`c4cb5f6f` (MIT). Le prédicteur un-à-un du modèle de bout en bout suit la
+conception de [DATE](https://github.com/YiqunChen1999/date) de Yiqun Chen
+(Apache-2.0), implémentée pour LibreYOLO sans copier de code de DATE. Le niveau
+de stride 4 est du code LibreYOLO.
 
 Le checkpoint aérien de stride 4 prédit les classes VisDrone. Utilisez la licence déclarée par l'éditeur dans le dépôt de ses poids.
 

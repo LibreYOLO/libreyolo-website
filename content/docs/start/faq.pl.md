@@ -15,7 +15,7 @@ keywords:
   - LibreYOLO CLI
   - LibreYOLO offline
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## Od którego modelu zacząć?
@@ -91,9 +91,12 @@ modelu informuje o tym przed próbą. Zobacz
 Słownik z nazwami metryk jako kluczami. Klucze detekcji obejmują
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` i `metrics/mAP50-95`,
 a wyniki detekcji i segmentacji zawierają też wyniki dla poszczególnych obrazów
-w `metrics.box`. Inne zadania zwracają
+oraz krzywe precyzji, recall i F1 dla poszczególnych klas w `metrics.box`.
+Wyniki detekcji, segmentacji i klasyfikacji zawierają `metrics.confusion_matrix`,
+a klasyfikacja dodaje `metrics.top1` i `metrics.top5`. Inne zadania zwracają
 odpowiednie dla nich klucze, takie jak `metrics/accuracy_top1` dla klasyfikacji
-albo `metrics/PQ`, `metrics/SQ` i `metrics/RQ` dla segmentacji panoptycznej.
+albo `metrics/PQ`, `metrics/SQ` i `metrics/RQ` dla segmentacji panoptycznej. Zobacz
+[walidacja i metryki](/docs/train/validation).
 
 ## Jak uruchomić model na katalogu, wideo lub kamerze internetowej?
 

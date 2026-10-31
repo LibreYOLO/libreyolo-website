@@ -47,7 +47,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## Składnia
@@ -129,8 +129,8 @@ zignorowane.
 
 Wsparcie jest określane per rodzina i per zadanie, nie globalnie. `libreyolo
 formats family=<family> task=<task>` wypisuje poziom wsparcia dla każdego
-formatu w tej kombinacji, wraz z uzasadnieniem i ewentualnym ograniczeniem.
-Argumenty opisuje [`libreyolo formats`](/docs/cli/utilities).
+formatu w tej kombinacji, wraz z uzasadnieniem, ewentualnym ograniczeniem oraz
+informacją, czy `export()` akceptuje tam FP16 i INT8. Argumenty opisuje [`libreyolo formats`](/docs/cli/utilities).
 
 Niektóre formaty wymagają opcjonalnej instalacji, a niektóre gotowego
 toolchainu. Brakująca zależność Pythona kończy się wyjściem z

@@ -86,12 +86,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() restituisce un semplice dict, non un oggetto.
+        # Un dict di chiavi metrics/, con i risultati per classe come attributi.
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -120,7 +121,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## Definizione
@@ -172,7 +173,8 @@ più le famiglie vision-language
 [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) e
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) e
 [LibreMODUS](/docs/models/libremodus). Queste si caricano attraverso una factory
 e degli extra propri; ogni pagina di modello riporta la chiamata esatta.
 
@@ -188,8 +190,10 @@ locale.
 `conf` imposta la soglia di confidenza e `max_det` limita il numero di righe.
 `iou` è la soglia di NMS, quindi ha effetto solo su una famiglia che esegue NMS;
 RF-DETR e la testa end-to-end di YOLOv9 decodificano un insieme fisso di
-predizioni e la ignorano. Vedi [predizione](/docs/predict) per sorgenti,
-streaming e gestione dei risultati.
+predizioni e la ignorano. `agnostic_nms=True` aggiunge un passaggio di soppressione
+agnostico rispetto alla classe a `iou` che si applica anche a questi due; vedi
+[soglie e filtraggio](/docs/predict/thresholds#agnostic_nms). Vedi
+[predizione](/docs/predict) per sorgenti, streaming e gestione dei risultati.
 
 ## Formato del dataset
 
@@ -254,8 +258,9 @@ Usa `classes=` per mantenere gli ID originali selezionati del dataset; `single_c
 
 ## Validazione
 
-`val()` restituisce un semplice dizionario di chiavi `metrics/`, calcolate con
-la valutazione COCO sullo split indicato da `val` nello YAML del dataset.
+`val()` restituisce un dizionario di chiavi `metrics/`, calcolate con la
+valutazione COCO sullo split indicato da `val` nello YAML del dataset, con i
+risultati per classe allegati come attributi.
 
 <code-tabs name="val" />
 
@@ -277,6 +282,13 @@ ripetono anche con un suffisso `(B)`, per box, così che una chiave di
 rilevamento si legga allo stesso modo su un modello che predice anche le
 maschere: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`,
 `metrics/precision(B)` e `metrics/recall(B)`.
+
+Il risultato porta anche `confusion_matrix`, indicizzata `matrix[predicted, true]`
+con una riga e una colonna `background`, e precisione, recall e F1 per classe al
+variare della confidenza su `box`: `box.px`, `box.p_curve`, `box.r_curve`,
+`box.f1_curve`, una riga per classe in `box.ap_class_index`.
+[Validazione e metriche](/docs/train/validation#confusion-matrix) tratta
+entrambe, insieme a `val(agnostic_nms=True)`.
 
 ## Esportazione
 

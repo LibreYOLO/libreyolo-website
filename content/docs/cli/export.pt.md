@@ -47,7 +47,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## Sinopse
@@ -126,7 +126,8 @@ formato sai com `config_unsupported` em vez de ser ignorada.
 
 O suporte é por família e por tarefa, não global. `libreyolo formats
 family=<family> task=<task>` imprime o nível de cada formato para essa
-combinação, com o motivo e qualquer restrição associada. Veja
+combinação, com o motivo, qualquer restrição associada e se o `export()`
+aceita FP16 e INT8 ali. Veja
 [`libreyolo formats`](/docs/cli/utilities) para os argumentos.
 
 Alguns formatos precisam de uma instalação opcional e outros precisam de um

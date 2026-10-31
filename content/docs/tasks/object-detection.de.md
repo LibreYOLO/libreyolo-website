@@ -102,12 +102,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() gibt ein einfaches Dictionary und kein Objekt zurück.
+        # Ein dict mit metrics/-Keys, Ergebnisse je Klasse als Attribute.
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -142,7 +143,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## Definition
@@ -161,7 +162,7 @@ Elf weitere Familien unterstützen Vorhersage, Validierung und Export, während 
 
 Die Darknet-Abstammungslinie aus [YOLOv1](/docs/models/yolov1), [YOLOv2](/docs/models/yolov2), [YOLOv3](/docs/models/yolov3) und [YOLOv4](/docs/models/yolov4) wird als eingefrorenes Exponat bewahrt. Vorhersage, Validierung und Export funktionieren, Training nicht.
 
-Eine separate Gruppe übernimmt ihre Klassenliste zur Laufzeit statt aus dem Checkpoint und erkennt dadurch Namen, die beim Training nie vorkamen: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) und [OV-DEIM](/docs/models/ov-deim) sowie die Vision-Language-Familien [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision) und [LibreMODUS](/docs/models/libremodus). Diese Modelle werden über eigene Factorys und Extras geladen. Den genauen Aufruf findest du auf der jeweiligen Modellseite.
+Eine separate Gruppe übernimmt ihre Klassenliste zur Laufzeit statt aus dem Checkpoint und erkennt dadurch Namen, die beim Training nie vorkamen: [Grounding DINO](/docs/models/grounding-dino), [OWLv2](/docs/models/owlv2), [OMDet-Turbo](/docs/models/omdet-turbo) und [OV-DEIM](/docs/models/ov-deim) sowie die Vision-Language-Familien [Florence-2](/docs/models/florence-2), [Kosmos-2](/docs/models/kosmos-2), [Qwen3-VL](/docs/models/qwen3-vl), [SmolVLM2](/docs/models/smolvlm2), [InternVL3](/docs/models/internvl3), [LFM2-VL](/docs/models/lfm2-vl), [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision), [LocateAnything](/docs/models/locate-anything), [SenseNova-Vision](/docs/models/sensenova-vision), [WeVisOne-VL](/docs/models/wevisone-vl) und [LibreMODUS](/docs/models/libremodus). Diese Modelle werden über eigene Factorys und Extras geladen. Den genauen Aufruf findest du auf der jeweiligen Modellseite.
 
 [PP-YOLOE](/docs/models/ppyoloe) und [TinyFormer](/docs/models/tinyformer) unterstützen ebenfalls Erkennungstraining.
 
@@ -171,7 +172,7 @@ Die Gewichte werden bei der ersten Verwendung von Hugging Face heruntergeladen u
 
 <code-tabs name="predict" />
 
-`conf` legt den Konfidenzschwellenwert fest und `max_det` begrenzt die Zeilenanzahl. `iou` ist der NMS-Schwellenwert und wirkt sich daher nur auf eine Familie aus, die NMS verwendet. RF-DETR und der End-to-End-Kopf von YOLOv9 decodieren eine feste Menge von Vorhersagen und ignorieren ihn. Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
+`conf` legt den Konfidenzschwellenwert fest und `max_det` begrenzt die Zeilenanzahl. `iou` ist der NMS-Schwellenwert und wirkt sich daher nur auf eine Familie aus, die NMS verwendet. RF-DETR und der End-to-End-Kopf von YOLOv9 decodieren eine feste Menge von Vorhersagen und ignorieren ihn. `agnostic_nms=True` fügt bei `iou` einen klassenunabhängigen Unterdrückungsschritt hinzu, der auch für diese beiden gilt; siehe [Schwellenwerte und Filterung](/docs/predict/thresholds#agnostic_nms). Unter [Vorhersage](/docs/predict) findest du Informationen zu Quellen, Streaming und Ergebnisverarbeitung.
 
 ## Datensatzformat
 
@@ -219,13 +220,15 @@ Verwende `classes=`, um ausgewählte ursprüngliche Datensatz-IDs beizubehalten;
 
 ## Validierung
 
-`val()` gibt ein einfaches Dictionary mit `metrics/`-Schlüsseln zurück. Diese werden anhand der COCO-Auswertung über den in der Datensatz-YAML-Datei unter `val` benannten Split berechnet.
+`val()` gibt ein Dictionary mit `metrics/`-Schlüsseln zurück. Diese werden anhand der COCO-Auswertung über den in der Datensatz-YAML-Datei unter `val` benannten Split berechnet, mit Ergebnissen je Klasse als angehängten Attributen.
 
 <code-tabs name="val" />
 
 `metrics/mAP50-95` ist die über IoU-Schwellenwerte von 0,50 bis 0,95 gemittelte Mean Average Precision und die wichtigste Kennzahl. `metrics/mAP50` und `metrics/mAP75` sind die Varianten bei einem einzelnen Schwellenwert. `metrics/mAP_small`, `metrics/mAP_medium` und `metrics/mAP_large` teilen denselben Mittelwert nach Objektfläche auf. `metrics/AR1`, `metrics/AR10`, `metrics/AR100`, `metrics/AR_small`, `metrics/AR_medium` und `metrics/AR_large` sind die entsprechenden Average-Recall-Werte. `metrics/AR_max_det` und `metrics/max_det` zeichnen die im Lauf verwendete Erkennungsobergrenze auf.
 
 Interpretiere `metrics/precision` und `metrics/recall` bei dieser Aufgabe sorgfältig. Sie bleiben aus Gründen der Abwärtskompatibilität erhalten und sind Aliasse, kein Arbeitspunkt. `metrics/precision` enthält denselben Wert wie `metrics/mAP50-95`, `metrics/recall` denselben wie `metrics/AR100`. Ihre Darstellung als Precision-Recall-Paar gibt einen Wert zweimal wieder. Vier Schlüssel erscheinen außerdem mit dem Suffix `(B)` für Box, damit ein Erkennungsschlüssel bei einem Modell mit zusätzlichen Masken gleich lautet: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`, `metrics/precision(B)` und `metrics/recall(B)`.
+
+Das Ergebnis trägt außerdem `confusion_matrix`, indiziert als `matrix[predicted, true]` mit einer Zeile und Spalte `background`, sowie Precision, Recall und F1 je Klasse über die Confidences in `box`: `box.px`, `box.p_curve`, `box.r_curve`, `box.f1_curve`, eine Zeile pro Klasse in `box.ap_class_index`. [Validierung und Metriken](/docs/train/validation#confusion-matrix) behandelt beides, zusammen mit `val(agnostic_nms=True)`.
 
 ## Export
 

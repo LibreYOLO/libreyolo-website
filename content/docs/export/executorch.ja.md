@@ -117,7 +117,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## インストール
@@ -175,8 +175,9 @@ Windowsでは、ローワリングの段階でExecuTorchに同梱される`flatc
 
 このバージョンでは、`delegate`は`"xnnpack"`だけを受け付けます。
 
-分類のエクスポートでは`crop_pct`と`interpolation`という2つのメタデータキーが追加され、
-ランタイムがそのファミリーのリサイズとセンタークロップの方針を再現できます。
+分類のエクスポートには、モデルの評価時の前処理がメタデータとして含まれます。`crop_pct`と
+`interpolation`に加え、設定しているファミリーでは`norm_mean`、`norm_std`、`resize_mode`も含まれ、
+ランタイムがモデルのリサイズとセンタークロップを再現できます。
 
 ブロックされている項目には、カテゴリではなく具体的な失敗内容が書かれています。
 D-FINEの検出とセグメンテーションは、strictキャプチャのもとでdeformable attention内の

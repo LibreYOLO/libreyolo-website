@@ -45,7 +45,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Niveles de soporte de exportación
@@ -122,9 +122,9 @@ el sitio usa para ese mismo grupo en la cabecera de una página de modelo.
 | `g2` | Supported | 19 | Conjunto de cobertura adicional de familias entrenables |
 | `g3` | Inference only | 44 | Familias sin implementación de entrenamiento |
 | `g4` | Museum | 5 | Familias históricas con cobertura de inferencia |
-| `s` | Sibling tier | 36 | APIs hermanas (SAM, vocabulario abierto, VLM, grounding, zero-shot) cubiertas por separado |
+| `s` | Sibling tier | 40 | APIs hermanas (SAM, vocabulario abierto, VLM, grounding, zero-shot) cubiertas por separado |
 
-Son 118 familias repartidas en seis grupos. `g3` es el grupo más grande, porque
+Son 122 familias repartidas en seis grupos. `g3` es el grupo más grande, porque
 buena parte del registro es linaje de solo inferencia, y no detectores
 entrenados activamente.
 
@@ -164,7 +164,7 @@ Una familia de `g3` o `g4` no tiene implementación de entrenamiento, y llamar a
 `train()` sobre una de ellas lanza una excepción. Eso es una propiedad del
 código de la familia, no de su grupo: el grupo registra el hecho, no lo provoca.
 
-De las 118 familias, 37 entrenan: todas las de `g0`, `g1` y `g2`, más Qwen3-VL
+De las 122 familias, 37 entrenan: todas las de `g0`, `g1` y `g2`, más Qwen3-VL
 a través de `LibreVLM` y SmolVLA, ACT y Diffusion Policy a través de `LibreVLA`.
 
 Para una familia que sí entrena, si un parámetro concreto de aumento de datos

@@ -39,7 +39,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## Synopsis
@@ -86,6 +86,20 @@ Browser gewählt oder angelegt. `data=path/to/data.yaml` öffnet diesen Datensat
 direkt, und die Startzeile meldet die Anzahl der Bilder, die Anzahl der Klassen
 und ob der Datensatz beschreibbar ist. Ein schreibgeschützter Datensatz öffnet
 sich trotzdem und nennt den Grund, warum er nicht beschrieben werden kann.
+
+### Label-Error-Radar
+
+Mit eingeschaltetem KI-Auto-Labeling lässt der Radar-Button, oder `Y`, das
+Assist-Modell über jedes gelabelte Bild laufen und listet die Bilder, bei denen
+das Modell den Labels widerspricht, die schlimmsten zuerst: eine Box, in der das
+Modell nichts findet, eine Detektion mit hoher Confidence ohne Box oder eine
+Box, deren Klasse das Modell anzweifelt. Radar schreibt nichts; jede Korrektur
+ist eine manuelle Bearbeitung. `N` springt in dieser Reihenfolge zum nächsten
+markierten Bild und beginnt am Ende wieder von vorn. Ein erneutes `Y` öffnet
+den letzten Scan wieder, mit dem Zeitpunkt seines Laufs und einem
+Rescan-Button, statt neu zu scannen. Radar ist in Projekten mit orientierten
+Boxen nicht verfügbar, und beide Tasten lassen sich im Shortcut-Dialog `?` neu
+belegen.
 
 ### Teilen, und was `host` bewirkt
 

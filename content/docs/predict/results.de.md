@@ -157,12 +157,12 @@ snippets:
 
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 
 ## Ein Objekt mit einem Slot je Nutzlast
 
-Eine Vorhersage für ein Bild gibt ein `Results`-Objekt zurück. Es enthält einundzwanzig Nutzlast-Slots. Ein Modell füllt nur die Slots, die seine Aufgabe erzeugt. Jeder andere Slot ist `None`. `result.masks` bei einem Detektor ergibt daher `None` statt eines Fehlers.
+Eine Vorhersage für ein Bild gibt ein `Results`-Objekt zurück. Es enthält dreiundzwanzig Nutzlast-Slots. Ein Modell füllt nur die Slots, die seine Aufgabe erzeugt. Jeder andere Slot ist `None`. `result.masks` bei einem Detektor ergibt daher `None` statt eines Fehlers.
 
 | Slot | Klasse | Form | Erzeugt von |
 |---|---|---|---|
@@ -187,12 +187,14 @@ Eine Vorhersage für ein Bild gibt ein `Results`-Objekt zurück. Es enthält ein
 | `albedo` | `AlbedoMap` | `(H, W, 3)` lineares RGB | Albedo-Schätzung |
 | `boxes3d` | `Boxes3D` | `(N, 14)` Quader im Kamerakoordinatensystem, zeilenweise an `boxes` ausgerichtet | Monokulare 3D-Objekterkennung |
 | `actions` | `Actions` | `(T, D)` Aktionsblock | Roboter-Policies |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB plus Prompt, Seed und Einstellungen | Bildgenerierung |
+| `gaussians` | `Gaussians` | `N` Gaussians als `xyz`, `scales`, `rotations`, `opacities` und `sh`, plus Kamera und Seed | 3D-Generierung |
 
 Daneben stehen Felder, die jedes Ergebnis besitzt: `orig_shape` als `(height, width)`, `path` als Quellpfad oder `None` bei einer Eingabe im Arbeitsspeicher, `names` als Zuordnung von Klassen-ID zu Klassenname, `frame_idx` für Video- und Live-Frames, `track_id` beim Tracking sowie `restore_scale`, der ganzzahlige Hochskalierungsfaktor eines Restaurationsergebnisses.
 
 `result.normals` ist ein Alias für `result.normal_map`.
 
-`result.speed` ist bei jedem Ergebnis vorhanden, wird aber nur von [Ensembles](/docs/predict/ensembling) befüllt. Dort heißen seine Schlüssel `member_0`, `member_1` und `fusion` und enthalten Millisekunden. Bei einem einzelnen Modell bleibt es ein leeres Dictionary.
+`result.speed` ist bei jedem Ergebnis vorhanden. [Ensembles](/docs/predict/ensembling) befüllen es mit `member_0`, `member_1` und `fusion` in Millisekunden, LibreGen-Modelle mit `inference`, den Millisekunden pro generiertem Bild oder Objekt, und FCOS3D mit `preprocess`, `inference` und `postprocess`. Andere Modelle lassen es ein leeres Dictionary.
 
 ## Boxen
 
@@ -243,7 +245,7 @@ Nutzlasten für das gesamte Bild verhalten sich anders als instanzbezogene Nutzl
 
 `result[i]` gibt ein neues `Results`-Objekt mit einer Instanz zurück. Instanzbezogene Nutzlasten werden geschnitten, Nutzlasten für das gesamte Bild unverändert übernommen. Das Slicing eines Klassifizierungsergebnisses kann seinen Wahrscheinlichkeitsvektor daher nicht auf eine Klasse verkürzen und das Slicing eines Tiefenergebnisses kann die Anordnung `(H, W)` nicht beschädigen.
 
-`len(result)` zählt Instanzen: Boxen, Punkte, Embeddings, OCR-Regionen oder Meshes. Jede dichte Nutzlast für das gesamte Bild zählt als `1`. Ein Ergebnis ohne Inhalt hat die Länge `0`.
+`len(result)` zählt Instanzen: Boxen, Punkte, Embeddings, OCR-Regionen oder Meshes. Jede dichte Nutzlast für das gesamte Bild zählt als `1`, ebenso ein generiertes Bild oder 3D-Objekt. Ein Ergebnis ohne Inhalt hat die Länge `0`.
 
 `to()`, `cpu()`, `cuda()` und `numpy()` geben jeweils ein neues `Results`-Objekt zurück, in dem alle befüllten Slots umgewandelt wurden. Das Original wird nicht verändert.
 
@@ -257,7 +259,7 @@ Nutzlasten für das gesamte Bild verhalten sich anders als instanzbezogene Nutzl
 
 Die Form einer Zeile richtet sich nach der Nutzlast. Erkennungszeilen enthalten `name`, `class`, `confidence` und ein Dictionary `box`. Bei vorhandenen Masken kommt `segments` hinzu, bei orientierten Boxen `obb` und `corners`, bei Blickrichtungen Winkel in Bogenmaß und Grad unter `gaze`, beim Tracking `track_id` und bei vorhandenen Meshes Parameter unter `mesh`.
 
-Wenn keine Boxen vorhanden sind, bestimmt eine Nutzlast die Zeilen. OCR erzeugt eine Zeile je Region mit `text`, Punkte eine Zeile je Punkt, Panoptik eine Zeile je Segment mit `pixel_count` und `pixel_fraction`, Semantik eine Zeile je vorhandener Klasse und Klassifizierung die fünf besten Klassen. Tiefe, Normalen, Kanten, Restauration und Matting erzeugen jeweils eine einzelne Zusammenfassungszeile, die die Karte statt ihrer Pixel beschreibt.
+Wenn keine Boxen vorhanden sind, bestimmt eine Nutzlast die Zeilen. OCR erzeugt eine Zeile je Region mit `text`, Punkte eine Zeile je Punkt, Panoptik eine Zeile je Segment mit `pixel_count` und `pixel_fraction`, Semantik eine Zeile je vorhandener Klasse und Klassifizierung die fünf besten Klassen. Tiefe, Normalen, Kanten, Restauration und Matting erzeugen jeweils eine einzelne Zusammenfassungszeile, die die Karte statt ihrer Pixel beschreibt, und ein generiertes Bild oder 3D-Objekt eine Zeile mit Seed und Einstellungen.
 
 Zwei Nutzlasten werden bewusst gekürzt. Ein Embedding-Vektor wird nur als `embedding_dim` gemeldet, da eine Zeile mit 512 Gleitkommazahlen etwa 2 KB je Gesicht umfasst. Übergib `embeddings=True`, um die Werte einzuschließen. Mesh-Eckpunkte werden nie aufgenommen, da dies Zehntausende Koordinaten je Person wären. Verwende für die Geometrie `result.meshes.vertices` oder `result.meshes.save_obj(path)`.
 
@@ -267,13 +269,13 @@ Zwei Nutzlasten werden bewusst gekürzt. Ein Embedding-Vektor wird nur als `embe
 
 `predict(save=True)` annotiert und schreibt die Ausgabe. Die Zeichenroutine wird anhand des befüllten Slots ausgewählt. Ein semantisches Ergebnis wird als farbige Maske geschrieben, ein Tiefenergebnis als Tiefenvisualisierung, ein panoptisches Ergebnis mit seinen Segmenten, eine Matte als RGBA-PNG mit transparentem Hintergrund und eine Detektorausgabe als Boxen mit darunterliegenden Masken. Der geschriebene Pfad wird als `result.saved_path` an das Ergebnis angehängt.
 
-`Results.save(path)` ist ebenfalls eng gefasst. Die Methode schreibt ein Matte-Ergebnis als RGBA-PNG-Ausschnitt mit transparentem Hintergrund und löst sonst `NotImplementedError` aus. `Results.cutout()` gibt dasselbe RGBA-Array zurück, ohne es zu schreiben. Beide benötigen das Quellbild aus `result.path` oder als Argument `image=`.
+`Results.save(path)` ist ebenfalls eng gefasst. Die Methode schreibt ein generiertes Bild oder 3D-Objekt, wobei sie das Format an der Dateiendung abliest, und ein Matte-Ergebnis als RGBA-PNG-Ausschnitt mit transparentem Hintergrund, und löst sonst `NotImplementedError` aus. `Results.cutout()` gibt dasselbe RGBA-Array zurück, ohne es zu schreiben. Bei einem Matte benötigen beide das Quellbild aus `result.path` oder als Argument `image=`.
 
 Zwei Nutzlasten besitzen eigene Schreibmethoden: `result.restored.save(path)` für ein restauriertes Bild und `result.meshes.save_obj(path, index=0)` für ein Mesh.
 
 Informationen zu den Speicherorten sowie zum Verhalten von `output_path` und `output_file_format` findest du unter [Vorhersagequellen](/docs/predict/sources).
 
-`plot()` deckt die Ergebnisdaten aller Aufgaben ab. Bild-Overlays liefern standardmäßig zusammenhängende HxWx3-uint8-BGR-Arrays; `pil=True` fordert PIL an. Tiefen-, Normalen-, Kanten- und Albedokarten, 3D-Quader und Aktionsblöcke liefern standardmäßig ein PIL-Bild; `pil=False` gibt das Array zurück. `orig_img` bewahrt BGR-Pixel für In-Memory- und URL-Quellen; lokale Dateien und gesammelte Frames endlicher Videos lassen sich erneut öffnen.
+`plot()` deckt die Ergebnisdaten aller Aufgaben ab. Bild-Overlays liefern standardmäßig zusammenhängende HxWx3-uint8-BGR-Arrays; `pil=True` fordert PIL an. Tiefen-, Normalen-, Kanten- und Albedokarten, 3D-Quader, Aktionsblöcke, generierte Bilder und das Punkt-Rendering eines generierten 3D-Objekts liefern standardmäßig ein PIL-Bild; `pil=False` gibt das Array zurück. `orig_img` bewahrt BGR-Pixel für In-Memory- und URL-Quellen; lokale Dateien und gesammelte Frames endlicher Videos lassen sich erneut öffnen.
 
 Zu den Optionen gehören `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` und `filename`. Gespeicherte Klassifikationsbilder enthalten die fünf besten Labels. Matting speichert ein freigestelltes RGBA-Bild.
 

@@ -15,7 +15,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: 标准任务名
-    value: 20
+    value: 22
   - label: 支持层级
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -44,12 +44,12 @@ snippets:
         # "pose"，"det" 解析为 "detect"，"semantic-segmentation" 解析为 "semantic"
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## 任务
 
-任务就是模型返回的东西。LibreYOLO 有二十个标准任务名，每一个都对应 `Results`
+任务就是模型返回的东西。LibreYOLO 有二十二个标准任务名，每一个都对应 `Results`
 对象上承载其输出的那个字段。
 
 | 任务 | 返回内容 |
@@ -74,6 +74,8 @@ source_hash: c745a3c602db00ea
 | `mesh` | 每个检测到的人一个带姿态的 3D 人体 |
 | `detect3d` | 相机坐标系下的 3D 框，带类别和置信度 |
 | `act` | 根据相机帧和机器人状态预测出的一段机器人动作块 |
+| `generate` | 由文本提示生成的 RGB 图像，附带能复现它的提示词、种子和调用参数 |
+| `generate3d` | 由单张图像生成的一个对象，以 3D 高斯泼溅表示 |
 
 这些就是出现在检查点（checkpoint）元数据和文件名里的名字。在任何可以传入任务的
 地方，也接受大家熟悉的别名，并且在其他一切发生之前先做归一化：`detection` 和
@@ -154,8 +156,8 @@ Libre<FAMILY><size>[-<task>].pt
 权重，会把数据集名字再作为一个后缀接上去，而这个变体也是文件下载来源的仓库名的
 一部分。
 
-有三类家族不在这套格式之内。可提示（promptable）的分割家族、视觉语言家族和开放词汇
-检测器没有注册进检查点工厂，也不产出 `Libre<FAMILY><size>.pt` 文件。它们的前缀指向的
+有几类家族不在这套格式之内。可提示（promptable）的分割家族、视觉语言家族、开放词汇
+检测器和 `LibreGen` 生成家族没有注册进检查点工厂，也不产出 `Libre<FAMILY><size>.pt` 文件。它们的前缀指向的
 是下载下来的 Hugging Face 快照或者一个可提示的检查点，那里上游的品牌大小写是特意
 保留的。
 

@@ -143,7 +143,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 624f3e70d2937683
+source_hash: c322dd68d42cdf24
 ---
 
 ## Installazione
@@ -212,9 +212,31 @@ invece un checkpoint di rilevamento base.
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.
 
-I nuovi fine-tuning di rilevamento standard attivano un ramo PGI usato solo nell'addestramento con `aux_weight=0.25`. `max_labels=300`; il momentum SGD sale da 0.8 a 0.937 durante le prime tre epoche. I vecchi checkpoint a testa singola riprendono con quel grafo. Predizione ed esportazione usano la testa principale. `letterbox_pad=None` eredita il valore registrato nel checkpoint: i pesi senza indicazione usano `topleft`, mentre le nuove conversioni ufficiali registrano `center`.
+Il modello base può addestrare un ramo ausiliario PGI accanto alla sua testa
+principale. Il ramo è usato solo nell'addestramento: predizione ed esportazione
+usano la testa principale. Un'esecuzione lo collega quando i pesi di partenza
+contengono tensori PGI o quando parte da zero. I checkpoint base pubblicati non
+ne contengono, quindi un fine-tuning da essi addestra solo la testa principale e
+lo registra nel log. `aux_weight=0.25` collega comunque un nuovo ramo con quel
+peso di loss, e `aux_weight=0` lo tiene spento. Un'esecuzione ripresa mantiene la
+configurazione PGI del suo checkpoint. Sulle taglie `m` e `c` il ramo è quello
+upstream: un secondo backbone sull'immagine di input, i cui stadi `CBFuse` somma
+con le derivazioni `CBLinear` del backbone principale, e una propria testa, con
+12.8M e 25.7M di parametri usati solo nell'addestramento a 80 classi. I modelli
+end-to-end e a stride 4 non hanno nessun ramo PGI.
 
-Il mosaic di YOLO9 e YOLOX preferisce immagini associate con annotazioni, con un massimo di 20 estrazioni; MixUp di YOLO9 usa la stessa regola. Vedi gli [istogrammi di eventi](/docs/train/event-histograms) per i profili di input non RGB.
+Tutte e tre le varianti limitano la norma L2 del gradiente a 10 prima di ogni
+passo dell'ottimizzatore; `clip_max_norm=0` disattiva il clipping.
+L'assegnazione delle etichette valuta gli anchor in fp32, anche sotto autocast
+float16. `max_labels=300` limita i box mantenuti per ogni immagine di
+addestramento, e i box oltre il limite vengono scartati con un avviso unico; la
+memoria dell'assegnazione segue i box reali di ciascuna immagine, non il limite.
+Il momentum SGD sale da 0.8 a 0.937 durante le prime tre epoche.
+`letterbox_pad=None` eredita il valore registrato nel checkpoint: i pesi senza
+indicazione usano `topleft`, mentre le nuove conversioni ufficiali registrano
+`center`.
+
+Il mosaic di YOLO9 e YOLOX preferisce immagini associate con annotazioni, con un massimo di 20 estrazioni; MixUp di YOLO9 usa la stessa regola. MixUp è disattivato di default (`mixup_prob=0`). Quando è attivo, il rapporto di miscelazione è estratto da Beta(1, 1), uniforme su [0, 1], come in MultimediaTechLab/YOLO. Vedi gli [istogrammi di eventi](/docs/train/event-histograms) per i profili di input non RGB.
 
 ## Validazione
 
@@ -260,6 +282,13 @@ Tutti i file di pesi pubblicati per questa famiglia.
 ## Licenze
 
 <provenance-box>
+
+Il codice di tutte e tre le varianti è portato da
+[MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) al commit
+`c4cb5f6f` (MIT). Il predittore uno-a-uno del modello end-to-end segue il design
+di [DATE](https://github.com/YiqunChen1999/date) di Yiqun Chen (Apache-2.0),
+implementato per LibreYOLO senza copiare codice di DATE. Il livello a stride 4 è
+codice LibreYOLO.
 
 Il checkpoint aereo con stride 4 predice le classi VisDrone. Usa la licenza dichiarata dal distributore e registrata nel repository dei pesi.
 

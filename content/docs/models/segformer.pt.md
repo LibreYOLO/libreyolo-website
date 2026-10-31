@@ -110,7 +110,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## Instalação
@@ -158,7 +158,8 @@ ADE20K: AdamW com um learning rate base no backbone e a cabeça de decode
 treinada a 10x essa taxa, weight decay em tudo menos no LayerNorm e na
 convolução posicional do Mix-FFN, e um schedule de decaimento linear com
 warmup. A convergência dos tamanhos maiores, de b3 a b5, não foi validada de
-ponta a ponta.
+ponta a ponta. O `libreyolo train` parte da mesma receita, e sem `name=` suas
+execuções vão para `runs/train/segformer_exp`.
 
 Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.

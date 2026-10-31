@@ -109,7 +109,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Установка
@@ -149,7 +149,8 @@ ViT-g/16 на 1.1 млрд параметров. Сам учитель, разм
 из оригинального отчёта: бэкбон ViT заморожен, обучается только плотная голова
 1x1 — именно так получены размещённые в LibreYOLO веса выше. Чтобы вместо этого
 дообучить всю сеть, передайте `freeze_backbone=False` и будьте готовы
-соответственно понизить `lr0`.
+соответственно понизить `lr0`. `libreyolo train` стартует с того же рецепта, а без `name=` его
+запуски попадают в `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

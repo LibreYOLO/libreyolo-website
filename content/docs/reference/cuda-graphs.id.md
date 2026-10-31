@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## Yang ditangkap
@@ -136,8 +136,7 @@ sekitar 1e-7 meski identik secara bit pada probe yang penting.
 
 ## Dukungan pelatihan
 
-Capture pelatihan bertambah dari dua family menjadi 24 pada rilis ini, dalam
-lima task.
+Capture pelatihan mencakup 24 family di lima task.
 
 | Task | Family |
 |---|---|

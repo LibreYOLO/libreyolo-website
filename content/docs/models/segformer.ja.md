@@ -104,7 +104,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## インストール
@@ -135,7 +135,7 @@ b0からb5まで6つのサイズがあり、同じall-MLP decode head設計を�
 
 <code-tabs name="train" />
 
-設定を変更しなければ、trainerはSegFormer論文のADE20K手順に従います。バックボーンの基本学習率でAdamWを使い、decode headはその10倍の学習率で学習します。LayerNormとMix-FFN positional convolution以外のすべてにweight decayを適用し、ウォームアップを伴うlinear decay scheduleを使います。b3からb5の大きなサイズについて、収束はエンドツーエンドで検証されていません。
+設定を変更しなければ、trainerはSegFormer論文のADE20K手順に従います。バックボーンの基本学習率でAdamWを使い、decode headはその10倍の学習率で学習します。LayerNormとMix-FFN positional convolution以外のすべてにweight decayを適用し、ウォームアップを伴うlinear decay scheduleを使います。b3からb5の大きなサイズについて、収束はエンドツーエンドで検証されていません。`libreyolo train`も同じ手順から始まり、`name=`を指定しない場合、実行結果は`runs/train/segformer_exp`に保存されます。
 
 データセット、データ拡張、マルチGPU、loggerについては[学習](/docs/train)を参照してください。
 

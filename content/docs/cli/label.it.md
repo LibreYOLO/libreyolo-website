@@ -39,7 +39,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## Sinossi
@@ -78,6 +78,19 @@ I box vengono salvati come file `labels/*.txt` nel formato nativo di LibreYOLO,
 che è il formato letto da `libreyolo train`, quindi dopo non c'è niente da
 convertire. Questa versione gestisce solo i bounding box. Le modifiche si salvano
 mentre ti sposti tra le immagini.
+
+### Label-Error Radar
+
+Con l'assistenza AI attiva, il pulsante Radar, o `Y`, esegue il modello di
+assistenza su ogni immagine etichettata ed elenca le immagini in cui il modello
+non concorda con le etichette, le peggiori per prime: un box in cui il modello
+non trova nulla, un rilevamento sicuro senza box, o un box la cui classe è
+contestata dal modello. Radar non scrive nulla; ogni correzione è una modifica
+manuale. `N` passa alla prossima immagine segnalata in quell'ordine, dalla
+peggiore, e riparte dall'inizio alla fine. Premere di nuovo `Y` riapre l'ultima
+scansione, con l'ora in cui è stata eseguita e un pulsante Rescan, invece di
+scansionare di nuovo. Radar non è disponibile nei progetti con box orientati, e
+entrambi i tasti si possono riassegnare nella finestra delle scorciatoie `?`.
 
 ### Aprire un dataset
 

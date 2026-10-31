@@ -1,18 +1,52 @@
 ---
-title: 升级到 1.6.0
-seo_title: LibreYOLO 从 1.5.0 升级到 1.6.0
-description: LibreYOLO 1.6.0 的迁移步骤：预处理、训练默认值、训练目录、固定资源、QAT 和数据加载器。
-lead: 1.6.0 更改了预处理、训练默认值和检查点处理。请重新验证已保存的基线，复现旧训练时显式设置以前的默认值。
+title: 升级到 1.7.0
+seo_title: LibreYOLO 从 1.6.0 升级到 1.7.0
+description: LibreYOLO 1.7.0 的迁移步骤：YOLO9 检查点、模块名称和训练配方，CLI 运行目录，混淆矩阵，以及新增的报错。
+lead: 1.7.0 让旧的 YOLO9 检查点继续以相同的浮点检测框加载。它改变了 YOLO9 家族的训练、代码在网络内部看到的名称，以及少数几处验证和预测的约定。
 keywords:
   - libreyolo 升级
-  - libreyolo 1.5.0 迁移
-  - allow_experimental 移除
+  - libreyolo 1.6.0 迁移
   - libreyolo 破坏性变更
-  - yolox bn eps
-  - faster-coco-eval 默认
-last_verified: 1.6.0
-source_hash: e9c7cb5271aa4a81
+  - yolo9 模块名称
+  - clip_max_norm
+  - yolo 混淆矩阵
+last_verified: 1.7.0
+source_hash: 895bcd7425f0052f
 ---
+
+## 从 1.6.0 升级到 1.7.0
+
+- 由 1.7.0 保存的 YOLO9、YOLO9-E2E 和 YOLO9-P2 检查点使用新的张量名称，在 1.6.x 中无法加载：1.6.x 加载 YOLO9 和 YOLO9-P2 的检查点时会给出缺失键警告并且不预测任何检测框，加载 YOLO9-E2E 的检查点则会抛出 `model_family` 不匹配错误。请升级每一个读取它们的环境。早期版本写出的浮点、量化和训练检查点都能在 1.7.0 中加载，ONNX 导出不受影响。
+
+- 直接访问 YOLO9 家族模型的 `model.model` 的代码，现在看到的是 MultimediaTechLab/YOLO 的模块名称，没有别名。`DDetect` 变成 `YOLO9Head`（`anchor_convs` / `class_convs`），`RepConvN` 变成 `RepConv`，`RepNBottleneck` 变成 `Bottleneck`，`DFL` 变成 `Anchor2Vec`（`anchor2vec`），`nc` 变成 `num_classes`，块的子层是 `conv1`/`conv2`/`bottleneck`。在 YOLO9-E2E 中，`YOLO9E2EDetect` 变成 `YOLO9E2EHead`，`one2one_cv2` / `one2one_cv3` 变成 `one_to_one_anchor_convs` / `one_to_one_class_convs`。`LibreYOLO9Model.fuse()`、`RepConvN.fuse_convs()`、`Conv.forward_without_bn()`、`Concat` 和 `yolo9.utils.decode_boxes` 已移除。每一项重命名都列在[更新日志](/docs/changelog)里。
+
+- head、骨干和 neck 里的 ONNX 节点名称跟随新的模块名称，例如 `/head/anchor_convs.0/...`。请更新以节点名称为键的工具，例如 Hailo 的 end-node 配置。模型的输入、输出和输出名称不变。
+
+- 用不带 PGI 张量的权重微调 YOLO9，其中包括已发布的 `LibreYOLO9{t,s,m,c}.pt`，只训练主 head，和 1.5.0 一样；1.6.0 会以 `aux_weight=0.25` 挂上一个随机初始化的 PGI 分支。带有 PGI 张量的权重和从头开始的运行仍然使用 PGI 训练。传入 `aux_weight=0.25` 可以强制挂上新分支，传入 `aux_weight=0` 则强制关闭。
+
+- 挂上 PGI 时，YOLO9-m 和 YOLO9-c 会构建 MultimediaTechLab 的辅助分支：在 80 个类别下仅训练时使用的参数量为 12.8M（m）和 25.7M（c），之前分别是 7.5M 和 10.2M，所以这两个尺寸的 PGI 训练每一步需要更多显存和时间。1.6.0 的 m/c 训练检查点会沿用它训练时的分支断点续训和微调。推理和 YOLO9-t/s 不变。
+
+- YOLO9、YOLO9-E2E 和 YOLO9-P2 把梯度 L2 范数裁剪到 10，它们的训练分配器用 fp32 给锚点打分，所以在 fp16 AMP 下选出的正样本可能不同。传入 `clip_max_norm=0` 可以得到 1.6.0 的裁剪行为；在 1.6.0 中开始、在 1.7.0 中续训的运行也会裁剪，除非你传入它。fp32 分配没有开关。
+
+- 在所有使用共享仿射变换的家族中（YOLO9 及其 E2E 和 P2 变体、YOLOX、YOLOv7、YOLO-NAS、PP-YOLOE、RTMDet、PicoDet、RT-DETR 和 RT-DETRv2），非零的 `perspective` 现在按角点位移来做变形，包括从设置了它的 1.6.0 检查点续训的运行。取值 `0.002` 及以上给出相同的最大变形，负值会抛出 `ValueError`。没有任何设置能复现 1.6.0 的变形；默认值 `perspective=0` 不变。
+
+- YOLO9 的 mosaic 流水线现在从 Beta(1, 1) 而不是 Beta(32, 32) 中抽取 mixup 比例，没有设置可以恢复旧值。YOLOv7 的默认训练因此改变，因为 YOLOv7 默认启用 mixup。YOLO9、YOLO9-E2E、YOLO9-P2、RT-DETR 和 RT-DETRv2 只有在启用 mixup 时才会变化。
+
+- 不带 `name=` 的 `libreyolo train` 会把 EC、D-FINE、SegFormer 和 LingBot-Vision 的运行分别写入 `runs/train/ec_exp`、`dfine_exp`、`segformer_exp` 和 `lingbotvision_exp`，而不再是 `runs/train/exp`；V-JEPA 2 探针写入 `runs/train/train`，YOLO9-P2 的运行写入 `runs/train/yolo9_exp`。要用旧路径，传入 `name=exp`，YOLO9-P2 则传入 `name=yolo9_p2_exp`。
+
+- `libreyolo train` 让 D-FINE、SegFormer 和 LingBot-Vision 从它们各自的配方开始。对 D-FINE 来说，就是 132 轮、`lr0=2e-4`、`weight_decay=1e-4`、2 轮预热，并且不使用 mosaic、mixup、HSV 或仿射数据增强。要发送 1.6.0 发送的那些值，请传入 `epochs=300 optimizer=sgd lr0=0.01 weight_decay=5e-4 warmup_epochs=5 mosaic=1.0 mixup=1.0 hsv_prob=1.0 degrees=10 translate=0.1 shear=2.0`。
+
+- `libreyolo.validation.ConfusionMatrix` 按 `matrix[predicted, true]` 索引（原来是 `[actual, predicted]`），在 `conf_thres=0.25` 下统计检测（原来是 0.15），`names=` 和 `task=` 只能作为关键字参数传入，并且它的 `matrix` 不能再被重新赋值。请转置按旧矩阵索引的代码，并传入 `conf_thres=0.15` 以得到旧的计数。`plots=True` 会把计数写入 `confusion_matrix.png`，把归一化后的图写入 `confusion_matrix_normalized.png`。
+
+- `predict(agnostic_nms=True)` 现在会跨类别抑制重叠的检测框，而不是发出警告。没有检测框的任务会抛出 `ValueError`，`LibreEnsemble` 和 HRNet 会抛出 `NotImplementedError`，SAM 层级则以 `TypeError` 拒绝这个关键字；请从这些调用中去掉这个参数。
+
+- 未知的分类器 `interpolation` 会抛出 `ValueError`，包括 torchvision 的 `LANCZOS`、`BOX`、`HAMMING` 和 `NEAREST_EXACT` 模式。请使用 `bilinear`、`bicubic`、`nearest` 或 `bilinear_no_antialias`。
+
+- 在与 1.6.0 的数字比较之前，请重新运行验证，涉及的情形有：在多个类别上训练的模型使用 `val(single_cls=True)`、混合了只有检测框的行和多边形行的分割数据集，以及 RTMDet-Ins（默认每张图像最多保留 `max_det=300` 个掩码；传入 `max_det=100` 可得到 MMDetection 的设置）。
+
+- 没有 `libreyolo[rfdetr]` 时，使用 RF-DETR 或 DINOv2 模型名称的 CLI 调用会以 JSON 错误码 `model_load_failed` 退出，而不是 `model_not_found`，并且错误信息会点出 `pip install libreyolo[rfdetr]`。
+
+完整的发布内容见[更新日志](/docs/changelog)。
 
 ## 从 1.5.0 升级到 1.6.0
 

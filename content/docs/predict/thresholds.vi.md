@@ -2,11 +2,12 @@
 title: Ngưỡng và lọc
 seo_title: 'conf, iou và max_det trong LibreYOLO'
 description: >-
-  conf, iou, max_det và classes thực sự làm gì khi dự đoán, những họ nào bỏ qua iou vì không chạy NMS và vì
-  sao agnostic_nms không có tác dụng.
+  conf, iou, max_det, classes và agnostic_nms làm gì khi dự đoán, và những họ
+  nào bỏ qua iou vì không tự chạy NMS.
 lead: >-
-  Bốn đối số quyết định dự đoán nào được giữ lại: conf, iou, max_det và classes. Chỉ hai trong số đó áp dụng
-  cho mọi họ vì set predictor giải mã tập query cố định và không bao giờ chạy NMS.
+  Bốn đối số quyết định dự đoán nào được giữ lại: conf, iou, max_det và classes.
+  Chỉ hai trong số đó áp dụng cho mọi họ vì set predictor giải mã tập query cố
+  định và không bao giờ chạy NMS.
 keywords:
   - ngưỡng conf yolo
   - ngưỡng iou nms
@@ -18,12 +19,16 @@ keywords:
   - lọc lớp khi suy luận
 last_verified: 1.6.0
 verification: >-
-  Giá trị mặc định được trích từ InferenceRunner.__call__ trong libreyolo/models/base/inference.py. Hành vi
-  NMS theo họ được đọc từ mọi module trong libreyolo/postprocess/ và đối chiếu với _is_nms_free_family trong
-  libreyolo/backends/base.py. Cách lọc lớp lấy từ InferenceRunner._apply_classes_filter và _wrap_results.
-  Trạng thái agnostic_nms lấy từ NOOP_PREDICT_KWARGS trong libreyolo/utils/predict_args.py. Cách xử lý
-  open-vocabulary lấy từ NMS_THRESHOLD trong libreyolo/models/openvocab/base.py. Giá trị mặc định khi đánh giá
-  lấy từ BaseModel.val.
+  Giá trị mặc định được trích từ InferenceRunner.__call__ trong
+  libreyolo/models/base/inference.py. Hành vi NMS theo họ được đọc từ mọi module
+  trong libreyolo/postprocess/ và đối chiếu với _is_nms_free_family trong
+  libreyolo/backends/base.py. Cách lọc lớp lấy từ
+  InferenceRunner._apply_classes_filter và _wrap_results. agnostic_nms lấy từ
+  check_agnostic_nms và postprocess_max_det trong
+  libreyolo/utils/predict_args.py và bước agnostic trong
+  InferenceRunner._wrap_results. Cách xử lý open-vocabulary lấy từ NMS_THRESHOLD
+  trong libreyolo/models/openvocab/base.py. Giá trị mặc định khi đánh giá lấy từ
+  BaseModel.val.
 snippets:
   basic:
     - label: Bốn đối số
@@ -85,18 +90,49 @@ snippets:
   nmsfree:
     - label: iou trên họ không chạy NMS
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # RF-DETR giải mã tập query cố định, nên iou không thay đổi gì ở đây.
+
         model = LibreYOLO("LibreRFDETRs.pt")
 
+
         loose = model(SAMPLE_IMAGE, iou=0.9)
+
         tight = model(SAMPLE_IMAGE, iou=0.1)
 
-        # Số lượng giống nhau trong cả hai trường hợp. conf và max_det là các điều khiển có tác dụng.
+
+        # Số lượng giống nhau trong cả hai trường hợp. conf và max_det là các
+        điều khiển có tác dụng.
+
         print(len(loose.boxes), len(tight.boxes))
-source_hash: 849650629e58c9e1
+  agnostic:
+    - label: Python
+      language: python
+      code: >
+        from libreyolo import LibreYOLO, SAMPLE_IMAGE
+
+
+        model = LibreYOLO("LibreYOLO9s.pt")
+
+
+        per_class = model(SAMPLE_IMAGE)
+
+        agnostic = model(SAMPLE_IMAGE, agnostic_nms=True)
+
+
+        # Các box chồng lấn thuộc lớp đối tượng khác nhau gộp lại thành box có
+        điểm cao nhất
+
+        print(len(per_class.boxes), len(agnostic.boxes))
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+source_hash: fa0e6cee02b3e336
 ---
 ## Bốn đối số
 
@@ -152,13 +188,16 @@ R-CNN và Mask R-CNN là trường hợp hơi khác: cả hai đã chạy NMS b�
 Các họ sau có dùng đối số này: YOLOv1 đến YOLOv4, YOLOv7, YOLOv9, YOLOX,
 YOLO-NAS, RTMDet, PicoDet, EfficientDet, FCOS, RetinaNet và SSD.
 
-Hai tùy chọn khi dự đoán khiến `iou` có ý nghĩa ngay cả với set predictor vì cả
-hai đều hợp nhất box sau khi mô hình hoàn tất:
+Ba tùy chọn khi dự đoán khiến `iou` có ý nghĩa ngay cả với set predictor vì cả
+ba đều tác động lên box sau khi mô hình hoàn tất:
 
 - `tiling=True` điều hòa các tile chồng lấn bằng NMS theo lớp ở `iou`
 - `augment=True` hợp nhất các góc nhìn đã lật bằng NMS theo lớp ở `iou`
 
-Cả hai được trình bày trong [Hiệu năng suy luận](/docs/predict/performance).
+- `agnostic_nms=True` loại bỏ các box chồng lấn xuyên các lớp đối tượng ở `iou`,
+  được mô tả [bên dưới](#agnostic_nms)
+
+Hai tùy chọn đầu được trình bày trong [Hiệu năng suy luận](/docs/predict/performance).
 
 Detector open-vocabulary có quy tắc riêng. Họ có processor chạy NMS sẽ khai báo
 ngưỡng mặc định riêng và tuân theo `iou`, như trường hợp OMDet-Turbo. Các họ
@@ -172,12 +211,13 @@ các cơ chế khác nhau: họ NMS cắt bớt sau bước loại bỏ, còn se
 làm kích thước lựa chọn top-k.
 
 Một số họ giới hạn thấp hơn giá trị bạn yêu cầu vì cấu hình tham chiếu thượng
-nguồn làm như vậy. SSD giới hạn ở 200, phân đoạn instance RTMDet ở 100, còn FCOS
-ở giới hạn phát hiện riêng cho mỗi ảnh. Tăng `max_det` vượt các mức đó không có
-tác dụng.
+nguồn làm như vậy. SSD giới hạn ở 200, còn FCOS ở giới hạn phát hiện riêng
+cho mỗi ảnh. Tăng `max_det` vượt các mức đó không có tác dụng.
 
-Nơi duy nhất `max_det` được áp dụng tập trung thay vì theo từng họ là suy luận
-chia tile, nơi danh sách đã hợp nhất được cắt bớt sau khi điều hòa các tile.
+`max_det` được áp dụng tập trung thay vì theo từng họ trong hai trường hợp: suy
+luận chia tile, nơi danh sách đã hợp nhất được cắt bớt sau khi điều hòa các tile,
+và các lời gọi có `classes` hoặc `agnostic_nms=True`, nơi việc cắt diễn ra sau bộ
+lọc hoặc sau bước loại bỏ.
 
 ## Lọc lớp
 
@@ -201,29 +241,57 @@ libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.gith
 ```
 
 Lọc không tự tạo thêm độ chính xác. Mô hình vẫn tiêu tốn ngân sách để dự đoán các
-lớp mà sau đó bạn loại, còn `max_det` được họ áp dụng trước bộ lọc, nên ảnh chứa
-nhiều lớp không mong muốn có thể chạm giới hạn trước khi đến lớp của bạn. Hãy
-giảm `conf` hoặc tăng `max_det` nếu điều đó xảy ra.
+lớp mà sau đó bạn loại. Khi đặt `classes`, họ giữ một ngân sách ứng viên gồm 300
+box, hoặc `max_det` nếu giá trị đó cao hơn, và việc cắt xuống `max_det` diễn ra
+sau bộ lọc, nên một `max_det` nhỏ không đẩy lớp của bạn ra ngoài. Các backend đã
+xuất dùng cùng ngân sách, kể cả engine TensorRT theo batch. Một ảnh có hơn 300 box
+điểm cao hơn thuộc các lớp không mong muốn vẫn có thể lấp đầy ngân sách trước khi
+đến lớp của bạn; hãy tăng `max_det` lên trên 300 nếu điều đó xảy ra.
 
 ## agnostic_nms
 
-`agnostic_nms` được chấp nhận nhưng không làm gì. Việc truyền nó phát cảnh báo
-rằng đây là no-op để tương thích dòng lệnh, rồi đối số bị loại bỏ.
+NMS riêng của mọi họ đều nhận biết lớp, nên theo mặc định hai box chồng lấn thuộc
+hai lớp khác nhau đều được giữ, ở mọi `iou`. `agnostic_nms=True` thêm một bước
+không phân biệt lớp: trong các box chồng lấn vượt `iou`, chỉ box có điểm cao nhất
+được giữ, bất kể lớp của chúng.
 
-Không có chế độ loại bỏ không phân biệt lớp. Mọi lời gọi NMS trong thư viện đều
-nhận biết lớp, nên hai box chồng lấn thuộc hai lớp khác nhau đều được giữ ở mọi
-`iou`. Khi điều này gây vấn đề, trước tiên hãy lọc bằng `classes` hoặc tự loại bỏ
-xuyên lớp trên `result.boxes`.
+<code-tabs name="agnostic" />
+
+Bước này chạy trên các phát hiện đã hoàn tất của họ, sau bộ lọc `classes` và trước
+khi cắt xuống `max_det`. Vì vậy nó hoạt động giống nhau trên set predictor không
+tự chạy NMS, trên các backend đã xuất, và với `augment=True` cùng `tiling=True`.
+Mask và keypoint bị bỏ cùng box của chúng, còn box định hướng được so sánh bằng
+IoU xoay. Nó bao phủ các tác vụ trả về box: detect, segment, pose và obb.
+
+Họ giữ một ngân sách ứng viên gồm 300 box, hoặc `max_det` nếu giá trị đó cao hơn,
+để bước này xử lý. Với `max_det` dưới 300, các ứng viên điểm thấp hơn lấp lại những
+chỗ trống mà việc loại bỏ giải phóng. Từ 300 trở lên, bao gồm cả giá trị mặc định,
+những chỗ đó vẫn để trống.
+
+Những nơi nó không áp dụng:
+
+- Trên đường predict tiêu chuẩn, một tác vụ không có box sẽ phát sinh `ValueError`.
+- `LibreEnsemble` và [HRNet](/docs/models/hrnet) phát sinh `NotImplementedError`.
+- Các mô hình `LibreSAM` và [bộ phát hiện 3D](/docs/tasks/3d-object-detection),
+  gồm WildDet3D, 3D-MOOD, FCOS3D và DetAny3D, không nhận đối số này và phát sinh
+  `TypeError`.
+- [L2CS-Net](/docs/models/l2cs), [PP-OCRv5](/docs/models/pp-ocrv5),
+  [SAM 3D Body](/docs/models/sam-3d-body) và
+  [LibreFaceRec](/docs/models/librefacerec) chạy đường predict riêng của chúng và
+  bỏ qua nó.
+
+`val(agnostic_nms=True)` áp dụng cùng bước này cho việc xác thực detect và
+segment; xem [Xác thực và chỉ số](/docs/train/validation).
 
 ## Những gì predict từ chối
 
 Hai đối số phát sinh lỗi thay vì cảnh báo: `visualize` và `embed` đều phát sinh
 `NotImplementedError`. Để tạo embedding, hãy tải mô hình với `task="embed"` rồi
-gọi `predict` hoặc `embed` như bình thường.
+gọi `predict` hoặc `embed` như bình thường. `agnostic_nms=True` phát sinh lỗi ở
+những nơi nó không áp dụng, như liệt kê ở trên.
 
 Bất kỳ tùy chọn nào không được nhận diện đều phát sinh `TypeError` nêu các tùy
 chọn được hỗ trợ, nên lỗi chính tả thất bại ngay thay vì bị âm thầm bỏ qua.
 
-Các tùy chọn sau được chấp nhận, cảnh báo rồi loại bỏ: `agnostic_nms`, `boxes`,
-`dnn`, `half`, `line_width`, `retina_masks`, `show_conf`, `show_labels` và
-`verbose`.
+Các tùy chọn sau được chấp nhận, cảnh báo rồi loại bỏ: `boxes`, `dnn`, `half`,
+`line_width`, `retina_masks`, `show_conf`, `show_labels` và `verbose`.

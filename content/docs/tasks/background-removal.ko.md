@@ -95,7 +95,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: "69fbc1d967b2d546"
+source_hash: 4079231f6f41f236
 ---
 
 ## 정의
@@ -123,6 +123,8 @@ BiRefNet과 FeyNobg는 순전파 경로를 공유합니다.
 <code-tabs name="predict" />
 
 BiRefNet과 FeyNobg는 고정된 기본 1024x1024 캔버스에서 실행하고 매트를 원본 이미지 크기로 조정합니다. Swin 백본의 상대 위치 테이블이 해당 크기에 묶여 있고, 크기가 맞지 않으면 오류를 내는 대신 잘못 보간하므로 다른 해상도는 지원하지 않습니다. `Results.save()`는 매트로 잘라낸 이미지를 만들 때 원본 이미지를 사용하며, 이미지를 전달하지 않으면 `Results.path`에서 다시 로드합니다. 소스, 스트리밍, 결과 처리는 [예측](/docs/predict)을 참조하십시오.
+
+[WeVisOne-VL](/docs/models/wevisone-vl)은 텍스트로 프롬프트합니다. `LibreVLM("wevisone-vl", names=["person"], task="matte")`는 구문과 일치하는 모든 인스턴스의 알파 매트를 합친 결과를 반환합니다. 이 모델은 `vlm` extra가 필요한 비전-언어 모델이며, `val()`과 `export()`는 예외를 발생시킵니다.
 
 `Results.save()`는 매트로 잘라낸 이미지를 RGBA로 저장합니다. `plot()`은 확인용 이미지를 렌더링합니다. BEN2는 기본 배치 예측을 지원하며, ViTMatte에는 단일 이미지 가이드가 필요합니다.
 

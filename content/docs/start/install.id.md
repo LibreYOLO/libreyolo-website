@@ -69,7 +69,7 @@ snippets:
         # Family yang ekstra-nya belum ada dicantumkan bersama perintah pip
         # yang mengaktifkannya.
         libreyolo models
-source_hash: 3ad6bb09bf2f5434
+source_hash: a4a8cf3926eeb9bb
 ---
 
 ## Instalasi
@@ -101,6 +101,7 @@ baik ekstra tersedia maupun tidak.
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 atau lebih baru |
 | `marigold` | Dependensi difusi, akselerasi, dan Transformers yang dipatok |
 | `molmo2` | `transformers==4.57.1`, `einops` dan `accelerate` |
+| `gen` | `diffusers>=0.38.0`, `transformers>=5.1.0` dan `accelerate>=1.7.0`, untuk LibreGen dan Speridlabs Idol |
 | `rfdetr` | `transformers`, yang menyediakan backbone RF-DETR |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, yang menyediakan encoder ViT-L/16 dan EfficientNet-Lite3 milik MiDaS |
@@ -168,11 +169,11 @@ ekstra. Hanya URL halaman YouTube yang memerlukannya.
 
 ### Ekstra agregat
 
-`libreyolo[all]` memasang extra model, ekspor, pelacakan, dan logging dalam satu perintah. Beberapa sengaja tidak disertakan. `neptune` dikecualikan karena `neptune-scale` stabil memerlukan protobuf di bawah 7, sedangkan jalur TFLite memerlukan protobuf 7. `executorch` dikecualikan karena ExecuTorch membatasi versi PyTorch yang kompatibel, dan `coreai` karena `coreai-torch` mematok PyTorch ke 2.11.x dan akan memindahkan seluruh lingkungan ke versi itu. `fast-eval`, `hub-kernels`, `clip-convert`, dan `siglip2-convert` juga tidak disertakan. Pasang masing-masing dengan namanya. `all` mencakup `hf` dan `llm`; `fiftyone`, `vla`, `marigold`, dan `molmo2` tetap terpisah. FiftyOne membawa OpenCV headless, yang bertumpang tindih dengan paket inti `cv2`.
+`libreyolo[all]` memasang extra model, ekspor, pelacakan, dan logging dalam satu perintah. Beberapa sengaja tidak disertakan. `neptune` dikecualikan karena `neptune-scale` stabil memerlukan protobuf di bawah 7, sedangkan jalur TFLite memerlukan protobuf 7. `executorch` dikecualikan karena ExecuTorch membatasi versi PyTorch yang kompatibel, dan `coreai` karena `coreai-torch` mematok PyTorch ke 2.11.x dan akan memindahkan seluruh lingkungan ke versi itu. `fast-eval`, `hub-kernels`, `clip-convert`, dan `siglip2-convert` juga tidak disertakan. Pasang masing-masing dengan namanya. `all` mencakup `hf`, `llm`, dan `gen`; `fiftyone`, `vla`, `marigold`, dan `molmo2` tetap terpisah. FiftyOne membawa OpenCV headless, yang bertumpang tindih dengan paket inti `cv2`.
 
 Instalasi inti memerlukan Python 3.10 atau lebih baru dan menambahkan `cloudpickle>=3.0.0` untuk DDP yang dikelola koordinator.
 
-Gunakan lingkungan terpisah untuk Molmo2: pin Transformers 4.57.1 bertentangan dengan stack VLM, Hub, dan Marigold yang lebih baru. Marigold mematok diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0, dan Transformers 5.4.0, serta bitsandbytes 0.49.2 pada Linux/Windows. Inferensi Marigold empat-bit default memerlukan CUDA. North Micro Vision memerlukan Transformers 5.16 atau lebih baru; Gemma 4 memerlukan 5.10 atau lebih baru, di atas batas minimum VLM bersama.
+Gunakan lingkungan terpisah untuk Molmo2: pin Transformers 4.57.1 bertentangan dengan stack VLM, Hub, dan Marigold yang lebih baru, dan `libreyolo[gen]` tidak dapat diinstal bersama `libreyolo[molmo2]`. Marigold mematok diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0, dan Transformers 5.4.0, serta bitsandbytes 0.49.2 pada Linux/Windows. Inferensi Marigold empat-bit default memerlukan CUDA. North Micro Vision memerlukan Transformers 5.16 atau lebih baru; Gemma 4 memerlukan 5.10 atau lebih baru, di atas batas minimum VLM bersama.
 
 ## Constraint platform
 

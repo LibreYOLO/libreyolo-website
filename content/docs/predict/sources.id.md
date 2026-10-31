@@ -205,7 +205,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: 81a0c947dbfe48b5
+source_hash: ea188c1154d0b7f6
 ---
 
 ## Cara sumber diklasifikasikan
@@ -389,7 +389,9 @@ otomatis, dengan nama berkas sumber dipertahankan. Setiap gambar dalam satu pros
 direktori yang sama, sehingga dua folder input dengan nama berkas sama saling menimpa.
 Gambar dalam memori tidak memiliki nama berkas untuk dipakai ulang. Satu gambar tunggal disimpan
 sebagai `inference`, sehingga pemanggilan berulang menimpanya; list atau batch diberi nomor
-`image0`, `image1`, dan seterusnya.
+`image0`, `image1`, dan seterusnya. Dua proses yang menyimpan pada saat yang sama
+mendapat direktori bernomor yang terpisah, karena setiap run memesan direktorinya
+dengan membuatnya.
 
 Video dan sumber live ditulis sebagai satu `.mp4` yang dinamai berdasarkan sumber.
 

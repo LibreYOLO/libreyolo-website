@@ -146,12 +146,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 
 ## Un objet, un emplacement par charge utile
 
-Une prédiction sur une image renvoie un objet `Results`. Il contient vingt et un
+Une prédiction sur une image renvoie un objet `Results`. Il contient vingt-trois
 emplacements de charges utiles et un modèle remplit uniquement ceux que sa
 tâche produit. Tous les autres valent `None`, lire `result.masks` sur un
 détecteur renvoie donc `None` au lieu de lever une erreur.
@@ -179,6 +179,8 @@ détecteur renvoie donc `None` au lieu de lever une erreur.
 | `albedo` | `AlbedoMap` | `(H, W, 3)` RGB linéaire | Estimation de l'albédo |
 | `boxes3d` | `Boxes3D` | `(N, 14)` cuboïdes dans le repère caméra, alignés ligne à ligne avec `boxes` | Détection 3D monoculaire |
 | `actions` | `Actions` | `(T, D)` séquence d'actions | Politiques robotiques |
+| `generated` | `GeneratedImage` | `(H, W, 3)` RGB uint8 plus prompt, seed et réglages | Génération d'images |
+| `gaussians` | `Gaussians` | `N` gaussiennes sous forme de `xyz`, `scales`, `rotations`, `opacities` et `sh`, plus caméra et seed | Génération 3D |
 
 À leurs côtés figurent les champs présents dans chaque résultat :
 `orig_shape` sous la forme `(height, width)`, `path` (le chemin source, ou
@@ -189,10 +191,12 @@ d'agrandissement d'un résultat de restauration.
 
 `result.normals` est un alias de `result.normal_map`.
 
-`result.speed` existe dans chaque résultat, mais seuls les
-[ensembles](/docs/predict/ensembling) le renseignent. Ses clés sont `member_0`,
-`member_1` et `fusion`, en millisecondes. Pour un modèle unique, il reste un
-dictionnaire vide.
+`result.speed` existe dans chaque résultat. Les
+[ensembles](/docs/predict/ensembling) le renseignent avec `member_0`, `member_1`
+et `fusion` en millisecondes, les modèles LibreGen avec `inference`, les
+millisecondes par image ou par objet généré, et FCOS3D avec `preprocess`,
+`inference` et `postprocess`. Les autres modèles le laissent à un dictionnaire
+vide.
 
 ## Bounding boxes
 
@@ -279,7 +283,8 @@ disposition `(H, W)`.
 
 `len(result)` compte les instances : bounding boxes, points, embeddings,
 régions OCR ou maillages. Toute charge utile dense couvrant l'image entière
-compte pour `1`. Un résultat vide vaut `0`.
+compte pour `1`, tout comme une image générée ou un objet 3D. Un résultat vide
+vaut `0`.
 
 `to()`, `cpu()`, `cuda()` et `numpy()` renvoient chacun un nouvel objet
 `Results` dans lequel chaque emplacement rempli a été converti. Ils ne
@@ -310,7 +315,8 @@ segmentation panoptique une ligne par segment avec `pixel_count` et
 `pixel_fraction`, la segmentation sémantique une ligne par classe présente,
 et la classification les cinq premières classes. La profondeur, les normales,
 les contours, la restauration et le matting émettent chacun une seule ligne de
-résumé décrivant la carte plutôt que ses pixels.
+résumé décrivant la carte plutôt que ses pixels, et une image générée ou un objet 3D une
+ligne avec sa seed et ses réglages.
 
 Deux charges utiles sont délibérément abrégées. Un vecteur d'embedding est
 rapporté uniquement sous la forme `embedding_dim`, car une ligne de 512
@@ -332,11 +338,12 @@ matte sous forme de PNG RGBA à arrière-plan transparent et une détection sous
 forme de bounding boxes avec les masques en dessous. Le chemin écrit est joint
 au résultat sous la forme `result.saved_path`.
 
-`Results.save(path)` est tout aussi limité : il écrit un résultat de matting
-sous forme de découpe PNG RGBA à arrière-plan transparent et lève
+`Results.save(path)` est tout aussi limité : il écrit une image générée ou un
+objet 3D généré, en choisissant le format d'après l'extension, et un résultat de
+matting sous forme de découpe PNG RGBA à arrière-plan transparent, et lève
 `NotImplementedError` dans les autres cas. `Results.cutout()` renvoie ce même
-tableau RGBA sans l'écrire. Les deux ont besoin de l'image source, lue dans
-`result.path` ou transmise avec `image=`.
+tableau RGBA sans l'écrire. Pour un matte, les deux ont besoin de l'image
+source, lue dans `result.path` ou transmise avec `image=`.
 
 Deux charges utiles disposent de leur propre méthode d'écriture :
 `result.restored.save(path)` pour une image restaurée et
@@ -346,7 +353,7 @@ Pour connaître l'emplacement des fichiers et le comportement de `output_path`
 et `output_file_format`, consultez les
 [sources de prédiction](/docs/predict/sources).
 
-`plot()` couvre toutes les charges utiles de tâche. Les superpositions d'image renvoient par défaut un tableau BGR uint8 HxWx3 contigu ; `pil=True` demande une image PIL. Les cartes de profondeur, de normales, de contours et d'albédo, les cuboïdes 3D et les séquences d'actions renvoient par défaut une image PIL ; `pil=False` renvoie le tableau. `orig_img` conserve les pixels BGR pour les sources en mémoire et les URL ; les fichiers locaux et les images collectées de vidéos finies peuvent être rouverts.
+`plot()` couvre toutes les charges utiles de tâche. Les superpositions d'image renvoient par défaut un tableau BGR uint8 HxWx3 contigu ; `pil=True` demande une image PIL. Les cartes de profondeur, de normales, de contours et d'albédo, les cuboïdes 3D, les séquences d'actions, les images générées et le rendu en points d'un objet 3D généré renvoient par défaut une image PIL ; `pil=False` renvoie le tableau. `orig_img` conserve les pixels BGR pour les sources en mémoire et les URL ; les fichiers locaux et les images collectées de vidéos finies peuvent être rouverts.
 
 Les contrôles comprennent `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save` et `filename`. Les images de classification enregistrées incluent les cinq premières étiquettes. L'enregistrement de matting écrit une découpe RGBA.
 

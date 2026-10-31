@@ -69,7 +69,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # 체력
         print(metrics["metrics/rec_1-NED"])
-source_hash: 58ad5305c9dd458c
+source_hash: d6ec02dfdb1a69a8
 ---
 
 ## 정의
@@ -80,11 +80,13 @@ source_hash: 58ad5305c9dd458c
 
 ## 모델들
 
-두 계열이 `ocr`를 제공합니다.
+세 계열이 `ocr`를 제공합니다.
 
 [PP-OCRv5](/docs/models/pp-ocrv5)는 전용 파이프라인입니다: 미분 가능 이진화 탐지기가 텍스트 사각형을 찾고 SVTR/CTC 인식기가 이를 읽으며, 두 단계 모두 인식 문자 집합과 함께 하나의 `.pt` 파일로 번들로 제공됩니다. 이 파이프라인은 두 가지 버전으로 제공되며, 하나는 CPU용 가벼운 버전이고, 다른 하나는 더 높은 정확도를 위한 서버용 버전입니다. 하나의 사전에는 간체 및 번체 중국어, 영어, 일본어, 병음이 포함되어 있습니다.
 
 [SenseNova-Vision](/docs/models/sensenova-vision)은 여섯 가지 다른 작업을 수행하는 동일한 7B 체크포인트에서 태그된 텍스트로 단어를 생성함으로써 OCR에 도달하며, `LibreVLM("sensenova-vision", task="ocr")`로 로드됩니다. `sensenova` 추가가 필요하며, 그 가중치는 비상업적 사용으로 제한되며 라이선스는 해당 페이지에 있습니다.
+
+[WeVisOne-VL](/docs/models/wevisone-vl)도 태그된 텍스트로 답을 생성하며, `LibreVLM("wevisone-vl", task="ocr")`로 불러옵니다. 공개된 지시문은 모든 단어를 박스 형식으로 요청하고, 각 박스는 전사 텍스트와 함께 축 정렬 사각형으로 돌아옵니다. 모델이 점수를 내지 않으므로 `.conf`와 `.det_conf`는 상수 1.0입니다. `vlm` extra가 필요하며 가중치는 Apache-2.0입니다.
 
 ## 예측
 
@@ -118,7 +120,7 @@ my-ocr-dataset/
 
 ## 학습
 
-어느 OCR 계열도 학습 구현을 가지고 있지 않습니다: `train()`는 둘 다에서 `NotImplementedError`를 발생시키며, OCR 지원은 예측과 검증만 다룹니다. PP-OCRv5의 페이지는 Apache-2.0 업스트림 학습 코드와 파인튜닝된 체크포인트를 다시 LibreYOLO로 가져오는 변환 스크립트를 명시하고 있습니다.
+어느 OCR 계열도 학습 구현을 가지고 있지 않습니다: `train()`는 세 계열 모두에서 `NotImplementedError`를 발생시킵니다. 검증은 PP-OCRv5를 다루며, `val()`은 두 비전-언어 계열에서 예외를 발생시킵니다. PP-OCRv5의 페이지는 Apache-2.0 업스트림 학습 코드와 파인튜닝된 체크포인트를 다시 LibreYOLO로 가져오는 변환 스크립트를 명시하고 있습니다.
 
 ## 검증
 
@@ -132,4 +134,4 @@ my-ocr-dataset/
 
 ## 내보내기
 
-이 작업에는 사용할 수 있는 내보내기 형식이 없습니다. PP-OCRv5는 추적 가능한 하나의 그래프가 아닌 두 개의 네트워크가 함께 움직이는 구조이며, `export()`는 두 계열의 모든 형식에 대해 발생합니다. LibreYOLO 외부에 배포하려면, 업스트림을 파인튜닝하고 업스트림 배포 경로를 사용하십시오.
+이 작업에는 사용할 수 있는 내보내기 형식이 없습니다. PP-OCRv5는 추적 가능한 하나의 그래프가 아닌 두 개의 네트워크가 함께 움직이는 구조이며, `export()`는 세 계열의 모든 형식에 대해 발생합니다. LibreYOLO 외부에 배포하려면, 업스트림을 파인튜닝하고 업스트림 배포 경로를 사용하십시오.

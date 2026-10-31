@@ -123,7 +123,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## Instalacja
@@ -181,9 +181,10 @@ odrzucane podczas walidacji, a urządzenie inne niż CPU nie jest przyjmowane.
 
 `delegate` przyjmuje w tej wersji `"xnnpack"` i nic więcej.
 
-Eksporty klasyfikacji niosą dwa dodatkowe klucze metadanych, `crop_pct` i
-`interpolation`, dzięki czemu środowisko uruchomieniowe może odtworzyć stosowaną
-przez daną rodzinę politykę zmiany rozmiaru i przycięcia środka.
+Eksporty klasyfikacji niosą preprocessing ewaluacyjny modelu jako metadane,
+`crop_pct` i `interpolation`, a dla rodzin, które je ustawiają, także
+`norm_mean`, `norm_std` i `resize_mode`, dzięki czemu środowisko uruchomieniowe
+odtwarza zmianę rozmiaru i przycięcie środka modelu.
 
 Zablokowane pozycje wskazują konkretny błąd, a nie kategorię. Detekcja i segmentacja
 w D-FINE trafiają na nieobsługiwany odczyt `ContextVar` w deformowalnej uwadze przy

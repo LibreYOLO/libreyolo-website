@@ -76,7 +76,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## Ustawianie parametrów
@@ -143,9 +143,9 @@ afiniczną dla każdej próbki i z MixUp stosowanym niezależnie zamiast warunko
 Wartość `mosaic_scale` jest ponownie używana jako zakres skali transformacji
 afinicznej.
 
-SegFormer i NAFNet uruchamiają pipeline specyficzny dla zadania, którego
-losowość jest ustalona w rodzinie, a nie konfigurowalna. Dla SegFormer aktywnymi
-parametrami są atrybuty klasy `semantic_scale_jitter` i `semantic_hsv_prob`, a
+SegFormer, LingBot-Vision i NAFNet uruchamiają pipeline specyficzny dla zadania,
+którego losowość jest ustalona w rodzinie, a nie konfigurowalna. Dla SegFormer i
+LingBot-Vision aktywnymi parametrami są atrybuty klasy `semantic_scale_jitter` i `semantic_hsv_prob`, a
 nie `mosaic_scale` oraz `hsv_prob`. Wycinanie i odbicia NAFNet są sprzężonymi
 operacjami wejścia i celu o stałym prawdopodobieństwie 0.5.
 
@@ -194,6 +194,21 @@ pipeline'ach mozaikowych wyłącza mozaikę i MixUp na ostatnie epoki. W
 pipeline'ach w stylu DETR zatrzymuje augmentacje fotometryczne, pomniejszenie i
 wycinanie oraz kształtuje końcówkę harmonogramu. W pipeline'ach klasyfikacji wyłącza automatyczną augmentację, erasing, MixUp i CutMix; wycinanie i odbicia pozostają.
 
+`perspective` dodaje transformację projekcyjną na wierzchu obrotu, skali,
+ścinania i przesunięcia. Każdy narożnik płótna przesuwa się do środka o losową
+wartość do `min(perspective * 100, 0.2)` połowy boku płótna, na każdej osi, więc
+`perspective=0.001` przesuwa narożnik najwyżej o 5 procent boku przy dowolnej
+rozdzielczości, a każda wartość od `0.002` w górę osiąga to samo maksimum.
+Domyślne `0` zachowuje transformację afiniczną, a wartość ujemna zgłasza
+`ValueError` przy zniekształcaniu pierwszej próbki. Stosują ją YOLOv9 i jego
+warianty E2E i P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE, RTMDet, PicoDet, RT-DETR i
+RT-DETRv2.
+
+MixUp w pipeline'ie mosaic YOLOv9, przez który trenują YOLOv9 i jego warianty,
+YOLOv7, RT-DETR i RT-DETRv2, losuje współczynnik mieszania z rozkładu Beta(1, 1),
+jednostajnego na [0, 1]. Nakładka mosaic YOLOX, używana przez YOLOX, RTMDet i
+PicoDet, miesza ze stałym współczynnikiem 0.5.
+
 ## Pakiet klasyfikacji
 
 Cztery parametry sterują pipeline'em klasyfikacji i żadnym innym. Rodziny
@@ -228,14 +243,15 @@ podstawowej, dlatego istnieją tylko dla tej rodziny i nie mają flagi CLI.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Prawdopodobieństwo augmentacji instancji copy-paste, tylko dla `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` ponownie używa tej samej odbitej próbki, a `"mixup"` pobiera drugą próbkę |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Prawdopodobieństwo losowego obrotu o 90 stopni |
-| YOLOv9 | `max_labels` | Limit danych referencyjnych na obraz w transformacjach trenowania, domyślnie 100 |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Limit danych referencyjnych na obraz w transformacjach trenowania, domyślnie 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste dla `task="segment"`, tylko tryb `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Prawdopodobieństwo losowego wycinania ze zmianą rozmiaru |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Prawdopodobieństwa zaburzenia jasności i kontrastu oraz transformacji afinicznej uwzględniającej punkty kluczowe w ścieżce pozy |
 
-`max_labels` jest jedynym parametrem, który po cichu powoduje utratę danych.
-Ramki powyżej limitu są odrzucane bez błędu, dlatego dla gęstych obrazów, takich
-jak fotografia lotnicza, trzeba go zwiększyć.
+`max_labels` jest jedynym parametrem, który powoduje utratę danych. Ramki powyżej
+limitu są odrzucane z jednorazowym ostrzeżeniem zamiast błędu, dlatego dla
+gęstych obrazów, takich jak fotografia lotnicza, trzeba go zwiększyć. Pamięć
+przypisywania etykiet zależy od najgęstszego obrazu w batchu, a nie od limitu.
 
 Mozaika i MixUp są wyłączone podczas trenowania obróconych ramek niezależnie od
 parametrów, ponieważ augmentacja uwzględniająca narożniki obróconych ramek nie

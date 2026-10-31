@@ -132,7 +132,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## 定义
@@ -179,7 +179,7 @@ LibreYOLO9t 检测器；`cropped=True` 把整张图像当作一个实例，`pers
 关键点的数量和顺序是检查点的属性，而不是库的属性，所以在不同骨架上训练出来的模型会
 返回不同的 `K`，每个索引的含义也不一样。关键点第三列里装的是什么，同样是检查点的
 属性：EdgeCrafter 在那里写的是一个常数，而不是逐点的分数，而且它根本没有检测框
-head，所以它的每个姿态检测框都是该实例自身关键点的外接范围。数据源、流式处理和结果
+head，所以它的每个姿态检测框都是该实例自身关键点的外接范围。`agnostic_nms=True` 会跨类别抑制重叠的检测框，并把每个被抑制实例的关键点随它的框一起丢弃；HRNet 对它会抛出 `NotImplementedError`。数据源、流式处理和结果
 处理见[预测](/docs/predict)。
 
 ## 数据集格式
@@ -252,7 +252,7 @@ Similarity 的 COCO 关键点评测，它按实例尺度和逐关键点的容差
 定义小目标那一档。与之对应的平均查全率数字是 `metrics/keypoints_AR50-95`、
 `metrics/keypoints_AR50`、`metrics/keypoints_AR75`、`metrics/keypoints_AR_M` 和
 `metrics/keypoints_AR_L`。这个任务上的每个键都带 `keypoints_` 前缀，所以检测器返回的
-那些检测框 `mAP` 键不会出现。
+那些检测框 `mAP` 键不会出现。`val(agnostic_nms=True)` 在这个任务上会抛出 `ValueError`。
 
 ## 导出
 

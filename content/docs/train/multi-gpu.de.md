@@ -42,6 +42,11 @@ snippets:
                 batch=32,     # globaler Batch: 16 Bilder je GPU bei zwei GPUs
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -79,7 +84,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Einmal auf GPU 0 testen und auf ein Vielfaches der Weltgröße skalieren.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 
 ## Ausführung auf zwei GPUs
@@ -93,6 +98,10 @@ Bei mehr als einem Gerät und ohne torchrun-Umgebung speichert `train()` des Mod
 `device` akzeptiert `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"`
 und `"auto"`. Nur eine Liste mit mehr als einem CUDA-Index startet mehrere
 Prozesse.
+
+`libreyolo train device=0,1` oder `device=[0,1]` baut das Modell auf der ersten
+aufgeführten GPU auf und übergibt die Liste an `train()`, das die Worker auf
+dieselbe Weise startet.
 
 ## Automatischer Start und Main-Guard
 

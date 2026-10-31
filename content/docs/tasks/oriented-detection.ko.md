@@ -152,7 +152,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## 정의
@@ -187,7 +187,7 @@ source_hash: 8af4d1647609e5e6
 
 실행 전에 RF-DETR 공개 체크포인트의 성격을 확인해야 합니다. DOTA는 이 작업의 기준 벤치마크지만, 해당 가중치는 DOTA로 학습하지 않았습니다. 네 가지 모두 RF-DETR 탐지 가중치로 초기화한 뒤 bike, bus, car, other_vehicle, taxi, truck의 6개 차량 클래스를 포함하는 단일 UAV 영상 데이터셋으로 파인튜닝했습니다. 모델 카드는 회전 바운딩 박스 학습 지원을 검증하면서 만든 개발용 가중치로 설명하며, 프로덕션용이나 공식 벤치마크 가중치로 해석해서는 안 된다고 명시합니다.
 
-실제로 이는 위에서 본 차량의 방향성 박스를 위한 작업 시작점이자 파이프라인이 처음부터 끝까지 실행되는지를 검증하는 의미를 갖습니다. 다른 도메인의 경우에는 자체 방향성 레이블을 사용하여 학습해야 하며, 항공 분야 카테고리에서는 DOTA가 유명하며, RT-DETRv2 체크포인트가 실제로 해당 데이터로 학습된 모델입니다. `conf`와 `max_det`는 검출을 위해 출력 형식을 조정합니다. 소스, 스트리밍 및 결과 처리는 [예측](/docs/predict)을 참조하십시오.
+실제로 이는 위에서 본 차량의 방향성 박스를 위한 작업 시작점이자 파이프라인이 처음부터 끝까지 실행되는지를 검증하는 의미를 갖습니다. 다른 도메인의 경우에는 자체 방향성 레이블을 사용하여 학습해야 하며, 항공 분야 카테고리에서는 DOTA가 유명하며, RT-DETRv2 체크포인트가 실제로 해당 데이터로 학습된 모델입니다. `conf`와 `max_det`는 검출을 위해 출력 형식을 조정하며, `agnostic_nms=True`는 회전 IoU로 클래스에 걸쳐 겹치는 박스를 억제합니다. 소스, 스트리밍 및 결과 처리는 [예측](/docs/predict)을 참조하십시오.
 
 ## 데이터셋 형식
 
@@ -245,7 +245,7 @@ YOLO-NAS OBB는 회전 할당과 손실, 뒤집기/HSV 증강을 사용하며, �
 
 `metrics/mAP50-95`는 IoU 임계값 0.50에서 0.95까지 0.05 단위로 평균된 평균 정밀도(mean average precision)이며, 주요 수치입니다. 탐지에서 사용되는 COCO 경로와 달리, 이 작업은 검증 구성(validation config)에서 `iou_thresholds`를 존중하므로 스윕(sweep)을 변경할 수 있습니다. `metrics/mAP50`와 `metrics/mAP75`는 단일 임계값 버전입니다. `metrics/precision`와 `metrics/recall`는 IoU 0.50에서의 실제 정밀도와 재현율이며, 가장 느슨한 동작 지점(loose operating point)에서 측정됩니다. 즉, 신뢰도 임계값(confidence threshold)을 통과한 모든 예측이 포함되며, 검증 중에 해당 임계값의 기본값은 0.001입니다. 따라서 `conf`를 높이면 이 값들이 이동하지만, 전체 정밀도-재현율 곡선을 사용하는 mAP 수치는 그대로 유지됩니다. 이 중 네 개는 `(OBB)` 접미사 아래에서 반복되며, `metrics/mAP50-95(OBB)`, `metrics/mAP50(OBB)`, `metrics/precision(OBB)`, `metrics/recall(OBB)`로 이어지는데, 이는 호출자가 동일한 테이블에 있을 때 축 정렬 결과와 방향이 지정된 결과를 구분하는 방법입니다. `metrics/mAP75`에는 접미사가 붙은 쌍이 없습니다.
 
-이 작업에서는 두 가지 옵션이 아무런 동작을 하지 않습니다. `save_json`와 `save_plots`는 허용되며 경고를 기록합니다: 방향 예측 덤프와 검증 플롯은 구현되지 않았습니다.
+이 작업에서는 두 가지 옵션이 아무런 동작을 하지 않습니다. `save_json`와 `save_plots`는 허용되며 경고를 기록합니다: 방향 예측 덤프와 검증 플롯은 구현되지 않았습니다. `agnostic_nms=True`는 여기서 `ValueError`를 발생시키며, 탐지와 분할 검증만 지원합니다.
 
 ## 내보내기
 

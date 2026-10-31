@@ -48,7 +48,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## Установка
@@ -82,15 +82,16 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Зафиксированный снапшот из апстрима |
 
 Алиас по умолчанию — `qwen3-vl-4b`. Для алиаса по умолчанию каждого семейства
 берётся размер, указанный первым: `qwen3-vl` разрешается в `4b`, `lfm2-vl` — в
-`450m`, `internvl3` — в `2b`, `smolvlm2` — в `2.2b`, `florence-2` — в `base`.
+`450m`, `internvl3` — в `2b`, `smolvlm2` — в `2.2b`, `florence-2` — в `base`, `wevisone-vl` — в `2b`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` и `LibreMODUS`
-(также пишется `LibreModus`) экспортируются на уровне пакета.
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL`
+и `LibreMODUS` (также пишется `LibreModus`) экспортируются на уровне пакета.
 
 Детекция также включает `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` и `lfm2-vl-3b`. Псевдоним `gemma-4` без суффикса выбирает E4B. Псевдонимы Molmo2: `molmo2-4b`, `molmo2-8b` и `molmo2-o-7b`; по умолчанию выбран 4B. Псевдонимы задают маршрутизацию, но не означают, что каждый удалённый снимок был скачан и проверен. `moondream-3` в 1.6.0 не загружается: в его зеркале не хватает шардов весов.
 
@@ -102,6 +103,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 Задача задаётся промптом, а не запечена в чекпойнт, поэтому её можно переключить
 на уже загруженной модели:
@@ -114,7 +116,7 @@ model.set_task(task: str) -> LibreVLMModel
 последующих вызовов `predict()` и `track()`, а модель возвращается, чтобы вызовы
 можно было соединять в цепочку.
 
-Molmo2 возвращает точки и требует `{label}` в собственных шаблонах указания точек. Moondream поддерживает детекцию, точки и нативный чат. Для запросов клика по инструкции используйте [LibreGround](/docs/reference/ground-api).
+Molmo2 возвращает точки и требует `{label}` в собственных шаблонах указания точек. `referring=True` в WeVisOne-VL заставляет `detect` отправлять по одной генерации на фразу, а его `segment`, `matte` и референтная детекция вызывают `ValueError` без словаря. Moondream поддерживает детекцию, точки и нативный чат. Для запросов клика по инструкции используйте [LibreGround](/docs/reference/ground-api).
 
 ## set_classes
 

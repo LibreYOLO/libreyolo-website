@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## Mengatur pengaturan
@@ -136,8 +136,8 @@ YOLO-NAS memiliki bentuk tersendiri: tanpa mosaic, affine per sampel yang selalu
 aktif, dan MixUp yang diterapkan secara independen. Nilai `mosaic_scale` digunakan
 kembali sebagai rentang skala affine.
 
-SegFormer dan NAFNet menjalankan pipeline khusus task dengan randomisasi tetap.
-Untuk SegFormer, pengaturan aktif adalah atribut kelas `semantic_scale_jitter`
+SegFormer, LingBot-Vision, dan NAFNet menjalankan pipeline khusus task dengan
+randomisasi tetap. Untuk SegFormer dan LingBot-Vision, pengaturan aktif adalah atribut kelas `semantic_scale_jitter`
 dan `semantic_hsv_prob`, bukan `mosaic_scale` serta `hsv_prob`. Crop dan flip
 NAFNet merupakan operasi input-target berpasangan dengan probabilitas tetap 0,5.
 
@@ -178,6 +178,20 @@ Pengecualian dalam kolom tersebut hanya mempersempit dukungan:
 
 `no_aug_epochs` berstatus `used` di mana pun, tetapi maknanya berbeda. Pada pipeline mosaic, ini mematikan mosaic dan MixUp pada epoch terakhir. Pada pipeline gaya DETR, ini menghentikan augmentasi fotometrik, zoom-out, dan crop serta mengatur bagian akhir jadwal. Pada pipeline klasifikasi, ini menonaktifkan augmentasi otomatis, erasing, MixUp, dan CutMix; crop dan pembalikan tetap aktif.
 
+`perspective` menambahkan projective warp di atas rotasi, skala, shear, dan translasi.
+Setiap sudut kanvas bergeser ke dalam sejauh nilai acak hingga
+`min(perspective * 100, 0.2)` kali setengah sisi kanvas, per sumbu, sehingga
+`perspective=0.001` menggeser sudut paling banyak 5 persen sisi pada resolusi apa
+pun, dan setiap nilai dari `0.002` ke atas mencapai maksimum yang sama. Default `0`
+menjaga warp tetap affine, dan nilai negatif memunculkan `ValueError` saat sampel
+pertama di-warp. YOLOv9 beserta varian E2E dan P2-nya, YOLOX, YOLOv7, YOLO-NAS,
+PP-YOLOE, RTMDet, PicoDet, RT-DETR, dan RT-DETRv2 menerapkannya.
+
+MixUp di pipeline mosaic YOLOv9, yang dipakai untuk melatih YOLOv9 beserta
+variannya, YOLOv7, RT-DETR, dan RT-DETRv2, menarik rasio blend dari Beta(1, 1),
+seragam pada [0, 1]. Wrapper mosaic YOLOX, yang dipakai YOLOX, RTMDet, dan PicoDet,
+melakukan blend pada 0.5 tetap.
+
 ## Paket classification
 
 Empat pengaturan mengendalikan pipeline classification dan tidak memengaruhi
@@ -211,13 +225,15 @@ untuk family tersebut dan tidak memiliki flag CLI.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Probabilitas augmentasi instance copy-paste, hanya `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` memakai ulang sampel yang dicerminkan, `"mixup"` mengambil sampel kedua |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Probabilitas rotasi acak 90 derajat |
-| YOLOv9 | `max_labels` | Batas ground truth per gambar dalam transform pelatihan, default 100 |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Batas ground truth per gambar dalam transform pelatihan, default 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste untuk `task="segment"`, hanya mode `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Probabilitas random crop-resize |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Jitter jalur pose dan probabilitas affine yang memahami keypoint |
 
-`max_labels` dapat diam-diam menghilangkan data. Bounding box setelah batas dibuang tanpa
-error, sehingga imagery padat seperti foto aerial perlu menaikkan nilainya.
+`max_labels` dapat menghilangkan data. Bounding box setelah batas dibuang dengan satu
+peringatan, bukan error, sehingga imagery padat seperti foto aerial perlu menaikkan
+nilainya. Memori penetapan label mengikuti gambar terpadat dalam batch, bukan batas
+tersebut.
 
 Mosaic dan MixUp dinonaktifkan untuk pelatihan oriented-bounding box tanpa memandang
 pengaturan karena augmentasi yang memahami sudut bounding box berotasi belum tersedia.

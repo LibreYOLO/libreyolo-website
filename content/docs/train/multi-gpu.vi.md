@@ -2,12 +2,13 @@
 title: Huấn luyện multi-GPU
 seo_title: Huấn luyện multi-GPU trong LibreYOLO
 description: >-
-  Huấn luyện trên nhiều GPU với device="0,1". Cách thư viện khởi tạo worker DDP, lý do batch là batch toàn
-  cục, khi nào cần đặt sync_bn và cách dùng torchrun.
+  Huấn luyện trên nhiều GPU với device="0,1". Cách thư viện khởi tạo worker DDP,
+  lý do batch là batch toàn cục, khi nào cần đặt sync_bn và cách dùng torchrun.
 lead: >-
-  Huấn luyện multi-GPU trong LibreYOLO dùng DistributedDataParallel của PyTorch: mỗi GPU có một process, mỗi
-  process giữ một bản sao đầy đủ của mô hình và một shard của từng batch, với gradient được lấy trung bình
-  trên các rank ở mỗi bước.
+  Huấn luyện multi-GPU trong LibreYOLO dùng DistributedDataParallel của PyTorch:
+  mỗi GPU có một process, mỗi process giữ một bản sao đầy đủ của mô hình và một
+  shard của từng batch, với gradient được lấy trung bình trên các rank ở mỗi
+  bước.
 keywords:
   - huấn luyện pytorch ddp
   - huấn luyện multi gpu
@@ -22,11 +23,15 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Điều kiện bảo vệ này vẫn được hỗ trợ; script thường cũng chạy được khi không có nó
+
+        # Điều kiện bảo vệ này vẫn được hỗ trợ; script thường cũng chạy được khi
+        không có nó
+
         # Giữ nó cho đối tượng callback/logger cần dùng standard-pickle dự phòng
+
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -35,6 +40,11 @@ snippets:
                 batch=32,     # batch toàn cục: 16 ảnh mỗi GPU trên hai GPU
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -72,7 +82,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Chỉ thăm dò một lần trên GPU 0, rồi điều chỉnh thành bội số của world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 ## Chạy trên hai GPU
 
@@ -85,6 +95,10 @@ Khi có nhiều hơn một thiết bị và không có môi trường torchrun, 
 `device` chấp nhận `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` và
 `"auto"`. Chỉ danh sách gồm nhiều hơn một index CUDA mới kích hoạt việc tạo
 process.
+
+`libreyolo train device=0,1`, hoặc `device=[0,1]`, dựng mô hình trên GPU đầu tiên
+trong danh sách và truyền danh sách đó cho `train()`, hàm này tạo các worker theo
+cùng cách.
 
 ## Khởi chạy tự động và điều kiện main
 

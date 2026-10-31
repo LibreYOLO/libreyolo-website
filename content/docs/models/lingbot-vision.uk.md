@@ -114,7 +114,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Встановлення
@@ -156,7 +156,8 @@ LibreYOLO, але LibreYOLO не розміщує власну контроль�
 лінійне дослідження зі звіту upstream: бекбон ViT заморожений, і навчається
 лише щільна голова 1x1, як під час створення наведених вище ваг на хостингу
 LibreYOLO. Передайте `freeze_backbone=False`, щоб натомість донавчати всю
-мережу, і відповідно зменште `lr0`.
+мережу, і відповідно зменште `lr0`. `libreyolo train` починає з того самого
+рецепта, а без `name=` його запуски потрапляють у `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

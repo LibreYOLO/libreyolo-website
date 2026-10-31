@@ -96,12 +96,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() renvoie un dictionnaire ordinaire et non un objet.
+        # Un dict de clés metrics/, avec les résultats par classe en attributs.
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -129,7 +130,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## Définition
@@ -195,7 +196,8 @@ ainsi que les familles vision-langage [Florence-2](/docs/models/florence-2),
 [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) et
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) et
 [LibreMODUS](/docs/models/libremodus). Ces modèles se chargent par leur propre
 fabrique et leurs propres extras. Chaque page de modèle présente l'appel exact.
 
@@ -211,8 +213,11 @@ en cache localement.
 `conf` définit le seuil de confiance et `max_det` limite le nombre de lignes.
 `iou` est le seuil de NMS. Il n'a donc d'effet que sur une famille qui applique
 la NMS. RF-DETR et la tête YOLOv9 de bout en bout décodent un ensemble fixe de
-prédictions et l'ignorent. Consultez la page [prédiction](/docs/predict) pour
-les sources, le streaming et la gestion des résultats.
+prédictions et l'ignorent. `agnostic_nms=True` ajoute à `iou` une étape de
+suppression indépendante des classes qui s'applique aussi à ces deux familles ;
+voir [seuils et filtrage](/docs/predict/thresholds#agnostic_nms). Consultez la
+page [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
+résultats.
 
 ## Format du dataset
 
@@ -277,8 +282,9 @@ Utilisez `classes=` pour conserver les identifiants d'origine choisis dans le da
 
 ## Valider
 
-`val()` renvoie un dictionnaire ordinaire de clés `metrics/`, calculées avec
-l'évaluation COCO sur la partition `val` du fichier YAML du dataset.
+`val()` renvoie un dictionnaire de clés `metrics/`, calculées avec l'évaluation
+COCO sur la partition `val` du fichier YAML du dataset, avec les résultats par
+classe attachés en attributs.
 
 <code-tabs name="val" />
 
@@ -300,6 +306,13 @@ nombre. Quatre clés sont aussi répétées avec le suffixe `(B)`, pour boîte, 
 qu'une clé de détection se lise de la même manière sur un modèle qui prédit
 aussi des masques : `metrics/mAP50-95(B)`, `metrics/mAP50(B)`,
 `metrics/precision(B)` et `metrics/recall(B)`.
+
+Le résultat contient aussi `confusion_matrix`, indexée `matrix[predicted, true]`
+avec une ligne et une colonne `background`, et la précision, le rappel et le F1
+par classe selon les confiances sur `box` : `box.px`, `box.p_curve`,
+`box.r_curve`, `box.f1_curve`, une ligne par classe dans `box.ap_class_index`.
+[Validation et mesures](/docs/train/validation#confusion-matrix) couvre les deux,
+ainsi que `val(agnostic_nms=True)`.
 
 ## Exporter
 

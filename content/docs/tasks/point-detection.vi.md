@@ -2,11 +2,12 @@
 title: Phát hiện điểm
 seo_title: Phát hiện điểm và đếm trong LibreYOLO
 description: >-
-  Định vị đối tượng bằng một điểm thay vì hộp trong LibreYOLO. Dự đoán tâm, đếm đối tượng, huấn luyện FOMO và
-  đọc các point metric.
+  Định vị đối tượng bằng một điểm thay vì hộp trong LibreYOLO. Dự đoán tâm, đếm
+  đối tượng, huấn luyện FOMO và đọc các point metric.
 lead: >-
-  Phát hiện điểm trả về một vị trí x, y trên mỗi đối tượng thay vì bounding box. LibreYOLO cung cấp dưới dạng
-  tác vụ point, và một dự đoán mang một dòng x, y, lớp đối tượng cùng độ tin cậy cho mỗi đối tượng.
+  Phát hiện điểm trả về một vị trí x, y trên mỗi đối tượng thay vì bounding box.
+  LibreYOLO cung cấp dưới dạng tác vụ point, và một dự đoán mang một dòng x, y,
+  lớp đối tượng cùng độ tin cậy cho mỗi đối tượng.
 keywords:
   - phát hiện điểm python
   - đếm đối tượng python
@@ -19,30 +20,46 @@ snippets:
   predict:
     - label: Dự đoán điểm và đếm
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
-        # Trọng số LibreFOMO không được tự động tải. Trước hết hãy tải checkpoint từ
+
+        # Trọng số LibreFOMO không được tự động tải. Trước hết hãy tải
+        checkpoint từ
+
         # https://huggingface.co/LibreYOLO rồi nạp bằng đường dẫn cục bộ.
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE, save=True)
 
+
         points = result.points
+
         print(len(points))     # số lượng đối tượng
+
         print(points.xy)       # tâm (N, 2) theo pixel ảnh gốc
+
         print(points.cls, points.conf)
     - label: Tọa độ chuẩn hóa và số lượng theo lớp
       language: python
-      code: |
+      code: >
         from collections import Counter
+
 
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         result = model(SAMPLE_IMAGE)
 
+
         points = result.points.numpy()
-        print(points.xyn)                          # cùng các tâm đó trong [0, 1]
+
+        print(points.xyn)                          # cùng các tâm đó trong [0,
+        1]
+
         print(Counter(points.cls.astype(int).tolist()))
   train:
     - label: Huấn luyện FOMO trên dataset YOLO
@@ -67,29 +84,44 @@ snippets:
   val:
     - label: Xác thực và đọc các key metric
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         model = LibreYOLO("./LibreFOMOs-point.pt")
+
         metrics = model.val(data="my-dataset.yaml")
 
+
         print(metrics["metrics/precision"], metrics["metrics/recall"])
+
         print(metrics["metrics/f1"])
+
         print(metrics["metrics/mAP@[0.01:0.10]"])   # fitness
+
         print(metrics["metrics/MLE"])               # sai số định vị trung bình
-        print(metrics["metrics/MAE"], metrics["metrics/RMSE"])   # sai số số lượng
+
+        print(metrics["metrics/MAE"], metrics["metrics/RMSE"])   # sai số số
+        lượng
     - label: Thay đổi các ngưỡng khoảng cách
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("./LibreFOMOs-point.pt")
 
+
         # Biên lượt quét là một phần văn bản key, vì vậy lượt quét tùy chỉnh
+
         # đổi tên các key mAP được tạo ra.
-        metrics = model.val(data="my-dataset.yaml", dist_thresholds=[0.02, 0.05])
+
+        metrics = model.val(data="my-dataset.yaml", dist_thresholds=[0.02,
+        0.05])
+
 
         print(metrics["metrics/mAP@0.02"])
+
         print(metrics["metrics/mAP@[0.02:0.05]"])
   export:
     - label: Xuất
@@ -110,7 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 ## Định nghĩa
 
@@ -146,7 +178,7 @@ checkpoint sinh theo prompt dùng cho sáu tác vụ khác, được nạp bằn
 trễ trên mỗi ảnh cao hơn đáng kể so với detector chuyên dụng. Trọng số chỉ dùng
 cho mục đích phi thương mại; giấy phép nằm trên trang của mô hình.
 
-[Molmo2](/docs/models/molmo2) và [Moondream](/docs/models/moondream) cung cấp điểm theo điều kiện văn bản. [LibreGround](/docs/reference/ground-api) dùng chỉ dẫn để chọn tối đa một vị trí nhấp cho mỗi truy vấn bằng ShowUI, Florence-2 hoặc Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) và [WeVisOne-VL](/docs/models/wevisone-vl) cung cấp điểm theo điều kiện văn bản. [LibreGround](/docs/reference/ground-api) dùng chỉ dẫn để chọn tối đa một vị trí nhấp cho mỗi truy vấn bằng ShowUI, Florence-2 hoặc Qwen3-VL.
 
 ## Dự đoán
 

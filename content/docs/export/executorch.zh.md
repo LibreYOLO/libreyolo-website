@@ -120,7 +120,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## 安装
@@ -170,8 +170,9 @@ Lowering 用 XNNPACK partitioner 跑 `to_edge_transform_and_lower`。如果结�
 
 `delegate` 在这个版本里只接受 `"xnnpack"`，别的都不行。
 
-分类导出会多带两个元数据键，`crop_pct` 和 `interpolation`，这样运行时就能复现这个家族
-的缩放和中心裁剪策略。
+分类导出会把模型评估时的预处理作为元数据带上：`crop_pct` 和 `interpolation`，以及
+设置了它们的家族所带的 `norm_mean`、`norm_std` 和 `resize_mode`，这样运行时就能复现
+模型的缩放和中心裁剪。
 
 被屏蔽的条目写的是具体的失败原因，而不是一个笼统的类别。D-FINE 的检测和分割在严格捕获
 下会走到可变形注意力里一处不支持的 `ContextVar` 读取，而强制走手写的 grid-sample 路径

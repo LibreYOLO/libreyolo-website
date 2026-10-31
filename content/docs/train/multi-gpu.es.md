@@ -41,6 +41,11 @@ snippets:
                 batch=32,     # batch global: 16 imágenes por GPU con dos GPU
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -78,7 +83,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Se sondea una vez en la GPU 0 y se escala a un múltiplo del world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 
 ## Entrenar en dos GPU
@@ -98,6 +103,10 @@ instancia del modelo que hizo la llamada.
 
 `device` acepta `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` y
 `"auto"`. Solo una lista de más de un índice CUDA dispara el spawn.
+
+`libreyolo train device=0,1`, o `device=[0,1]`, construye el modelo en la primera
+GPU de la lista y pasa la lista a `train()`, que lanza los workers de la misma
+manera.
 
 ## Lanzamiento automático y el guard de main
 

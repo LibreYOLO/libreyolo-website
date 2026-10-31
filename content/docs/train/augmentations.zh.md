@@ -70,7 +70,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 
 ## 设置这些参数
@@ -126,8 +126,8 @@ RF-DETR。
 YOLO-NAS 自成一种形态：完全没有 mosaic，逐样本的仿射变换始终开着，MixUp 是独立应用
 的，而不是被门控的。它的 `mosaic_scale` 值被复用为仿射变换的缩放范围。
 
-SegFormer 和 NAFNet 各自跑一条任务专属的流水线，其随机性写死在家族里，不可配置。对
-SegFormer 来说，活的参数是类属性 `semantic_scale_jitter` 和 `semantic_hsv_prob`，
+SegFormer、LingBot-Vision 和 NAFNet 各自跑一条任务专属的流水线，其随机性写死在家族里，不可配置。对
+SegFormer 和 LingBot-Vision 来说，活的参数是类属性 `semantic_scale_jitter` 和 `semantic_hsv_prob`，
 而不是 `mosaic_scale` 和 `hsv_prob`。NAFNet 的裁剪和翻转是输入与目标耦合的操作，概
 率固定为 0.5。
 
@@ -168,6 +168,10 @@ SegFormer 来说，活的参数是类属性 `semantic_scale_jitter` 和 `semanti
 
 `no_aug_epochs` 在所有流水线中都是 `used`，但含义并不相同。在 mosaic 流水线中，它会在最后几轮关闭 mosaic 和 MixUp。在 DETR 风格流水线中，它停止光度、缩小和裁剪数据增强，并控制学习率调度的尾段。在分类流水线中，它禁用自动增强、擦除、MixUp 和 CutMix；裁剪与翻转保留。
 
+`perspective` 在旋转、缩放、剪切和平移之上再加一个投影变换。画布的每个角点向内移动一个随机量，每个轴最多为 `min(perspective * 100, 0.2)` 乘以画布边长的一半，所以 `perspective=0.001` 在任何分辨率下最多把一个角点移动边长的 5%，而从 `0.002` 起的每个取值都达到同一个最大值。默认值 `0` 让变形保持为仿射，负值会在第一个样本被变形时抛出 `ValueError`。YOLOv9 及其 E2E 和 P2 变体、YOLOX、YOLOv7、YOLO-NAS、PP-YOLOE、RTMDet、PicoDet、RT-DETR 和 RT-DETRv2 都会应用它。
+
+YOLOv9 的 mosaic 流水线中的 MixUp（YOLOv9 及其变体、YOLOv7、RT-DETR 和 RT-DETRv2 都经由它训练）从 Beta(1, 1) 中抽取混合比例，即在 [0, 1] 上均匀分布。YOLOX、RTMDet 和 PicoDet 使用的 YOLOX mosaic 封装则以固定的 0.5 混合。
+
 ## 分类参数包
 
 有四个参数只驱动分类流水线，别的什么都不驱动。检测家族对这四个一律忽略。
@@ -198,13 +202,13 @@ CLI flag。
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | copy-paste 实例增强的概率，仅 `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` 复用同一张样本的镜像，`"mixup"` 会再取一张样本 |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | 随机 90 度旋转的概率 |
-| YOLOv9 | `max_labels` | 训练变换里每张图的真值（ground truth）上限，默认 100 |
+| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `max_labels` | 训练变换里每张图的真值（ground truth）上限，默认 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | 用于 `task="segment"` 的 copy-paste，仅 `"flip"` 模式 |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | 随机裁剪缩放的概率 |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | pose 路径的抖动概率和感知关键点的仿射变换概率 |
 
-`max_labels` 是那个会悄悄丢数据的参数。超过上限的检测框会被直接丢掉，不报错，所以
-航拍这类密集图像需要把它调大。
+`max_labels` 是那个会丢数据的参数。超过上限的检测框会被丢掉，只发出一次警告而不报错，所以
+航拍这类密集图像需要把它调大。标签分配的内存取决于批次中最密集的那张图像，而不是这个上限。
 
 不管参数怎么设，旋转框训练都会禁用 mosaic 和 MixUp，因为针对旋转框、感知角点的增强
 还没有实现。

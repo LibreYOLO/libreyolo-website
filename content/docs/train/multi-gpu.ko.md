@@ -34,6 +34,11 @@ snippets:
                 batch=32,     # 글로벌 배치: 두 개의 GPU에서 GPU당 16개의 이미지
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -71,7 +76,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # GPU 0에서 한 번 탐침되었으며, 세계 크기의 배수로 조정되었습니다.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: "e339072d5d8e71ea"
+source_hash: 18d4cbb626aee47d
 ---
 
 ## 두 개의 GPU에서 실행
@@ -83,6 +88,8 @@ source_hash: "e339072d5d8e71ea"
 둘 이상의 장치를 지정하고 torchrun 환경이 없으면 모델의 `train()`은 가중치를 임시 파일에 저장하고, 요청한 경우 자동 배치를 계산한 뒤, 코디네이터가 관리하는 작업자 프로세스를 GPU당 하나씩 시작합니다. 각 작업자는 모델 클래스를 다시 가져와 저장한 가중치로 재구성하고 일반 단일 장치 경로를 실행합니다. 생성된 작업자 내부에는 torchrun 환경 변수가 설정되기 때문입니다. 실행이 끝나면 랭크 0의 최적 체크포인트가 호출한 모델 인스턴스에 다시 로드됩니다.
 
 `device`는 `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` 및 `"auto"`를 허용합니다. 두 개 이상의 CUDA 인덱스 목록만 생성이 시작됩니다.
+
+`libreyolo train device=0,1` 또는 `device=[0,1]`은 목록의 첫 번째 GPU에서 모델을 만들고 목록을 `train()`에 넘기며, `train()`은 같은 방식으로 워커를 생성합니다.
 
 ## 자동 실행과 main 가드
 

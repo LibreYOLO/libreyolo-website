@@ -74,7 +74,7 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 3112c6f54b98ef9f
+source_hash: 54faadc6bb2c5d80
 ---
 ## Thiết lập các nút điều chỉnh
 
@@ -137,10 +137,10 @@ YOLO-NAS có dạng riêng: hoàn toàn không có mosaic, affine theo từng sa
 bật, và MixUp được áp dụng độc lập thay vì bị ràng buộc. Giá trị `mosaic_scale`
 của nó được dùng lại làm phạm vi tỷ lệ affine.
 
-SegFormer và NAFNet đều chạy pipeline riêng theo tác vụ, với tính ngẫu nhiên
-được cố định trong family thay vì có thể cấu hình. Với SegFormer, các nút có tác
-dụng là thuộc tính class `semantic_scale_jitter` và `semantic_hsv_prob`, không
-phải `mosaic_scale` và `hsv_prob`. Phép crop và lật của NAFNet là các thao tác
+SegFormer, LingBot-Vision và NAFNet đều chạy pipeline riêng theo tác vụ, với tính
+ngẫu nhiên được cố định trong family thay vì có thể cấu hình. Với SegFormer và
+LingBot-Vision, các nút có tác dụng là thuộc tính class `semantic_scale_jitter` và
+`semantic_hsv_prob`, không phải `mosaic_scale` và `hsv_prob`. Phép crop và lật của NAFNet là các thao tác
 ghép cặp đầu vào với target ở xác suất cố định 0.5.
 
 ## Mỗi family áp dụng nút nào
@@ -183,6 +183,20 @@ Các ngoại lệ trong những cột đó đều thu hẹp phạm vi:
 
 `no_aug_epochs` có trạng thái `used` ở mọi nơi nhưng không mang cùng ý nghĩa. Trên pipeline mosaic, nó tắt mosaic và MixUp trong các epoch cuối. Trên pipeline kiểu DETR, nó dừng augmentation quang học, zoom-out và cắt ảnh, đồng thời định hình phần cuối lịch trình. Trên pipeline phân loại, nó tắt auto-augmentation, erasing, MixUp và CutMix; cắt và lật ảnh vẫn hoạt động.
 
+`perspective` thêm một phép méo phối cảnh lên trên phép xoay, scale, shear và dịch
+chuyển. Mỗi góc canvas dịch vào trong một lượng ngẫu nhiên tối đa
+`min(perspective * 100, 0.2)` lần nửa cạnh canvas, theo từng trục, nên
+`perspective=0.001` dịch một góc tối đa 5 phần trăm cạnh ở mọi độ phân giải, và
+mọi giá trị từ `0.002` trở lên đạt cùng mức tối đa. Mặc định `0` giữ phép méo ở
+dạng affine, và một giá trị âm phát sinh `ValueError` khi mẫu đầu tiên bị làm
+méo. YOLOv9 cùng các biến thể E2E và P2, YOLOX, YOLOv7, YOLO-NAS, PP-YOLOE,
+RTMDet, PicoDet, RT-DETR và RT-DETRv2 áp dụng nó.
+
+MixUp trong pipeline mosaic của YOLOv9, mà YOLOv9 cùng các biến thể, YOLOv7,
+RT-DETR và RT-DETRv2 huấn luyện qua, lấy tỉ lệ trộn từ Beta(1, 1), đồng đều trên
+[0, 1]. Wrapper mosaic của YOLOX, dùng bởi YOLOX, RTMDet và PicoDet, trộn ở mức cố
+định 0.5.
+
 ## Bộ tùy chọn phân loại
 
 Bốn nút điều khiển pipeline phân loại và không điều khiển gì khác. Các family
@@ -216,14 +230,15 @@ chúng chỉ tồn tại cho family đó và không có flag CLI.
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste` | Xác suất augmentation thực thể copy-paste, chỉ cho `task="segment"` |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `copy_paste_mode` | `"flip"` dùng lại cùng sample đã lật, `"mixup"` lấy sample thứ hai |
 | YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `rot90` | Xác suất xoay ngẫu nhiên 90 độ |
-| YOLOv9 | `max_labels` | Giới hạn ground truth trên mỗi ảnh trong transform huấn luyện, mặc định 100 |
+| YOLOv9, YOLOv9-E2E, YOLOv9-P2 | `max_labels` | Giới hạn ground truth trên mỗi ảnh trong transform huấn luyện, mặc định 300 |
 | RF-DETR | `copy_paste`, `copy_paste_mode` | Copy-paste cho `task="segment"`, chỉ ở chế độ `"flip"` |
 | RF-DETR, D-FINE, EC | `crop_resize_prob` | Xác suất crop-resize ngẫu nhiên |
 | EC, YOLO-NAS | `brightness_contrast_prob`, `affine_prob` | Xác suất jitter và affine nhận biết keypoint trên đường dẫn tư thế |
 
-`max_labels` là nút âm thầm làm mất dữ liệu. Các hộp vượt quá giới hạn bị loại
-mà không phát sinh lỗi, vì vậy cần tăng giá trị cho ảnh dày đặc như ảnh hàng
-không.
+`max_labels` là nút làm mất dữ liệu. Các hộp vượt quá giới hạn bị loại kèm một
+cảnh báo một lần thay vì phát sinh lỗi, vì vậy cần tăng giá trị cho ảnh dày đặc
+như ảnh hàng không. Bộ nhớ gán nhãn theo ảnh dày đặc nhất trong batch, không theo
+giới hạn này.
 
 Mosaic và MixUp bị tắt cho quá trình huấn luyện hộp xoay bất kể giá trị các nút,
 vì augmentation nhận biết góc cho hộp xoay chưa được triển khai.

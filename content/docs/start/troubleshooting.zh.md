@@ -10,7 +10,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo 问题排查
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 报错按你看到的文字分组。如果你的报错信息不在这里，[FAQ](/docs/faq) 回答的是那些
@@ -24,6 +24,16 @@ traceback 里不一定能直接看出该怎么修。
 运行 `libreyolo models`。凡是依赖缺失的家族，都会连同启用它所需的确切 pip 命令
 一起打印出来，你不必自己把包名反推回 extra。`libreyolo models --json` 会把同样的
 内容打印成一个对象。
+
+RF-DETR 和 DINOv2 需要 `libreyolo[rfdetr]`，它们的报错信息会点出这个 extra。
+没有它的话，`LibreYOLO("LibreRFDETRn.pt")`、DINOv2 的权重名称和
+`libreyolo predict model=rfdetr-n` 都会带着安装命令中止，CLI 则以
+`model_load_failed` 退出：
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 [安装页面](/docs/install)列出了每一个 extra 以及它覆盖的范围。
 
@@ -86,12 +96,17 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 所以一个跟已发布检查点（checkpoint）对不上的名字，会生成一个并不存在的 URL。每个
 模型页面上的检查点表格列出了已发布的确切文件名。
 
-## Windows 或 macOS 上训练卡住或反复重启
+## 在脚本顶层调用了 train() 或 val()
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 Windows 没有 `fork`，macOS 上的 Python 默认也不使用它，所以 dataloader 的 worker
-是靠重新导入你的脚本来启动的。没有
-`if __name__ == "__main__":` 这层保护，每个 worker 都会把你的训练调用重跑一遍，
-结果要么死锁，要么无休止地派生进程。
+是靠重新导入你的脚本来启动的。`spawn` 和 `forkserver` 启动方式在任何平台上都是
+如此。没有 `if __name__ == "__main__":` 这层保护，每个 worker 都会把你的 `train()` 或
+`val()` 调用再跑一遍，所以每个进程都会在那个调用处中止，打印这行点出该调用的信息，
+脚本随后以错误退出。
 
 ```python
 def main():

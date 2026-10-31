@@ -17,7 +17,7 @@ keywords:
   - libreyolo cli
   - libreyolo sin internet
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## ¿Con qué modelo debería empezar?
@@ -91,9 +91,13 @@ cabecera de la página de cada modelo te lo dice antes de intentarlo. Consulta
 Un diccionario indexado por nombre de métrica. Las claves de detección incluyen
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` y
 `metrics/mAP50-95`, y los resultados de detección y segmentación llevan además
-resultados por imagen en `metrics.box`. Las demás tareas devuelven las claves que tienen sentido
+resultados por imagen y curvas de precisión, recall y F1 por clase en
+`metrics.box`. Los resultados de detección, segmentación y clasificación llevan
+`metrics.confusion_matrix`, y clasificación añade `metrics.top1` y
+`metrics.top5`. Las demás tareas devuelven las claves que tienen sentido
 para ellas, como `metrics/accuracy_top1` para clasificación o `metrics/PQ`,
-`metrics/SQ` y `metrics/RQ` para segmentación panóptica.
+`metrics/SQ` y `metrics/RQ` para segmentación panóptica. Consulta
+[Validación y métricas](/docs/train/validation).
 
 ## ¿Cómo ejecuto sobre una carpeta, un vídeo o una webcam?
 

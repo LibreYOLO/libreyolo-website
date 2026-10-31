@@ -135,7 +135,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Definición
@@ -182,9 +182,10 @@ un clic, un box o una frase eligen el objeto, y el modelo devuelve su máscara.
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
 [EdgeTAM](/docs/models/edgetam) y [PicoSAM3](/docs/models/picosam3) funcionan
 así, igual que [SenseNova-Vision](/docs/models/sensenova-vision), cuya
-segmentación es referring: toma una frase que nombra un objeto. Se cargan a
-través de su propia factory y sus extras, y cada página de modelo lleva la
-llamada exacta.
+segmentación es referring: toma una frase que nombra un objeto.
+[WeVisOne-VL](/docs/models/wevisone-vl) segmenta cada frase dada en `names=` y
+devuelve boxes más máscaras binarias. Se cargan a través de su propia factory y
+sus extras, y cada página de modelo lleva la llamada exacta.
 
 ## Predicción
 
@@ -193,7 +194,8 @@ Los pesos se descargan de Hugging Face en el primer uso y se cachean localmente.
 <code-tabs name="predict" />
 
 `conf` y `max_det` moldean la salida igual que en detección, y las máscaras se
-filtran junto con los boxes a los que pertenecen. Consulta la
+filtran junto con los boxes a los que pertenecen, también por
+`agnostic_nms=True`. Consulta la
 [predicción](/docs/predict) para las fuentes, el streaming y el manejo de
 resultados.
 
@@ -256,9 +258,10 @@ multi-GPU y los loggers.
 
 ## Validación
 
-`val()` devuelve un diccionario plano de claves `metrics/`. Los boxes y las
+`val()` devuelve un diccionario de claves `metrics/`. Los boxes y las
 máscaras se puntúan por separado, ambos con la evaluación COCO, y las cifras de
-máscara son las principales.
+máscara son las principales. Una fila de etiqueta de cinco campos solo con box se
+puntúa como su máscara rectangular, la que lee el entrenamiento de segmentación.
 
 <code-tabs name="val" />
 
@@ -283,6 +286,11 @@ retrocompatibilidad y son alias, no un punto de operación:
 `metrics/recall(M)` el mismo valor que el AR de máscara con 100 detecciones, y
 `(B)` se comporta igual para los boxes. Graficar un par de ellas reporta el
 mismo número dos veces.
+
+El resultado también lleva `confusion_matrix` y las curvas de precisión, recall y
+F1 por clase en `box`, ambas calculadas a partir de boxes y no de máscaras;
+consulta [Validación y métricas](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` está soportado en esta tarea.
 
 ## Exportación
 

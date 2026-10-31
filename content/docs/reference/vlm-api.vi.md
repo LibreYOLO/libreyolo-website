@@ -48,7 +48,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 ## Cài đặt
 
@@ -81,14 +81,15 @@ không xác định phát sinh `ValueError` liệt kê mọi bí danh.
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | Snapshot thượng nguồn đã ghim |
 
 Bí danh mặc định là `qwen3-vl-4b`. Kích thước cho bí danh mặc định của từng họ
 là mục được liệt kê đầu tiên: `qwen3-vl` phân giải thành `4b`, `lfm2-vl` thành
-`450m`, `internvl3` thành `2b`, `smolvlm2` thành `2.2b`, `florence-2` thành `base`.
+`450m`, `internvl3` thành `2b`, `smolvlm2` thành `2.2b`, `florence-2` thành `base`, `wevisone-vl` thành `2b`.
 
 `LibreVLM`, `LibreLFM2VL`, `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`,
-`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything` và `LibreMODUS` (cũng
+`LibreFlorence2`, `LibreKosmos2`, `LibreLocateAnything`, `LibreWeVisOneVL` và `LibreMODUS` (cũng
 được viết là `LibreModus`) được xuất ở cấp gói.
 
 Phát hiện còn gồm `north-micro-vision`, `gemma-4-e2b`, `gemma-4-e4b`, `moondream-2`, `moondream-3` và `lfm2-vl-3b`. Tên thay thế `gemma-4` không có hậu tố chọn E4B. Tên thay thế của Molmo2 là `molmo2-4b`, `molmo2-8b` và `molmo2-o-7b`; mặc định là 4B. Tên thay thế xác định định tuyến, không có nghĩa mọi snapshot từ xa đã được tải và kiểm thử. `moondream-3` không nạp được trong 1.6.0: mirror của nó thiếu các shard trọng số.
@@ -101,6 +102,7 @@ Khả năng hỗ trợ tác vụ tùy thuộc họ mô hình. Các adapter này 
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 Vì tác vụ được điều khiển bằng prompt thay vì nhúng vào checkpoint, có thể chuyển
 tác vụ trên mô hình đã tải:
@@ -112,7 +114,7 @@ model.set_task(task: str) -> LibreVLMModel
 Tác vụ được kiểm tra với danh sách hỗ trợ của họ, được duy trì qua các lời gọi
 `predict()` và `track()` sau đó, còn mô hình được trả về để có thể nối chuỗi lời gọi.
 
-Molmo2 trả về điểm và yêu cầu `{label}` trong mẫu chỉ điểm tùy chỉnh. Moondream hỗ trợ phát hiện, điểm và chat gốc. Dùng [LibreGround](/docs/reference/ground-api) cho truy vấn chỉ dẫn thành vị trí nhấp.
+Molmo2 trả về điểm và yêu cầu `{label}` trong mẫu chỉ điểm tùy chỉnh. `referring=True` của WeVisOne-VL khiến `detect` gửi một lần sinh cho mỗi cụm từ, còn `segment`, `matte` và phát hiện theo tham chiếu của nó phát sinh `ValueError` khi không có vocabulary. Moondream hỗ trợ phát hiện, điểm và chat gốc. Dùng [LibreGround](/docs/reference/ground-api) cho truy vấn chỉ dẫn thành vị trí nhấp.
 
 ## set_classes
 

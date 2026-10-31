@@ -110,7 +110,7 @@ snippets:
         # yaml 里的键就是 TrainConfig 的字段名，显式传入的 kwargs 优先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## 设置参数
@@ -182,6 +182,8 @@ autobatch 是 CUDA 上的功能。在 CPU 或 MPS 上，它只记一行日志，
 调度的形状由 `scheduler`、`warmup_epochs`、`warmup_lr_start` 和 `min_lr_ratio` 决定。`no_aug_epochs` 设定最后多少轮不带强数据增强，而且有几个调度器也用它来塑造自己的尾段，所以它不只是一个数据增强旋钮。各家族拿它的数据增强那一半做什么，写在[数据增强](/docs/train/augmentations)里。
 
 有些家族会加上自己的学习率旋钮。`backbone_lr_mult` 相对 head 缩放骨干那一组，`clip_max_norm` 设置梯度裁剪，SegFormer 用 `head_lr_mult` 让它的 decode head 以骨干十倍的速率跑。这些都在家族的配置子类上，不在基类上。
+
+`clip_max_norm` 会在每个优化器步之前把梯度 L2 范数裁剪到这个值，`0` 表示关闭裁剪。YOLOv9、YOLOv9-E2E 和 YOLOv9-P2 默认为 `10`。D-FINE、Dome-DETR、DEIM、DEIMv2、TinyFormer、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、DINOv2、GTR 和 EC 默认为 `0.1`。在 CLI 上写作 `clip_max_norm=` 或 `--clip-max-norm`；哪些家族在那里接受它，见 [`libreyolo train`](/docs/cli/train)。
 
 ## EMA
 

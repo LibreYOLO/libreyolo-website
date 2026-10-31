@@ -187,7 +187,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 3238696a4e1ab6c2
+source_hash: 1b6651371762ad63
 ---
 
 ## Installazione
@@ -198,6 +198,9 @@ backbone.
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+Senza di esso, caricare un checkpoint o un nome di modello RF-DETR, da Python o
+dalla CLI, si ferma con un errore che indica questa riga di installazione.
 
 ## Predizione
 
@@ -243,6 +246,11 @@ tu non abbia un motivo per cambiarla. L'input deve essere divisibile
 esattamente per la dimensione delle patch del backbone moltiplicata per il
 numero di finestre; LibreYOLO lo verifica prima che l'esecuzione parta e indica
 le dimensioni valide più vicine.
+
+Il fine-tuning di segmentazione parte da un checkpoint di segmentazione, perché
+RF-DETR non ha il trasferimento da detect a segment.
+`libreyolo train model=LibreRFDETRn-seg.pt task=segment` carica quel checkpoint,
+e un checkpoint di rilevamento con `task=segment` si ferma con un errore.
 
 Vedi [addestramento](/docs/train) per dataset, data augmentation, multi-GPU e
 logger.

@@ -15,7 +15,7 @@ keywords:
   - dichotomous image segmentation
   - transparentes png freisteller
   - weiche alpha matte
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Eine Matte vorhersagen
@@ -97,7 +97,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: "69fbc1d967b2d546"
+source_hash: 4079231f6f41f236
 ---
 
 ## Definition
@@ -136,6 +136,12 @@ den Modellseiten angegeben, und maßgeblich ist die Lizenz im
 Hugging-Face-Repository des konkreten Checkpoints.
 
 [BEN2](/docs/models/ben2) ergänzt Hintergrundentfernung bei fester Auflösung 1024. [ViTMatte](/docs/models/vitmatte) nimmt ein Bild und eine dreistufige `trimap=`, die Hintergrund, unbekannte Bereiche und Vordergrundpixel kennzeichnet.
+
+[WeVisOne-VL](/docs/models/wevisone-vl) wird mit Text angesprochen:
+`LibreVLM("wevisone-vl", names=["person"], task="matte")` gibt die Vereinigung
+der Alpha-Mattes jeder Instanz zurück, die zur Phrase passt. Es ist ein
+Vision-Language-Modell, das das Extra `vlm` benötigt, und sein `val()` und
+`export()` lösen Fehler aus.
 
 ## Vorhersage
 

@@ -98,17 +98,26 @@ snippets:
   val:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() zwraca zwykły słownik, a nie obiekt.
+
+        # Słownik kluczy metrics/, z wynikami dla poszczególnych klas jako
+        atrybutami.
+
         metrics = model.val(data="coco128.yaml")
 
+
         print(metrics["metrics/mAP50-95"])
+
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
+
         print(metrics["metrics/AR100"])
+
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -142,7 +151,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 01ee5ee9eea3b569
+source_hash: e74fa360e2f7ed1d
 ---
 
 ## Definicja
@@ -203,7 +212,8 @@ także rodziny wizualno-językowe [Florence-2](/docs/models/florence-2),
 [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) oraz
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) oraz
 [LibreMODUS](/docs/models/libremodus). Modele te są wczytywane przez własne
 funkcje fabrykujące i zestawy zależności, a ich strony zawierają dokładne
 wywołania.
@@ -219,8 +229,10 @@ pamięci podręcznej.
 
 `conf` ustawia próg pewności, a `max_det` ogranicza liczbę wierszy. `iou` jest
 progiem NMS, więc ma wpływ wyłącznie na rodziny korzystające z NMS. RF-DETR i
-głowica end-to-end YOLOv9 dekodują stały zestaw predykcji i go ignorują.
-Informacje o źródłach, streamingu i obsłudze wyników zawiera strona
+głowica end-to-end YOLOv9 dekodują stały zestaw predykcji i go ignorują. `agnostic_nms=True` dodaje krok
+tłumienia niezależnego od klas przy `iou`, który dotyczy także tych dwóch; zobacz
+[progi i filtrowanie](/docs/predict/thresholds#agnostic_nms). Informacje o
+źródłach, streamingu i obsłudze wyników zawiera strona
 [predykcji](/docs/predict).
 
 ## Format zbioru danych
@@ -286,8 +298,9 @@ augmentacji, wielu GPU i modułach rejestrujących zawiera strona
 
 ## Walidacja
 
-Funkcja `val()` zwraca zwykły słownik kluczy `metrics/`, obliczany za pomocą
-oceny COCO na podziale wskazanym przez `val` w pliku YAML zbioru danych.
+Funkcja `val()` zwraca słownik kluczy `metrics/`, obliczany za pomocą oceny COCO
+na podziale wskazanym przez `val` w pliku YAML zbioru danych, z wynikami dla
+poszczególnych klas dołączonymi jako atrybuty.
 
 <code-tabs name="val" />
 
@@ -309,6 +322,13 @@ powtórzone z sufiksem `(B)` oznaczającym ramkę, dzięki czemu klucz detekcji 
 taką samą postać w modelu, który przewiduje również maski:
 `metrics/mAP50-95(B)`, `metrics/mAP50(B)`, `metrics/precision(B)` i
 `metrics/recall(B)`.
+
+Wynik zawiera też `confusion_matrix`, indeksowaną `matrix[predicted, true]` z
+wierszem i kolumną `background`, oraz precyzję, recall i F1 dla poszczególnych
+klas w zależności od pewności w `box`: `box.px`, `box.p_curve`, `box.r_curve`,
+`box.f1_curve`, po jednym wierszu na klasę w `box.ap_class_index`.
+[Walidacja i metryki](/docs/train/validation#confusion-matrix) opisują oba,
+razem z `val(agnostic_nms=True)`.
 
 ## Eksport
 

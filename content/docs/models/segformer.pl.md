@@ -120,7 +120,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## Instalacja
@@ -167,7 +167,8 @@ Przy ustawieniach domyślnych trener stosuje konfigurację ADE20K z publikacji
 SegFormer: AdamW z podstawową szybkością uczenia dla backbone i głowicą dekodera
 trenowaną z szybkością 10 razy większą, zanik wag wszędzie poza LayerNorm i
 konwolucją pozycyjną Mix-FFN oraz liniowy harmonogram zaniku z rozgrzewką.
-Zbieżność większych rozmiarów, od b3 do b5, nie została zweryfikowana kompleksowo.
+Zbieżność większych rozmiarów, od b3 do b5, nie została zweryfikowana kompleksowo. `libreyolo train` zaczyna od tej samej
+receptury, a bez `name=` jego przebiegi trafiają do `runs/train/segformer_exp`.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach znajdziesz w sekcji [trenowanie](/docs/train).
 

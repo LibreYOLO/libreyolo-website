@@ -121,7 +121,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: c2c354a76ee33157
+source_hash: 00a8615a22e818f3
 ---
 
 ## Instalasi
@@ -178,9 +178,10 @@ memunculkan `ValueError` sebelum ekspor mengubah apa pun, `half=True` dan
 
 `delegate` menerima `"xnnpack"` dan tidak ada nilai lain di versi ini.
 
-Ekspor klasifikasi membawa dua key metadata tambahan, `crop_pct` dan
-`interpolation`, agar runtime bisa mereproduksi kebijakan resize dan center-crop
-milik family tersebut.
+Ekspor klasifikasi membawa preprocessing evaluasi model sebagai metadata,
+`crop_pct` dan `interpolation`, ditambah `norm_mean`, `norm_std` dan
+`resize_mode` untuk family yang menetapkannya, agar runtime mereproduksi resize
+dan center crop model tersebut.
 
 Entri yang diblokir menyebutkan kegagalan konkretnya, bukan sekadar kategorinya.
 Deteksi dan segmentasi D-FINE sampai pada pembacaan `ContextVar` yang tidak didukung

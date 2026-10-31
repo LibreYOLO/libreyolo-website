@@ -40,7 +40,7 @@ snippets:
         # 工厂按文件后缀路由，所以导出产物会像检查点一样加载
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## 概要
@@ -115,8 +115,8 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 ### 一个家族支持哪些格式
 
 支持情况是按家族、按任务来的，不是全局的。`libreyolo formats
-family=<family> task=<task>` 会为这个组合打印每种格式的等级，附上原因和挂在上面的
-约束。参数见 [`libreyolo formats`](/docs/cli/utilities)。
+family=<family> task=<task>` 会为这个组合打印每种格式的等级，附上原因、挂在上面的
+约束，以及 `export()` 在这里是否接受 FP16 和 INT8。参数见 [`libreyolo formats`](/docs/cli/utilities)。
 
 有些格式需要装一个可选依赖，有些需要工具链。缺少 Python 依赖会以
 `export_dep_missing` 退出；该格式产不出的精度会以 `format_precision_unsupported`

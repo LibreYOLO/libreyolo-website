@@ -69,7 +69,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: c8d7adb6aabcbc80
+source_hash: 766f7d68cb2233ad
 ---
 
 ## Измерение перед любыми изменениями
@@ -125,6 +125,10 @@ RF-DETR и пути сопоставления D-FINE/DEIM/RT-DETR сокращ�
 <code-tabs name="amp" />
 
 Float16 использует градиентный скейлер; bfloat16 отключает его. D-FINE, DEIM, RT-DETRv4 и детекция YOLO-NAS по умолчанию используют `amp=True`. Dome-DETR, PP-YOLOE и YOLO-NAS OBB сохраняют FP32 по умолчанию. Передайте `amp=False`, чтобы явно запросить FP32.
+
+YOLOv9, YOLOv9-E2E и YOLOv9-P2 оценивают якоря для назначения меток в fp32 при
+любом dtype, потому что сигмоида сильно отрицательного логита класса в float16
+уходит в ноль и оставила бы батч без положительных якорей.
 
 Семантика аргументов, включая то, что происходит при запросе bfloat16 на железе
 без поддержки bfloat16, описана в разделе

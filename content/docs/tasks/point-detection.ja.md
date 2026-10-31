@@ -114,7 +114,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## 定義
@@ -133,7 +133,7 @@ source_hash: 5c3cfe7a606cd7aa
 
 [SenseNova-Vision](/docs/models/sensenova-vision)は、他の6タスクでも使う同じプロンプト生成チェックポイントを通して`point`に対応し、`LibreVLM("sensenova-vision", task="point")`で読み込みます。`sensenova`追加パッケージが必要です。推論ごとに7Bモデルの生成処理を実行するため、専用検出器より画像ごとのレイテンシが明らかに長くなります。重みは非商用で、ライセンスはモデルページに記載されています。
 
-[Molmo2](/docs/models/molmo2)と[Moondream](/docs/models/moondream)は、テキストを条件とする点を出力します。[LibreGround](/docs/reference/ground-api)は、ShowUI、Florence-2、Qwen3-VLを使い、指示に基づいてクエリごとに最大1つのクリック位置を選択します。
+[Molmo2](/docs/models/molmo2)、[Moondream](/docs/models/moondream)、[WeVisOne-VL](/docs/models/wevisone-vl)は、テキストを条件とする点を出力します。[LibreGround](/docs/reference/ground-api)は、ShowUI、Florence-2、Qwen3-VLを使い、指示に基づいてクエリごとに最大1つのクリック位置を選択します。
 
 ## 推論
 

@@ -127,7 +127,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Ustawianie argumentów
@@ -238,6 +238,13 @@ ustawia przycinanie gradientów, a SegFormer używa `head_lr_mult`, aby uruchami
 głowicę dekodującą z dziesięciokrotnie większym współczynnikiem niż backbone.
 Parametry te znajdują się w podklasie konfiguracji rodziny, a nie w klasie
 podstawowej.
+
+`clip_max_norm` obcina normę L2 gradientu do tej wartości przed każdym krokiem
+optymalizatora, a `0` wyłącza obcinanie. YOLOv9, YOLOv9-E2E i YOLOv9-P2 mają
+domyślnie `10`. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2,
+RT-DETRv4, RF-DETR, DINOv2, GTR i EC mają domyślnie `0.1`. W CLI jest to
+`clip_max_norm=` lub `--clip-max-norm`; rodziny, które je tam przyjmują, opisuje
+[`libreyolo train`](/docs/cli/train).
 
 ## EMA
 

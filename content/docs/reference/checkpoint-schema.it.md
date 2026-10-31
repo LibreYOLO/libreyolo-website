@@ -18,7 +18,10 @@ keywords:
   - quant manifest
   - wrap_libreyolo_checkpoint
 last_verified: 1.6.0
-verification: Rispecchia docs/checkpoint_schema.md nel repository libreyolo alla v1.6.0, verificato per confronto con libreyolo/utils/serialization.py e BaseModel.save.
+verification: >-
+  Rispecchia docs/checkpoint_schema.md nel repository libreyolo alla v1.6.0,
+  verificato per confronto con libreyolo/utils/serialization.py e
+  BaseModel.save.
 snippets:
   usage:
     - label: Leggere i metadati di un checkpoint
@@ -48,7 +51,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## Schema v1.0
@@ -95,6 +98,16 @@ impostato a `max(imgsz_h, imgsz_w)`, e scrivono in aggiunta `imgsz_h` e
 rettangolari deve preferirli allo scalare. Le famiglie con un contratto
 rettangolare fisso, come HRNet pose, rifiutano le dimensioni di runtime
 incompatibili.
+
+I checkpoint di classificazione possono aggiungere `interpolation`, il filtro di
+ridimensionamento del modello: `"bilinear"`, `"bicubic"`, `"nearest"` o
+`"bilinear_no_antialias"`. `save()`, `best.pt` e `last.pt` lo scrivono e il
+caricamento lo ripristina, quindi addestramento, `val()`, `predict()`,
+calibrazione INT8 ed esportazione mantengono il filtro con cui il checkpoint è
+stato salvato. Un checkpoint senza la chiave mantiene il valore predefinito della
+famiglia, e qualsiasi altro valore non è valido. I primi tre ridimensionano con
+Pillow, che applica l'antialiasing quando riduce; `"bilinear_no_antialias"` è
+un bilineare semplice con centri a mezzo pixel e senza antialiasing.
 
 Lo schema è volutamente piatto, e `model` è volutamente uno state dict.
 
@@ -207,9 +220,10 @@ valore.
 
 Le esportazioni di classificazione possono aggiungere `crop_pct`, un rapporto
 float di ritaglio centrale il cui obiettivo di ridimensionamento prima del
-ritaglio è `round(imgsz / crop_pct)` e che vale `0.875` quando è assente, e
-`interpolation`, `"bilinear"` o `"bicubic"`, con valore predefinito
-`"bilinear"`.
+ritaglio è `floor(imgsz / crop_pct)` e che vale `0.875` quando è assente, e
+`interpolation`, uno dei quattro valori del checkpoint indicati sopra, con valore
+predefinito `"bilinear"` quando è assente; i lettori rifiutano qualsiasi altro
+valore.
 
 Le esportazioni ExecuTorch scrivono i metadati piatti in un file affiancato
 `<program>.pte.json` obbligatorio. Il contratto v1 è CPU, FP32, batch 1 e canvas

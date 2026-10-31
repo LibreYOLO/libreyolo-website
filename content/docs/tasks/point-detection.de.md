@@ -15,7 +15,7 @@ keywords:
   - FOMO Punktlokalisierung
   - Objekte in Bildern zählen
   - Punktlokalisierung
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Punkte vorhersagen und zählen
@@ -158,7 +158,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: "5c3cfe7a606cd7aa"
+source_hash: dd636077cf280d26
 ---
 
 ## Definition
@@ -177,7 +177,7 @@ Punktmodelle unterscheiden sich in Vokabular und Ausgabesemantik.
 
 [SenseNova-Vision](/docs/models/sensenova-vision) erreicht `point` über denselben Checkpoint mit Prompt-basierter Generierung, den es für sechs weitere Aufgaben verwendet. Das Modell wird mit `LibreVLM("sensenova-vision", task="point")` geladen und benötigt das Extra `sensenova`. Jede Vorhersage ist ein Generierungsdurchlauf über ein 7B-Modell. Rechne deshalb mit einer deutlich höheren Latenz je Bild als bei einem eigens entwickelten Detektor. Die Gewichte sind nicht kommerziell nutzbar. Die Lizenz steht auf der Modellseite.
 
-[Molmo2](/docs/models/molmo2) und [Moondream](/docs/models/moondream) liefern textbedingte Punkte. [LibreGround](/docs/reference/ground-api) wählt anhand einer Anweisung mit ShowUI, Florence-2 oder Qwen3-VL höchstens einen Klick pro Anfrage aus.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) und [WeVisOne-VL](/docs/models/wevisone-vl) liefern textbedingte Punkte. [LibreGround](/docs/reference/ground-api) wählt anhand einer Anweisung mit ShowUI, Florence-2 oder Qwen3-VL höchstens einen Klick pro Anfrage aus.
 
 ## Vorhersage
 

@@ -12,7 +12,7 @@ keywords:
   - libreyolo 미구현 오류
   - libreyolo 문제 해결
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 오류는 보는 텍스트별로 그룹화됩니다. 메시지가 여기에 없다면, [FAQ](/docs/faq)는 실패가 아닌 질문에 답변하며, `libreyolo models`는 설치한 프로그램이 실제로 로드할 수 있는 내용을 보고합니다.
@@ -22,6 +22,13 @@ source_hash: f2faaab56a2f0415
 일부 계열는 선택적 추가가 필요합니다. 메시지는 추가가 아니라 누락된 패키지의 이름을 나타내므로, 추적 정보만으로는 항상 수정 방법이 명확하지 않습니다.
 
 `libreyolo models`를 실행하십시오. 의존성이 없는 모든 계열는 해당 의존성을 활성화하는 정확한 pip 명령어와 함께 출력되므로, 패키지를 다시 extra에 매핑할 필요가 없습니다. `libreyolo models --json`는 객체와 동일하게 출력됩니다.
+
+RF-DETR과 DINOv2에는 `libreyolo[rfdetr]`가 필요하며, 메시지가 이 extra의 이름을 알려 줍니다. 이것이 없으면 `LibreYOLO("LibreRFDETRn.pt")`, DINOv2 가중치 이름, `libreyolo predict model=rfdetr-n`이 설치 명령과 함께 멈추고, CLI는 `model_load_failed`로 종료합니다:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 [설치 페이지](/docs/install)에는 모든 추가 기능과 그 내용이 나와 있습니다.
 
@@ -71,9 +78,13 @@ Windows에서는 디스플레이 GPU에 또 다른 고장 모드가 있으며, �
 
 다운로드가 404 오류가 발생하면 전달한 파일 이름을 확인하십시오. URL은 해당 파일 이름에서 파생되며, 작업 접미사도 포함되므로 게시된 체크포인트와 일치하지 않는 이름은 존재하지 않는 URL을 생성합니다. 각 모델 페이지의 체크포인트 표에는 정확한 게시된 파일 이름이 나와 있습니다.
 
-## Windows 또는 macOS에서 학습이 중단되거나 다시 시작됨
+## 스크립트 최상위에서 train() 또는 val()을 호출함
 
-Windows에는 `fork`가 없고 macOS의 Python은 기본적으로 이를 사용하지 않기 때문에 dataloader 작업자는 스크립트를 다시 가져오는 것으로 시작합니다. `if __name__ == "__main__":` 보호가 없으면 각 작업자가 학습 호출을 다시 실행하게 되며, 이는 교착 상태를 일으키거나 끝없이 프로세스를 생성하게 됩니다.
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
+
+Windows에는 `fork`가 없고 macOS의 Python은 기본적으로 이를 사용하지 않기 때문에 dataloader 작업자는 스크립트를 다시 가져오는 것으로 시작합니다. `spawn`과 `forkserver` 시작 방식은 어느 플랫폼에서든 똑같이 동작합니다. `if __name__ == "__main__":` 보호가 없으면 각 작업자가 `train()` 또는 `val()` 호출을 다시 실행하게 되므로, 각 작업자는 그 호출에서 멈추고 호출을 알리는 이 줄을 출력하며, 스크립트는 오류로 종료됩니다.
 
 ```python
 def main():

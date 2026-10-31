@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: a0446a47e0f89b27
+source_hash: 587851b0988347c3
 ---
 
 ## 개요
@@ -61,6 +61,7 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 | `imgsz` | | 이미지 크기: `640`(정사각형) 또는 `480x640`(HxW). 설정하지 않으면 모델 자체의 입력 크기 |
 | `conf` | `0.001` | 신뢰도 임계값 |
 | `iou` | `0.6` | NMS IoU 임계값 |
+| `agnostic_nms` | `false` | 클래스 무관 NMS: `iou`를 넘어 겹치는 박스 중 클래스와 관계없이 점수가 가장 높은 것 하나만 남깁니다. 탐지와 분할 전용 |
 | `max_det` | `300` | NMS 이후 이미지당 최대 예측 수 |
 | `eval_max_det` | | COCO 평가기 상한. 설정하지 않으면 pycocotools의 AP@100 관례 |
 | `faster_coco_eval` | `true` | 설치되어 있으면 COCO 지표에 faster-coco-eval C++ 백엔드 사용; 없으면 pycocotools로 대체 |

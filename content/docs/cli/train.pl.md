@@ -25,7 +25,9 @@ meta:
     value: data
     mono: true
   - label: Wynik
-    value: 'Checkpointy, metryki i logi w runs/train/<name>; YOLO9 używa yolo9_exp'
+    value: >-
+      Checkpointy, metryki i logi w runs/train/<name>; bez name= nazwa
+      uruchomienia własna dla rodziny, na przykład yolo9_exp
 snippets:
   examples:
     - label: Podstawowy
@@ -53,7 +55,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 30b2c16d339f5f50
+source_hash: 5916562e70ea1d8a
 ---
 
 ## Składnia
@@ -83,9 +85,9 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | Argument | Domyślnie | Znaczenie |
 |---|---|---|
 | `epochs` | `300` | Epoki trenowania |
-| `batch` | `16` | Rozmiar batcha na urządzenie |
+| `batch` | `16` | Rozmiar batcha. Przy kilku GPU jest to batch globalny, dzielony równo między nie |
 | `imgsz` | `640` | Rozmiar obrazu treningowego: `640` (kwadrat) lub `480x640` (HxW) |
-| `device` | `auto` | Urządzenie: `0`, `cpu`, `mps`, `auto` |
+| `device` | `auto` | Urządzenie: `0`, `cpu`, `mps`, `auto`. Lista GPU, taka jak `0,1` lub `[0,1]`, trenuje na tych GPU |
 | `workers` | `4` | Procesy robocze dataloadera |
 | `cache` | `false` | Zapisywanie obrazów w pamięci podręcznej, aby przyspieszyć wczytywanie danych: `ram`, `disk`, `true`, `false` |
 | `seed` | `0` | Ziarno losowości |
@@ -114,6 +116,7 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | `momentum` | `0.937` | Momentum SGD, a dla optymalizatorów Adam współczynnik pierwszego momentu |
 | `weight_decay` | `0.0005` | Regularyzacja L2 |
 | `nesterov` | `true` | Momentum Nesterova |
+| `clip_max_norm` | | Obcina normę L2 gradientu do tej wartości przed każdym krokiem optymalizatora; `0` wyłącza obcinanie. Bez ustawienia obowiązuje wartość rodziny |
 
 ### Harmonogram
 
@@ -164,7 +167,7 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | Argument | Domyślnie | Znaczenie |
 |---|---|---|
 | `project` | `runs/train` | Katalog główny wyników |
-| `name` | `exp` | Nazwa eksperymentu |
+| `name` | | Nazwa eksperymentu. Bez ustawienia uruchomienie dostaje nazwę używaną przez `train()` rodziny, na przykład `yolo9_exp` lub `dfine_exp` |
 | `exist_ok` | `false` | Ponowne użycie istniejącego katalogu wyjściowego |
 | `save_period` | `10` | Zapis checkpointu co N epok |
 | `log_interval` | `10` | Logowanie straty co N batchy |
@@ -189,7 +192,7 @@ Argumenty to pary `key=value`, działa też forma POSIX, więc `epochs=50` i
 | `average_best` | `0` | Równomierne uśrednienie N najlepszych checkpointów według obserwowanej metryki do weights/average.pt na końcu trenowania (0 = wyłączone) |
 | `export_check` | `False` | Eksport ONNX przed epoką 1 i przerwanie uruchomienia, jeśli eksport się nie powiedzie (domyślnie wyłączone) |
 | `precise_bn` | `0` | Ponowne obliczenie bieżących statystyk BatchNorm z tylu obrazów treningowych po ostatniej epoce (0 = wyłączone) |
-| `aux_weight` | | Tylko YOLO9: waga funkcji straty gałęzi pomocniczej PGI przy dostrajaniu. `0.25`, gdy nieustawione; `0` trenuje tylko główną głowicę |
+| `aux_weight` | | Tylko YOLO9: waga funkcji straty gałęzi pomocniczej PGI. Wartość dołącza nową gałąź z tą wagą, a `0` trenuje tylko główną głowicę. Bez ustawienia gałąź jest dołączana z wagą `0.25` tylko wtedy, gdy wagi zawierają tensory PGI albo uruchomienie trenuje od zera |
 | `fliplr` | `None` | Prawdopodobieństwo odbicia poziomego (alias flip_prob używany w ekosystemie) |
 | `flipud` | `0.0` | Prawdopodobieństwo odbicia pionowego |
 | `auto_augment` | `None` | Polityka automatycznej augmentacji klasyfikacji: randaugment, autoaugment, augmix (domyślnie brak) |
@@ -236,7 +239,7 @@ afinicznego, więc `mosaic`, `mixup`, `hsv_prob`, `degrees`, `translate`,
 z tego samego pipeline'u, ale czyta `hsv_prob`, `degrees` i `translate`, gdy
 jego zadaniem jest estymacja pozy. Rodziny klasyfikacyjne ignorują ten zestaw
 z wyjątkiem `mixup`, który oznacza dla nich batch-MixUp, i czytają `flip_prob`.
-SegFormer i NAFNet ignorują cały ten zestaw, a wraz z nim `flip_prob`, ponieważ
+SegFormer, LingBot-Vision i NAFNet ignorują cały ten zestaw, a wraz z nim `flip_prob`, ponieważ
 ich odbicie działa ze stałym prawdopodobieństwem, a nie konfigurowalnym.
 YOLO-NAS ignoruje sam
 `mosaic`, ponieważ zamiast tego stosuje stale włączone przekształcenie
@@ -258,6 +261,22 @@ zapisuje `best.pt`.
 `lora=true` jest przyjmowane przez RF-DETR, D-FINE, DEIM, DEIMv2, RT-DETR v1,
 v2 i v4, EC, GTR oraz ConvNeXt. Każda inna rodzina kończy działanie z
 `config_unsupported`, zamiast trenować bez tego.
+
+`clip_max_norm` jest przyjmowane przez rodziny, których konfiguracja trenowania
+go deklaruje: YOLOv9, YOLOv9-E2E i YOLOv9-P2, gdzie domyślnie wynosi `10`, oraz
+D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR, RT-DETRv2, RT-DETRv4,
+RF-DETR, DINOv2 i GTR, gdzie domyślnie wynosi `0.1`. Każda inna rodzina kończy
+działanie z `config_unsupported`, a wartość ujemna lub nieskończona kończy z
+`config_type_error`.
+
+`device=0,1` buduje model na pierwszym wymienionym GPU i przekazuje listę do
+`train()`, który uruchamia jeden proces na każde GPU. Zobacz
+[trenowanie na wielu GPU](/docs/train/multi-gpu).
+
+RF-DETR nie ma transferu z detekcji do segmentacji. `task=segment` z
+checkpointem segmentacji RF-DETR ładuje ten checkpoint niezależnie od nazwy
+pliku, ponieważ o zadaniu decydują metadane checkpointu, natomiast checkpoint
+detekcji kończy się błędem zamiast trenować nieuczoną głowicę masek.
 
 `pretrained=false` w połączeniu z `resume` jest odrzucane w rodzinach, które
 obsługują trenowanie od zera, ponieważ oba te ustawienia żądają przeciwnych

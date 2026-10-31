@@ -173,7 +173,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 3238696a4e1ab6c2
+source_hash: 1b6651371762ad63
 ---
 
 ## 安装
@@ -183,6 +183,8 @@ RF-DETR 需要自己的 extra，它会为骨干拉进 `transformers`。
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+没有它的话，无论从 Python 还是 CLI 加载 RF-DETR 检查点或模型名称，都会报错中止，错误信息里会给出这行安装命令。
 
 ## 预测
 
@@ -217,6 +219,8 @@ pip install "libreyolo[rfdetr]"
 模型能扛住的学习率会让检测 transformer 发散。除非你有理由改，否则把 `imgsz` 留在
 检查点的原生分辨率上。输入必须能被骨干的 patch 大小乘以窗口数整除；LibreYOLO 会在
 训练开始前检查这一点，并给出最接近的合法尺寸。
+
+分割微调从分割检查点开始，因为 RF-DETR 没有从检测到分割的迁移。`libreyolo train model=LibreRFDETRn-seg.pt task=segment` 会加载这个检查点，而对检测检查点传 `task=segment` 则会报错中止。
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 

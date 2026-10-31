@@ -117,7 +117,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 361e81de5614a571
+source_hash: 7104f0fd056896b9
 ---
 
 ## Instalacja
@@ -167,6 +167,11 @@ fazą 15 epok bez augmentacji co YOLOX, dostosowanymi do głowicy opartej na
 kotwicach. Jest jedna różnica: YOLOX dodaje udoskonalanie regresji ramek L1 w
 tych ostatnich epokach, a v7 je pomija, ponieważ funkcja straty SimOTA v7 nie ma
 gałęzi L1 surowego przesunięcia do udoskonalania.
+
+Mosaic i MixUp są domyślnie włączone (`mosaic_prob=1.0`, `mixup_prob=1.0`).
+Próbki przechodzą przez pipeline mosaic z YOLOv9, którego MixUp losuje
+współczynnik mieszania z rozkładu Beta(1, 1), jednostajnego na [0, 1], tak jak
+robi to MultimediaTechLab/YOLO.
 
 Informacje o zbiorach danych, augmentacji, wielu GPU i loggerach zawiera strona
 [trenowania](/docs/train).

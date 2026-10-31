@@ -43,7 +43,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## Sinopsis
@@ -135,10 +135,14 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | Salida JSON por stdout |
 | `quiet` | `false` | Silencia stderr |
 
-Sin `family`, la salida es solo el inventario de formatos. Con ella, cada
-formato gana el nivel de soporte para esa familia y esa tarea, el motivo detrás
-del nivel y cualquier restricción asociada. Una familia desconocida, o una tarea
-que la familia no admite, es un error de uso.
+Sin `family`, la salida es solo el inventario de formatos, y los campos FP16 e
+INT8 describen el formato. Con ella, cada formato gana el nivel de soporte para
+esa familia y esa tarea, el motivo detrás del nivel y cualquier restricción
+asociada, y los campos FP16 e INT8 indican lo que `export()` acepta para esa
+combinación: ambos son false en un formato bloqueado o en una familia que solo
+exporta en FP32, e INT8 es true solo donde la exportación INT8 del formato
+cubre esa familia y esa tarea. Una familia desconocida, o una tarea que la
+familia no admite, es un error de uso.
 
 Los alias de formato aparecen junto a su nombre canónico: `engine` para
 `tensorrt`, `litert` para `tflite`.

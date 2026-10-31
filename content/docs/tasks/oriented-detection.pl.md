@@ -179,7 +179,7 @@ snippets:
 
 
         print(result.obb.xywhr)
-source_hash: 8af4d1647609e5e6
+source_hash: 8c2cfd249cfd5ae2
 ---
 
 ## Definicja
@@ -257,8 +257,9 @@ widzianych z góry oraz do sprawdzenia, czy pipeline działa od początku do ko�
 Każda inna dziedzina wymaga trenowania na własnych etykietach obróconych ramek.
 Dla kategorii lotniczych znanych ze zbioru DOTA właściwym wyborem są checkpointy
 RT-DETRv2, rzeczywiście wytrenowane na tych danych. `conf` i `max_det` kształtują
-dane wyjściowe tak samo jak w detekcji. Informacje o źródłach, streamingu i
-obsłudze wyników znajdują się w sekcji [predykcja](/docs/predict).
+dane wyjściowe tak samo jak w detekcji, a `agnostic_nms=True` tłumi nakładające
+się ramki między klasami za pomocą obróconego IoU. Informacje o źródłach,
+streamingu i obsłudze wyników znajdują się w sekcji [predykcja](/docs/predict).
 
 ## Format zbioru danych
 
@@ -357,7 +358,8 @@ wyrównanego do osi, gdy oba znajdują się w tej samej tabeli. Metryka
 
 Dwie opcje nie mają wpływu na to zadanie. `save_json` i `save_plots` są
 akceptowane i powodują zapisanie ostrzeżenia w logu. Zrzuty predykcji obróconych
-ramek i wykresy walidacji nie są zaimplementowane.
+ramek i wykresy walidacji nie są zaimplementowane. `agnostic_nms=True` zgłasza tu
+`ValueError`; obejmuje tylko walidację detekcji i segmentacji.
 
 ## Eksport
 

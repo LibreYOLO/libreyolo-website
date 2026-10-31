@@ -63,7 +63,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 70b9541fb8949352
+source_hash: a19c391d4a4d4a1b
 ---
 
 ## Forma de la matriz
@@ -138,6 +138,11 @@ explícita.
 
 | Tarea | Motivo |
 |---|---|
+| `albedo` | La exportación de albedo no tiene contrato de runtime de backend en RGB lineal |
+| `act` | El bucle de muestreo de la política no tiene grafo exportable ni contrato de runtime de backend |
+| `generate` | La generación de imágenes ejecuta un bucle de muestreo sobre varias redes, que no tiene grafo exportable ni contrato de runtime de backend |
+| `generate3d` | La generación 3D ejecuta un bucle de muestreo sobre varias redes, que no tiene grafo exportable ni contrato de runtime de backend |
+| `detect3d` | Las salidas del grafo de detección 3D, los metadatos de cámara y el contrato de runtime no están definidos |
 | `ocr` | Dos redes con recorte dinámico por región no encajan en el contrato de exportación de grafo único |
 | `point` | La familia no está conectada al contrato compartido de heatmap de puntos y decodificación de picos en el backend |
 | `semantic` | La familia no está conectada al contrato compartido de logits densos y argmax en el backend |
@@ -160,7 +165,7 @@ familia semántica ya conectada sí se exporta.
 | `hrnet` | Cualquier cosa fuera de ONNX, TorchScript, OpenVINO y TensorRT |
 | `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Todos los formatos; la exportación de modelos promptables queda fuera del alcance del contrato de runtime v1 |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Todos los formatos; la exportación en runtime de vocabulario abierto queda fuera del alcance de la v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything` | Todos los formatos; la exportación de VLM generativos queda fuera del alcance de la v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Todos los formatos; la exportación de VLM generativos queda fuera del alcance de la v1 |
 
 PicoSAM3 es la excepción dentro del nivel promptable: exporta a ONNX su red de
 ROI en crudo de 96 píxeles.

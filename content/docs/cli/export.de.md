@@ -49,7 +49,7 @@ snippets:
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 290b778a1060a760
+source_hash: 6e4d764c73b71b5b
 ---
 
 ## Syntax
@@ -132,7 +132,8 @@ statt die Option zu ignorieren.
 
 Die Unterstützung gilt pro Familie und pro Aufgabe, nicht global. `libreyolo
 formats family=<family> task=<task>` gibt für diese Kombination die Stufe jedes
-Formats aus, mit dem Grund und jeder angehängten Einschränkung. Die Argumente
+Formats aus, mit dem Grund, jeder angehängten Einschränkung und der Angabe, ob
+`export()` dort FP16 und INT8 akzeptiert. Die Argumente
 stehen unter [`libreyolo formats`](/docs/cli/utilities).
 
 Manche Formate brauchen eine optionale Installation und manche eine Toolchain.

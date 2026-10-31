@@ -50,7 +50,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## キャプチャされるもの
@@ -94,7 +94,7 @@ NMSも検出損失も候補ではありません。どちらもブールマス�
 
 ## 学習の対応状況
 
-このリリースで、学習キャプチャは2ファミリーから5タスクにわたる24ファミリーへ増えました。
+学習キャプチャは5タスクにわたる24ファミリーに対応しています。
 
 | タスク | ファミリー |
 |---|---|

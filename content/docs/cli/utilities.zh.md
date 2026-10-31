@@ -38,7 +38,7 @@ snippets:
       code: |
         libreyolo info model=LibreYOLO9s.pt
         libreyolo metadata path=weights/LibreYOLO9s.pt
-source_hash: 95935c1f8ca2d6db
+source_hash: 906faaa720434dc9
 ---
 
 ## 概要
@@ -121,9 +121,11 @@ libreyolo formats [family=<family>] [task=<task>]
 | `json` | `false` | 向 stdout 输出 JSON |
 | `quiet` | `false` | 屏蔽 stderr |
 
-不带 `family` 时，输出只有格式清单本身。带上它之后，每种格式还会给出针对该家族和该
-任务的支持等级、这个等级背后的理由，以及附在它上面的任何约束。未知的家族，或者该
-家族不支持的任务，都是用法错误。
+不带 `family` 时，输出只有格式清单本身，FP16 和 INT8 字段描述的是格式本身。带上它之后，
+每种格式还会给出针对该家族和该任务的支持等级、这个等级背后的理由，以及附在它上面的
+任何约束，FP16 和 INT8 字段则报告 `export()` 对这个组合接受什么：格式被阻止，或者家族
+只导出 FP32 时，两者都为 false；只有当该格式的 INT8 导出覆盖了这个家族和任务时，INT8
+才为 true。未知的家族，或者该家族不支持的任务，都是用法错误。
 
 格式别名显示在它的规范名称旁边：`engine` 对应 `tensorrt`，`litert` 对应 `tflite`。
 

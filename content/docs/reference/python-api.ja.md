@@ -71,7 +71,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 7dc6a5ef1b3ba9ea
+source_hash: 93a9e4b50df2bc1c
 ---
 
 ## エントリーポイント
@@ -85,11 +85,12 @@ source_hash: 7dc6a5ef1b3ba9ea
 | `LibreSAM` | サイズの別名で指定するプロンプト対応セグメンター | 点、ボックス、または概念テキスト | `sam` |
 | `LibreVLM` | 別名で指定する生成型ビジョン言語検出器 | クラス語彙または自由形式のプロンプト | `vlm` |
 | `LibreOpenVocab` | 別名で指定するテキスト条件付き検出器 | クラス語彙 | `openvocab` |
+| `LibreGen` | エイリアスまたはローカルのモデルディレクトリで指定する生成モデル | テキストプロンプト（テキストから画像）または画像（画像から3D） | `gen` |
 | `LibreEnsemble` | 1つのインターフェースに融合した2つ以上の検出器 | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO`はチェックポイントファイルとエクスポート済みファイルを受け取ります。関連するファクトリーはモデルのエイリアスを受け取り、`LibreVLM`と`LibreVLA`はそれぞれが保存したチェックポイントディレクトリも再読み込みできます。
+`LibreYOLO`はチェックポイントファイルとエクスポート済みファイルを受け取ります。関連するファクトリーはモデルのエイリアスを受け取り、`LibreVLM`と`LibreVLA`はそれぞれが保存したチェックポイントディレクトリも再読み込みでき、`LibreGen`は対応ファミリーのアップストリーム形式のローカルモデルディレクトリを読み込みます。
 
 ```python
 LibreYOLO(
@@ -160,9 +161,9 @@ Family(model_path, size, nb_classes=80, device="auto", task=None, **kwargs)
 `LibreGroundingDINO`、`LibreOWLv2`、`LibreOMDetTurbo`、`LibreLFM2VL`、
 `LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、
 `LibreKosmos2`、`LibreLocateAnything`、`LibreGemma4`、`LibreMoondream`、
-`LibreMolmo2`、`LibreNorthMicroVision`、`LibreMODUS`（`LibreModus`という綴りも可能）；
+`LibreMolmo2`、`LibreNorthMicroVision`、`LibreMODUS`（`LibreModus`という綴りも可能）、`LibreWeVisOneVL`；
 `LibreGround`配下の`LibreShowUI`、`LibreGroundFlorence2`、`LibreGroundQwen3VL`；
-`LibreVLA`配下の`LibreSmolVLA`、`LibreACT`、`LibreDiffusionPolicy`。
+`LibreVLA`配下の`LibreSmolVLA`、`LibreACT`、`LibreDiffusionPolicy`；`LibreGen`配下の`LibreFlux2Klein`、`LibreSanaSprint`、`LibreSperidlabsIdol`。
 
 ## 推論インターフェース
 
@@ -179,6 +180,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -200,6 +202,8 @@ model(
 それらのリストを返し、`stream=True`はジェネレーターを返します。モデルオブジェクトの
 他のメソッドは[モデルAPIページ](/docs/reference/model-api)で説明しています。
 
+`agnostic_nms=True`はクラス非依存NMSを実行します。`iou`を超えて重なるボックスのうち、クラスにかかわらずスコアが最も高いものだけが残ります。ファミリーの完成した検出結果に対して`classes`フィルターの後で実行され、detect、segment、pose、OBBの各タスクが対象です。回転ボックスには回転IoUを使います。それ以外のタスクでは`ValueError`を送出します。
+
 ## Resultsペイロード
 
 `Results`とペイロードクラスはパッケージレベルで公開されます：
@@ -209,6 +213,8 @@ model(
 それぞれの説明は[Resultsの型](/docs/reference/results-types)にあります。
 
 `Boxes3D`、`AlbedoMap`、`Actions`は、3D直方体、固有のアルベド、アクションチャンクを追加します。[結果の型](/docs/reference/results-types)を参照してください。
+
+`GeneratedImage`と`Gaussians`は`LibreGen`の出力を保持します。生成された画像は`Results.generated`に、生成された3Dオブジェクトは`Results.gaussians`に入ります。
 
 ## バックエンド
 

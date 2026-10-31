@@ -43,7 +43,7 @@ snippets:
 
         print(get_support(family, "detect", "onnx").tier)
         print(validated_alternatives(family, "detect"))
-source_hash: 6d8f3ec671e6cb02
+source_hash: baefdbccd23e8196
 ---
 
 ## Tier di supporto all'esportazione
@@ -123,9 +123,9 @@ nell'intestazione di una pagina di modello.
 | `g2` | Supportate | 19 | Insieme di copertura aggiuntivo per le famiglie addestrabili |
 | `g3` | Solo inferenza | 44 | Famiglie senza un'implementazione dell'addestramento |
 | `g4` | Museo | 5 | Famiglie storiche con copertura in inferenza |
-| `s` | Tier gemello | 36 | API gemelle (SAM, open-vocab, VLM, grounding, zero-shot) coperte separatamente |
+| `s` | Tier gemello | 40 | API gemelle (SAM, open-vocab, VLM, grounding, zero-shot) coperte separatamente |
 
-In totale sono 118 famiglie in sei gruppi. `g3` è il gruppo più grande, perché
+In totale sono 122 famiglie in sei gruppi. `g3` è il gruppo più grande, perché
 buona parte del registry è lignaggio solo in inferenza, più che detector
 addestrati attivamente.
 
@@ -166,7 +166,7 @@ chiamare `train()` su una di esse solleva un errore. È una proprietà del
 codice della famiglia, non del suo gruppo: il gruppo registra il fatto, non lo
 causa.
 
-Delle 118 famiglie, 37 si addestrano: tutte le famiglie di `g0`, `g1` e `g2`,
+Delle 122 famiglie, 37 si addestrano: tutte le famiglie di `g0`, `g1` e `g2`,
 più Qwen3-VL tramite `LibreVLM` e SmolVLA, ACT e Diffusion Policy tramite
 `LibreVLA`.
 

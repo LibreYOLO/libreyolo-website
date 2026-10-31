@@ -23,11 +23,16 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Este guard continua suportado; scripts comuns também funcionam sem ele.
-        # Mantenha-o para objetos de callback/logger que precisem do fallback para pickle padrão.
+
+        # Este guard continua suportado; scripts comuns também funcionam sem
+        ele.
+
+        # Mantenha-o para objetos de callback/logger que precisem do fallback
+        para pickle padrão.
+
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -36,6 +41,11 @@ snippets:
                 batch=32,     # batch global: 16 imagens por GPU em duas GPUs
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -73,7 +83,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Sondado uma vez na GPU 0 e escalado para um múltiplo do world size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 
 ## Rodar em duas GPUs
@@ -86,6 +96,9 @@ Com mais de um dispositivo e sem ambiente torchrun, `train()` do modelo salva os
 
 `device` aceita `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"` e
 `"auto"`. Só uma lista com mais de um índice CUDA dispara o spawn.
+
+`libreyolo train device=0,1`, ou `device=[0,1]`, constrói o modelo na primeira GPU
+da lista e passa a lista para o `train()`, que inicia os workers do mesmo jeito.
 
 ## Inicialização automática e proteção do main
 

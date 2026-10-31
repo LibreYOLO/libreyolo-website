@@ -154,10 +154,14 @@ snippets:
         # LibreYOLOグラフは他のエクスポート向け設定で見られるmodel.Nではなく
         # /head/...接頭辞を使用 コピーした設定とは一致しないため解析に失敗したら
         # 自分のグラフ内の名前を確認
+        # anchor_convsはボックスのタワー、class_convsはクラスのタワー
         END_NODES = [
-            "/head/cv2.0/cv2.0.2/Conv", "/head/cv3.0/cv3.0.2/Conv",
-            "/head/cv2.1/cv2.1.2/Conv", "/head/cv3.1/cv3.1.2/Conv",
-            "/head/cv2.2/cv2.2.2/Conv", "/head/cv3.2/cv3.2.2/Conv",
+            "/head/anchor_convs.0/anchor_convs.0.2/Conv",
+            "/head/class_convs.0/class_convs.0.2/Conv",
+            "/head/anchor_convs.1/anchor_convs.1.2/Conv",
+            "/head/class_convs.1/class_convs.1.2/Conv",
+            "/head/anchor_convs.2/anchor_convs.2.2/Conv",
+            "/head/class_convs.2/class_convs.2.2/Conv",
         ]
         runner.translate_onnx_model(ONNX, end_node_names=END_NODES)
   device:
@@ -167,7 +171,7 @@ snippets:
         sudo apt install dkms hailo-all
         hailortcli fw-control identify       # デバイスを確認してアーキテクチャ名を表示
         hailortcli run libreyoloxs.hef       # スモークテストとスループット
-source_hash: 33b077f1c23d5535
+source_hash: 67cc64bf2d25e1b4
 ---
 
 ## インストール

@@ -42,7 +42,7 @@ snippets:
 
         model = LibreVLM("lfm2-vl-450m")
         print(model.chat(SAMPLE_IMAGE, "How many people are in this image?"))
-source_hash: a9e0d635a6645d2c
+source_hash: 6d87f6540a9593e4
 ---
 
 ## インストール
@@ -73,11 +73,12 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 | Kosmos-2 | `kosmos-2`, `kosmos2` | `224` | `microsoft/kosmos-2-patch14-224` |
 | LocateAnything | `locate-anything`, `locateanything`, `locate-anything-3b`, `locateanything-3b` | `3b` | `nvidia/LocateAnything-3B` |
 | SenseNova-Vision | `sensenova-vision`, `sensenova-vision-7b`, `sensenovavision` | `7b` | `LibreYOLO/SenseNovaVision7b` |
+| WeVisOne-VL | `wevisone-vl`, `wevisone`, `wevisonevl`, `wevisone-vl-2b`, `wevisone-vl-4b` | `2b`, `4b` | `tencent/WeVisOne-VL-2B`, `-4B` |
 | LibreMODUS | `libremodus`, `libremodus-14b-a7b`, `modus`, `modus-14b-a7b` | `14b-a7b` | 固定されたアップストリームsnapshot |
 
-デフォルトの別名は `qwen3-vl-4b` です。各ファミリーのデフォルト別名では、最初に記載されたサイズが使われます。`qwen3-vl` は `4b`、`lfm2-vl` は `450m`、`internvl3` は `2b`、`smolvlm2` は `2.2b`、`florence-2` は `base` に解決されます。
+デフォルトの別名は `qwen3-vl-4b` です。各ファミリーのデフォルト別名では、最初に記載されたサイズが使われます。`qwen3-vl` は `4b`、`lfm2-vl` は `450m`、`internvl3` は `2b`、`smolvlm2` は `2.2b`、`florence-2` は `base`、`wevisone-vl` は `2b` に解決されます。
 
-`LibreVLM`、`LibreLFM2VL`、`LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything`、`LibreMODUS`（`LibreModus` という綴りも可能）はパッケージレベルでエクスポートされます。
+`LibreVLM`、`LibreLFM2VL`、`LibreQwen3VL`、`LibreSmolVLM2`、`LibreInternVL3`、`LibreFlorence2`、`LibreKosmos2`、`LibreLocateAnything`、`LibreWeVisOneVL`、`LibreMODUS`（`LibreModus` という綴りも可能）はパッケージレベルでエクスポートされます。
 
 物体検出には、`north-micro-vision`、`gemma-4-e2b`、`gemma-4-e4b`、`moondream-2`、`moondream-3`、`lfm2-vl-3b`もあります。単独の`gemma-4`という別名はE4Bを選択します。Molmo2の別名は`molmo2-4b`、`molmo2-8b`、`molmo2-o-7b`で、デフォルトは4Bです。別名は振り分け先を定めるもので、すべてのリモートスナップショットのダウンロードとテストが完了していることを意味しません。`moondream-3`は1.6.0では読み込めません。ミラーに重みのシャードが欠けているためです。
 
@@ -89,6 +90,7 @@ LibreVLM(model: str = "qwen3-vl-4b", **kwargs) -> LibreVLMModel
 |---|---|
 | LocateAnything | `detect`, `point` |
 | SenseNova-Vision | `detect`, `segment`, `panoptic`, `pose`, `point`, `depth`, `ocr` |
+| WeVisOne-VL | `detect`, `point`, `segment`, `matte`, `ocr` |
 
 タスクはチェックポイントに埋め込まれず、プロンプトで制御されるため、読み込み済みモデルで切り替えられます。
 
@@ -98,7 +100,7 @@ model.set_task(task: str) -> LibreVLMModel
 
 タスクはファミリーの対応リストに照らして検証され、その後の `predict()` と `track()` の呼び出しでも維持されます。また、呼び出しを連鎖できるようモデルが返されます。
 
-Molmo2は点を返し、独自のポイント指定テンプレートには`{label}`が必要です。Moondreamは物体検出、点、ネイティブのチャットに対応します。指示からクリック位置を得るクエリには[LibreGround](/docs/reference/ground-api)を使ってください。
+Molmo2は点を返し、独自のポイント指定テンプレートには`{label}`が必要です。WeVisOne-VLの`referring=True`は、`detect`がフレーズごとに1回の生成を送るようにし、その`segment`、`matte`、参照検出は、語彙がないと`ValueError`を送出します。Moondreamは物体検出、点、ネイティブのチャットに対応します。指示からクリック位置を得るクエリには[LibreGround](/docs/reference/ground-api)を使ってください。
 
 ## set_classes
 

@@ -50,7 +50,7 @@ snippets:
         # Các hàng dưới dạng dict thuần, sau đó là JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 ## Object Results
 
@@ -95,6 +95,8 @@ Mỗi slot là `None` trừ khi mô hình tạo ra nó. Tác vụ của họ quy
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, kèm gallery |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` là alias đọc ghi của `result.normal_map`.
 
@@ -307,3 +309,52 @@ thuần, mỗi detection, segment, điểm hoặc vùng một hàng tùy các sl
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` biểu diễn đoạn hành động float32 `(T, D)`. `first` trả về hàng đầu tiên; slicing chọn các bước thời gian. Giá trị giữ đơn vị của dataset chính sách. `names` mô tả các chiều hành động, `fps` là tần số điều khiển và `instruction` là văn bản điều kiện.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+giữ một ảnh được tổng hợp, `(H, W, 3)` uint8 RGB. `array` trả về view numpy và
+`image` trả về một `PIL.Image`. `prompt` là văn bản tạo ra ảnh và `seed` là số
+nguyên tái tạo lại ảnh đó với cùng mô hình và thiết lập; `params` ghi phần còn lại
+của lời gọi: `model`, `imgsz` và mọi thiết lập của họ đang có hiệu lực. `save(path)`
+ghi ảnh, và một tệp PNG còn lưu `to_dict()`, gồm shape, prompt, seed và params,
+dưới dạng JSON trong một text chunk `libreyolo`.
+
+Trên một kết quả được sinh ra, `Results.boxes` và `Results.path` là `None`,
+`orig_shape` là `(H, W)` của chính ảnh, và `len(result)` là 1.
+`Results.save(path)` ghi ảnh, `plot()` trả về nó dưới dạng ảnh PIL, và `summary()`
+trả về một hàng cùng bản ghi của payload.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+giữ một đối tượng 3D được sinh ra dưới dạng Gaussian splat, trong hệ tọa độ riêng
+của đối tượng: z hướng lên, đặt giữa khối lập phương `[-0.5, 0.5]^3`. Mỗi hàng là
+một Gaussian.
+
+| Thành phần | Trả về |
+|---|---|
+| `xyz` | `(N, 3)` vị trí trong hệ tọa độ đối tượng |
+| `scales` | `(N, 3)` độ lệch chuẩn dọc các trục cục bộ, tuyến tính, không phải log |
+| `rotations` | `(N, 4)` quaternion đơn vị `(w, x, y, z)`, từ các trục cục bộ vào hệ tọa độ đối tượng |
+| `opacities` | `(N,)` trong `[0, 1]` |
+| `sh` | `(N, K, 3)` hệ số màu spherical-harmonic, bậc 0 đứng đầu |
+| `colors` | `(N, 3)` RGB trong `[0, 1]`, từ số hạng bậc 0 |
+| `camera` | Góc nhìn đầu vào được suy ra: `yaw` và `pitch` theo radian, `radius` theo đơn vị đối tượng, `fov` dọc theo độ, và `margin` của vùng crop |
+| `seed`, `params` | Seed và các thiết lập của lời gọi tái tạo lại đối tượng |
+| `input_image` | Ảnh RGB mà mô hình nhìn thấy sau bước tiền xử lý của chính nó |
+
+`len(gaussians)` là `N`, và `gaussians[gaussians.opacities > 0.1]` trả về một
+`Gaussians` mới giữ các hàng được chọn. `save(path)` ghi theo phần mở rộng. `.ply`
+là bố cục 3D Gaussian Splatting chuẩn, với scale dạng log và opacity dạng logit,
+được xoay thành y hướng lên như các trình xem splat mong đợi, cùng một dòng header
+`comment libreyolo` chứa seed, camera và params dưới dạng JSON. Một payload có màu
+bậc cao hơn (`K > 1`) sẽ phát sinh `NotImplementedError` với `.ply`. `.splat` là
+định dạng web gọn nhẹ, 32 byte cho mỗi Gaussian. `render(size=512, background=(0, 0, 0))`
+trả về một bản render điểm từ góc nhìn đầu vào được suy ra dưới dạng `PIL.Image`,
+một cái nhìn nhanh chứ không phải rasterization Gaussian.
+
+Trên một kết quả 3D được sinh ra, `Results.boxes` là `None`; `path`, `orig_shape` và
+`orig_img` mô tả ảnh nguồn, và `len(result)` là 1. `Results.save(path)` ghi đối
+tượng, `plot()` trả về bản render điểm đó, và `summary()` trả về một hàng cùng bản
+ghi của payload.

@@ -116,7 +116,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 361e81de5614a571
+source_hash: 7104f0fd056896b9
 ---
 
 ## Installer
@@ -168,6 +168,11 @@ la même phase finale sans augmentation de 15 époques que YOLOX, adaptées à l
 tête avec ancres. Une différence subsiste : YOLOX ajoute durant ces dernières
 époques un raffinement L1 de la régression des bounding boxes, que v7 omet, car
 sa loss SimOTA ne possède aucune branche L1 de décalage brut à affiner.
+
+Mosaic et MixUp sont tous deux activés par défaut (`mosaic_prob=1.0`,
+`mixup_prob=1.0`). Les échantillons passent par le pipeline mosaic de YOLOv9,
+dont le MixUp tire le ratio de mélange selon Beta(1, 1), uniforme sur [0, 1],
+comme le fait MultimediaTechLab/YOLO.
 
 Consultez l'[entraînement](/docs/train) pour les datasets, l'augmentation, le
 multi-GPU et les loggers.

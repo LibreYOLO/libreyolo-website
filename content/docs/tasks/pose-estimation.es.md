@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## Definición
@@ -225,8 +225,10 @@ biblioteca, así que un modelo entrenado sobre un esqueleto distinto devuelve un
 columna de keypoints también es una propiedad del checkpoint: EdgeCrafter
 escribe ahí una constante en lugar de una puntuación por punto, y no tiene
 cabeza de boxes en absoluto, así que cada uno de sus boxes de pose es la
-extensión que encierra los propios keypoints de esa instancia. Consulta
-[predicción](/docs/predict) para las fuentes, el streaming y el manejo de
+extensión que encierra los propios keypoints de esa instancia. `agnostic_nms=True`
+suprime los boxes solapados entre clases y descarta los keypoints de cada
+instancia suprimida junto con su box; HRNet lanza `NotImplementedError` con él.
+Consulta [predicción](/docs/predict) para las fuentes, el streaming y el manejo de
 resultados.
 
 ## Formato del dataset
@@ -313,7 +315,7 @@ promedio son `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
 `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` y
 `metrics/keypoints_AR_L`. Todas las claves de esta tarea llevan el prefijo
 `keypoints_`, así que las claves de `mAP` de boxes que devuelve un detector no
-aparecen.
+aparecen. `val(agnostic_nms=True)` lanza `ValueError` en esta tarea.
 
 ## Exportación
 

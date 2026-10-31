@@ -111,7 +111,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c236895b991beabf
+source_hash: d83f0c00236ab502
 ---
 
 ## Installazione
@@ -163,7 +163,8 @@ di SegFormer: AdamW con un learning rate base per il backbone e la testa di
 decodifica addestrata a 10x quel valore, weight decay ovunque tranne che sui
 LayerNorm e sulla convoluzione posizionale del Mix-FFN, e uno schedule a
 decadimento lineare con warmup. La convergenza per le taglie più grandi, da b3
-a b5, non è stata validata end to end.
+a b5, non è stata validata end to end. `libreyolo train` parte dalla stessa
+ricetta, e senza `name=` le sue esecuzioni vanno in `runs/train/segformer_exp`.
 
 Vedi [addestramento](/docs/train) per dataset, augmentation, multi-GPU e
 logger.

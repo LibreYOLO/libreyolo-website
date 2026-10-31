@@ -123,7 +123,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 2f5033bdc1c3c931
+source_hash: d3d0a78f93c4f53c
 ---
 
 ## Installation
@@ -145,8 +145,10 @@ Wechsel zu einem anderen Detektor erfordert daher nur eine Änderung in einer
 Zeile. Ein Dateiname mit `-seg` wird selbstständig der RTMDet-Ins-Aufgabe
 zugeordnet. `result.masks` enthält dann die Instanzmasken neben den Boxen.
 `conf` legt den Confidence-Schwellenwert und `iou` den NMS-Schwellenwert fest.
-Unter [Vorhersage](/docs/predict) findest du Quellen, Streaming und die
-Verarbeitung von Ergebnissen.
+`max_det` gilt unverändert für beide Aufgaben, standardmäßig bis zu 300 Boxen
+oder Masken pro Bild; die Testkonfiguration von MMDetection für RTMDet-Ins
+behält 100, was `max_det=100` reproduziert. Unter [Vorhersage](/docs/predict)
+findest du Quellen, Streaming und die Verarbeitung von Ergebnissen.
 
 ## Varianten
 

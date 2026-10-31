@@ -45,7 +45,7 @@ snippets:
 
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Construction
@@ -79,6 +79,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -105,6 +106,7 @@ model(
 | `device` | `None` | Remplacement de l'appareil pour cet appel |
 | `classes` | `None` | Conserver uniquement ces identifiants de classe |
 | `max_det` | `300` | Nombre maximal de détections par image |
+| `agnostic_nms` | `False` | Ne garder que la boîte au score le plus élevé parmi celles qui se chevauchent au-delà de `iou`, quelles que soient leurs classes. Détection, segmentation, pose et obb |
 | `augment` | `False` | Augmentation à l'inférence |
 | `save` | `False` | Écrire une image ou vidéo annotée |
 | `batch` | `1` | Nombre d'images par passe forward pour les sources répertoire et liste |
@@ -217,9 +219,19 @@ sortie sous la forme `project/name`, incrémenté sauf si `exist_ok=True`.
 `plots` est un alias de `save_plots`. `allow_download_scripts` autorise le
 Python intégré que le champ `download` d'un YAML de dataset peut contenir.
 
+Pour la détection et la segmentation, le dictionnaire est une sous-classe de
+`dict` qui porte aussi `box` (métriques par image et courbes de précision,
+rappel et F1 par classe) et `confusion_matrix` ; pour la classification, il
+porte `top1`, `top5` et `confusion_matrix`. Voir
+[Validation et mesures](/docs/train/validation).
+
 `faster_coco_eval` est accepté dans `**kwargs` et vaut `True` par défaut, avec
 un repli vers pycocotools lorsque le package n'est pas installé. Le backend
 réellement exécuté est indiqué dans `model.last_eval_backend`.
+
+`agnostic_nms=True`, également via `**kwargs`, applique une NMS indépendante des
+classes au seuil `iou` avant le calcul des scores. Elle couvre la détection et la
+segmentation et lève `ValueError` pour toute autre tâche.
 
 La validation augmentée lève une erreur pour les tâches `obb` et `pose`.
 

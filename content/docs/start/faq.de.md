@@ -15,7 +15,7 @@ keywords:
   - libreyolo cli
   - libreyolo offline
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## Mit welchem Modell sollte ich beginnen?
@@ -95,9 +95,13 @@ du es versuchst. Siehe [Grundkonzepte](/docs/concepts).
 Ein Dictionary mit Metriknamen als Schlüsseln. Zu den Erkennungsschlüsseln
 gehören `metrics/precision`, `metrics/recall`, `metrics/mAP50` und
 `metrics/mAP50-95`, und Ergebnisse von Erkennung und Segmentierung tragen
-außerdem Ergebnisse pro Bild in `metrics.box`. Andere Aufgaben geben die für sie relevanten Schlüssel
+außerdem Ergebnisse pro Bild und klassenweise Precision-, Recall- und F1-Kurven
+in `metrics.box`. Ergebnisse von Erkennung, Segmentierung und Klassifikation
+tragen `metrics.confusion_matrix`, und die Klassifikation ergänzt `metrics.top1`
+und `metrics.top5`. Andere Aufgaben geben die für sie relevanten Schlüssel
 zurück, etwa `metrics/accuracy_top1` für Klassifikation oder `metrics/PQ`,
-`metrics/SQ` und `metrics/RQ` für panoptische Segmentierung.
+`metrics/SQ` und `metrics/RQ` für panoptische Segmentierung. Siehe
+[Validierung und Metriken](/docs/train/validation).
 
 ## Wie verarbeite ich einen Ordner, ein Video oder eine Webcam?
 

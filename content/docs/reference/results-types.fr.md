@@ -50,7 +50,7 @@ snippets:
         # Lignes sous forme de dictionnaires simples, puis en JSON.
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 173c542fb675892e
+source_hash: b4e69bd678ede2dd
 ---
 
 ## Objet Results
@@ -96,6 +96,8 @@ famille détermine l'emplacement qu'elle remplit.
 | `embeddings` | `Embeddings` | embed |
 | `identities` | `Identities` | embed, avec une galerie |
 | `meshes` | `Meshes` | mesh |
+| `generated` | `GeneratedImage` | generate |
+| `gaussians` | `Gaussians` | generate3d |
 
 `result.normals` est un alias en lecture-écriture de `result.normal_map`.
 
@@ -332,3 +334,55 @@ les emplacements définis. `to_json(**kwargs)` transmet ses arguments à
 ## Actions
 
 `Actions(data, orig_shape=None, names=None, fps=None, instruction=None)` représente une séquence d'actions float32 `(T, D)`. `first` renvoie la première ligne ; le découpage sélectionne les pas de temps. Les valeurs restent dans les unités du dataset de la politique. `names` décrit les dimensions des actions, `fps` la cadence de contrôle et `instruction` le texte de conditionnement.
+
+## GeneratedImage
+
+`GeneratedImage(data, orig_shape=None, *, prompt=None, seed=None, params=None)`
+contient une image synthétisée, `(H, W, 3)` uint8 RGB. `array` renvoie la vue
+numpy et `image` une `PIL.Image`. `prompt` est le texte qui a produit l'image et
+`seed` l'entier qui la reproduit avec le même modèle et les mêmes réglages ;
+`params` consigne le reste de l'appel : `model`, `imgsz` et chaque réglage de
+famille en vigueur. `save(path)` écrit l'image, et un PNG stocke aussi
+`to_dict()`, la forme, le prompt, la seed et les params, sous forme de JSON dans
+un chunk texte `libreyolo`.
+
+Sur un résultat généré, `Results.boxes` et `Results.path` valent `None`,
+`orig_shape` est le `(H, W)` propre à l'image, et `len(result)` vaut 1.
+`Results.save(path)` écrit l'image, `plot()` la renvoie sous forme d'image PIL, et
+`summary()` renvoie une ligne avec l'enregistrement de la charge utile.
+
+## Gaussians
+
+`Gaussians(xyz, scales, rotations, opacities, sh, *, camera=None, seed=None, params=None, input_image=None)`
+contient un objet 3D généré sous forme de splats gaussiens, dans le repère
+propre à l'objet : z vers le haut, centré dans le cube `[-0.5, 0.5]^3`. Chaque
+ligne est une gaussienne.
+
+| Membre | Renvoie |
+|---|---|
+| `xyz` | `(N, 3)` positions dans le repère de l'objet |
+| `scales` | `(N, 3)` écarts types le long des axes locaux, linéaires, pas en log |
+| `rotations` | `(N, 4)` quaternions unitaires `(w, x, y, z)`, des axes locaux vers le repère de l'objet |
+| `opacities` | `(N,)` dans `[0, 1]` |
+| `sh` | `(N, K, 3)` coefficients de couleur en harmoniques sphériques, degré 0 en premier |
+| `colors` | `(N, 3)` RGB dans `[0, 1]`, issu du terme de degré 0 |
+| `camera` | La vue d'entrée inférée : `yaw` et `pitch` en radians, `radius` en unités de l'objet, `fov` vertical en degrés, et la `margin` du recadrage |
+| `seed`, `params` | La seed et les réglages d'appel qui reproduisent l'objet |
+| `input_image` | L'image RGB que le modèle a vue après son propre prétraitement |
+
+`len(gaussians)` vaut `N`, et `gaussians[gaussians.opacities > 0.1]` renvoie un
+nouvel objet `Gaussians` contenant les lignes sélectionnées. `save(path)` écrit
+selon l'extension. `.ply` est la disposition standard du 3D Gaussian Splatting,
+avec des échelles en log et des opacités en logit, orientée y vers le haut comme
+les visionneuses de splats l'attendent, et une ligne d'en-tête
+`comment libreyolo` qui contient la seed, la caméra et les params en JSON. Une
+charge utile avec une couleur d'ordre supérieur (`K > 1`) lève
+`NotImplementedError` pour `.ply`. `.splat` est le format web compact, 32 octets
+par gaussienne. `render(size=512, background=(0, 0, 0))` renvoie un rendu en
+points depuis la vue d'entrée inférée sous forme de `PIL.Image`, un aperçu
+rapide plutôt qu'une rastérisation gaussienne.
+
+Sur un résultat 3D généré, `Results.boxes` vaut `None` ; `path`, `orig_shape` et
+`orig_img` décrivent l'image source, et `len(result)` vaut 1.
+`Results.save(path)` écrit l'objet, `plot()` renvoie ce rendu en points, et
+`summary()` renvoie une ligne avec l'enregistrement de la charge utile.

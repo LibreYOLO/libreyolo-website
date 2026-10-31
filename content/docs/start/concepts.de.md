@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Kanonische Aufgaben
-    value: 20
+    value: 22
   - label: Support-Stufen
     value: 'Flagship, Core, Supported, Inference only, Museum, Sibling tier'
 snippets:
@@ -49,12 +49,12 @@ snippets:
         # "pose", "det" zu "detect", "semantic-segmentation" zu "semantic".
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Aufgaben
 
-Eine Aufgabe bestimmt, was ein Modell zurückgibt. LibreYOLO besitzt 20
+Eine Aufgabe bestimmt, was ein Modell zurückgibt. LibreYOLO besitzt 22
 kanonische Aufgabennamen. Jeder bezeichnet das Feld im `Results`-Objekt, das
 die jeweilige Ausgabe enthält.
 
@@ -80,6 +80,8 @@ die jeweilige Ausgabe enthält.
 | `mesh` | Ein positionierter 3D-Körper pro erkannter Person |
 | `detect3d` | 3D-Boxen in Kamerakoordinaten mit Klasse und Confidence |
 | `act` | Ein Block von Roboteraktionen, vorhergesagt aus Kamera-Frames und Roboterzustand |
+| `generate` | Ein aus einem Text-Prompt generiertes RGB-Bild, mit dem Prompt, dem Seed und den Aufrufparametern, die es reproduzieren |
+| `generate3d` | Ein Objekt als 3D Gaussian Splats, generiert aus einem einzelnen Bild davon |
 
 Diese Namen stehen in Checkpoint-Metadaten und Dateinamen. Vertraute Aliasse
 werden überall akzeptiert, wo du eine Aufgabe übergibst, und vor jedem weiteren
@@ -175,8 +177,9 @@ veröffentlicht, die auf einem anderen als ihrem Standarddatensatz trainiert
 wurden, hängt sie den Datensatznamen als weiteres Suffix an. Diese Variante
 bleibt Teil des Repository-Namens, aus dem die Datei heruntergeladen wird.
 
-Drei Stufen liegen außerhalb dieses Schemas. Familien für promptbasierte
-Segmentierung, Vision-Language-Familien und Open-Vocabulary-Detektoren werden
+Mehrere Stufen liegen außerhalb dieses Schemas. Familien für promptbasierte
+Segmentierung, Vision-Language-Familien, Open-Vocabulary-Detektoren und die
+`LibreGen`-Generierungsfamilien werden
 nicht in der Checkpoint-Factory registriert und erzeugen keine Datei
 `Libre<FAMILY><size>.pt`. Ihr Präfix bezeichnet stattdessen einen
 heruntergeladenen Snapshot von Hugging Face oder einen promptbasierten

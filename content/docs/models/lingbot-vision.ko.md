@@ -105,7 +105,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## 설치
@@ -132,7 +132,7 @@ pip install libreyolo
 
 ## 학습
 
-`train()`은 공개된 체크포인트를 파인튜닝합니다. 기본 레시피는 업스트림 보고서의 선형 프로브입니다. ViT 백본을 동결하고 1x1 조밀 헤드만 학습하며 위 LibreYOLO 호스팅 가중치가 생성된 방식과 일치합니다. 전체 네트워크를 파인튜닝하려면 `freeze_backbone=False`를 전달하고 그에 맞춰 `lr0`를 낮춥니다.
+`train()`은 공개된 체크포인트를 파인튜닝합니다. 기본 레시피는 업스트림 보고서의 선형 프로브입니다. ViT 백본을 동결하고 1x1 조밀 헤드만 학습하며 위 LibreYOLO 호스팅 가중치가 생성된 방식과 일치합니다. 전체 네트워크를 파인튜닝하려면 `freeze_backbone=False`를 전달하고 그에 맞춰 `lr0`를 낮춥니다. `libreyolo train`도 같은 레시피로 시작하며, `name=`이 없으면 실행 결과는 `runs/train/lingbotvision_exp`에 저장됩니다.
 
 <code-tabs name="train" />
 

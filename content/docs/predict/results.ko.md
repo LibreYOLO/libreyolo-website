@@ -119,12 +119,12 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: cebaac95f0a28b5f
+source_hash: d55562c03633c81e
 ---
 
 ## 하나의 객체, 페이로드당 하나의 슬롯
 
-한 이미지에 대한 예측은 하나의 `Results`를 반환합니다. 이는 21개의 페이로드 슬롯을 가지고 있으며, 모델은 자신의 작업이 생성하는 슬롯만 채웁니다. 나머지 모든 슬롯은 `None`이므로, 탐지기에서 `result.masks`를 읽는 것은 오류가 아니라 `None`입니다.
+한 이미지에 대한 예측은 하나의 `Results`를 반환합니다. 이는 23개의 페이로드 슬롯을 가지고 있으며, 모델은 자신의 작업이 생성하는 슬롯만 채웁니다. 나머지 모든 슬롯은 `None`이므로, 탐지기에서 `result.masks`를 읽는 것은 오류가 아니라 `None`입니다.
 
 | 슬롯 | 수업 | 모양 | 제작 |
 |---|---|---|---|
@@ -149,12 +149,14 @@ source_hash: cebaac95f0a28b5f
 | `albedo` | `AlbedoMap` | `(H, W, 3)` 선형 RGB | 알베도 추정 |
 | `boxes3d` | `Boxes3D` | `(N, 14)` 카메라 좌표계 직육면체, `boxes`와 행 정렬 | 단안 3D 탐지 |
 | `actions` | `Actions` | `(T, D)` 동작 청크 | 로봇 정책 |
+| `generated` | `GeneratedImage` | `(H, W, 3)` uint8 RGB와 프롬프트, 시드, 설정 | 이미지 생성 |
+| `gaussians` | `Gaussians` | `xyz`, `scales`, `rotations`, `opacities`, `sh`로 구성된 `N`개의 가우시안과 카메라, 시드 | 3D 생성 |
 
 그들 옆에는 모든 결과가 갖는 필드가 있습니다: `orig_shape`는 `(height, width)`로, `path`(원본 경로 또는 메모리 입력의 경우 `None`), `names`는 클래스 ID를 클래스 이름에 매핑, `frame_idx`는 비디오 및 실시간 프레임용, `track_id`는 추적 시, 그리고 `restore_scale`는 복원 결과의 정수 업스케일 계수입니다.
 
 `result.normals`는 `result.normal_map`의 별칭입니다.
 
-`result.speed`는 모든 결과에 존재하지만 [앙상블](/docs/predict/ensembling)에서만 채워지며, 그 키는 밀리초 단위의 `member_0`, `member_1` 및 `fusion`입니다. 단일 모델의 경우 빈 딕셔너리로 유지됩니다.
+`result.speed`는 모든 결과에 존재합니다. [앙상블](/docs/predict/ensembling)은 밀리초 단위의 `member_0`, `member_1`, `fusion`을 채우고, LibreGen 모델은 생성한 이미지 또는 객체 하나당 밀리초인 `inference`를, FCOS3D는 `preprocess`, `inference`, `postprocess`를 채웁니다. 다른 모델은 빈 딕셔너리로 둡니다.
 
 ## 상자들
 
@@ -205,7 +207,7 @@ source_hash: cebaac95f0a28b5f
 
 `result[i]`는 하나의 인스턴스를 보유한 새 `Results`를 반환합니다. 인스턴스별 페이로드는 분할되며, 전체 이미지 페이로드는 그대로 전달되므로, 분류 결과를 분할한다고 해서 확률 벡터를 단일 클래스만으로 줄일 수 없고, 깊이 결과를 분할한다고 해서 `(H, W)` 레이아웃이 손상되지 않습니다.
 
-`len(result)`는 인스턴스를 계산합니다: 상자, 포인트, 임베딩, OCR 영역 또는 메시. 모든 밀집 전체 이미지 페이로드는 `1`로 계산됩니다. 아무 것도 없는 결과는 `0`입니다.
+`len(result)`는 인스턴스를 계산합니다: 상자, 포인트, 임베딩, OCR 영역 또는 메시. 모든 밀집 전체 이미지 페이로드는 `1`로 계산되며, 생성된 이미지나 3D 객체도 마찬가지입니다. 아무 것도 없는 결과는 `0`입니다.
 
 `to()`, `cpu()`, `cuda()` 및 `numpy()`는 각기 모든 채워진 슬롯이 변환된 새로운 `Results`를 반환합니다. 이들은 원본을 수정하지 않습니다.
 
@@ -219,7 +221,7 @@ source_hash: cebaac95f0a28b5f
 
 행 모양은 페이로드를 따릅니다. 탐지 행에는 `name`, `class`, `confidence` 및 `box` 사전이 포함되며, 마스크가 존재할 때 `segments`를 가져오고, 방향이 있는 박스의 경우 `obb` 및 `corners`, 라디안 및 도 단위의 `gaze` 각도, 추적 시 `track_id`, 메시가 존재할 때 `mesh` 매개변수가 포함됩니다.
 
-상자가 없는 경우, 한 페이로드가 행을 결정합니다: OCR은 `text`가 있는 각 영역마다 한 행을 출력하고, 포인트는 각 포인트마다 한 행을 출력하며, 파노라마틱은 `pixel_count`와 `pixel_fraction`가 있는 각 세그먼트마다 한 행을 출력하고, 시맨틱은 존재하는 각 클래스마다 한 행을 출력하며, 분류는 상위 다섯 클래스만 출력합니다. 깊이, 노멀, 가장자리, 복원 및 매팅은 각 픽셀 대신 맵을 설명하는 단일 요약 행을 출력합니다.
+상자가 없는 경우, 한 페이로드가 행을 결정합니다: OCR은 `text`가 있는 각 영역마다 한 행을 출력하고, 포인트는 각 포인트마다 한 행을 출력하며, 파노라마틱은 `pixel_count`와 `pixel_fraction`가 있는 각 세그먼트마다 한 행을 출력하고, 시맨틱은 존재하는 각 클래스마다 한 행을 출력하며, 분류는 상위 다섯 클래스만 출력합니다. 깊이, 노멀, 가장자리, 복원 및 매팅은 각 픽셀 대신 맵을 설명하는 단일 요약 행을 출력하고, 생성된 이미지나 3D 객체는 시드와 설정이 담긴 한 행을 출력합니다.
 
 두 개의 페이로드는 의도적으로 축약되었습니다. 임베딩 벡터는 얼굴당 약 2KB인 512-플롯 행이므로 `embedding_dim`로만 보고됩니다; 값을 포함하려면 `embeddings=True`를 전달하십시오. 메시 정점은 절대로 포함되지 않는데, 이는 사람당 수만 개의 좌표이기 때문입니다. 지오메트리에 대해서는 `result.meshes.vertices`를 읽거나 `result.meshes.save_obj(path)`를 호출하십시오.
 
@@ -229,13 +231,13 @@ source_hash: cebaac95f0a28b5f
 
 `predict(save=True)`는 주석을 달고 기록하는 경로입니다. 이 경로는 채워진 슬롯에서 그리기 루틴을 선택하므로, 의미론적 결과는 색상 마스크로 기록되고, 깊이 결과는 깊이 시각화로, 파노프틱 결과는 해당 세그먼트와 함께, 매트는 투명 배경 RGBA PNG로, 디텍터는 그 아래에 마스크가 있는 박스로 기록됩니다. 기록된 경로는 결과에 `result.saved_path`로 첨부됩니다.
 
-`Results.save(path)` 또한 좁습니다: 투명 배경의 RGBA PNG 컷아웃으로 무광 결과를 기록하고 그렇지 않으면 `NotImplementedError`를 발생시킵니다. `Results.cutout()`는 그것을 기록하지 않고 동일한 RGBA 배열을 반환합니다. 두 함수 모두 원본 이미지가 필요하며, 이는 `result.path`에서 가져오거나 `image=`로 전달됩니다.
+`Results.save(path)` 또한 좁습니다: 생성된 이미지나 3D 객체를 확장자에 따라 형식을 골라 기록하고, 무광 결과는 투명 배경의 RGBA PNG 컷아웃으로 기록하며, 그 외에는 `NotImplementedError`를 발생시킵니다. `Results.cutout()`는 그것을 기록하지 않고 동일한 RGBA 배열을 반환합니다. 무광 결과의 경우 두 함수 모두 원본 이미지가 필요하며, 이는 `result.path`에서 가져오거나 `image=`로 전달됩니다.
 
 두 개의 페이로드는 각각 자체 작성기를 가지고 있습니다: 복원된 이미지를 위한 `result.restored.save(path)`와 메시를 위한 `result.meshes.save_obj(path, index=0)`.
 
 파일이 어디에 위치하는지와 `output_path` 및 `output_file_format`가 어떻게 작동하는지에 대해서는 [예측 소스](/docs/predict/sources)를 참조하십시오.
 
-`plot()`은 모든 작업 페이로드를 처리합니다. 이미지 오버레이는 기본적으로 연속된 HxWx3 uint8 BGR을 반환하며, `pil=True`로 PIL을 요청합니다. 깊이, 법선, 엣지, 알베도 맵과 3D 직육면체, 동작 청크는 기본적으로 PIL 이미지를 반환하며, `pil=False`를 지정하면 배열을 반환합니다. `orig_img`는 메모리 및 URL 소스의 BGR 픽셀을 보관하며, 로컬 파일과 수집한 유한 길이 비디오 프레임은 다시 열 수 있습니다.
+`plot()`은 모든 작업 페이로드를 처리합니다. 이미지 오버레이는 기본적으로 연속된 HxWx3 uint8 BGR을 반환하며, `pil=True`로 PIL을 요청합니다. 깊이, 법선, 엣지, 알베도 맵과 3D 직육면체, 동작 청크, 생성된 이미지, 생성된 3D 객체의 포인트 렌더는 기본적으로 PIL 이미지를 반환하며, `pil=False`를 지정하면 배열을 반환합니다. `orig_img`는 메모리 및 URL 소스의 BGR 픽셀을 보관하며, 로컬 파일과 수집한 유한 길이 비디오 프레임은 다시 열 수 있습니다.
 
 설정에는 `img`, `conf`, `labels`, `boxes`, `masks`, `probs`, `line_width`, `pil`, `show`, `save`, `filename`이 있습니다. 저장된 분류 이미지는 상위 5개 레이블을 포함합니다. 매트 저장은 RGBA로 잘라낸 이미지를 만듭니다.
 

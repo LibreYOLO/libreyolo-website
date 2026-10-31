@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## Definicja
@@ -216,8 +216,10 @@ biblioteki, dlatego model wytrenowany na innym szkielecie zwraca inną wartość
 kluczowych również jest właściwością checkpointu. EdgeCrafter zapisuje tam stałą
 wartość zamiast wyniku dla poszczególnych punktów i w ogóle nie ma głowicy
 ramek, dlatego każda z jego ramek pozy jest zewnętrznym obrysem punktów
-kluczowych danej instancji. Informacje o źródłach, streamingu i obsłudze wyników
-znajdują się w sekcji [predykcja](/docs/predict).
+kluczowych danej instancji. `agnostic_nms=True` tłumi nakładające się ramki
+między klasami i odrzuca punkty kluczowe każdej stłumionej instancji razem z jej
+ramką; HRNet zgłasza dla niego `NotImplementedError`. Informacje o źródłach,
+streamingu i obsłudze wyników znajdują się w sekcji [predykcja](/docs/predict).
 
 ## Format zbioru danych
 
@@ -300,6 +302,7 @@ wartości średniego recall to `metrics/keypoints_AR50-95`,
 `metrics/keypoints_AR50`, `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` i
 `metrics/keypoints_AR_L`. Każdy klucz w tym zadaniu ma prefiks `keypoints_`,
 dlatego nie pojawiają się klucze `mAP` ramek zwracane przez detektor.
+`val(agnostic_nms=True)` zgłasza w tym zadaniu `ValueError`.
 
 ## Eksport
 

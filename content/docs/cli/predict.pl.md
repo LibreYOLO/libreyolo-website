@@ -49,7 +49,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## Składnia
@@ -77,6 +77,7 @@ zadania jest usuwane przed parsowaniem.
 | `imgsz` | | Rozmiar obrazu wejściowego: `640` (kwadrat) lub `480x640` (HxW). Gdy nie ustawiono, własny rozmiar wejściowy modelu |
 | `classes` | | Filtrowanie po identyfikatorach klas, np. `[0,2,5]`. Akceptowana jest też sama liczba całkowita |
 | `max_det` | `300` | Maksymalna liczba detekcji na obraz |
+| `agnostic_nms` | `false` | NMS niezależne od klas: spośród ramek nakładających się powyżej `iou` zostaje tylko ta z najwyższym wynikiem, bez względu na ich klasy. Detekcja, segmentacja, poza i OBB |
 | `half` | `false` | Inferencja FP16 (tylko CUDA, wymaga obsługi po stronie modelu) |
 | `save` | `false` | Zapis obrazów z adnotacjami |
 | `batch` | `1` | Liczba obrazów na jedno przejście w przód dla źródeł katalogowych. Powyżej 1 uruchamia prawdziwą inferencję batchową na modelach, które ją obsługują |

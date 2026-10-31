@@ -130,7 +130,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Définition
@@ -181,7 +181,9 @@ le modèle renvoie son masque. [SAM](/docs/models/sam),
 [MobileSAM](/docs/models/mobilesam), [EdgeTAM](/docs/models/edgetam) et
 [PicoSAM3](/docs/models/picosam3) fonctionnent ainsi, tout comme
 [SenseNova-Vision](/docs/models/sensenova-vision), dont la segmentation est
-référentielle et reçoit une phrase qui nomme un objet. Ces modèles se chargent
+référentielle et reçoit une phrase qui nomme un objet.
+[WeVisOne-VL](/docs/models/wevisone-vl) segmente chaque phrase donnée dans
+`names=` et renvoie des boîtes plus des masques binaires. Ces modèles se chargent
 par leur propre fabrique et leurs propres extras. Chaque page de modèle présente
 l'appel exact.
 
@@ -193,7 +195,8 @@ en cache localement.
 <code-tabs name="predict" />
 
 `conf` et `max_det` façonnent la sortie comme pour la détection, et les masques
-sont filtrés avec les boîtes auxquelles ils appartiennent. Consultez la page
+sont filtrés avec les boîtes auxquelles ils appartiennent, y compris par
+`agnostic_nms=True`. Consultez la page
 [prédiction](/docs/predict) pour les sources, le streaming et la gestion des
 résultats.
 
@@ -256,9 +259,11 @@ les augmentations, le multi-GPU et les systèmes de journalisation.
 
 ## Valider
 
-`val()` renvoie un dictionnaire ordinaire de clés `metrics/`. Les boîtes et les
-masques sont évalués séparément, tous deux avec l'évaluation COCO. Les nombres
-des masques sont les principaux.
+`val()` renvoie un dictionnaire de clés `metrics/`. Les boîtes et les masques
+sont évalués séparément, tous deux avec l'évaluation COCO. Les nombres des
+masques sont les principaux. Une ligne d'étiquette à cinq champs, avec boîte
+seule, est évaluée comme son masque rectangulaire, celui que lit l'entraînement
+de segmentation.
 
 <code-tabs name="val" />
 
@@ -284,6 +289,12 @@ fonctionnement. `metrics/precision(M)` contient la même valeur que
 `metrics/mAP50-95(M)` et `metrics/recall(M)` la même valeur que l'AR des
 masques à 100 détections. `(B)` se comporte de la même façon pour les boîtes.
 Tracer une paire de ces valeurs rapporte donc deux fois le même nombre.
+
+Le résultat contient aussi `confusion_matrix` et les courbes de précision, de
+rappel et de F1 par classe sur `box`, toutes deux calculées à partir des boîtes
+et non des masques ; voir
+[Validation et mesures](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` est pris en charge pour cette tâche.
 
 ## Exporter
 

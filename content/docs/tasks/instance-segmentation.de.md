@@ -123,7 +123,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 577cd3c8c2d5d6fe
+source_hash: 05c7c0be14c38eef
 ---
 
 ## Definition
@@ -174,9 +174,10 @@ seine Maske. [SAM](/docs/models/sam), [SAM 2](/docs/models/sam-2),
 [EdgeTAM](/docs/models/edgetam) und [PicoSAM3](/docs/models/picosam3)
 funktionieren so, ebenso
 [SenseNova-Vision](/docs/models/sensenova-vision), dessen Segmentierung
-referenzierend ist: Es nimmt eine Phrase, die ein Objekt benennt. Sie laden über
-ihre eigene Factory und ihre eigenen Extras, und jede Modellseite trägt den
-genauen Aufruf.
+referenzierend ist: Es nimmt eine Phrase, die ein Objekt benennt.
+[WeVisOne-VL](/docs/models/wevisone-vl) segmentiert jede in `names=` übergebene
+Phrase und gibt Boxen plus binäre Masken zurück. Sie laden über ihre eigene
+Factory und ihre eigenen Extras, und jede Modellseite trägt den genauen Aufruf.
 
 ## Vorhersage
 
@@ -186,7 +187,8 @@ zwischengespeichert.
 <code-tabs name="predict" />
 
 `conf` und `max_det` formen die Ausgabe genauso wie bei der Detektion, und
-Masken werden zusammen mit den Boxen gefiltert, zu denen sie gehören. Siehe
+Masken werden zusammen mit den Boxen gefiltert, zu denen sie gehören, auch von
+`agnostic_nms=True`. Siehe
 [Vorhersage](/docs/predict) für Quellen, Streaming und den Umgang mit
 Ergebnissen.
 
@@ -249,9 +251,10 @@ Logger.
 
 ## Validierung
 
-`val()` liefert ein schlichtes Dictionary von `metrics/`-Keys. Boxen und Masken
-werden getrennt bewertet, beide mit COCO-Evaluation, und die Maskenzahlen sind
-die primären.
+`val()` liefert ein Dictionary von `metrics/`-Keys. Boxen und Masken werden
+getrennt bewertet, beide mit COCO-Evaluation, und die Maskenzahlen sind die
+primären. Eine Label-Zeile mit fünf Feldern, die nur eine Box enthält, wird als
+ihre Rechteckmaske bewertet, so wie das Segmentierungstraining sie daraus liest.
 
 <code-tabs name="val" />
 
@@ -277,6 +280,11 @@ Abwärtskompatibilität erhalten und sind Aliase, kein Arbeitspunkt:
 `metrics/recall(M)` denselben Wert wie der Masken-AR bei 100 Detektionen, wobei
 sich `(B)` für Boxen genauso verhält. Ein Paar davon zu plotten zeigt eine Zahl
 zweimal.
+
+Das Ergebnis trägt außerdem `confusion_matrix` und die klassenweisen Precision-,
+Recall- und F1-Kurven in `box`, beide aus Boxen statt aus Masken berechnet; siehe
+[Validierung und Metriken](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` wird bei dieser Aufgabe unterstützt.
 
 ## Export
 

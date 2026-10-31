@@ -148,7 +148,7 @@ snippets:
         # エクスポート時はタスクからファイル名を付ける ここではLibreDINOv2s-sem.onnx
         model = LibreYOLO("LibreDINOv2s-sem.onnx")
         result = model(SAMPLE_IMAGE)
-source_hash: c89a9662d03fe6f7
+source_hash: d6fa949f75a548c8
 ---
 
 ## インストール
@@ -158,6 +158,8 @@ LibreDINOv2が登録されるのは`transformers`がインストールされて�
 ```bash
 pip install "libreyolo[rfdetr]"
 ```
+
+これがないと、DINOv2のチェックポイントやモデル名を読み込む時点で、このインストール行を示すエラーで停止します。
 
 ## 推論
 

@@ -23,11 +23,15 @@ snippets:
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Guard ini tetap didukung; skrip biasa juga berjalan tanpanya.
-        # Pertahankan untuk objek callback/logger yang memerlukan fallback pickle standar.
+
+        # Pertahankan untuk objek callback/logger yang memerlukan fallback
+        pickle standar.
+
         if __name__ == "__main__":
             model = LibreYOLO("LibreYOLO9s.pt")
             model.train(
@@ -36,6 +40,11 @@ snippets:
                 batch=32,     # batch global: 16 gambar per GPU pada dua GPU
                 device="0,1",
             )
+    - label: CLI
+      language: bash
+      code: |
+        libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
+          epochs=100 batch=32 device=0,1
   torchrun:
     - label: train.py
       language: python
@@ -73,7 +82,7 @@ snippets:
             model = LibreYOLO("LibreYOLO9s.pt")
             # Diperiksa sekali pada GPU 0, lalu diskalakan ke kelipatan world-size.
             model.train(data="my-dataset.yaml", batch=-1, device="0,1")
-source_hash: e339072d5d8e71ea
+source_hash: 18d4cbb626aee47d
 ---
 
 ## Jalankan pada dua GPU
@@ -86,6 +95,10 @@ Jika diberi lebih dari satu perangkat tanpa lingkungan torchrun, `train()` model
 
 `device` menerima `"0,1"`, `[0, 1]`, `0`, `"cuda:0"`, `"cpu"`, `"mps"`, dan
 `"auto"`. Hanya daftar lebih dari satu indeks CUDA yang memicu spawn.
+
+`libreyolo train device=0,1`, atau `device=[0,1]`, membangun model di GPU pertama
+dalam daftar dan meneruskan daftar itu ke `train()`, yang memulai worker dengan cara
+yang sama.
 
 ## Peluncuran otomatis dan main guard
 

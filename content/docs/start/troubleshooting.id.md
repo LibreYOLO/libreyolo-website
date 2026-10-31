@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - troubleshooting libreyolo
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 Error dikelompokkan berdasarkan teks yang terlihat. Jika pesan tidak tersedia di
@@ -32,6 +32,16 @@ Jalankan `libreyolo models`. Setiap family dengan dependency yang hilang dicetak
 bersama perintah pip persis yang mengaktifkannya, sehingga paket tidak perlu
 dipetakan kembali ke ekstra secara manual. `libreyolo models --json` mencetak
 informasi yang sama sebagai objek.
+
+RF-DETR dan DINOv2 memerlukan `libreyolo[rfdetr]`, dan pesannya menyebut ekstra
+tersebut. Tanpanya, `LibreYOLO("LibreRFDETRn.pt")`, nama bobot DINOv2, dan
+`libreyolo predict model=rfdetr-n` berhenti dengan baris instalasi, dan CLI keluar
+dengan `model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 [Halaman instalasi](/docs/install) mencantumkan setiap ekstra dan cakupannya.
 
@@ -105,12 +115,19 @@ diturunkan dari nama tersebut, termasuk suffix task, sehingga nama yang tidak
 cocok dengan checkpoint terbitan menghasilkan URL yang tidak ada. Tabel
 checkpoint pada setiap halaman model mencantumkan nama berkas terbitan persis.
 
-## Pelatihan macet atau dimulai ulang di Windows atau macOS
+## train() atau val() dipanggil di tingkat atas script Anda
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 Windows tidak memiliki `fork`, dan Python di macOS tidak memakainya secara
-default, sehingga worker dataloader dimulai dengan mengimpor ulang script. Tanpa guard `if __name__ == "__main__":`, setiap worker
-menjalankan ulang pemanggilan pelatihan, yang menyebabkan deadlock atau spawn
-process tanpa akhir.
+default, sehingga worker dataloader dimulai dengan mengimpor ulang script. Metode
+mulai `spawn` dan `forkserver` melakukan hal yang sama di platform mana pun. Tanpa
+guard `if __name__ == "__main__":`, setiap worker akan menjalankan ulang
+pemanggilan `train()` atau `val()` Anda, sehingga masing-masing berhenti pada
+pemanggilan itu, mencetak baris ini yang menyebut pemanggilannya, dan script keluar
+dengan error.
 
 ```python
 def main():

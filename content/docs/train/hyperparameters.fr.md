@@ -131,7 +131,7 @@ snippets:
         model = LibreYOLO("LibreYOLO9s.pt")
 
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Définir les arguments
@@ -245,6 +245,13 @@ Certaines familles ajoutent leurs propres paramètres de learning rate.
 `head_lr_mult` pour exécuter sa tête de décodage à dix fois le learning rate du
 backbone. Ces paramètres appartiennent à la sous-classe de configuration de la
 famille, pas à la classe de base.
+
+`clip_max_norm` écrête la norme L2 du gradient à cette valeur avant chaque pas de
+l'optimiseur, et `0` désactive l'écrêtage. YOLOv9, YOLOv9-E2E et YOLOv9-P2 le
+fixent à `10` par défaut. D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR,
+RT-DETRv2, RT-DETRv4, RF-DETR, DINOv2, GTR et EC le fixent à `0.1` par défaut.
+Dans la CLI, c'est `clip_max_norm=` ou `--clip-max-norm` ; voir
+[`libreyolo train`](/docs/cli/train) pour les familles qui l'y acceptent.
 
 ## EMA
 

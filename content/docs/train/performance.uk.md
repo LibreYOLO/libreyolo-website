@@ -69,7 +69,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: c8d7adb6aabcbc80
+source_hash: 766f7d68cb2233ad
 ---
 
 ## Вимірювання перед змінами
@@ -123,6 +123,10 @@ source_hash: c8d7adb6aabcbc80
 <code-tabs name="amp" />
 
 Float16 використовує масштабувач градієнтів; bfloat16 його вимикає. Виявлення D-FINE, DEIM, RT-DETRv4 і YOLO-NAS типово використовує `amp=True`. Dome-DETR, PP-YOLOE і YOLO-NAS OBB зберігають типові налаштування FP32. Передайте `amp=False`, щоб явно запитати FP32.
+
+YOLOv9, YOLOv9-E2E і YOLOv9-P2 оцінюють якорі для призначення міток у fp32 за
+будь-якого типу, бо сигмоїда сильно від'ємного логіта класу float16 зводиться до
+нуля й залишила б батч без позитивних якорів.
 
 Семантику аргументів, зокрема поведінку запиту bfloat16 на обладнанні без його
 підтримки, описано в розділі [Гіперпараметри](/docs/train/hyperparameters).

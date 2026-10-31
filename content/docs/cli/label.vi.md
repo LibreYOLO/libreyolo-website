@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: |
         libreyolo label share=true
-source_hash: bddad245877793b1
+source_hash: bc8acc78af75408f
 ---
 
 ## Cú pháp
@@ -84,6 +84,19 @@ hoặc tạo từ trình duyệt. Truyền `data=path/to/data.yaml` sẽ mở th
 và dòng khởi động báo số lượng ảnh, số lượng lớp đối tượng, và dataset có ghi
 được hay không. Một dataset chỉ đọc vẫn mở được và cho biết vì sao không ghi vào
 đó được.
+
+### Label-Error Radar
+
+Khi bật hỗ trợ bằng AI, nút Radar, hoặc phím `Y`, sẽ chạy mô hình hỗ trợ trên
+mọi ảnh đã gán nhãn và liệt kê các ảnh mà mô hình không đồng ý với nhãn, theo
+thứ tự từ tệ nhất:
+một box mà mô hình không tìm thấy gì bên trong, một phát hiện có độ tin cậy cao
+nhưng không có box, hoặc một box mà mô hình phản đối lớp đối tượng của nó. Radar
+không ghi gì cả; mọi sửa chữa đều là chỉnh sửa thủ công. `N` chuyển sang ảnh bị
+gắn cờ tiếp theo theo đúng thứ tự từ tệ nhất đó và quay vòng lại khi tới cuối.
+Nhấn `Y` lần nữa sẽ mở lại lần quét gần nhất, kèm thời điểm chạy và một nút
+Rescan, thay vì quét lại. Radar không khả dụng trên các dự án hộp xoay, và cả hai
+phím đều có thể gán lại trong hộp thoại phím tắt `?`.
 
 ### Chia sẻ, và `host` làm gì
 

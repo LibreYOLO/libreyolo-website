@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 
 ## Definizione
@@ -213,8 +213,10 @@ libreria, quindi un modello addestrato su uno scheletro diverso restituisce un
 terza colonna dei keypoint è una proprietà del checkpoint: EdgeCrafter ci scrive
 una costante invece di un punteggio per punto, e non ha affatto una testa per i
 box, quindi ognuno dei suoi box pose è l'estensione che racchiude i keypoint di
-quella stessa istanza. Vedi [predizione](/docs/predict) per sorgenti, streaming
-e gestione dei risultati.
+quella stessa istanza. `agnostic_nms=True` sopprime i box sovrapposti tra classi
+e scarta i keypoint di ogni istanza soppressa insieme al suo box; HRNet solleva
+`NotImplementedError` per esso. Vedi [predizione](/docs/predict) per sorgenti,
+streaming e gestione dei risultati.
 
 ## Formato del dataset
 
@@ -299,7 +301,7 @@ gruppo small. I valori corrispondenti di average recall sono
 `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` e
 `metrics/keypoints_AR_L`. Ogni chiave di questo task ha il prefisso
 `keypoints_`, quindi le chiavi `mAP` dei box che restituisce un rilevatore non
-compaiono.
+compaiono. `val(agnostic_nms=True)` solleva `ValueError` su questo task.
 
 ## Esportazione
 

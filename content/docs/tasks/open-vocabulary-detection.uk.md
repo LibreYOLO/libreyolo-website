@@ -18,7 +18,7 @@ keywords:
   - OWLv2
   - OMDet-Turbo
   - виявлення за текстовою підказкою
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -74,7 +74,7 @@ snippets:
         # Лише Grounding DINO приймає text_threshold; інші спричиняють помилку.
 
         result = model.predict(SAMPLE_IMAGE, conf=0.25, text_threshold=0.3)
-source_hash: 10f41b40f357b037
+source_hash: 1a68c35b50bf0f3f
 ---
 
 ## Визначення
@@ -148,7 +148,7 @@ pip install "libreyolo[openvocab]"
 дискримінативними детекторами, які безпосередньо видають оцінки, тоді як
 рівень VLM генерує їх.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) і [North Micro Vision](/docs/models/northmicrovision) розширюють вибір детекторів `LibreVLM`. [Molmo2](/docs/models/molmo2) повертає точки. Для запитів клацання за інструкцією замість словника виявлення використовуйте [LibreGround](/docs/reference/ground-api).
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) і [WeVisOne-VL](/docs/models/wevisone-vl) розширюють вибір детекторів `LibreVLM`. [Molmo2](/docs/models/molmo2) повертає точки. Для запитів клацання за інструкцією замість словника виявлення використовуйте [LibreGround](/docs/reference/ground-api).
 
 ## Передбачення
 

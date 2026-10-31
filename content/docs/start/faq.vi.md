@@ -15,7 +15,7 @@ keywords:
   - cli libreyolo
   - dùng libreyolo offline
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 ## Tôi nên bắt đầu với mô hình nào?
 
@@ -87,9 +87,13 @@ khi thử. Xem [khái niệm cốt lõi](/docs/concepts).
 Một dictionary có khóa là tên metric. Các khóa detection gồm
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` và
 `metrics/mAP50-95`, đồng thời kết quả detection và segmentation còn chứa kết quả
-theo từng ảnh trên `metrics.box`. Những tác vụ khác trả về các khóa phù hợp, chẳng hạn
+theo từng ảnh cùng các đường cong precision, recall và F1 theo từng lớp đối tượng
+trên `metrics.box`. Kết quả detection, segmentation và classification chứa
+`metrics.confusion_matrix`, và classification thêm `metrics.top1` và
+`metrics.top5`. Những tác vụ khác trả về các khóa phù hợp, chẳng hạn
 `metrics/accuracy_top1` cho classification hoặc `metrics/PQ`, `metrics/SQ` và
-`metrics/RQ` cho panoptic segmentation.
+`metrics/RQ` cho panoptic segmentation. Xem
+[Xác thực và metric](/docs/train/validation).
 
 ## Làm sao chạy trên thư mục, video hoặc webcam?
 

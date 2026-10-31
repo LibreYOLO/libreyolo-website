@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## O que é capturado
@@ -135,8 +135,7 @@ importa.
 
 ## Suporte no treinamento
 
-A captura no treinamento passou de duas famílias para 24 nesta versão, em cinco
-tarefas.
+A captura no treinamento cobre 24 famílias em cinco tarefas.
 
 | Tarefa | Famílias |
 |---|---|

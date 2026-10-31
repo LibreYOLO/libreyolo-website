@@ -46,7 +46,7 @@ snippets:
         metadata["imgsz"])
 
         print(len(state_dict), "tensors")
-source_hash: 177904564cf0a488
+source_hash: 842796593836710a
 ---
 
 ## スキーマv1.0
@@ -82,6 +82,8 @@ source_hash: 177904564cf0a488
 `task`は`detect`、`segment`、`semantic`、`panoptic`、`pose`、`classify`、`gaze`、`obb`、`point`、`depth`、`edge`、`normal`、`restore`、`matte`、`ocr`、`embed`、`mesh`のいずれかです。
 
 公式チェックポイントはすべての`names`キーを書き込みます。リーダーはレガシーの疎なマッピングに対し、欠けたキーを`class_i`ラベルで埋めることがありますが、範囲外のキーは無効です。
+
+分類チェックポイントには、モデルのリサイズフィルターである`interpolation`を追加できます。`"bilinear"`、`"bicubic"`、`"nearest"`、`"bilinear_no_antialias"`のいずれかです。`save()`、`best.pt`、`last.pt`がこれを書き込み、読み込み時に復元されるため、学習、`val()`、`predict()`、INT8キャリブレーション、エクスポートは、チェックポイントが保存されたときのフィルターを維持します。このキーがないチェックポイントはファミリーのデフォルトを維持し、それ以外の値は無効です。最初の3つはPillowでリサイズし、Pillowは縮小時にアンチエイリアスをかけます。`"bilinear_no_antialias"`はハーフピクセル中心のプレーンなバイリニアで、アンチエイリアスをかけません。
 
 長方形チェックポイントは、レガシーリーダー向けに`max(imgsz_h, imgsz_w)`を設定したスカラー`imgsz`を維持し、実際の寸法を持つ`imgsz_h`と`imgsz_w`も書き込みます。長方形フィールドを認識するリーダーは、スカラーよりこれらを優先する必要があります。HRNet姿勢推定のように固定長方形規約を持つファミリーは、互換性のない実行時サイズを拒否します。
 
@@ -160,7 +162,7 @@ NMSを組み込んだエクスポートは、次のフラットなキーを追�
 
 姿勢推定エクスポートは`num_keypoints`を追加できます。`keypoint_dim`では、テンソルにprecisionまたはclass-logitフィールドを含むGroupPose形式の未加工エクスポートが`8`などの大きな値を使うことがあります。`num_keypoints_per_class`はJSONエンコードされたリストで、キーポイントが0個のクラススロットもスキーマを定義するため維持する必要があります。`pose_input`では、`"person_crop"`がグラフはすでに切り出された1つのcropを消費し、検出器を含まないことを意味します。HRNetランタイムエクスポートにはこの値が必要です。
 
-分類エクスポートは`crop_pct`を追加できます。中心crop比率を示す浮動小数点数で、crop前のリサイズ先は`round(imgsz / crop_pct)`となり、省略時のデフォルトは`0.875`です。`interpolation`は`"bilinear"`または`"bicubic"`で、デフォルトは`"bilinear"`です。
+分類エクスポートは`crop_pct`を追加できます。中心crop比率を示す浮動小数点数で、crop前のリサイズ先は`floor(imgsz / crop_pct)`となり、省略時のデフォルトは`0.875`です。`interpolation`は上記のチェックポイントの4つの値のいずれかで、省略時のデフォルトは`"bilinear"`です。リーダーはそれ以外の値を拒否します。
 
 ExecuTorchエクスポートは、必須の`<program>.pte.json`サイドカーにフラットなメタデータを書き込みます。v1規約はCPU、FP32、バッチ1、固定入力キャンバスで、さらに`executorch_version`、`"xnnpack"`と等しい`executorch_delegate`、正の`executorch_delegate_partitions`を必要とします。別のdelegate、動的形状、FP32以外の精度を主張するサイドカーはローダーが拒否します。
 

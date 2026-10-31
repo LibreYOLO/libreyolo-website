@@ -48,7 +48,7 @@ snippets:
         # stream=True trả về generator, mỗi frame hoặc ảnh một Results.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Khởi tạo
@@ -80,6 +80,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -106,6 +107,7 @@ model(
 | `device` | `None` | Override thiết bị cho lệnh gọi này |
 | `classes` | `None` | Chỉ giữ các ID lớp này |
 | `max_det` | `300` | Số detection tối đa mỗi ảnh |
+| `agnostic_nms` | `False` | Chỉ giữ box có điểm cao nhất trong các box chồng lấn vượt `iou`, bất kể lớp. Detect, segment, pose và obb |
 | `augment` | `False` | Test-time augmentation |
 | `save` | `False` | Ghi ảnh hoặc video đã chú thích |
 | `batch` | `1` | Số ảnh mỗi forward pass cho source thư mục và danh sách |
@@ -214,9 +216,18 @@ mục đầu ra là `project/name`, với hậu tố tăng dần trừ khi `exis
 là alias của `save_plots`. `allow_download_scripts` kiểm soát Python nhúng mà YAML
 dataset có thể chứa trong trường `download`.
 
+Với detect và segment, dictionary là một lớp con của `dict` có thêm `box` (chỉ số
+theo từng ảnh và các đường cong precision, recall và F1 theo từng lớp đối tượng)
+và `confusion_matrix`; với classify nó mang `top1`, `top5` và `confusion_matrix`.
+Xem [Xác thực và metric](/docs/train/validation).
+
 `faster_coco_eval` được nhận qua `**kwargs`, mặc định `True`, và quay về
 pycocotools khi package chưa được cài. Backend đã chạy được báo trong
 `model.last_eval_backend`.
+
+`agnostic_nms=True`, cũng qua `**kwargs`, áp dụng NMS không phân biệt lớp ở `iou`
+trước khi chấm điểm. Nó bao phủ detect và segment và báo `ValueError` ở mọi tác
+vụ khác.
 
 Xác thực có augmentation báo lỗi với tác vụ `obb` và `pose`.
 

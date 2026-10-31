@@ -11,7 +11,7 @@ keywords:
   - libreyolo 커맨드 라인 인터페이스
   - libreyolo 오프라인
 last_verified: 1.6.0
-source_hash: 13810bf9ea01c459
+source_hash: 0ca5ebe0f53a92a3
 ---
 
 ## 어떤 모델부터 시작해야 하나요?
@@ -50,7 +50,7 @@ CNN 검출기용 YOLOv9와 트랜스포머용 RF-DETR. 두 모델 모두 플래�
 
 ## val은 무엇을 반환합니까?
 
-지표 이름을 키로 하는 사전입니다. 탐지 키에는 `metrics/precision`, `metrics/recall`, `metrics/mAP50` 및 `metrics/mAP50-95`가 포함되며, 탐지와 분할 결과는 `metrics.box`에 이미지별 결과도 담습니다. 다른 작업은 분류의 경우 `metrics/accuracy_top1`와 같이 해당 작업에 맞는 키를 반환하거나 전경-배경 분할을 위한 `metrics/PQ`, `metrics/SQ` 및 `metrics/RQ`와 같은 키를 반환합니다.
+지표 이름을 키로 하는 사전입니다. 탐지 키에는 `metrics/precision`, `metrics/recall`, `metrics/mAP50` 및 `metrics/mAP50-95`가 포함되며, 탐지와 분할 결과는 `metrics.box`에 이미지별 결과와 클래스별 정밀도, 재현율, F1 곡선도 담습니다. 탐지, 분할, 분류 결과는 `metrics.confusion_matrix`를 담고, 분류는 `metrics.top1`과 `metrics.top5`를 더합니다. 다른 작업은 분류의 경우 `metrics/accuracy_top1`와 같이 해당 작업에 맞는 키를 반환하거나 전경-배경 분할을 위한 `metrics/PQ`, `metrics/SQ` 및 `metrics/RQ`와 같은 키를 반환합니다. [검증과 지표](/docs/train/validation)를 참조하십시오.
 
 ## 폴더, 비디오 또는 웹캠에서 어떻게 실행하나요?
 

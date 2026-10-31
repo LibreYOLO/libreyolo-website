@@ -104,7 +104,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## インストール
@@ -131,7 +131,7 @@ pip install libreyolo
 
 ## 学習
 
-`train()` は公開済みチェックポイントをファインチューニングします。デフォルトの手順はアップストリームの報告にあるlinear probeです。ViTバックボーンを凍結して1x1 dense headだけを学習し、上記のLibreYOLOホストの重みが生成された方法に合わせます。ネットワーク全体をファインチューニングするには `freeze_backbone=False` を渡し、それに応じて `lr0` を下げることを想定してください。
+`train()` は公開済みチェックポイントをファインチューニングします。デフォルトの手順はアップストリームの報告にあるlinear probeです。ViTバックボーンを凍結して1x1 dense headだけを学習し、上記のLibreYOLOホストの重みが生成された方法に合わせます。ネットワーク全体をファインチューニングするには `freeze_backbone=False` を渡し、それに応じて `lr0` を下げることを想定してください。`libreyolo train`も同じ手順から始まり、`name=`を指定しない場合、実行結果は`runs/train/lingbotvision_exp`に保存されます。
 
 <code-tabs name="train" />
 

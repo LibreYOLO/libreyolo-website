@@ -20,7 +20,7 @@ meta:
     value: data
     mono: true
   - label: 出力
-    value: runs/train/<name>配下のチェックポイント・指標・ログ。YOLO9はyolo9_expを使用
+    value: runs/train/<name>配下のチェックポイント・指標・ログ。name=がない場合はyolo9_expなどファミリー独自の実行名
 snippets:
   examples:
     - label: 基本
@@ -45,7 +45,7 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=coco8.yaml \
           epochs=50 batch=8 optimizer=adamw lr0=0.001 weight_decay=0.0001 \
           patience=20 save_period=5 project=runs/train name=yolo9s-coco8 exist_ok=true
-source_hash: 30b2c16d339f5f50
+source_hash: 5916562e70ea1d8a
 ---
 
 ## 書式
@@ -75,9 +75,9 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 引数 | デフォルト値 | 意味 |
 |---|---|---|
 | `epochs` | `300` | 学習エポック数 |
-| `batch` | `16` | デバイスあたりのバッチサイズ |
+| `batch` | `16` | バッチサイズ。複数GPUではグローバルバッチで、各GPUに均等に分割 |
 | `imgsz` | `640` | 学習時の画像サイズ：`640`（正方形）または`480x640`（HxW） |
-| `device` | `auto` | デバイス：`0`、`cpu`、`mps`、`auto` |
+| `device` | `auto` | デバイス：`0`、`cpu`、`mps`、`auto`。`0,1`や`[0,1]`のようなGPUのリストを指定すると、それらのGPUで学習 |
 | `workers` | `4` | データローダーのワーカー数 |
 | `cache` | `false` | データ読み込みを高速化するために画像をキャッシュ：`ram`、`disk`、`true`、`false` |
 | `seed` | `0` | 乱数シード |
@@ -106,6 +106,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `momentum` | `0.937` | SGDのモーメンタム、およびAdam系オプティマイザーの一次モーメント係数 |
 | `weight_decay` | `0.0005` | L2正則化 |
 | `nesterov` | `true` | Nesterovモーメンタム |
+| `clip_max_norm` | | 各オプティマイザーステップの前に、勾配のL2ノルムをこの値にクリップ。`0`でクリッピングを無効化。未設定の場合はファミリーの値を適用 |
 
 ### スケジューラー
 
@@ -156,7 +157,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | 引数 | デフォルト値 | 意味 |
 |---|---|---|
 | `project` | `runs/train` | 出力ディレクトリのルート |
-| `name` | `exp` | 実験名 |
+| `name` | | 実験名。未設定の場合は、`yolo9_exp`や`dfine_exp`など、ファミリーの`train()`が使う名前を使用 |
 | `exist_ok` | `false` | 既存の出力ディレクトリを再利用 |
 | `save_period` | `10` | Nエポックごとにチェックポイントを保存 |
 | `log_interval` | `10` | Nバッチごとに損失を記録 |
@@ -181,7 +182,7 @@ libreyolo train data=<dataset.yaml> [model=<name|path>] [key=value ...]
 | `average_best` | `0` | 監視する指標で上位N個のチェックポイントを均等に平均し、学習終了時にweights/average.ptへ保存（0で無効） |
 | `export_check` | `False` | エポック1の前にONNXへエクスポートし、失敗した場合は実行を停止（デフォルトは無効） |
 | `precise_bn` | `0` | 最後のエポック後に、この数の学習画像からBatchNormの移動統計を再計算（0で無効） |
-| `aux_weight` | | YOLO9のみ：ファインチューニング時のPGI補助分岐の損失の重み。未設定の場合は`0.25`、`0`で主ヘッドのみを学習 |
+| `aux_weight` | | YOLO9のみ：PGI補助分岐の損失の重み。値を指定するとその重みで新しい分岐を付け、`0`で主ヘッドのみを学習。未設定の場合、重みがPGIテンソルを持つかゼロから学習するときだけ`0.25`で分岐を付ける |
 | `fliplr` | `None` | 水平反転の確率（flip_probの別名） |
 | `flipud` | `0.0` | 垂直反転の確率 |
 | `auto_augment` | `None` | 分類の自動データ拡張方針：randaugment、autoaugment、augmix（デフォルトはなし） |
@@ -225,8 +226,8 @@ RF-DETRとDEIMv2は`imgsz`が明示的に設定されたときだけ値を渡す
 そこでは何にも届きません。ECは同じパイプラインを使いますが、タスクが姿勢推定の
 ときは`hsv_prob`、`degrees`、`translate`を読みます。分類系のファミリーは、分類系
 ではバッチMixUpとなる`mixup`を除いてその一式を無視し、`flip_prob`は読みます。
-SegFormerとNAFNetは、反転が設定可能な確率ではなく固定の確率で行われるため、その
-一式全体に加えて`flip_prob`も無視します。YOLO-NASは代わりに常時有効なサンプルごとの
+SegFormer、LingBot-Vision、NAFNetは、反転が設定可能な確率ではなく固定の確率で
+行われるため、その一式全体に加えて`flip_prob`も無視します。YOLO-NASは代わりに常時有効なサンプルごとの
 アフィン変換でデータ拡張するため、`mosaic`だけを無視します。RF-DETRはそのリストに
 加えてさらに3つ、`optimizer`、`momentum`、`nesterov`を無視します。
 
@@ -244,6 +245,21 @@ SegFormerとNAFNetは、反転が設定可能な確率ではなく固定の確�
 `lora=true`を受け付けるのはRF-DETR、D-FINE、DEIM、DEIMv2、RT-DETRのv1、v2、v4、
 EC、GTR、ConvNeXtです。ほかのファミリーはLoRAなしで学習するのではなく、
 `config_unsupported`で終了します。
+
+`clip_max_norm`を受け付けるのは、学習設定でこれを宣言しているファミリーです：
+YOLOv9、YOLOv9-E2E、YOLOv9-P2ではデフォルトが`10`、D-FINE、Dome-DETR、DEIM、
+DEIMv2、TinyFormer、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、DINOv2、GTRでは
+デフォルトが`0.1`です。ほかのファミリーは`config_unsupported`で終了し、負の値や
+有限でない値は`config_type_error`で終了します。
+
+`device=0,1`は、リストの最初のGPU上にモデルを構築し、リストを`train()`に渡します。
+`train()`はGPUごとに1つのプロセスを起動します。
+[マルチGPU学習](/docs/train/multi-gpu)を参照してください。
+
+RF-DETRには検出からセグメンテーションへの転移がありません。RF-DETRのセグメンテーション
+チェックポイントで`task=segment`を指定すると、チェックポイントのメタデータがタスクを
+決めるため、ファイル名にかかわらずそのチェックポイントを読み込みます。一方、検出
+チェックポイントでは、学習されていないマスクヘッドを学習する代わりにエラーで停止します。
 
 `pretrained=false`と`resume`の併用は、両者が正反対のことを求めているため、ゼロ
 からの学習に対応するファミリーでは拒否されます。

@@ -79,7 +79,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 7dc6a5ef1b3ba9ea
+source_hash: 93a9e4b50df2bc1c
 ---
 
 ## Points d'entrée
@@ -93,11 +93,12 @@ et non leur architecture.
 | `LibreSAM` | Segmenteurs guidables, par alias de taille | Points, bounding boxes ou texte conceptuel | `sam` |
 | `LibreVLM` | Détecteurs vision-langage génératifs, par alias | Vocabulaire de classes ou prompt libre | `vlm` |
 | `LibreOpenVocab` | Détecteurs conditionnés par du texte, par alias | Vocabulaire de classes | `openvocab` |
+| `LibreGen` | Modèles génératifs, par alias ou répertoire de modèle local | Un prompt texte (texte vers image) ou une image (image vers 3D) | `gen` |
 | `LibreEnsemble` | Au moins deux détecteurs, fusionnés derrière une interface | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO` accepte des fichiers de checkpoint et des artefacts exportés. Les fabriques associées acceptent des alias de modèles ; `LibreVLM` et `LibreVLA` rechargent aussi leurs propres répertoires de checkpoints sauvegardés.
+`LibreYOLO` accepte des fichiers de checkpoint et des artefacts exportés. Les fabriques associées acceptent des alias de modèles ; `LibreVLM` et `LibreVLA` rechargent aussi leurs propres répertoires de checkpoints sauvegardés, et `LibreGen` charge un répertoire de modèle local au format upstream d'une famille prise en charge.
 
 ```python
 LibreYOLO(
@@ -170,9 +171,10 @@ Les niveaux frères exportent également leurs classes de familles : `LibreSAM1
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
 `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
 `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (également orthographié
-`LibreModus`) ; `LibreShowUI`, `LibreGroundFlorence2` et `LibreGroundQwen3VL`
+`LibreModus`), `LibreWeVisOneVL` ; `LibreShowUI`, `LibreGroundFlorence2` et `LibreGroundQwen3VL`
 derrière `LibreGround` ; `LibreSmolVLA`, `LibreACT` et `LibreDiffusionPolicy`
-derrière `LibreVLA`.
+derrière `LibreVLA` ; `LibreFlux2Klein`, `LibreSanaSprint` et
+`LibreSperidlabsIdol` derrière `LibreGen`.
 
 ## Interface de prédiction
 
@@ -189,6 +191,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -211,6 +214,13 @@ répertoire en renvoie une liste, tandis que `stream=True` renvoie un
 générateur. Les autres méthodes de l'objet modèle sont documentées sur la page
 de l'[API du modèle](/docs/reference/model-api).
 
+`agnostic_nms=True` exécute une NMS indépendante des classes : parmi les boîtes
+qui se chevauchent au-delà de `iou`, seule celle au score le plus élevé est
+conservée, quelles que soient leurs classes. Elle s'exécute sur les détections
+terminées de la famille, après le filtre `classes`, et couvre les tâches
+detect, segment, pose et OBB, avec un IoU pivoté pour les boîtes orientées. Sur
+toute autre tâche, elle lève `ValueError`.
+
 ## Charges utiles Results
 
 `Results` et ses classes de charges utiles sont exportés au niveau du
@@ -221,6 +231,8 @@ package : `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`,
 [types de résultats](/docs/reference/results-types).
 
 `Boxes3D`, `AlbedoMap` et `Actions` ajoutent les cuboïdes 3D, l'albédo intrinsèque et les séquences d'actions. Consultez les [types de résultats](/docs/reference/results-types).
+
+`GeneratedImage` et `Gaussians` portent la sortie de `LibreGen` : une image générée dans `Results.generated` et un objet 3D généré dans `Results.gaussians`.
 
 ## Backends
 

@@ -67,7 +67,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: c8d7adb6aabcbc80
+source_hash: 766f7d68cb2233ad
 ---
 ## Đo trước khi thay đổi bất cứ thứ gì
 
@@ -120,6 +120,10 @@ autocast. `amp_dtype` chọn `float16` hoặc `bfloat16`.
 <code-tabs name="amp" />
 
 Float16 dùng gradient scaler; bfloat16 tắt nó. Phát hiện D-FINE, DEIM, RT-DETRv4 và YOLO-NAS mặc định dùng `amp=True`. Dome-DETR, PP-YOLOE và YOLO-NAS OBB giữ mặc định FP32. Truyền `amp=False` để yêu cầu FP32 rõ ràng.
+
+YOLOv9, YOLOv9-E2E và YOLOv9-P2 chấm điểm anchor cho việc gán nhãn ở fp32 dưới cả
+hai dtype, vì sigmoid của một logit lớp float16 âm mạnh bị underflow về không và
+sẽ để một batch không còn anchor dương nào.
 
 Ngữ nghĩa đối số, gồm hành vi của yêu cầu bfloat16 trên phần cứng không hỗ trợ
 bfloat16, nằm trong [Siêu tham số](/docs/train/hyperparameters).

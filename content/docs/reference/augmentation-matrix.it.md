@@ -42,7 +42,7 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: f0d31511715e3cc4
+source_hash: beeb351c2f97e3d0
 ---
 
 ## I parametri
@@ -61,7 +61,7 @@ e la CLI mappano le grafie brevi su di essi, quindi `mosaic` imposta `mosaic_pro
 | `mosaic_scale` | Intervallo di scala casuale per la trasformazione affine |
 | `mixup_scale` | Intervallo di scala del jitter applicato all'immagine partner del MixUp |
 | `shear` | Intervallo di shear casuale per la trasformazione affine, in gradi |
-| `perspective` | Entità della deformazione prospettica per la trasformazione affine |
+| `perspective` | Intensità della deformazione proiettiva aggiunta alla trasformazione affine: gli angoli del canvas si spostano verso l'interno fino a `min(perspective * 100, 0.2)` volte metà lato del canvas, per asse; `0` la disattiva |
 | `flipud` | Probabilità di flip verticale |
 | `no_aug_epochs` | Epoche finali addestrate con la data augmentation forte disattivata |
 | `auto_augment` | Policy AutoAugment per la classificazione: randaugment, autoaugment o augmix |
@@ -126,13 +126,13 @@ La pipeline di tipo DETR usa una trasformazione senza mosaic. Distorsione fotome
 | Archetipo | Famiglie |
 |---|---|
 | Stile YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas` |
-| Stile DETR | `dfine`, `domedetr`, `deim`, `deimv2`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Classificazione | `resnet`, `convnext`, `mobilenetv4`, `efficientnetv2` |
-| Semantica | `segformer` |
+| YOLO-NAS | `yolonas`, `ppyoloe` |
+| Stile DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
+| Classificazione | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
+| Semantica | `segformer`, `unet`, `lingbotvision` |
 | Restauro | `nafnet` |
 
-Sono coperte venticinque famiglie. Una famiglia fuori da questo elenco
+Sono coperte trentuno famiglie. Una famiglia fuori da questo elenco
 restituisce un insieme di parametri ignorati vuoto, quindi per essa non viene
 emesso alcun avviso.
 
@@ -145,6 +145,8 @@ emesso alcun avviso.
 | `rtdetr` | `flipud` ignorato |
 | `rtdetrv2` | `flipud` ignorato |
 | `fomo` | `perspective` e `flipud` ignorati |
+| `ppyoloe` | `flipud` ignorato: la ricetta originale usa invece una rotazione casuale di 90 gradi |
+| `gtr` | `mosaic_prob` e `mixup_prob` usati, per le prime `mosaic_epochs` epoche; `degrees`, `translate` e `mosaic_scale` determinano l'affine che segue il mosaic |
 | `ec` | `hsv_prob`, `degrees` e `translate` usati, solo per `task="pose"`; detect e segment usano ricette fotometriche fisse |
 | `dinov2` | Il pacchetto di classificazione è usato, solo per `task="classify"` |
 

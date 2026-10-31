@@ -118,7 +118,7 @@ snippets:
         # Ключи в yaml — имена полей TrainConfig. Явные kwargs побеждают.
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: ca1259a10e05a51d
+source_hash: 3ae91092dda49658
 ---
 
 ## Задание аргументов
@@ -227,6 +227,13 @@ L2-слагаемое, а `nesterov` относится к SGD.
 `clip_max_norm` задаёт обрезку градиентов, а SegFormer использует
 `head_lr_mult`, чтобы его декодирующая голова обучалась со скоростью в десять раз
 выше, чем у бэкбона. Эти поля живут в подклассе конфигурации семейства, а не в базовом.
+
+`clip_max_norm` обрезает L2-норму градиента до этого значения перед каждым шагом
+оптимизатора, а `0` отключает обрезку. У YOLOv9, YOLOv9-E2E и YOLOv9-P2 по
+умолчанию он равен `10`. У D-FINE, Dome-DETR, DEIM, DEIMv2, TinyFormer, RT-DETR,
+RT-DETRv2, RT-DETRv4, RF-DETR, DINOv2, GTR и EC по умолчанию он равен `0.1`. В
+CLI это `clip_max_norm=` или `--clip-max-norm`; семейства, которые принимают его
+там, перечислены в [`libreyolo train`](/docs/cli/train).
 
 ## EMA
 

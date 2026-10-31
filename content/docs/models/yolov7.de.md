@@ -118,7 +118,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 361e81de5614a571
+source_hash: 7104f0fd056896b9
 ---
 
 ## Installation
@@ -148,6 +148,8 @@ LibreYOLO stellt eine Größe bereit: `b`. Das Upstream-Projekt veröffentlicht 
 `pretrained` wird tatsächlich ausgewertet, anders als das gleichnamige wirkungslose Argument bei einigen anderen Familien. Übergib `True` für einen Warmstart mit dem veröffentlichten und automatisch heruntergeladenen Checkpoint `LibreYOLO7b.pt` oder einen Pfad beziehungsweise Namen für andere Gewichte. Der veröffentlichte Checkpoint besitzt 80 COCO-Klassen. Wird er für ein bereits auf eine andere Klassenanzahl umgebautes Modell angefordert, baut LibreYOLO zunächst auf 80 Klassen zurück und lädt den Checkpoint. Sobald die Klassenanzahl des Datensatzes bekannt ist, werden anschließend alle Tensoren mit passender Form in den Zielkopf übertragen. `resume=True` lässt sich nicht mit `pretrained` kombinieren. Beim Standardwert `None` wird das Training mit dem Zustand fortgesetzt, mit dem das Modell erstellt wurde, oder ohne geladene Gewichte mit zufälliger Initialisierung.
 
 Ohne weitere Angaben führt der Trainer 300 Epochen mit `lr0=0.01`, SGD-Momentum 0,937, einem Warmup über 3 Epochen sowie derselben SimOTA-Zuweisung und abschließenden 15 Epochen ohne Augmentation wie YOLOX aus. Dies ist an den Anchor-basierten Kopf angepasst. Es gibt einen Unterschied: YOLOX ergänzt in den letzten Epochen eine L1-Verfeinerung der Boxregression, die v7 auslässt, da der SimOTA-Loss von v7 keinen L1-Zweig für Roh-Offsets enthält.
+
+Mosaic und MixUp sind standardmäßig beide aktiv (`mosaic_prob=1.0`, `mixup_prob=1.0`). Die Samples durchlaufen die YOLOv9-Mosaic-Pipeline, deren MixUp das Mischverhältnis aus Beta(1, 1) zieht, gleichverteilt auf [0, 1], wie es MultimediaTechLab/YOLO tut.
 
 Unter [Training](/docs/train) findest du Informationen zu Datensätzen, Augmentation, Multi-GPU und Loggern.
 

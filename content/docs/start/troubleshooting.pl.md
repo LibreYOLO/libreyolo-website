@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - rozwiązywanie problemów libreyolo
 last_verified: 1.6.0
-source_hash: f2faaab56a2f0415
+source_hash: 754a74f67274fca4
 ---
 
 Błędy są pogrupowane według wyświetlanego tekstu. Jeśli danego komunikatu nie
@@ -34,6 +34,16 @@ Uruchom `libreyolo models`. Każda rodzina z brakującą zależnością jest
 wyświetlana wraz z dokładnym poleceniem pip, które ją włącza. Nie trzeba więc
 samodzielnie przyporządkowywać pakietu do zestawu zależności. Polecenie
 `libreyolo models --json` wyświetla te same dane jako obiekt.
+
+RF-DETR i DINOv2 wymagają `libreyolo[rfdetr]`, a ich komunikat podaje nazwę tego
+zestawu opcjonalnych zależności. Bez niego `LibreYOLO("LibreRFDETRn.pt")`, nazwy
+wag DINOv2 i `libreyolo predict model=rfdetr-n` kończą się linią instalacji, a
+CLI kończy działanie z `model_load_failed`:
+
+```
+ModuleNotFoundError: RF-DETR support requires extra dependencies.
+Install with: pip install libreyolo[rfdetr]
+```
 
 Na [stronie instalacji](/docs/install) znajduje się lista wszystkich zestawów
 opcjonalnych zależności i ich zastosowań.
@@ -111,13 +121,19 @@ opublikowanym checkpointem prowadzi do nieistniejącego adresu URL. Tabela
 checkpointów na stronie każdego modelu zawiera dokładne nazwy opublikowanych
 plików.
 
-## Trenowanie zawiesza się lub uruchamia ponownie w systemie Windows lub macOS
+## train() lub val() zostało wywołane na najwyższym poziomie skryptu
+
+```
+LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+```
 
 System Windows nie ma mechanizmu `fork`, a Python w systemie macOS domyślnie go
 nie używa, dlatego procesy robocze modułu wczytującego dane rozpoczynają pracę
-od ponownego importu skryptu. Bez warunku
-`if __name__ == "__main__":` każdy proces roboczy ponownie wykonuje wywołanie
-trenowania, co powoduje zakleszczenie albo tworzenie procesów bez końca.
+od ponownego importu skryptu. Metody startu `spawn` i `forkserver` robią to samo
+na każdej platformie. Bez warunku `if __name__ == "__main__":` każdy proces
+roboczy ponownie wykonałby wywołanie `train()` lub `val()`, więc każdy z nich
+zatrzymuje się na tym wywołaniu, wypisuje tę linię z nazwą wywołania, a skrypt
+kończy działanie z błędem.
 
 ```python
 def main():

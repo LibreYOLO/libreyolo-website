@@ -1,10 +1,27 @@
 ---
 title: YOLOv9
-families: [yolo9]
-seo_title: "YOLOv9: preveja, treine e exporte sob a MIT"
-description: "Rode o YOLOv9 no LibreYOLO, incluindo a cabeça end-to-end sem NMS e a cabeça de stride 4 para objetos pequenos. Instale, faça predições, treine, valide e exporte."
-lead: "Um detector convolucional de estágio único: uma passada pontua uma grade densa de caixas e o NMS descarta as duplicadas. O LibreYOLO traz três variantes dele, uma delas sem etapa de NMS."
-keywords: [YOLOv9, YOLO9, detecção de objetos, detecção sem NMS, detecção end-to-end, detecção de objetos pequenos, yolov9 python, treinar yolov9, programmable gradient information, GELAN]
+families:
+  - yolo9
+seo_title: 'YOLOv9: preveja, treine e exporte sob a MIT'
+description: >-
+  Rode o YOLOv9 no LibreYOLO, incluindo a cabeça end-to-end sem NMS e a cabeça
+  de stride 4 para objetos pequenos. Instale, faça predições, treine, valide e
+  exporte.
+lead: >-
+  Um detector convolucional de estágio único: uma passada pontua uma grade densa
+  de caixas e o NMS descarta as duplicadas. O LibreYOLO traz três variantes
+  dele, uma delas sem etapa de NMS.
+keywords:
+  - YOLOv9
+  - YOLO9
+  - detecção de objetos
+  - detecção sem NMS
+  - detecção end-to-end
+  - detecção de objetos pequenos
+  - yolov9 python
+  - treinar yolov9
+  - programmable gradient information
+  - GELAN
 last_verified: 1.6.0
 snippets:
   predict:
@@ -25,13 +42,19 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Sem NMS
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO, SAMPLE_IMAGE
 
+
         # Mesma chamada, checkpoint diferente. A cabeça end-to-end devolve suas
-        # próprias predições de maior pontuação, então nenhum NMS roda e iou é ignorado.
+
+        # próprias predições de maior pontuação, então nenhum NMS roda e iou é
+        ignorado.
+
         model = LibreYOLO("LibreYOLO9E2Es.pt")
+
         result = model(SAMPLE_IMAGE, conf=0.25, max_det=300)
+
 
         print(len(result.boxes))
   train:
@@ -49,14 +72,20 @@ snippets:
           epochs=100 imgsz=640 batch=16
     - label: Objetos pequenos
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO9P2
 
+
         # A variante de stride 4 não tem checkpoint COCO próprio, então indique
+
         # um de detecção base: o backbone e o neck dele carregam sem alterações
+
         # e a torre da cabeça de stride 4 parte de inicialização aleatória.
+
         model = LibreYOLO9P2(None, size="s")
-        model.train(data="my-dataset.yaml", epochs=100, pretrained="LibreYOLO9s.pt")
+
+        model.train(data="my-dataset.yaml", epochs=100,
+        pretrained="LibreYOLO9s.pt")
   val:
     - label: Python
       language: python
@@ -74,9 +103,12 @@ snippets:
         libreyolo val model=LibreYOLO9s.pt data=my-dataset.yaml
     - label: Contra o COCO
       language: bash
-      code: |
+      code: >
         # O yaml de COCO que vem junto carrega um script de download embutido,
-        # então ele precisa de permissão explícita a menos que o dataset já esteja local.
+
+        # então ele precisa de permissão explícita a menos que o dataset já
+        esteja local.
+
         libreyolo val model=LibreYOLO9c.pt data=coco.yaml imgsz=640 \
           allow_download_scripts=True
   export:
@@ -107,7 +139,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 624f3e70d2937683
+source_hash: c322dd68d42cdf24
 ---
 
 ## Instalação
@@ -174,9 +206,29 @@ checkpoint de detecção base no lugar.
 Veja [treinamento](/docs/train) para datasets, data augmentation, multi-GPU e
 loggers.
 
-Novos fine-tunings de detecção padrão ativam um ramo PGI exclusivo do treinamento com `aux_weight=0.25`. `max_labels=300`; o momentum do SGD aumenta de 0.8 a 0.937 durante três épocas de warmup. Checkpoints antigos de cabeça única retomam com esse grafo. Predição e exportação usam a cabeça principal. `letterbox_pad=None` herda o registro do checkpoint: pesos sem registro usam `topleft`, enquanto novas conversões oficiais registram `center`.
+O modelo base pode treinar um ramo auxiliar PGI ao lado da cabeça principal. O
+ramo é exclusivo do treinamento: predição e exportação usam a cabeça principal.
+Uma execução o anexa quando os pesos iniciais trazem tensores PGI ou quando
+treina do zero. Os checkpoints base publicados não trazem nenhum, então um
+fine-tuning a partir deles treina só a cabeça principal e registra isso no log.
+`aux_weight=0.25` anexa um ramo novo com esse peso de loss mesmo assim, e
+`aux_weight=0` o mantém desligado. Uma execução retomada mantém a configuração
+PGI do seu checkpoint. Nos tamanhos `m` e `c` o ramo é o do upstream: um segundo
+backbone sobre a imagem de entrada, cujos estágios o `CBFuse` soma com taps
+`CBLinear` do backbone principal, e sua própria cabeça, com 12.8M e 25.7M de
+parâmetros exclusivos do treinamento com 80 classes. Os modelos end-to-end e de
+stride 4 não têm ramo PGI.
 
-O mosaic de YOLO9 e YOLOX prefere imagens parceiras anotadas, com no máximo 20 sorteios; o MixUp de YOLO9 usa a mesma política. Veja [histogramas de eventos](/docs/train/event-histograms) para perfis de entrada não RGB.
+As três variantes limitam a norma L2 do gradiente a 10 antes de cada passo do
+otimizador; `clip_max_norm=0` desliga o clipping. A atribuição de labels pontua
+as âncoras em fp32, também sob autocast float16. `max_labels=300` limita as
+caixas mantidas por imagem de treinamento, e as caixas além disso são descartadas
+com um aviso único; a memória da atribuição acompanha as caixas reais de cada
+imagem, não o limite. O momentum do SGD aumenta de 0.8 a 0.937 durante três
+épocas. `letterbox_pad=None` herda o registro do checkpoint: pesos sem registro
+usam `topleft`, enquanto novas conversões oficiais registram `center`.
+
+O mosaic de YOLO9 e YOLOX prefere imagens parceiras anotadas, com no máximo 20 sorteios; o MixUp de YOLO9 usa a mesma política. O MixUp vem desligado por padrão (`mixup_prob=0`). Quando ligado, a razão de mistura é sorteada de Beta(1, 1), uniforme em [0, 1], como no MultimediaTechLab/YOLO. Veja [histogramas de eventos](/docs/train/event-histograms) para perfis de entrada não RGB.
 
 ## Validação
 
@@ -222,6 +274,13 @@ Todos os arquivos de pesos publicados desta família.
 ## Licenciamento
 
 <provenance-box>
+
+O código das três variantes é portado de
+[MultimediaTechLab/YOLO](https://github.com/MultimediaTechLab/YOLO) no commit
+`c4cb5f6f` (MIT). O preditor one-to-one do modelo end-to-end segue o design do
+[DATE](https://github.com/YiqunChen1999/date), de Yiqun Chen (Apache-2.0),
+implementado para o LibreYOLO sem nenhum código do DATE copiado. O nível de
+stride 4 é código do LibreYOLO.
 
 O checkpoint aéreo com stride 4 prevê as classes VisDrone. Use a licença declarada pelo publicador no repositório dos pesos.
 

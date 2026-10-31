@@ -43,7 +43,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: a0446a47e0f89b27
+source_hash: 587851b0988347c3
 ---
 ## Cú pháp
 
@@ -66,6 +66,7 @@ Tham số là các cặp `key=value`, và dạng POSIX cũng dùng được, nê
 | `imgsz` | | Kích thước ảnh: `640` (vuông) hoặc `480x640` (HxW). Dùng kích thước đầu vào của chính mô hình khi không đặt |
 | `conf` | `0.001` | Ngưỡng độ tin cậy |
 | `iou` | `0.6` | Ngưỡng IoU của NMS |
+| `agnostic_nms` | `false` | NMS không phân biệt lớp đối tượng: trong các box chồng lấn vượt `iou`, chỉ giữ box có điểm cao nhất bất kể lớp đối tượng của chúng. Chỉ detect và segment |
 | `max_det` | `300` | Số dự đoán tối đa mỗi ảnh sau NMS |
 | `eval_max_det` | | Giới hạn của bộ đánh giá COCO. Theo quy ước AP@100 của pycocotools khi không đặt |
 | `faster_coco_eval` | `true` | Dùng backend C++ faster-coco-eval cho các metric COCO khi đã cài; nếu không thì quay về pycocotools |

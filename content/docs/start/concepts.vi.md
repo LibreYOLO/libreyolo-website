@@ -20,7 +20,7 @@ meta:
     value: 'Libre<FAMILY><size>[-<task>].pt'
     mono: true
   - label: Tác vụ chuẩn
-    value: 20
+    value: 22
   - label: Cấp hỗ trợ
     value: 'Flagship, Core, Supported, Chỉ inference, Museum, Cấp sibling'
 snippets:
@@ -54,12 +54,12 @@ snippets:
         model = LibreYOLO("LibreYOLO9t.pt", task="det")
 
         print(model.task)
-source_hash: c745a3c602db00ea
+source_hash: 85bad95f0e5ec544
 ---
 
 ## Tác vụ
 
-Tác vụ là thứ mô hình trả về. LibreYOLO có hai mươi tên tác vụ chuẩn, và mỗi
+Tác vụ là thứ mô hình trả về. LibreYOLO có hai mươi hai tên tác vụ chuẩn, và mỗi
 tên tương ứng với trường trên object `Results` chứa đầu ra của tác vụ đó.
 
 | Tác vụ | Trả về |
@@ -84,6 +84,8 @@ tên tương ứng với trường trên object `Results` chứa đầu ra của
 | `mesh` | Cơ thể 3D đã tạo dáng cho mỗi người được phát hiện |
 | `detect3d` | Box 3D trong hệ tọa độ camera, kèm lớp và độ tin cậy |
 | `act` | Một đoạn hành động robot được dự đoán từ các frame camera và trạng thái robot |
+| `generate` | Một ảnh RGB được sinh ra từ một prompt văn bản, kèm prompt, seed và tham số lời gọi để tái tạo lại nó |
+| `generate3d` | Một đối tượng dưới dạng 3D Gaussian splat, được sinh ra từ một ảnh duy nhất của nó |
 
 Đây là các tên xuất hiện trong metadata checkpoint và tên file. Các alias quen
 thuộc được chấp nhận ở mọi nơi có thể truyền tác vụ và được chuẩn hóa trước mọi
@@ -172,9 +174,9 @@ hậu tố không được chấp nhận là checkpoint hợp lệ của họ. N
 trọng số được huấn luyện trên dataset khác mặc định, tên dataset được nối thêm
 làm hậu tố và biến thể đó vẫn thuộc tên repo nơi file được tải xuống.
 
-Ba cấp nằm ngoài schema này. Các họ promptable segmentation, họ
-vision-language và detector open-vocabulary không được đăng ký vào factory
-checkpoint và không tạo file `Libre<FAMILY><size>.pt`. Thay vào đó, prefix của
+Nhiều cấp nằm ngoài schema này. Các họ promptable segmentation, họ
+vision-language, detector open-vocabulary và các họ sinh `LibreGen` không được
+đăng ký vào factory checkpoint và không tạo file `Libre<FAMILY><size>.pt`. Thay vào đó, prefix của
 chúng chỉ snapshot Hugging Face đã tải hoặc checkpoint promptable, và cách viết
 hoa thương hiệu upstream được cố ý giữ nguyên.
 

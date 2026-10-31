@@ -61,7 +61,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9t.pt data=my-dataset.yaml \
           epochs=100 --cuda-graph
-source_hash: 67c46199939278f2
+source_hash: a759c49c80247969
 ---
 
 ## 캡처된 것
@@ -105,7 +105,7 @@ NMS도 탐지 손실도 후보가 될 수 없습니다. 둘 다 불리언 마스
 
 ## 학습 지원
 
-이번 릴리스에서는 학습 캡처가 두 계열에서 다섯 가지 작업에 걸쳐 24계열으로 확대되었습니다.
+학습 캡처는 다섯 가지 작업에 걸쳐 24개 계열을 포함합니다.
 
 | 작업 | 계열들 |
 |---|---|

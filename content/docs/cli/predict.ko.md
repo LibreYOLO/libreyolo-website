@@ -43,7 +43,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## 개요
@@ -71,6 +71,7 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `imgsz` | | 입력 이미지 크기: `640`(정사각형) 또는 `480x640`(HxW). 설정하지 않으면 모델 자체의 입력 크기 |
 | `classes` | | 클래스 ID로 필터링, 예: `[0,2,5]`. 단일 정수도 받습니다 |
 | `max_det` | `300` | 이미지당 최대 탐지 수 |
+| `agnostic_nms` | `false` | 클래스 무관 NMS: `iou`를 넘어 겹치는 박스 중 클래스와 관계없이 점수가 가장 높은 것 하나만 남깁니다. 탐지, 분할, 자세, OBB |
 | `half` | `false` | FP16 추론(CUDA 전용, 모델 지원 필요) |
 | `save` | `false` | 어노테이션된 이미지 저장 |
 | `batch` | `1` | 디렉터리 소스에서 순전파 한 번에 처리할 이미지 수. 1보다 크면 이를 지원하는 모델에서 실제 배치 추론을 실행합니다 |

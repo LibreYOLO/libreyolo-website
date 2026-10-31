@@ -66,7 +66,7 @@ snippets:
       code: |
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           amp_dtype=bfloat16
-source_hash: c8d7adb6aabcbc80
+source_hash: 766f7d68cb2233ad
 ---
 
 ## 변경 전 측정
@@ -101,6 +101,8 @@ RF-DETR과 D-FINE/DEIM/RT-DETR 매처 경로는 호스트 전송을 줄이며, �
 <code-tabs name="amp" />
 
 Float16은 그래디언트 스케일러를 사용하며 bfloat16은 비활성화합니다. D-FINE, DEIM, RT-DETRv4, YOLO-NAS 탐지는 `amp=True`가 기본값입니다. Dome-DETR, PP-YOLOE, YOLO-NAS OBB는 FP32 기본값을 유지합니다. FP32를 명시적으로 요청하려면 `amp=False`를 전달합니다.
+
+YOLOv9, YOLOv9-E2E, YOLOv9-P2는 두 dtype 모두에서 레이블 할당용 앵커 점수를 fp32로 계산합니다. 크게 음수인 float16 클래스 로짓의 시그모이드는 0으로 언더플로하여 배치에 양성 앵커가 하나도 남지 않게 할 수 있기 때문입니다.
 
 bfloat16 요청이 bfloat16을 지원하지 않는 하드웨어에서 수행하는 작업을 포함한 인수 의미론은 [Hyperparameters](/docs/train/hyperparameters)에 있습니다.
 

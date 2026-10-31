@@ -78,7 +78,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 7dc6a5ef1b3ba9ea
+source_hash: 93a9e4b50df2bc1c
 ---
 ## Điểm vào
 
@@ -90,11 +90,12 @@ Factory tải mô hình hoặc cấu hình API client. Chúng được phân chi
 | `LibreSAM` | Segmenter có prompt, theo alias kích thước | Điểm, box hoặc văn bản khái niệm | `sam` |
 | `LibreVLM` | Detector vision-language sinh, theo alias | Vocabulary lớp hoặc prompt tự do | `vlm` |
 | `LibreOpenVocab` | Detector được điều kiện hóa bằng văn bản, theo alias | Vocabulary lớp | `openvocab` |
+| `LibreGen` | Mô hình sinh, theo alias hoặc thư mục mô hình cục bộ | Một prompt văn bản (văn bản thành ảnh) hoặc một ảnh (ảnh thành 3D) | `gen` |
 | `LibreEnsemble` | Hai detector trở lên được hợp nhất vào một giao diện | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO` chấp nhận tệp checkpoint và tệp đã xuất. Các factory cùng cấp chấp nhận tên thay thế của mô hình; `LibreVLM` và `LibreVLA` còn tải lại thư mục checkpoint do chúng lưu.
+`LibreYOLO` chấp nhận tệp checkpoint và tệp đã xuất. Các factory cùng cấp chấp nhận tên thay thế của mô hình; `LibreVLM` và `LibreVLA` còn tải lại thư mục checkpoint do chúng lưu, còn `LibreGen` tải một thư mục mô hình cục bộ theo định dạng thượng nguồn của một họ được hỗ trợ.
 
 ```python
 LibreYOLO(
@@ -165,10 +166,11 @@ Các cấp sibling cũng export lớp họ: `LibreSAM1`, `LibreSAM2`, `LibreSAM3
 `LibreOWLv2`, `LibreOMDetTurbo`; `LibreLFM2VL`, `LibreQwen3VL`,
 `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`, `LibreKosmos2`,
 `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`, `LibreMolmo2`,
-`LibreNorthMicroVision`, `LibreMODUS` (cũng viết là `LibreModus`);
+`LibreNorthMicroVision`, `LibreMODUS` (cũng viết là `LibreModus`), `LibreWeVisOneVL`;
 `LibreShowUI`, `LibreGroundFlorence2` và `LibreGroundQwen3VL` đứng sau
 `LibreGround`; `LibreSmolVLA`, `LibreACT` và `LibreDiffusionPolicy` đứng sau
-`LibreVLA`.
+`LibreVLA`; `LibreFlux2Klein`, `LibreSanaSprint` và `LibreSperidlabsIdol` đứng sau
+`LibreGen`.
 
 ## Giao diện dự đoán
 
@@ -185,6 +187,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -206,11 +209,19 @@ Source là một ảnh trả về một `Results`. Danh sách, tuple hoặc thư
 danh sách, còn `stream=True` trả về generator. Các phương thức khác trên object
 mô hình được mô tả tại [trang model API](/docs/reference/model-api).
 
+`agnostic_nms=True` chạy NMS không phân biệt lớp: trong các box chồng lấn vượt
+`iou`, chỉ box có điểm cao nhất được giữ, bất kể lớp của chúng. Nó chạy trên các
+phát hiện đã hoàn tất của họ, sau bộ lọc `classes`, và bao phủ các tác vụ detect,
+segment, pose và OBB, với IoU xoay cho box định hướng. Ở mọi tác vụ khác nó phát
+sinh `ValueError`.
+
 ## Payload Results
 
 `Results` và các lớp dữ liệu của nó được xuất ở cấp package: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. Mỗi lớp được mô tả trong [các kiểu Results](/docs/reference/results-types).
 
 `Boxes3D`, `AlbedoMap` và `Actions` bổ sung khối hộp 3D, albedo nội tại và đoạn hành động. Xem [các kiểu kết quả](/docs/reference/results-types).
+
+`GeneratedImage` và `Gaussians` mang đầu ra của `LibreGen`: một ảnh được sinh ra trong `Results.generated` và một đối tượng 3D được sinh ra trong `Results.gaussians`.
 
 ## Backend
 

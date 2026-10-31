@@ -77,7 +77,7 @@ snippets:
         LibreOpenVocab
 
         print(type(detector).__name__, ens.fusion)
-source_hash: 7dc6a5ef1b3ba9ea
+source_hash: 93a9e4b50df2bc1c
 ---
 
 ## Entry point
@@ -90,11 +90,12 @@ Factory memuat model atau mengonfigurasi klien API. Pemisahannya berdasarkan kon
 | `LibreSAM` | Segmenter yang dapat menerima prompt, berdasarkan alias ukuran | Titik, bounding box, atau teks konsep | `sam` |
 | `LibreVLM` | Detektor vision-language generatif, berdasarkan alias | Vocabulary kelas atau prompt bebas | `vlm` |
 | `LibreOpenVocab` | Detektor yang dikondisikan oleh teks, berdasarkan alias | Vocabulary kelas | `openvocab` |
+| `LibreGen` | Model generatif, berdasarkan alias atau direktori model lokal | Prompt teks (teks ke gambar) atau gambar (gambar ke 3D) | `gen` |
 | `LibreEnsemble` | Dua detektor atau lebih yang digabungkan menjadi satu antarmuka | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO` menerima berkas checkpoint dan artefak ekspor. Factory lain menerima alias model; `LibreVLM` dan `LibreVLA` juga memuat ulang direktori checkpoint yang disimpannya sendiri.
+`LibreYOLO` menerima berkas checkpoint dan artefak ekspor. Factory lain menerima alias model; `LibreVLM` dan `LibreVLA` juga memuat ulang direktori checkpoint yang disimpannya sendiri, dan `LibreGen` memuat direktori model lokal dalam format upstream family yang didukung.
 
 ```python
 LibreYOLO(
@@ -166,9 +167,10 @@ Tingkat saudara juga mengekspor kelas family-nya: `LibreSAM1`, `LibreSAM2`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
 `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
 `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (juga ditulis
-`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` dan `LibreGroundQwen3VL`
+`LibreModus`), `LibreWeVisOneVL`; `LibreShowUI`, `LibreGroundFlorence2` dan `LibreGroundQwen3VL`
 di balik `LibreGround`; `LibreSmolVLA`, `LibreACT` dan `LibreDiffusionPolicy`
-di balik `LibreVLA`.
+di balik `LibreVLA`; `LibreFlux2Klein`, `LibreSanaSprint` dan
+`LibreSperidlabsIdol` di balik `LibreGen`.
 
 ## Antarmuka prediksi
 
@@ -185,6 +187,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -207,11 +210,19 @@ mengembalikan list `Results`, sedangkan `stream=True` mengembalikan generator.
 Metode lain pada objek model didokumentasikan di
 [halaman API model](/docs/reference/model-api).
 
+`agnostic_nms=True` menjalankan NMS class-agnostic: di antara kotak yang tumpang
+tindih di atas `iou`, hanya kotak dengan skor tertinggi yang dipertahankan, apa
+pun kelasnya. Langkah ini berjalan pada deteksi akhir milik family, setelah filter
+`classes`, dan mencakup task detect, segment, pose, dan OBB, dengan IoU terotasi
+untuk kotak berorientasi. Pada task lain mana pun ia memunculkan `ValueError`.
+
 ## Muatan Results
 
 `Results` dan kelas payload-nya diekspor pada tingkat paket: `Results`, `Boxes`, `Masks`, `Keypoints`, `Points`, `Probs`, `OBB`, `Gaze`, `SemanticMask`, `PanopticSegmentation`, `DepthMap`, `EdgeMap`, `NormalMap`, `RestoredImage`, `Matte`, `Meshes`, `OCRRegions`, `Embeddings`, `Identities`. Masing-masing dijelaskan dalam [tipe Results](/docs/reference/results-types).
 
 `Boxes3D`, `AlbedoMap`, dan `Actions` menambahkan kuboid 3D, albedo intrinsik, dan potongan aksi. Lihat [tipe hasil](/docs/reference/results-types).
+
+`GeneratedImage` dan `Gaussians` membawa keluaran `LibreGen`: gambar hasil generasi di `Results.generated` dan objek 3D hasil generasi di `Results.gaussians`.
 
 ## Backend
 

@@ -50,7 +50,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 21374ebc0e6cf4d3
+source_hash: 45cb238a2ac1b377
 ---
 
 ## Sinopsis
@@ -78,6 +78,7 @@ task-nya dibuang sebelum parsing.
 | `imgsz` | | Ukuran gambar masukan: `640` (persegi) atau `480x640` (HxW). Ukuran masukan milik model sendiri bila tidak diisi |
 | `classes` | | Filter berdasarkan ID kelas, misalnya `[0,2,5]`. Integer tunggal juga diterima |
 | `max_det` | `300` | Deteksi maksimum per gambar |
+| `agnostic_nms` | `false` | NMS class-agnostic: di antara box yang saling tumpang tindih di atas `iou`, hanya box dengan skor tertinggi yang dipertahankan, apa pun kelasnya. Detect, segment, pose, dan OBB |
 | `half` | `false` | Inferensi FP16 (hanya CUDA, model harus mendukungnya) |
 | `save` | `false` | Menyimpan gambar beranotasi |
 | `batch` | `1` | Jumlah gambar per forward pass untuk source berupa direktori. Di atas 1 menjalankan inferensi batch sesungguhnya pada model yang mendukungnya |

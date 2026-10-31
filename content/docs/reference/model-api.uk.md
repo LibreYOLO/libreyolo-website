@@ -48,7 +48,7 @@ snippets:
         # stream=True повертає генератор з одним Results на кадр або зображення.
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: ccecee93e9744550
+source_hash: 9403676faa1daecc
 ---
 
 ## Створення
@@ -81,6 +81,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -107,6 +108,7 @@ model(
 | `device` | `None` | Перевизначення пристрою для цього виклику |
 | `classes` | `None` | Залишити лише ці ідентифікатори класів |
 | `max_det` | `300` | Максимальна кількість виявлень на зображення |
+| `agnostic_nms` | `False` | Лишає тільки рамку з найвищою оцінкою серед рамок, що перекриваються понад `iou`, незалежно від їхніх класів. Для detect, segment, pose і obb |
 | `augment` | `False` | Аугментація під час тестування |
 | `save` | `False` | Запис анотованого зображення чи відео |
 | `batch` | `1` | Кількість зображень на прямий прохід для джерел у вигляді каталогу чи списку |
@@ -218,9 +220,18 @@ model.val(
 `save_plots`. `allow_download_scripts` контролює вбудований Python, який YAML
 датасету може містити в полі `download`.
 
+Для detect і segment словник є підкласом `dict`, який також несе `box`
+(метрики для кожного зображення та криві точності, повноти й F1 для кожного
+класу) і `confusion_matrix`; для classify він несе `top1`, `top5` і
+`confusion_matrix`. Див. [Валідація та метрики](/docs/train/validation).
+
 `faster_coco_eval` приймається через `**kwargs` і типово дорівнює `True`, а за
 відсутності пакета використовується резервний pycocotools. Використаний бекенд
 повідомляється в `model.last_eval_backend`.
+
+`agnostic_nms=True`, також через `**kwargs`, застосовує NMS без урахування
+класів із порогом `iou` перед оцінюванням. Він охоплює detect і segment та
+спричиняє `ValueError` для будь-якого іншого завдання.
 
 Аугментована валідація спричиняє помилку для завдань `obb` і `pose`.
 

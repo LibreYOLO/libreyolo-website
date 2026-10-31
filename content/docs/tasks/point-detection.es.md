@@ -150,7 +150,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 5c3cfe7a606cd7aa
+source_hash: dd636077cf280d26
 ---
 
 ## Definición
@@ -191,7 +191,7 @@ cargado con `LibreVLM("sensenova-vision", task="point")`. Necesita el extra
 detector específico. Sus pesos son no comerciales; la licencia está en su
 página.
 
-[Molmo2](/docs/models/molmo2) y [Moondream](/docs/models/moondream) proporcionan puntos condicionados por texto. [LibreGround](/docs/reference/ground-api) usa una instrucción para seleccionar como máximo un clic por consulta con ShowUI, Florence-2 o Qwen3-VL.
+[Molmo2](/docs/models/molmo2), [Moondream](/docs/models/moondream) y [WeVisOne-VL](/docs/models/wevisone-vl) proporcionan puntos condicionados por texto. [LibreGround](/docs/reference/ground-api) usa una instrucción para seleccionar como máximo un clic por consulta con ShowUI, Florence-2 o Qwen3-VL.
 
 ## Predicción
 

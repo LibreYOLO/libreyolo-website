@@ -109,7 +109,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: c47b33fdc6fa1139
+source_hash: c2da99ce509aa51e
 ---
 
 ## Instalação
@@ -149,7 +149,8 @@ LibreYOLO, mas o LibreYOLO não hospeda um checkpoint `g` próprio.
 linear probe do relatório original: o backbone ViT fica congelado e só a cabeça
 densa 1x1 treina, do mesmo jeito que os pesos hospedados pelo LibreYOLO acima
 foram produzidos. Passe `freeze_backbone=False` para fazer fine-tuning da rede
-inteira, e espere ter que baixar o `lr0` na mesma medida.
+inteira, e espere ter que baixar o `lr0` na mesma medida. O `libreyolo train` parte da mesma
+receita, e sem `name=` suas execuções vão para `runs/train/lingbotvision_exp`.
 
 <code-tabs name="train" />
 

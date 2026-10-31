@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: 3650786b0a858958
+source_hash: fbabf598151eeac0
 ---
 ## Định nghĩa
 
@@ -195,8 +195,10 @@ vậy mô hình được huấn luyện trên skeleton khác sẽ trả về `K`
 theo index khác. Nội dung cột keypoint thứ ba cũng là thuộc tính checkpoint:
 EdgeCrafter ghi một hằng số thay vì điểm theo từng điểm, và hoàn toàn không có
 box head, vì vậy mỗi pose box là phạm vi bao của các keypoint riêng thuộc thực
-thể đó. Xem [dự đoán](/docs/predict) để biết về nguồn, stream và cách xử lý kết
-quả.
+thể đó. `agnostic_nms=True` loại bỏ các hộp chồng lấn xuyên các lớp đối tượng và
+bỏ keypoint của mỗi thực thể bị loại cùng hộp của nó; HRNet phát sinh
+`NotImplementedError` với tùy chọn này. Xem [dự đoán](/docs/predict) để biết về
+nguồn, stream và cách xử lý kết quả.
 
 ## Định dạng dataset
 
@@ -276,7 +278,8 @@ nghĩa nhóm nhỏ. Các số liệu average recall tương ứng là
 `metrics/keypoints_AR50-95`, `metrics/keypoints_AR50`,
 `metrics/keypoints_AR75`, `metrics/keypoints_AR_M` và
 `metrics/keypoints_AR_L`. Mọi key trên tác vụ này đều có tiền tố `keypoints_`,
-vì vậy các key `mAP` hộp mà detector trả về không xuất hiện.
+vì vậy các key `mAP` hộp mà detector trả về không xuất hiện. `val(agnostic_nms=True)`
+phát sinh `ValueError` trên tác vụ này.
 
 ## Xuất
 
