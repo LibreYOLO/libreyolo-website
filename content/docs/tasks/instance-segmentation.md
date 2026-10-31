@@ -150,9 +150,10 @@ box or a phrase picks the object, and the model returns its mask.
 [SAM 3](/docs/models/sam-3), [MobileSAM](/docs/models/mobilesam),
 [EdgeTAM](/docs/models/edgetam) and [PicoSAM3](/docs/models/picosam3) work this
 way, as does [SenseNova-Vision](/docs/models/sensenova-vision), whose
-segmentation is referring: it takes a phrase naming one object. They load
-through their own factory and extras, and each model page carries the exact
-call.
+segmentation is referring: it takes a phrase naming one object.
+[WeVisOne-VL](/docs/models/wevisone-vl) segments each phrase given in `names=`
+and returns boxes plus binary masks. They load through their own factory and
+extras, and each model page carries the exact call.
 
 ## Predict
 
@@ -161,7 +162,8 @@ Weights download from Hugging Face on first use and are cached locally.
 <code-tabs name="predict" />
 
 `conf` and `max_det` shape the output the same way they do for detection, and
-masks are filtered along with the boxes they belong to. See
+masks are filtered along with the boxes they belong to, including by
+`agnostic_nms=True`. See
 [prediction](/docs/predict) for sources, streaming and result handling.
 
 ## Dataset format
@@ -219,9 +221,10 @@ multi-GPU and loggers.
 
 ## Validate
 
-`val()` returns a plain dictionary of `metrics/` keys. Boxes and masks are
-scored separately, both with COCO evaluation, and the mask numbers are the
-primary ones.
+`val()` returns a dictionary of `metrics/` keys. Boxes and masks are scored
+separately, both with COCO evaluation, and the mask numbers are the primary
+ones. A five-field box-only label row is scored as its rectangle mask, the
+segment training reads from it.
 
 <code-tabs name="val" />
 
@@ -244,6 +247,11 @@ compatibility and are aliases, not an operating point: `metrics/precision(M)`
 holds the same value as `metrics/mAP50-95(M)`, and `metrics/recall(M)` the same
 value as mask AR at 100 detections, with `(B)` behaving the same way for boxes.
 Plotting a pair of them reports one number twice.
+
+The result also carries `confusion_matrix` and the per-class precision, recall
+and F1 curves on `box`, both computed from boxes rather than masks; see
+[Validation and metrics](/docs/train/validation#confusion-matrix).
+`val(agnostic_nms=True)` is supported on this task.
 
 ## Export
 

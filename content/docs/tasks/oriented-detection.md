@@ -207,8 +207,9 @@ vehicles seen from above, and for verifying that your pipeline runs end to end.
 Any other domain means training on your own oriented labels, and for the aerial
 categories DOTA is known for, the RT-DETRv2 checkpoints are the ones actually
 trained on that data. `conf` and `max_det` shape the output as
-they do for detection. See [prediction](/docs/predict) for sources, streaming
-and result handling.
+they do for detection, and `agnostic_nms=True` suppresses overlapping boxes
+across classes by rotated IoU. See [prediction](/docs/predict) for sources,
+streaming and result handling.
 
 ## Dataset format
 
@@ -303,7 +304,8 @@ suffixed twin.
 
 Two options do nothing on this task. `save_json` and `save_plots` are accepted
 and log a warning: oriented prediction dumps and validation plots are not
-implemented.
+implemented. `agnostic_nms=True` raises `ValueError` here; it covers detect
+and segment validation only.
 
 ## Export
 

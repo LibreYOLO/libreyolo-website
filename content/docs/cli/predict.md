@@ -61,6 +61,7 @@ word is stripped before parsing.
 | `imgsz` | | Input image size: `640` (square) or `480x640` (HxW). The model's own input size when unset |
 | `classes` | | Filter by class IDs, e.g. `[0,2,5]`. A bare integer is accepted |
 | `max_det` | `300` | Max detections per image |
+| `agnostic_nms` | `false` | Class-agnostic NMS: among boxes overlapping above `iou`, keep only the highest-scoring one whatever their classes. Detect, segment, pose and OBB |
 | `half` | `false` | FP16 inference (CUDA only, requires model support) |
 | `save` | `false` | Save annotated images |
 | `batch` | `1` | Images per forward pass for directory sources. Above 1 runs true batched inference on models that support it |

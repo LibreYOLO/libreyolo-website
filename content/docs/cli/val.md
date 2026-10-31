@@ -53,6 +53,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `batch=8` and
 | `imgsz` | | Image size: `640` (square) or `480x640` (HxW). The model's own input size when unset |
 | `conf` | `0.001` | Confidence threshold |
 | `iou` | `0.6` | NMS IoU threshold |
+| `agnostic_nms` | `false` | Class-agnostic NMS: among boxes overlapping above `iou`, keep only the highest-scoring one whatever their classes. Detect and segment only |
 | `max_det` | `300` | Max predictions per image after NMS |
 | `eval_max_det` | | COCO evaluator cap. The pycocotools AP@100 convention when unset |
 | `faster_coco_eval` | `true` | Use the faster-coco-eval C++ backend for COCO metrics when installed; falls back to pycocotools |

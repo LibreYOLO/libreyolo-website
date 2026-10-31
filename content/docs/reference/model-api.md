@@ -69,6 +69,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -95,6 +96,7 @@ model(
 | `device` | `None` | Device override for this call |
 | `classes` | `None` | Keep only these class IDs |
 | `max_det` | `300` | Maximum detections per image |
+| `agnostic_nms` | `False` | Keep only the highest-scoring box among boxes overlapping above `iou`, whatever their classes. Detect, segment, pose and obb |
 | `augment` | `False` | Test-time augmentation |
 | `save` | `False` | Write an annotated image or video |
 | `batch` | `1` | Images per forward pass for directory and list sources |
@@ -204,9 +206,18 @@ directory as `project/name`, incremented unless `exist_ok=True`. `plots` is an
 alias for `save_plots`. `allow_download_scripts` gates the embedded Python that a
 dataset YAML may carry in its `download` field.
 
+For detect and segment the dictionary is a `dict` subclass that also carries
+`box` (per-image metrics and per-class precision, recall and F1 curves) and
+`confusion_matrix`; for classify it carries `top1`, `top5` and
+`confusion_matrix`. See [Validation and metrics](/docs/train/validation).
+
 `faster_coco_eval` is accepted through `**kwargs` and defaults to `True`,
 falling back to pycocotools when the package is not installed. The backend
 that ran is reported on `model.last_eval_backend`.
+
+`agnostic_nms=True`, also through `**kwargs`, applies class-agnostic NMS at
+`iou` before scoring. It covers detect and segment and raises `ValueError` on
+any other task.
 
 Augmented validation raises for the `obb` and `pose` tasks.
 

@@ -75,11 +75,12 @@ snippets:
 
         model = LibreYOLO("LibreResNet50-cls.pt")
 
-        # val() returns a plain dict, not an object.
+        # A dict of metrics/ keys, plus top1, top5 and confusion_matrix.
         metrics = model.val(data="imagenette160")
 
         print(metrics["metrics/accuracy_top1"])
         print(metrics["metrics/accuracy_top5"])
+        print(metrics.top1, metrics.top5)
     - label: CLI
       language: bash
       code: |
@@ -201,9 +202,11 @@ multi-GPU and loggers.
 
 ResNet, ConvNeXt, ConvNeXt V2, MobileNetV4, EfficientNetV2 and DINOv2 support `cls_pw` or `class_weights` loss weighting. Classification `scale` controls crop area, and `crop_pct` controls evaluation cropping. See [augmentations](/docs/train/augmentations).
 
+The resize filter is part of the model. Set `model.interpolation` to `"bilinear"`, `"bicubic"`, `"nearest"` or `"bilinear_no_antialias"` before training: training, `val()`, `predict()`, INT8 calibration and export all use it, and `save()`, `best.pt` and `last.pt` record it, so a reload keeps it. Any other name raises `ValueError`. `"bilinear_no_antialias"` resizes with plain bilinear and no antialiasing everywhere, `RandomResizedCrop` included, for models that will run behind a runtime resize without antialiasing. MobileNetV4, ResNet, ConvNeXt, ConvNeXt V2, EfficientNetV2, DeiT, Swin and ViT default to bicubic; AlexNet and VGG to bilinear.
+
 ## Validate
 
-`val()` returns a plain dictionary of `metrics/` keys, computed over the `val/`
+`val()` returns a dictionary of `metrics/` keys, computed over the `val/`
 split of the dataset root.
 
 <code-tabs name="val" />
@@ -216,6 +219,14 @@ the dataset has. The dictionary also carries `fitness`, a copy of the top-1
 value.
 
 ImageFolder validation also returns macro `metrics/precision`, `metrics/recall` and `metrics/f1`, averaging over classes present in the validation targets. Unpredicted classes contribute zero precision. Default fitness remains top-1 accuracy. Validation and calibration use the model evaluation transform.
+
+The result is a `dict` subclass with three attributes: `top1` and `top5` hold
+the two accuracy values, and `confusion_matrix` counts each image at its top-1
+class against its label, indexed `matrix[predicted, true]`. `plots=True` writes
+it as counts to `confusion_matrix.png` and as shares of each label to
+`confusion_matrix_normalized.png`. Above 2,000 classes the dense matrix and its
+plots are unavailable, and `nonzero()`, `tp_fp()` and `class_accuracy()` read
+the counts instead; see [Validation and metrics](/docs/train/validation#confusion-matrix).
 
 ## Export
 

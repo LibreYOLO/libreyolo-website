@@ -73,12 +73,13 @@ snippets:
 
         model = LibreYOLO("LibreYOLO9t.pt")
 
-        # val() returns a plain dict, not an object.
+        # A dict of metrics/ keys, with per-class results as attributes.
         metrics = model.val(data="coco128.yaml")
 
         print(metrics["metrics/mAP50-95"])
         print(metrics["metrics/mAP50"], metrics["metrics/mAP75"])
         print(metrics["metrics/AR100"])
+        print(metrics.confusion_matrix.class_accuracy())
     - label: CLI
       language: bash
       code: |
@@ -165,7 +166,8 @@ plus the vision-language families
 [Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream),
 [North Micro Vision](/docs/models/northmicrovision),
 [LocateAnything](/docs/models/locate-anything),
-[SenseNova-Vision](/docs/models/sensenova-vision) and
+[SenseNova-Vision](/docs/models/sensenova-vision),
+[WeVisOne-VL](/docs/models/wevisone-vl) and
 [LibreMODUS](/docs/models/libremodus). These load through their own factory and
 extras; each model page carries the exact call.
 
@@ -180,8 +182,10 @@ Weights download from Hugging Face on first use and are cached locally.
 `conf` sets the confidence threshold and `max_det` caps the number of rows.
 `iou` is the NMS threshold, so it only has an effect on a family that runs NMS;
 RF-DETR and the end-to-end YOLOv9 head decode a fixed set of predictions and
-ignore it. See [prediction](/docs/predict) for sources, streaming and result
-handling.
+ignore it. `agnostic_nms=True` adds a class-agnostic suppression step at `iou`
+that applies to those two as well; see
+[thresholds and filtering](/docs/predict/thresholds#agnostic_nms). See
+[prediction](/docs/predict) for sources, streaming and result handling.
 
 ## Dataset format
 
@@ -242,8 +246,9 @@ Use `classes=` to retain selected original dataset IDs; `single_cls=True` collap
 
 ## Validate
 
-`val()` returns a plain dictionary of `metrics/` keys, computed with COCO
-evaluation over the split named by `val` in the dataset YAML.
+`val()` returns a dictionary of `metrics/` keys, computed with COCO evaluation
+over the split named by `val` in the dataset YAML, with per-class results
+attached as attributes.
 
 <code-tabs name="val" />
 
@@ -264,6 +269,13 @@ precision-recall pair reports one number twice. Four keys also repeat under a
 `(B)` suffix, for box, so that a detection key reads the same on a model that
 also predicts masks: `metrics/mAP50-95(B)`, `metrics/mAP50(B)`,
 `metrics/precision(B)` and `metrics/recall(B)`.
+
+The result also carries `confusion_matrix`, indexed `matrix[predicted, true]`
+with a `background` row and column, and per-class precision, recall and F1
+across confidences on `box`: `box.px`, `box.p_curve`, `box.r_curve`,
+`box.f1_curve`, one row per class in `box.ap_class_index`.
+[Validation and metrics](/docs/train/validation#confusion-matrix) covers both,
+along with `val(agnostic_nms=True)`.
 
 ## Export
 

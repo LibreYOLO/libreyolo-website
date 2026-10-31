@@ -85,9 +85,13 @@ header tells you before you try. See [core concepts](/docs/concepts).
 A dictionary keyed by metric name. Detection keys include
 `metrics/precision`, `metrics/recall`, `metrics/mAP50` and
 `metrics/mAP50-95`, and detection and segmentation results also carry
-per-image results on `metrics.box`. Other tasks return the keys that make sense for them, such
+per-image results and per-class precision, recall and F1 curves on
+`metrics.box`. Detection, segmentation and classification results carry
+`metrics.confusion_matrix`, and classification adds `metrics.top1` and
+`metrics.top5`. Other tasks return the keys that make sense for them, such
 as `metrics/accuracy_top1` for classification or `metrics/PQ`, `metrics/SQ` and
-`metrics/RQ` for panoptic segmentation.
+`metrics/RQ` for panoptic segmentation. See
+[Validation and metrics](/docs/train/validation).
 
 ## How do I run on a folder, a video or a webcam?
 
