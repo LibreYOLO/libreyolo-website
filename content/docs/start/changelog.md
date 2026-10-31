@@ -1,7 +1,7 @@
 ---
 title: Changelog
 seo_title: "LibreYOLO changelog: recent releases"
-description: "What landed in LibreYOLO 1.7.0 and what 1.6.0 contained: YOLO9 on MIT upstream code, image and 3D generation, WeVisOne-VL and confusion matrices."
+description: "What landed in LibreYOLO 1.7.0 and what 1.6.0 contained: image and 3D generation, WeVisOne-VL, confusion matrices and class-agnostic NMS."
 lead: "A summary of the repository changelog: what 1.7.0 adds, and what 1.6.0, 1.5.0 and 1.4.0 shipped before it."
 keywords: [libreyolo changelog, libreyolo release notes, libreyolo 1.7.0, libreyolo 1.6.0, libreyolo 1.5.0, libreyolo 1.4.0, libreyolo new models]
 last_verified: "1.7.0"
