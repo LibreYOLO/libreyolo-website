@@ -114,7 +114,7 @@ vision-language models, such as [Qwen3-VL](/docs/models/qwen3-vl) and
 produces the boxes: the families on this page are discriminative detectors that
 emit scores directly, while the VLM tier generates them.
 
-[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream) and [North Micro Vision](/docs/models/northmicrovision) extend the `LibreVLM` detection choices. [Molmo2](/docs/models/molmo2) returns points. Use [LibreGround](/docs/reference/ground-api) for instruction-to-click queries rather than a detection vocabulary.
+[Gemma 4](/docs/models/gemma-4), [Moondream](/docs/models/moondream), [North Micro Vision](/docs/models/northmicrovision) and [WeVisOne-VL](/docs/models/wevisone-vl) extend the `LibreVLM` detection choices. [Molmo2](/docs/models/molmo2) returns points. Use [LibreGround](/docs/reference/ground-api) for instruction-to-click queries rather than a detection vocabulary.
 
 ## Predict
 
