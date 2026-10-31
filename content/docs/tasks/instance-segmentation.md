@@ -224,7 +224,7 @@ multi-GPU and loggers.
 `val()` returns a dictionary of `metrics/` keys. Boxes and masks are scored
 separately, both with COCO evaluation, and the mask numbers are the primary
 ones. A five-field box-only label row is scored as its rectangle mask, the
-segment training reads from it.
+one segmentation training reads.
 
 <code-tabs name="val" />
 
