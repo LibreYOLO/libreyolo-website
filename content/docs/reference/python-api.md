@@ -68,11 +68,12 @@ architecture.
 | `LibreSAM` | Promptable segmenters, by size alias | Points, boxes, or concept text | `sam` |
 | `LibreVLM` | Generative vision-language detectors, by alias | Class vocabulary or a free-form prompt | `vlm` |
 | `LibreOpenVocab` | Text-conditioned detectors, by alias | Class vocabulary | `openvocab` |
+| `LibreGen` | Generative models, by alias or local model directory | A text prompt (text to image) or an image (image to 3D) | `gen` |
 | `LibreEnsemble` | Two or more detectors, fused into one surface | | |
 
 <code-tabs name="factories" />
 
-`LibreYOLO` accepts checkpoint files and exported artifacts. Sibling factories accept model aliases; `LibreVLM` and `LibreVLA` also reload their own saved checkpoint directories.
+`LibreYOLO` accepts checkpoint files and exported artifacts. Sibling factories accept model aliases; `LibreVLM` and `LibreVLA` also reload their own saved checkpoint directories, and `LibreGen` loads a local model directory in a supported family's upstream format.
 
 ```python
 LibreYOLO(
@@ -144,9 +145,10 @@ The sibling tiers export their family classes too: `LibreSAM1`, `LibreSAM2`,
 `LibreQwen3VL`, `LibreSmolVLM2`, `LibreInternVL3`, `LibreFlorence2`,
 `LibreKosmos2`, `LibreLocateAnything`, `LibreGemma4`, `LibreMoondream`,
 `LibreMolmo2`, `LibreNorthMicroVision`, `LibreMODUS` (also spelled
-`LibreModus`); `LibreShowUI`, `LibreGroundFlorence2` and `LibreGroundQwen3VL`
+`LibreModus`), `LibreWeVisOneVL`; `LibreShowUI`, `LibreGroundFlorence2` and `LibreGroundQwen3VL`
 behind `LibreGround`; `LibreSmolVLA`, `LibreACT` and `LibreDiffusionPolicy`
-behind `LibreVLA`.
+behind `LibreVLA`; `LibreFlux2Klein`, `LibreSanaSprint` and
+`LibreSperidlabsIdol` behind `LibreGen`.
 
 ## Prediction surface
 
@@ -163,6 +165,7 @@ model(
     device=None,
     classes=None,
     max_det=300,
+    agnostic_nms=False,
     augment=False,
     save=False,
     batch=1,
@@ -185,6 +188,12 @@ returns a list of them, and `stream=True` returns a generator. The other
 methods on the model object are documented on the
 [model API page](/docs/reference/model-api).
 
+`agnostic_nms=True` runs class-agnostic NMS: among boxes that overlap above
+`iou`, only the highest-scoring one is kept, whatever their classes. It runs on
+the family's finished detections, after the `classes` filter, and covers the
+detect, segment, pose and OBB tasks, with rotated IoU for oriented boxes. On
+any other task it raises `ValueError`.
+
 ## Results payloads
 
 `Results` and its payload classes are exported at package level:
@@ -194,6 +203,8 @@ methods on the model object are documented on the
 Each one is described in [Results types](/docs/reference/results-types).
 
 `Boxes3D`, `AlbedoMap` and `Actions` add 3D cuboids, intrinsic albedo and action chunks. See [result types](/docs/reference/results-types).
+
+`GeneratedImage` and `Gaussians` carry the output of `LibreGen`: a generated image in `Results.generated` and a generated 3D object in `Results.gaussians`.
 
 ## Backends
 

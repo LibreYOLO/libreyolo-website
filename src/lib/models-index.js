@@ -45,6 +45,7 @@ const TASK_META = {
   detect3d: { label: '3D detection', blurb: 'Camera-frame cuboids from a single image.' },
   albedo: { label: 'Albedo', blurb: 'Intrinsic surface color in linear RGB.' },
   act: { label: 'Robot policies', blurb: 'Action chunks from camera observations and robot state.' },
+  generate: { label: 'Image generation', blurb: 'An image from a text prompt, with the seed that makes it again.' },
   generate3d: { label: '3D generation', blurb: 'The whole object as 3D Gaussian splats, from one picture of it.' },
   detect: {
     label: 'Detection',
@@ -161,6 +162,14 @@ const WEIGHTS_SOURCE = {
   dinov2: {
     url: 'https://github.com/facebookresearch/dinov2',
     note: 'Apache-2.0 weights, downloaded from the upstream project on first use.',
+  },
+  flux2_klein: {
+    url: 'https://huggingface.co/black-forest-labs/FLUX.2-klein-4B',
+    note: "Apache-2.0 weights, downloaded from Black Forest Labs' own Hugging Face repository on first use.",
+  },
+  sana_sprint: {
+    url: 'https://huggingface.co/Efficient-Large-Model/Sana_Sprint_0.6B_1024px_diffusers',
+    note: "Apache-2.0 weights, downloaded from the upstream Hugging Face repository on first use. The bundled Gemma 2 text encoder is under Google's Gemma Terms of Use.",
   },
   speridlabs_idol: {
     url: 'https://huggingface.co/speridlabs/idol',
