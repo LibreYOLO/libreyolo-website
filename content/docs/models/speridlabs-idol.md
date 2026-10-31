@@ -112,6 +112,9 @@ and settings. Rarely, part of the Gaussians land differently from one run to
 the next while the object stays the same: one attention step runs on a cuDNN
 kernel whose result depends on GPU memory history, in the SDK as in the port.
 
+Objects generated from photos, with their source images, are in the article
+[Speridlabs Idol in LibreYOLO: one image to a 3D object](/articles/speridlabs-idol-image-to-3d).
+
 ### Settings
 
 Every setting has a default, so all are optional. A name the model does not
