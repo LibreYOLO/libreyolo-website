@@ -96,6 +96,7 @@ an extra is present.
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 or later |
 | `marigold` | Pinned diffusion, acceleration and Transformers dependencies |
 | `molmo2` | `transformers==4.57.1`, `einops` and `accelerate` |
+| `gen` | `diffusers>=0.38.0`, `transformers>=5.1.0` and `accelerate>=1.7.0`, for LibreGen and Speridlabs Idol |
 | `rfdetr` | `transformers`, which supplies the RF-DETR backbone |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, which supplies MiDaS's ViT-L/16 and EfficientNet-Lite3 encoders |
@@ -170,11 +171,11 @@ protobuf 7. `executorch` is excluded because ExecuTorch constrains which PyTorch
 version it pairs with, and `coreai` because `coreai-torch` pins PyTorch to
 2.11.x and would drag the whole environment onto that version. `fast-eval`,
 `hub-kernels`, `clip-convert` and `siglip2-convert` are also left out. Install
-any of them by name. `all` includes `hf` and `llm`; `fiftyone`, `vla`, `marigold` and `molmo2` stay separate. FiftyOne brings headless OpenCV, which overlaps the core `cv2` package.
+any of them by name. `all` includes `hf`, `llm` and `gen`; `fiftyone`, `vla`, `marigold` and `molmo2` stay separate. FiftyOne brings headless OpenCV, which overlaps the core `cv2` package.
 
 Core installation requires Python 3.10 or later and adds `cloudpickle>=3.0.0` for coordinator-managed DDP.
 
-Use a separate environment for Molmo2: its Transformers 4.57.1 pin conflicts with the newer VLM, Hub and Marigold stacks. Marigold pins diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 and Transformers 5.4.0, plus bitsandbytes 0.49.2 on Linux/Windows. Default four-bit Marigold inference requires CUDA. North Micro Vision requires Transformers 5.16 or later; Gemma 4 requires 5.10 or later, above the shared VLM floor.
+Use a separate environment for Molmo2: its Transformers 4.57.1 pin conflicts with the newer VLM, Hub and Marigold stacks, and `libreyolo[gen]` cannot be installed together with `libreyolo[molmo2]`. Marigold pins diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 and Transformers 5.4.0, plus bitsandbytes 0.49.2 on Linux/Windows. Default four-bit Marigold inference requires CUDA. North Micro Vision requires Transformers 5.16 or later; Gemma 4 requires 5.10 or later, above the shared VLM floor.
 
 ## Platform constraints
 

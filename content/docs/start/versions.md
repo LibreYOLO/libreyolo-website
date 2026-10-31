@@ -3,7 +3,7 @@ title: Versions
 seo_title: LibreYOLO versions and older documentation
 description: >-
   Which release these pages describe, where the documentation for 1.1.0 through
-  1.5.0 lives, and how to check the version you have installed.
+  1.6.0 lives, and how to check the version you have installed.
 lead: >-
   These pages describe one release of LibreYOLO on unversioned URLs.
   Documentation for earlier releases stays online at its own versioned path.
@@ -13,7 +13,7 @@ keywords:
   - libreyolo 1.4.0 docs
   - check libreyolo version
   - pin libreyolo version
-last_verified: 1.6.0
+last_verified: 1.7.0
 snippets:
   version:
     - label: CLI
@@ -30,7 +30,7 @@ snippets:
 
 ## The release these pages describe
 
-These pages describe LibreYOLO 1.6.0. The version sits at the top of the docs
+These pages describe LibreYOLO 1.7.0. The version sits at the top of the docs
 sidebar, and every page ends with a line naming the release it was verified
 against.
 
@@ -51,12 +51,13 @@ and exits.
 ## Documentation for earlier releases
 
 Each earlier release keeps the documentation it shipped with, at its own path.
-1.5.0 keeps the full tree, one page per topic at the same paths as these
-pages; 1.1.0 to 1.4.0 are single pages.
+1.6.0 and 1.5.0 keep the full tree, one page per topic at the same paths as
+these pages; 1.1.0 to 1.4.0 are single pages.
 
 | Release | Documentation |
 | --- | --- |
-| 1.6.0 | [/docs](/docs), these pages |
+| 1.7.0 | [/docs](/docs), these pages |
+| 1.6.0 | [/docs/v1.6.0](/docs/v1.6.0) |
 | 1.5.0 | [/docs/v1.5.0](/docs/v1.5.0) |
 | 1.4.0 | [/docs/v1.4.0](/docs/v1.4.0) |
 | 1.3.1 | [/docs/v1.3.1](/docs/v1.3.1) |
@@ -75,7 +76,7 @@ versions, its page is the accurate reference and this tree is not.
 version when a result has to be reproducible:
 
 ```bash
-pip install "libreyolo==1.6.0"
+pip install "libreyolo==1.7.0"
 ```
 
 Installing from source, a plain clone checks out `release`, the stable branch
