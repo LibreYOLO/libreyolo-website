@@ -11,6 +11,11 @@ const nextConfig = {
   turbopack: {
     root: '.',
   },
+  // The Speridlabs Idol gallery objects (about 40 MB) are static files the
+  // browser fetches; no server function reads them.
+  outputFileTracingExcludes: {
+    '*': ['public/idol-gallery/**'],
+  },
   // Hand-written pages that predate the docs tree, or are placeholders and
   // past events. Each goes to the page that now covers its subject, in every
   // locale.

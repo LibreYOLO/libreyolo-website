@@ -25,7 +25,8 @@ export default function ThemedEmbed({ node, src = '', className, style, ...props
   if (src && src.includes('/embed/')) {
     try {
       const url = new URL(src, 'https://visionanalysis.org')
-      url.searchParams.set('theme', theme)
+      // Only Vision Analysis widgets read `theme`; leave YouTube and others alone.
+      if (url.hostname.endsWith('visionanalysis.org')) url.searchParams.set('theme', theme)
       finalSrc = url.toString()
     } catch {
       finalSrc = src

@@ -1,0 +1,277 @@
+[
+  {
+    "slug": "peine-del-viento",
+    "title": "Peine del Viento",
+    "artist": "Eduardo Chillida",
+    "file": "/idol-gallery/peine-del-viento.lyg",
+    "photo": "/idol-gallery/peine-del-viento.webp",
+    "photo_credit": {
+      "author": "Ermell",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:San_Sebastian_Peine_del_Viento-Haizearen_Orrazia_1190518.jpg"
+    },
+    "gaussians": 260901,
+    "bytes": 3843359,
+    "seed": 7,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.1,
+    "camera": {
+      "yaw": 2.0531375478228497,
+      "pitch": -0.05391435076669059,
+      "radius": 45.431451404076306,
+      "fov": 2.2071978213412735,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "guggenheim",
+    "title": "Guggenheim Museum Bilbao",
+    "artist": "Frank Gehry",
+    "file": "/idol-gallery/guggenheim.lyg",
+    "photo": "/idol-gallery/guggenheim.webp",
+    "photo_credit": {
+      "author": "Jules Verne Times Two",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:North_view_of_the_Guggenheim_Museum,_Bilbao,_Spain_(PPL3-Altered)_julesvernex2.jpg"
+    },
+    "gaussians": 261256,
+    "bytes": 3956843,
+    "seed": 1,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.1,
+    "camera": {
+      "yaw": 1.2472959246081243,
+      "pitch": -0.1803816239408145,
+      "radius": 8.954369702308535,
+      "fov": 10.759900902383833,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "puppy",
+    "title": "Puppy",
+    "artist": "Jeff Koons",
+    "file": "/idol-gallery/puppy.lyg",
+    "photo": "/idol-gallery/puppy.webp",
+    "photo_credit": {
+      "author": "José Ligero Loarte",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Puppy_de_Jeff_Koons_(2)_--_2021_--_Bilbao,_Espa%C3%B1a.jpg"
+    },
+    "gaussians": 261349,
+    "bytes": 3929395,
+    "seed": 7,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 9.8,
+    "camera": {
+      "yaw": 1.980482307247314,
+      "pitch": -0.22166303143844285,
+      "radius": 1.9631831545444174,
+      "fov": 58.752583882872116,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "maman",
+    "title": "Maman",
+    "artist": "Louise Bourgeois",
+    "file": "/idol-gallery/maman.lyg",
+    "photo": "/idol-gallery/maman.webp",
+    "photo_credit": {
+      "author": "Didier Descouens",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Maman_de_Louise_Bourgeois_-_Bilbao.jpg"
+    },
+    "gaussians": 259371,
+    "bytes": 3721073,
+    "seed": 42,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.0,
+    "camera": {
+      "yaw": 1.6085167499842394,
+      "pitch": -0.27619550786357144,
+      "radius": 1.7194509552325385,
+      "fov": 60.827229275184486,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "el-caminante",
+    "title": "El Caminante",
+    "artist": "Juan José Eguizábal",
+    "file": "/idol-gallery/el-caminante.lyg",
+    "photo": "/idol-gallery/el-caminante.webp",
+    "photo_credit": {
+      "author": "Oscar Lafuente",
+      "license": "CC BY-SA 3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:El_Caminante_(Eguizabal).jpg"
+    },
+    "gaussians": 260937,
+    "bytes": 3710160,
+    "seed": 7,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.1,
+    "camera": {
+      "yaw": 1.372952411041108,
+      "pitch": 0.054956196247362976,
+      "radius": 4.361414882275549,
+      "fov": 22.863548173123924,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "construccion-vacia",
+    "title": "Construcción vacía",
+    "artist": "Jorge Oteiza",
+    "file": "/idol-gallery/construccion-vacia.lyg",
+    "photo": "/idol-gallery/construccion-vacia.webp",
+    "photo_credit": {
+      "author": "Iñaki LLM",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Oteiza_eraikuntza_hutsa.jpg"
+    },
+    "gaussians": 261185,
+    "bytes": 3722989,
+    "seed": 7,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.1,
+    "camera": {
+      "yaw": 1.2875004480361025,
+      "pitch": -0.24822460917122935,
+      "radius": 1.6992638475003004,
+      "fov": 53.956834194242575,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "variante-ovoide",
+    "title": "Variante ovoide",
+    "artist": "Jorge Oteiza",
+    "file": "/idol-gallery/variante-ovoide.lyg",
+    "photo": "/idol-gallery/variante-ovoide.webp",
+    "photo_credit": {
+      "author": "Kamahele",
+      "license": "CC BY-SA 3.0 de",
+      "url": "https://commons.wikimedia.org/wiki/File:Bilbao-Oteiza-11_219.jpg"
+    },
+    "gaussians": 260096,
+    "bytes": 3803875,
+    "seed": 42,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.0,
+    "camera": {
+      "yaw": 2.2536603406058666,
+      "pitch": -0.13180041254208993,
+      "radius": 15.599197735323553,
+      "fov": 6.2926872388111,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "paloma-de-la-paz",
+    "title": "Paloma de la Paz",
+    "artist": "Néstor Basterretxea",
+    "file": "/idol-gallery/paloma-de-la-paz.lyg",
+    "photo": "/idol-gallery/paloma-de-la-paz.webp",
+    "photo_credit": {
+      "author": "DONOSTIA KULTURA",
+      "license": "CC BY-SA 2.0",
+      "url": "https://commons.wikimedia.org/wiki/File:%E2%80%9CPaloma_de_la_Paz%E2%80%9D_eskultura_Zurriolan_-_Escultura_%E2%80%9CPaloma_de_la_Paz%E2%80%9D_en_la_Zurriola._(23535395510).jpg"
+    },
+    "gaussians": 260794,
+    "bytes": 3813154,
+    "seed": 42,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.0,
+    "camera": {
+      "yaw": 0.8083937222174105,
+      "pitch": -0.19324170282911637,
+      "radius": 1.7803468453449576,
+      "fov": 71.61789530095713,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "tall-tree",
+    "title": "Tall Tree & The Eye",
+    "artist": "Anish Kapoor",
+    "file": "/idol-gallery/tall-tree.lyg",
+    "photo": "/idol-gallery/tall-tree.webp",
+    "photo_credit": {
+      "author": "Zarateman",
+      "license": "CC0",
+      "url": "https://commons.wikimedia.org/wiki/File:Bilbao_-_Museo_Guggenheim_-_Tall_Tree_and_the_Eye_(Anish_Kapoor)_4.JPG"
+    },
+    "gaussians": 261755,
+    "bytes": 3887690,
+    "seed": 7,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.2,
+    "camera": {
+      "yaw": 1.0770647294810547,
+      "pitch": -0.2880959627225311,
+      "radius": 15.287025307733188,
+      "fov": 6.697420551168979,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "gure-aitaren-etxea",
+    "title": "Gure Aitaren Etxea",
+    "artist": "Eduardo Chillida",
+    "file": "/idol-gallery/gure-aitaren-etxea.lyg",
+    "photo": "/idol-gallery/gure-aitaren-etxea.webp",
+    "photo_credit": {
+      "author": "Andy Roberts from East London, England",
+      "license": "CC BY 2.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Chillida_statue.jpg"
+    },
+    "gaussians": 260799,
+    "bytes": 3874065,
+    "seed": 42,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 10.0,
+    "camera": {
+      "yaw": 2.0644113216335955,
+      "pitch": -0.1639760389430454,
+      "radius": 1.7352485602700736,
+      "fov": 59.841734014645084,
+      "margin": 1.7
+    }
+  },
+  {
+    "slug": "loyola",
+    "title": "Sanctuary of Loyola",
+    "artist": "",
+    "file": "/idol-gallery/loyola.lyg",
+    "photo": "/idol-gallery/loyola.webp",
+    "photo_credit": {
+      "author": "Jose Luis Filpo Cabana",
+      "license": "CC BY 3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Santuario_de_Loyola._Bas%C3%ADlica.jpg"
+    },
+    "gaussians": 261122,
+    "bytes": 3886996,
+    "seed": 7,
+    "steps": 50,
+    "mode": "real",
+    "seconds": 9.8,
+    "camera": {
+      "yaw": 1.4484860830673327,
+      "pitch": 0.04637687717846167,
+      "radius": 1.995791013381751,
+      "fov": 53.3048825204196,
+      "margin": 1.7
+    }
+  }
+]
