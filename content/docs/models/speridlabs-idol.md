@@ -6,6 +6,13 @@ description: "Run Speridlabs Idol in LibreYOLO: one picture of an object in, the
 lead: "Speridlabs Idol is an image-to-3D model by Speridlabs. It takes one picture of an object and returns the whole object, including the sides the picture never showed, as 3D Gaussian splats. LibreYOLO ports it from the Speridlabs SDK and runs it through the LibreGen factory."
 keywords: [Speridlabs Idol, Speridlabs, image to 3D, single image to 3D, 3D Gaussian splatting, Gaussian splats, 3DGS, PLY, splat, LibreGen]
 last_verified: "1.7.0"
+hero:
+  youtube:
+    id: IGICYFyP_EI
+    start: 191
+    end: 266
+    title: "Speridlabs Idol in the AI Search news roundup on YouTube, 3:11 to 4:26"
+  caption: "Speridlabs Idol in the AI Search news roundup on YouTube (3:11 to 4:26)."
 snippets:
   predict:
     - label: Python

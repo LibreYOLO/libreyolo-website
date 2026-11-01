@@ -34,6 +34,19 @@ Under the hood, a rectified-flow transformer reads DINOv3 and FLUX.2 VAE feature
 
 Speridlabs also runs a [browser demo](https://huggingface.co/spaces/speridlabs/idol) that takes your own images.
 
+<iframe
+  src="https://www.youtube-nocookie.com/embed/IGICYFyP_EI?rel=0&start=191&end=266"
+  width="100%"
+  style="border:0;border-radius:12px;aspect-ratio:16/9"
+  loading="lazy"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerpolicy="strict-origin-when-cross-origin"
+  allowfullscreen
+  title="Speridlabs Idol in the AI Search news roundup on YouTube, 3:11 to 4:26">
+</iframe>
+
+*Speridlabs Idol in the [AI Search](https://www.youtube.com/@theAIsearch) news roundup on YouTube, from 3:11 to 4:26.*
+
 ## Running it
 
 Speridlabs' own path is the [Idol SDK](https://github.com/speridlabs/idol-sdk): clone it, `pip install -e .`, then `python -m idol.sample --image photo.jpg --mode real`. It is clean and well documented. Its two image encoders, DINOv3 and the FLUX.2 VAE, sit in gated Hugging Face repositories, so the first run needs two access requests and an `hf auth login`.

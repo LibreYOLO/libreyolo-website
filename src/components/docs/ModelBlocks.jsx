@@ -211,6 +211,30 @@ export function PageHeader({ doc }) {
 
 export function HeroMedia({ media }) {
   if (!media) return null
+  if (media.youtube) {
+    // Privacy-enhanced embed: youtube-nocookie sets no cookies until playback.
+    // `start` and `end` (seconds) play one segment of a longer video.
+    const { id, start, end, title } = media.youtube
+    const params = new URLSearchParams({ rel: '0' })
+    if (start) params.set('start', String(start))
+    if (end) params.set('end', String(end))
+    return (
+      <figure className="my-8 max-w-[560px]">
+        <iframe
+          className="block aspect-video w-full border border-surface-200 dark:border-white/[0.09]"
+          src={`https://www.youtube-nocookie.com/embed/${id}?${params}`}
+          title={title || media.caption}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
+        {media.caption && (
+          <figcaption className="mt-2 text-[13px] text-surface-500 dark:text-surface-500">{media.caption}</figcaption>
+        )}
+      </figure>
+    )
+  }
   return (
     <figure className="my-8 max-w-[560px]">
       <video
