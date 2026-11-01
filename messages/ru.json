@@ -353,6 +353,28 @@
     "weightsNotHosted": "{license}, распространяются авторами. LibreYOLO не размещает и не зеркалирует их.",
     "weightsHosted": "{license}, повторно опубликованы на <link>huggingface.co/LibreYOLO</link>"
   },
+  "OnnxIo": {
+    "tensor": "Тензор",
+    "color": "Цвет",
+    "scaling": "Масштабирование",
+    "normalization": "Нормализация",
+    "resize": "Изменение размера",
+    "none": "нет",
+    "scalingValue": "пиксель / {scale}",
+    "mean": "среднее {value}",
+    "std": "стандартное отклонение {value}",
+    "padValue": "значение заполнения {value}",
+    "padPosition": "положение заполнения {position}",
+    "padFromMetadata": "положение заполнения берется из ключа метаданных <code>letterbox_pad</code>",
+    "exportHeading": "{task}, {when}",
+    "defaultExport": "экспорт по умолчанию",
+    "outputName": "Выход",
+    "outputShape": "Форма",
+    "outputMeaning": "Смысл",
+    "postprocess": "Постобработка",
+    "reference": "Чтобы проверить собственную реализацию, пропустите тот же файл через LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> возвращает эталонные результаты.",
+    "verified": "Проверено на LibreYOLO {version}."
+  },
   "DocsLanding": {
     "metaTitle": "Документация LibreYOLO",
     "metaDescription": "Установка, обучение, оценка и экспорт всех моделей LibreYOLO, библиотеки компьютерного зрения под лицензией MIT. Один API для детекции, сегментации, оценки позы, глубины, распознавания текста и других задач.",

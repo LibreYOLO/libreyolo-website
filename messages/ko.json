@@ -353,6 +353,28 @@
     "weightsNotHosted": "{license}, 저자가 배포합니다. LibreYOLO는 이를 호스팅하거나 미러링하지 않습니다.",
     "weightsHosted": "{license}, <link>huggingface.co/LibreYOLO</link>에 다시 게시됨"
   },
+  "OnnxIo": {
+    "tensor": "텐서",
+    "color": "색상",
+    "scaling": "스케일링",
+    "normalization": "정규화",
+    "resize": "크기 조정",
+    "none": "없음",
+    "scalingValue": "픽셀 / {scale}",
+    "mean": "평균 {value}",
+    "std": "표준편차 {value}",
+    "padValue": "패딩 값 {value}",
+    "padPosition": "패딩 위치 {position}",
+    "padFromMetadata": "패딩 위치는 메타데이터 키 <code>letterbox_pad</code>에서 읽음",
+    "exportHeading": "{task}, {when}",
+    "defaultExport": "기본 내보내기",
+    "outputName": "출력",
+    "outputShape": "형태",
+    "outputMeaning": "의미",
+    "postprocess": "후처리",
+    "reference": "직접 구현한 코드를 확인하려면 같은 파일을 LibreYOLO로 실행하세요. <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code>가 기준 결과를 반환합니다.",
+    "verified": "LibreYOLO {version}으로 검증함."
+  },
   "DocsLanding": {
     "metaTitle": "LibreYOLO 문서",
     "metaDescription": "MIT 라이선스 컴퓨터 비전 라이브러리 LibreYOLO의 모든 모델을 설치, 학습, 평가하고 내보낼 수 있습니다. 하나의 API로 탐지, 분할, 자세, 깊이, OCR 등을 다룹니다.",

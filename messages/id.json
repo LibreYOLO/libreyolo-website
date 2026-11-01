@@ -353,6 +353,28 @@
     "weightsNotHosted": "{license}, didistribusikan oleh penulisnya. LibreYOLO tidak menghosting atau mencerminkannya.",
     "weightsHosted": "{license}, dipublikasikan ulang di <link>huggingface.co/LibreYOLO</link>"
   },
+  "OnnxIo": {
+    "tensor": "Tensor",
+    "color": "Warna",
+    "scaling": "Penskalaan",
+    "normalization": "Normalisasi",
+    "resize": "Ubah ukuran",
+    "none": "tidak ada",
+    "scalingValue": "piksel / {scale}",
+    "mean": "rata-rata {value}",
+    "std": "simpangan baku {value}",
+    "padValue": "nilai padding {value}",
+    "padPosition": "posisi padding {position}",
+    "padFromMetadata": "posisi padding dari kunci metadata <code>letterbox_pad</code>",
+    "exportHeading": "{task}, {when}",
+    "defaultExport": "ekspor default",
+    "outputName": "Output",
+    "outputShape": "Bentuk",
+    "outputMeaning": "Arti",
+    "postprocess": "Pascapemrosesan",
+    "reference": "Untuk memeriksa implementasi Anda sendiri, jalankan file yang sama lewat LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> mengembalikan hasil acuan.",
+    "verified": "Diverifikasi dengan LibreYOLO {version}."
+  },
   "DocsLanding": {
     "metaTitle": "Dokumentasi LibreYOLO",
     "metaDescription": "Instal, latih, evaluasi, dan ekspor setiap model di LibreYOLO, library computer vision berlisensi MIT. Satu API untuk deteksi, segmentasi, pose, kedalaman, OCR, dan lainnya.",

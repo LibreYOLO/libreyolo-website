@@ -125,7 +125,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 
 ## インストール
@@ -195,6 +195,10 @@ YOLO9とYOLOXのMosaicは、最大20回の抽出でアノテーション付き�
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite)では、キャリブレーションデータと`int8=True`を使います。
+
+### ONNX の入力と出力
+
+<onnx-io />
 
 ## チェックポイント
 

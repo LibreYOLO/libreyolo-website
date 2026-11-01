@@ -353,6 +353,28 @@
     "weightsNotHosted": "{license}, поширюється авторами. LibreYOLO не розміщує й не дублює ці ваги.",
     "weightsHosted": "{license}, повторно опубліковано на <link>huggingface.co/LibreYOLO</link>"
   },
+  "OnnxIo": {
+    "tensor": "Тензор",
+    "color": "Колір",
+    "scaling": "Масштабування",
+    "normalization": "Нормалізація",
+    "resize": "Зміна розміру",
+    "none": "немає",
+    "scalingValue": "піксель / {scale}",
+    "mean": "середнє {value}",
+    "std": "стандартне відхилення {value}",
+    "padValue": "значення заповнення {value}",
+    "padPosition": "положення заповнення {position}",
+    "padFromMetadata": "положення заповнення береться з ключа метаданих <code>letterbox_pad</code>",
+    "exportHeading": "{task}, {when}",
+    "defaultExport": "експорт за замовчуванням",
+    "outputName": "Вихід",
+    "outputShape": "Форма",
+    "outputMeaning": "Значення",
+    "postprocess": "Постобробка",
+    "reference": "Щоб перевірити власну реалізацію, пропустіть той самий файл через LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> повертає еталонні результати.",
+    "verified": "Перевірено на LibreYOLO {version}."
+  },
   "DocsLanding": {
     "metaTitle": "Документація LibreYOLO",
     "metaDescription": "Встановлюйте, навчайте, оцінюйте й експортуйте будь-яку модель у бібліотеці комп'ютерного зору LibreYOLO з ліцензією MIT. Один API для виявлення, сегментації, оцінювання пози, глибини, OCR тощо.",

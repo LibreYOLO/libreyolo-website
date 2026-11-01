@@ -143,7 +143,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 
 ## Installazione
@@ -272,6 +272,10 @@ le cose stanno nella pagina di quel formato.
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite) usa `int8=True` con dati di calibrazione.
+
+### Input e output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

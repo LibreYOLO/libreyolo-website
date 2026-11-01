@@ -224,6 +224,10 @@ Both are on that format's page.
 
 [TFLite INT8](/docs/export/tflite) uses `int8=True` with calibration data.
 
+### ONNX inputs and outputs
+
+<onnx-io />
+
 ## Checkpoints
 
 Every published weight file for this family.

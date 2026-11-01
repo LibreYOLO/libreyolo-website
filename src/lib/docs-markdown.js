@@ -1,4 +1,5 @@
 import { getModelDiagram } from '@/lib/model-diagrams'
+import { getOnnxIo, scalingOf, normalizationOf } from '@/lib/onnx-io'
 import registry, { currentDocs, expandSelfClosingTags } from '@/lib/docs'
 
 /*
@@ -49,6 +50,44 @@ function exportMatrix(family, { getTaskMeta, getExportFormats }) {
     }),
   ])
   return `${table(['Task', ...formats.map((f) => f.label)], rows)}\n\nA "yes" means the export is supported. An empty cell means the exporter refuses that combination.`
+}
+
+function onnxIo(family, { getTaskMeta, archived }) {
+  const data = archived ? null : getOnnxIo(family?.key)
+  if (!data?.variants?.length) return ''
+  const cell = (s) => String(s ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ')
+  const many = data.variants.length > 1
+  const out = data.variants.map((v) => {
+    const i = v.input
+    const scale = scalingOf(i)
+    const norm = normalizationOf(i)
+    const resize = [`\`${i.resize}\``, i.interpolation && `\`${i.interpolation}\``,
+      i.resize === 'letterbox' && i.pad_value != null && `pad value ${i.pad_value}`,
+      i.resize === 'letterbox' && i.pad_position &&
+        (i.pad_position === 'metadata' ? 'pad position from the `letterbox_pad` metadata key' : `pad position ${i.pad_position}`),
+    ].filter(Boolean).join(', ')
+    const parts = []
+    if (many) parts.push(`**${v.label}**`)
+    parts.push(table(['Input', ''], [
+      ['Tensor', `\`${i.name}\` \`${i.dtype}\` \`${i.shape}\``],
+      ['Color', i.color],
+      ['Scaling', scale ? `pixel / ${scale}` : 'none'],
+      ['Normalization', norm ? [norm.mean && `mean ${norm.mean}`, norm.std && `std ${norm.std}`].filter(Boolean).join(', ') : 'none'],
+      ['Resize', resize],
+    ]))
+    if (i.notes?.length) parts.push(i.notes.join('\n\n'))
+    for (const [task, entries] of Object.entries(v.tasks || {})) {
+      for (const e of entries) {
+        parts.push(`**${getTaskMeta(task).label}, ${e.when === 'default' ? 'default export' : e.when}**`)
+        parts.push(table(['Output', 'Shape', 'Meaning'], e.outputs.map((o) => [`\`${o.name}\``, `\`${o.shape}\``, cell(o.meaning)])))
+        if (e.postprocess?.length) parts.push(`Postprocessing:\n\n${e.postprocess.map((s, n) => `${n + 1}. ${s}`).join('\n')}`)
+      }
+    }
+    return parts.join('\n\n')
+  })
+  const verified = data.verified_with ? ` Verified with LibreYOLO ${data.verified_with}.` : ''
+  out.push('To check your own implementation, run the same file through LibreYOLO: `LibreYOLO("model.onnx").predict("image.jpg")` returns the reference results.' + verified)
+  return out.join('\n\n')
 }
 
 function provenance(family) {
@@ -106,6 +145,7 @@ export function docToMarkdown(doc, source = currentDocs) {
   replace('benchmark-table', (a) => benchmarkTable(family, /task="(\w+)"/.exec(a)?.[1] || 'detect'))
   replace('checkpoint-table', () => checkpointTable(family, source))
   replace('export-matrix', () => exportMatrix(family, source))
+  replace('onnx-io', () => onnxIo(family, source))
   replace('citation-block', () => citation(family))
   replace('code-tabs', (a) => codeTabs(snippets, /name="([\w-]+)"/.exec(a)?.[1]))
   replace('task-support', () => '')

@@ -353,6 +353,28 @@
     "weightsNotHosted": "{license}, do tác giả phân phối. LibreYOLO không lưu trữ hoặc sao chép chúng.",
     "weightsHosted": "{license}, được phát hành lại tại <link>huggingface.co/LibreYOLO</link>"
   },
+  "OnnxIo": {
+    "tensor": "Tensor",
+    "color": "Màu",
+    "scaling": "Chuẩn hóa tỉ lệ",
+    "normalization": "Chuẩn hóa",
+    "resize": "Đổi kích thước",
+    "none": "không có",
+    "scalingValue": "pixel / {scale}",
+    "mean": "trung bình {value}",
+    "std": "độ lệch chuẩn {value}",
+    "padValue": "giá trị đệm {value}",
+    "padPosition": "vị trí đệm {position}",
+    "padFromMetadata": "vị trí đệm lấy từ khóa metadata <code>letterbox_pad</code>",
+    "exportHeading": "{task}, {when}",
+    "defaultExport": "xuất mặc định",
+    "outputName": "Đầu ra",
+    "outputShape": "Hình dạng",
+    "outputMeaning": "Ý nghĩa",
+    "postprocess": "Hậu xử lý",
+    "reference": "Để kiểm tra bản triển khai của bạn, hãy chạy cùng tệp đó qua LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> trả về kết quả tham chiếu.",
+    "verified": "Đã kiểm chứng với LibreYOLO {version}."
+  },
   "DocsLanding": {
     "metaTitle": "Tài liệu LibreYOLO",
     "metaDescription": "Cài đặt, huấn luyện, đánh giá và xuất mọi mô hình trong LibreYOLO, thư viện thị giác máy tính được cấp giấy phép MIT. Một API dùng cho phát hiện, phân đoạn, tư thế, độ sâu, OCR và nhiều tác vụ khác.",

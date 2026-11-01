@@ -353,6 +353,28 @@
     "weightsNotHosted": "{license}, distribuidos por sus autores. LibreYOLO no los aloja ni los replica.",
     "weightsHosted": "{license}, republicados en <link>huggingface.co/LibreYOLO</link>"
   },
+  "OnnxIo": {
+    "tensor": "Tensor",
+    "color": "Color",
+    "scaling": "Escalado",
+    "normalization": "Normalización",
+    "resize": "Redimensionado",
+    "none": "ninguna",
+    "scalingValue": "píxel / {scale}",
+    "mean": "media {value}",
+    "std": "desviación típica {value}",
+    "padValue": "valor de relleno {value}",
+    "padPosition": "posición del relleno {position}",
+    "padFromMetadata": "posición del relleno según la clave de metadatos <code>letterbox_pad</code>",
+    "exportHeading": "{task}, {when}",
+    "defaultExport": "exportación por defecto",
+    "outputName": "Salida",
+    "outputShape": "Forma",
+    "outputMeaning": "Significado",
+    "postprocess": "Posprocesado",
+    "reference": "Para comprobar tu propia implementación, pasa el mismo archivo por LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> devuelve los resultados de referencia.",
+    "verified": "Verificado con LibreYOLO {version}."
+  },
   "DocsLanding": {
     "metaTitle": "Documentación de LibreYOLO",
     "metaDescription": "Instala, entrena, evalúa y exporta todos los modelos de LibreYOLO, la biblioteca de visión por computador con licencia MIT. Una API para detección, segmentación, pose, profundidad, OCR y mucho más.",

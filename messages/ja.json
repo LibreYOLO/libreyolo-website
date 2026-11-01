@@ -353,6 +353,28 @@
     "weightsNotHosted": "{license}、著者が配布。LibreYOLOではホストもミラーもしていません。",
     "weightsHosted": "{license}、<link>huggingface.co/LibreYOLO</link>で再公開"
   },
+  "OnnxIo": {
+    "tensor": "テンソル",
+    "color": "色",
+    "scaling": "スケーリング",
+    "normalization": "正規化",
+    "resize": "リサイズ",
+    "none": "なし",
+    "scalingValue": "ピクセル値 / {scale}",
+    "mean": "平均 {value}",
+    "std": "標準偏差 {value}",
+    "padValue": "パディング値 {value}",
+    "padPosition": "パディング位置 {position}",
+    "padFromMetadata": "パディング位置はメタデータキー <code>letterbox_pad</code> から取得",
+    "exportHeading": "{task}、{when}",
+    "defaultExport": "デフォルトのエクスポート",
+    "outputName": "出力",
+    "outputShape": "形状",
+    "outputMeaning": "意味",
+    "postprocess": "後処理",
+    "reference": "自分の実装を確認するには、同じファイルを LibreYOLO で実行します。<code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> が基準となる結果を返します。",
+    "verified": "LibreYOLO {version} で検証済み。"
+  },
   "DocsLanding": {
     "metaTitle": "LibreYOLOドキュメント",
     "metaDescription": "MITライセンスのコンピュータビジョンライブラリLibreYOLOに含まれるすべてのモデルを、インストール、学習、評価、エクスポートできます。検出、セグメンテーション、姿勢推定、深度推定、OCRなどを1つのAPIで扱えます。",

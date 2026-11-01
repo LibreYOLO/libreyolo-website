@@ -23,6 +23,7 @@ import { Fragment } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { currentDocs } from '@/lib/docs'
+import { getOnnxIo, scalingOf, normalizationOf } from '@/lib/onnx-io'
 
 const HF_BASE = 'https://huggingface.co/LibreYOLO'
 
@@ -485,6 +486,128 @@ export function ExportMatrix({ family, source = currentDocs }) {
         </table>
       </div>
 
+    </div>
+  )
+}
+
+/* ── ONNX inputs and outputs ─────────────────────────────────────── */
+
+/*
+ * What goes into and comes out of the exported graph, for people who run the
+ * file in a bare runtime. Data is one JSON file per family; labels are
+ * translated, the free text inside the JSON is English on every locale.
+ */
+const C = ({ children }) => (
+  <code className="rounded bg-libre-500/10 px-1.5 py-0.5 font-mono text-[0.85em] text-libre-700 dark:bg-white/[0.06] dark:text-libre-300">
+    {children}
+  </code>
+)
+
+function InputTable({ input }) {
+  const t = useTranslations('OnnxIo')
+  const scale = scalingOf(input)
+  const norm = normalizationOf(input)
+  const rows = [
+    [t('tensor'), <Fragment key="v"><C>{input.name}</C> <C>{input.dtype}</C> <C>{input.shape}</C></Fragment>],
+    [t('color'), input.color],
+    [t('scaling'), scale ? t('scalingValue', { scale }) : t('none')],
+    [t('normalization'), norm
+      ? [norm.mean && t('mean', { value: norm.mean }), norm.std && t('std', { value: norm.std })].filter(Boolean).join(', ')
+      : t('none')],
+    [t('resize'), (
+      <Fragment key="v">
+        <C>{input.resize}</C>{input.interpolation && <>, <C>{input.interpolation}</C></>}
+        {input.resize === 'letterbox' && input.pad_value != null && <>, {t('padValue', { value: input.pad_value })}</>}
+        {input.resize === 'letterbox' && input.pad_position && (
+          <>, {input.pad_position === 'metadata'
+            ? t.rich('padFromMetadata', { code: (c) => <C>{c}</C> })
+            : t('padPosition', { position: input.pad_position })}</>
+        )}
+      </Fragment>
+    )],
+  ]
+  return (
+    <>
+      <Table>
+        <tbody>
+          {rows.map(([label, value]) => (
+            <tr key={label}>
+              <th scope="row" className="w-36 border-b border-surface-200/70 px-3 py-1.5 text-left font-normal text-surface-500 dark:border-white/[0.07] dark:text-surface-500">{label}</th>
+              <Td>{value}</Td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      {input.notes?.length > 0 && (
+        <div className="mt-2 space-y-1">
+          {input.notes.map((n) => <Note key={n}>{n}</Note>)}
+        </div>
+      )}
+    </>
+  )
+}
+
+function ExportOutputs({ taskLabel, entry }) {
+  const t = useTranslations('OnnxIo')
+  const when = entry.when === 'default' ? t('defaultExport') : entry.when
+  return (
+    <div className="mt-6">
+      <p className="mb-1 text-[13.5px] font-semibold text-surface-800 dark:text-surface-200">
+        {t('exportHeading', { task: taskLabel, when })}
+      </p>
+      <Table>
+        <thead>
+          <tr>
+            <Th>{t('outputName')}</Th>
+            <Th>{t('outputShape')}</Th>
+            <Th>{t('outputMeaning')}</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {entry.outputs.map((o) => (
+            <tr key={o.name}>
+              <Td><C>{o.name}</C></Td>
+              <Td className="whitespace-nowrap"><C>{o.shape}</C></Td>
+              <Td>{o.meaning}</Td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      {entry.postprocess?.length > 0 && (
+        <>
+          <p className="mb-1 mt-3 text-[13px] text-surface-500">{t('postprocess')}</p>
+          <ol className="max-w-[68ch] list-decimal space-y-1 pl-5 text-[14px] leading-[1.6] text-surface-600 dark:text-surface-400">
+            {entry.postprocess.map((s) => <li key={s}>{s}</li>)}
+          </ol>
+        </>
+      )}
+    </div>
+  )
+}
+
+export function OnnxIo({ family, source = currentDocs }) {
+  const t = useTranslations('OnnxIo')
+  if (source.archived) return null
+  const data = getOnnxIo(family?.key)
+  if (!data?.variants?.length) return null
+  const { getTaskMeta } = source
+  const many = data.variants.length > 1
+  return (
+    <div className="my-5">
+      {data.variants.map((v) => (
+        <section key={v.keys?.join('+') || v.label} className="mb-8 last:mb-0">
+          {many && <p className="mb-2 text-[13px] font-semibold uppercase tracking-wide text-surface-500">{v.label}</p>}
+          <InputTable input={v.input} />
+          {Object.entries(v.tasks || {}).map(([task, entries]) =>
+            entries.map((entry) => (
+              <ExportOutputs key={`${task}-${entry.when}`} taskLabel={getTaskMeta(task).label} entry={entry} />
+            )))}
+        </section>
+      ))}
+      <Note>
+        {t.rich('reference', { code: (c) => <C>{c}</C> })}
+        {data.verified_with && ` ${t('verified', { version: data.verified_with })}`}
+      </Note>
     </div>
   )
 }

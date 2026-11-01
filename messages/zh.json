@@ -353,6 +353,28 @@
     "weightsNotHosted": "采用 {license} 许可，由作者分发。LibreYOLO 不托管或镜像这些权重。",
     "weightsHosted": "采用 {license} 许可，重新发布在 <link>huggingface.co/LibreYOLO</link>"
   },
+  "OnnxIo": {
+    "tensor": "张量",
+    "color": "颜色",
+    "scaling": "缩放",
+    "normalization": "归一化",
+    "resize": "缩放方式",
+    "none": "无",
+    "scalingValue": "像素 / {scale}",
+    "mean": "均值 {value}",
+    "std": "标准差 {value}",
+    "padValue": "填充值 {value}",
+    "padPosition": "填充位置 {position}",
+    "padFromMetadata": "填充位置取自元数据键 <code>letterbox_pad</code>",
+    "exportHeading": "{task}，{when}",
+    "defaultExport": "默认导出",
+    "outputName": "输出",
+    "outputShape": "形状",
+    "outputMeaning": "含义",
+    "postprocess": "后处理",
+    "reference": "要检查你自己的实现，请用 LibreYOLO 运行同一个文件：<code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> 会返回参考结果。",
+    "verified": "已用 LibreYOLO {version} 验证。"
+  },
   "DocsLanding": {
     "metaTitle": "LibreYOLO 文档",
     "metaDescription": "安装、训练、评估和导出采用 MIT 许可的计算机视觉库 LibreYOLO 中的每个模型。一套 API 覆盖检测、分割、姿态、深度、OCR 等任务。",

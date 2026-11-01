@@ -139,7 +139,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 
 ## Instalação
@@ -264,6 +264,10 @@ duas coisas estão na página daquele formato.
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite) usa `int8=True` com dados de calibração.
+
+### Entradas e saídas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 
