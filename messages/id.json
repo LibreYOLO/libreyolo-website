@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "Ya",
     "titleRest": ", Anda boleh memakai ini.",
-    "subtitle": "100% gratis, tanpa syarat tersembunyi. LibreYOLO adalah open source seperti yang seharusnya YOLO sejak dulu."
+    "subtitle": "100% gratis, tanpa syarat tersembunyi. LibreYOLO adalah open source seperti yang seharusnya YOLO sejak dulu.",
+    "licensingCta": "Baca panduan lisensi"
   },
   "Articles": {
     "title": "Artikel",

@@ -455,7 +455,7 @@ export async function StandaloneDocView({ locale, slug, source = currentDocs }) 
   const href = source.href
   const path = `/docs/${slug}`
   const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
-  const headings = extractHeadings(doc.content)
+  const headings = extractHeadings(doc.content, [], doc.headingIds)
   const breadcrumbs = [{ label: chrome('docsCrumb'), href: href('/docs') }, { label: doc.title }]
 
   const jsonLd = [
@@ -489,7 +489,7 @@ export async function StandaloneDocView({ locale, slug, source = currentDocs }) 
           <ArchiveNotice locale={locale} source={source} currentPath={currentCounterpart(path, locale, STANDALONE, slug).path} />
           <PageHeader doc={doc} />
 
-          <DocMarkdown snippets={doc.snippets || {}} bareTables {...(source.archived ? { source } : {})}>
+          <DocMarkdown headingIds={doc.headingIds} snippets={doc.snippets || {}} bareTables {...(source.archived ? { source } : {})}>
             {doc.content}
           </DocMarkdown>
 
@@ -530,7 +530,7 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
   const url = localeUrl(path, doc.translated ? locale : routing.defaultLocale)
   // Model pages are a usage reference: install, predict, variants, train,
   // validate, export, licensing. No FAQ and no related-links section.
-  const headings = extractHeadings(doc.content)
+  const headings = extractHeadings(doc.content, [], doc.headingIds)
   if (diagram) {
     const labels = await getTranslations({ locale, namespace: 'ModelDiagram' })
     headings.push({ id: 'architecture', title: labels('title', { model: diagram.title }) })
@@ -602,7 +602,7 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
               {registeredFamily ? <ModelHeader doc={doc} family={family} {...archivedSource} /> : <PageHeader doc={doc} />}
               <HeroMedia media={doc.hero} />
 
-              <DocMarkdown family={family} snippets={doc.snippets || {}} {...archivedSource}>
+              <DocMarkdown headingIds={doc.headingIds} family={family} snippets={doc.snippets || {}} {...archivedSource}>
                 {doc.content}
               </DocMarkdown>
 
@@ -614,7 +614,7 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
             <>
               <PageHeader doc={doc} />
 
-              <DocMarkdown snippets={doc.snippets || {}} bareTables {...archivedSource}>
+              <DocMarkdown headingIds={doc.headingIds} snippets={doc.snippets || {}} bareTables {...archivedSource}>
                 {doc.content}
               </DocMarkdown>
 

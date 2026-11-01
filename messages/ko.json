@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "네",
     "titleRest": ", 사용하셔도 됩니다.",
-    "subtitle": "100% 무료이고 조건도 없습니다. LibreYOLO는 YOLO가 원래 그랬어야 할 모습대로 오픈 소스입니다."
+    "subtitle": "100% 무료이고 조건도 없습니다. LibreYOLO는 YOLO가 원래 그랬어야 할 모습대로 오픈 소스입니다.",
+    "licensingCta": "라이선스 가이드 보기"
   },
   "Articles": {
     "title": "아티클",

@@ -42,12 +42,16 @@ function dom({ node, ...rest }) {
  * generated blocks on that release's registry and keeps /docs links inside the
  * archive wherever the archive has the target page.
  */
-export default function DocMarkdown({ children, family, snippets = {}, source }) {
+export default function DocMarkdown({ children, family, snippets = {}, source, headingIds = {} }) {
   const href = (target) => (source ? source.href(target) : target)
+  const headingId = (kids) => {
+    const id = slugifyHeading(textOf(kids))
+    return headingIds[id] ?? id
+  }
   const components = {
-    h2: ({ children: kids }) => <SectionTitle id={slugifyHeading(textOf(kids))}>{kids}</SectionTitle>,
+    h2: ({ children: kids }) => <SectionTitle id={headingId(kids)}>{kids}</SectionTitle>,
     h3: ({ children: kids }) => (
-      <h3 id={slugifyHeading(textOf(kids))} className="scroll-mt-24 mt-7 mb-2 text-[15px] font-semibold text-surface-900 dark:text-white">
+      <h3 id={headingId(kids)} className="scroll-mt-24 mt-7 mb-2 text-[15px] font-semibold text-surface-900 dark:text-white">
         {kids}
       </h3>
     ),

@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "Sim",
     "titleRest": ", você pode usar isto.",
-    "subtitle": "100% grátis, sem pegadinha. O LibreYOLO é código aberto como o YOLO sempre deveria ter sido."
+    "subtitle": "100% grátis, sem pegadinha. O LibreYOLO é código aberto como o YOLO sempre deveria ter sido.",
+    "licensingCta": "Ler o guia de licenciamento"
   },
   "Articles": {
     "title": "Artigos",

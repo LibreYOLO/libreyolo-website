@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "Yes",
     "titleRest": ", you can use this.",
-    "subtitle": "100% free, no strings attached. LibreYOLO is open source like YOLO was always supposed to be."
+    "subtitle": "100% free, no strings attached. LibreYOLO is open source like YOLO was always supposed to be.",
+    "licensingCta": "Read the licensing guide"
   },
   "Articles": {
     "title": "Articles",

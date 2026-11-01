@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "はい",
     "titleRest": "、使えます。",
-    "subtitle": "100%無料で、条件は一切ありません。LibreYOLOは、YOLOが本来そうあるべきだったとおりのオープンソースです。"
+    "subtitle": "100%無料で、条件は一切ありません。LibreYOLOは、YOLOが本来そうあるべきだったとおりのオープンソースです。",
+    "licensingCta": "ライセンスガイドを読む"
   },
   "Articles": {
     "title": "記事",

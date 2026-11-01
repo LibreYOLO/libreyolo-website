@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "Tak",
     "titleRest": ", możesz tego używać.",
-    "subtitle": "100% za darmo, bez haczyków. LibreYOLO jest otwarte tak, jak YOLO miało być od zawsze."
+    "subtitle": "100% za darmo, bez haczyków. LibreYOLO jest otwarte tak, jak YOLO miało być od zawsze.",
+    "licensingCta": "Przeczytaj przewodnik po licencjach"
   },
   "Articles": {
     "title": "Artykuły",

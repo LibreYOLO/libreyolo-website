@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "Có",
     "titleRest": ", bạn được dùng cái này.",
-    "subtitle": "Miễn phí 100%, không ràng buộc gì. LibreYOLO là mã nguồn mở đúng như YOLO vốn phải như vậy."
+    "subtitle": "Miễn phí 100%, không ràng buộc gì. LibreYOLO là mã nguồn mở đúng như YOLO vốn phải như vậy.",
+    "licensingCta": "Đọc hướng dẫn giấy phép"
   },
   "Articles": {
     "title": "Bài viết",

@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "Sì",
     "titleRest": ", puoi usarlo.",
-    "subtitle": "100% gratuito, senza condizioni nascoste. LibreYOLO è open source come YOLO avrebbe sempre dovuto essere."
+    "subtitle": "100% gratuito, senza condizioni nascoste. LibreYOLO è open source come YOLO avrebbe sempre dovuto essere.",
+    "licensingCta": "Leggi la guida alle licenze"
   },
   "Articles": {
     "title": "Articoli",

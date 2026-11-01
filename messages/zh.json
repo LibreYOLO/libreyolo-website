@@ -239,7 +239,8 @@
   "Commercial": {
     "titleEmphasis": "是的",
     "titleRest": "，你可以使用它。",
-    "subtitle": "100% 免费，没有任何附加条件。LibreYOLO 是开源的，正如 YOLO 本应有的样子。"
+    "subtitle": "100% 免费，没有任何附加条件。LibreYOLO 是开源的，正如 YOLO 本应有的样子。",
+    "licensingCta": "阅读许可证指南"
   },
   "Articles": {
     "title": "文章",

@@ -72,7 +72,10 @@ function createDocsSource({ version, registry, nav, docsDir, docDir, docFile, up
     if (!fs.existsSync(filePath)) return null
 
     const { data, content } = matter(fs.readFileSync(filePath, 'utf8'))
-    return { section, slug, ...data, content: expandSelfClosingTags(content), translated }
+    const headingIds = translated
+      ? headingIdMap(content, matter(fs.readFileSync(englishPath, 'utf8')).content)
+      : {}
+    return { section, slug, ...data, content: expandSelfClosingTags(content), translated, headingIds }
   }
 
   function getDocSlugs(section) {
@@ -286,16 +289,48 @@ export { slugifyHeading }
 
 // The right-hand rail is built from the markdown source rather than the DOM so
 // it renders server-side with no layout shift.
-export function extractHeadings(markdown, extra = []) {
+export function extractHeadings(markdown, extra = [], headingIds = {}) {
   const headings = []
   let inFence = false
   for (const line of String(markdown).split('\n')) {
     if (/^\s*```/.test(line)) { inFence = !inFence; continue }
     if (inFence) continue
     const match = /^##\s+(.+?)\s*$/.exec(line)
-    if (match) headings.push({ id: slugifyHeading(match[1]), title: match[1] })
+    if (match) {
+      const id = slugifyHeading(match[1])
+      headings.push({ id: headingIds[id] ?? id, title: match[1] })
+    }
   }
   return [...headings, ...extra]
+}
+
+// A translated page keeps the English heading ids, so a link to
+// /docs/train/validation#confusion-matrix lands on the section in every
+// language, and so do search results, whose index is English. Headings are
+// paired by position within each level; a level whose count differs from the
+// English page keeps its own ids rather than risk pointing at the wrong section.
+function headingIdMap(translated, english) {
+  const idsByLevel = (markdown) => {
+    const levels = { 2: [], 3: [] }
+    let inFence = false
+    for (const line of String(markdown).split('\n')) {
+      if (/^\s*```/.test(line)) { inFence = !inFence; continue }
+      if (inFence) continue
+      const match = /^(#{2,3})\s+(.+?)\s*$/.exec(line)
+      if (match) levels[match[1].length].push(slugifyHeading(match[2]))
+    }
+    return levels
+  }
+  const from = idsByLevel(translated)
+  const to = idsByLevel(english)
+  const map = {}
+  for (const level of [2, 3]) {
+    if (from[level].length !== to[level].length) continue
+    from[level].forEach((id, i) => {
+      if (!(id in map)) map[id] = to[level][i]
+    })
+  }
+  return map
 }
 
 /* Frozen single-page docs for releases before the v2 tree. Kept reachable and
