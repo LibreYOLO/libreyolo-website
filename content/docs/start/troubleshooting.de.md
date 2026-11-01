@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo fehlerbehebung
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Die Fehler sind nach dem angezeigten Text gruppiert. Wenn deine Meldung hier
@@ -123,16 +123,21 @@ Dateinamen auf.
 ## train() oder val() wurde auf oberster Ebene deines Skripts aufgerufen
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows unterstützt kein `fork`, und Python unter macOS verwendet es
 standardmäßig nicht. Dataloader-Worker starten daher, indem sie dein Skript
 erneut importieren. Die Startmethoden `spawn` und `forkserver` tun das auf jeder
 Plattform. Ohne einen Guard `if __name__ == "__main__":` würde jeder Worker
-deinen Aufruf von `train()` oder `val()` erneut ausführen. Deshalb bricht jeder
-an diesem Aufruf ab, gibt diese Zeile mit dem Namen des Aufrufs aus, und das
-Skript endet mit einem Fehler.
+deinen Aufruf von `train()` oder `val()` erneut ausführen. Seit 1.7.1 erkennt
+LibreYOLO das vorab und führt den Aufruf stattdessen mit `workers=0` aus, auch
+wenn du einen anderen Wert übergeben hast, und gibt die obige Zeile einmal aus.
+Das Training funktioniert, aber die Daten werden im Hauptprozess geladen, was
+langsamer ist. In 1.7.0 brach dasselbe Skript mit einem Fehler ab, der dazu riet,
+den Guard hinzuzufügen oder `workers=0` zu übergeben.
+
+Um wieder parallele Worker zu nutzen, setze den Aufruf unter den Guard:
 
 ```python
 def main():
@@ -142,8 +147,8 @@ if __name__ == "__main__":
     main()
 ```
 
-Mit `workers=0` lässt sich das Problem ebenfalls vermeiden, allerdings auf
-Kosten des Durchsatzes. Der Guard ist die bessere Lösung.
+Notebooks, die CLI und Linux, wo Worker mit `fork` starten, sind nicht
+betroffen.
 
 ## Zwei Fehler ohne Ausnahme
 

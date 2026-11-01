@@ -108,15 +108,20 @@ lists the exact published filenames.
 ## train() or val() was called at the top level of your script
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows has no `fork`, and Python on macOS does not use it by default, so
 dataloader workers start by re-importing your script. The `spawn` and
 `forkserver` start methods do the same on any platform. Without an
 `if __name__ == "__main__":` guard, each worker would run your `train()` or
-`val()` call again, so each one stops at that call, prints this line naming the
-call, and the script exits with an error.
+`val()` call again. Since 1.7.1, LibreYOLO sees this coming and runs the call
+with `workers=0` instead, even if you passed another value, and logs the line
+above once. Training works, but data loads in the main process, which is
+slower. In 1.7.0 the same script stopped with an error that said to add the
+guard or pass `workers=0`.
+
+To get parallel workers back, put the call under the guard:
 
 ```python
 def main():
@@ -126,8 +131,8 @@ if __name__ == "__main__":
     main()
 ```
 
-Setting `workers=0` also avoids it, at a throughput cost. The guard is the
-better fix.
+Notebooks, the CLI and Linux, where workers start with `fork`, are not
+affected.
 
 ## Two failures that do not raise
 

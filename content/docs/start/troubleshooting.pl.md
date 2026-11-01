@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - rozwiązywanie problemów libreyolo
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Błędy są pogrupowane według wyświetlanego tekstu. Jeśli danego komunikatu nie
@@ -124,16 +124,21 @@ plików.
 ## train() lub val() zostało wywołane na najwyższym poziomie skryptu
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 System Windows nie ma mechanizmu `fork`, a Python w systemie macOS domyślnie go
 nie używa, dlatego procesy robocze modułu wczytującego dane rozpoczynają pracę
 od ponownego importu skryptu. Metody startu `spawn` i `forkserver` robią to samo
 na każdej platformie. Bez warunku `if __name__ == "__main__":` każdy proces
-roboczy ponownie wykonałby wywołanie `train()` lub `val()`, więc każdy z nich
-zatrzymuje się na tym wywołaniu, wypisuje tę linię z nazwą wywołania, a skrypt
-kończy działanie z błędem.
+roboczy ponownie wykonałby wywołanie `train()` lub `val()`. Od wersji 1.7.1
+LibreYOLO wykrywa to z wyprzedzeniem i zamiast tego wykonuje wywołanie z
+`workers=0`, nawet jeśli podano inną wartość, a powyższą linię zapisuje w logu
+jednokrotnie. Trening działa, ale dane są wczytywane w głównym procesie, co jest
+wolniejsze. W wersji 1.7.0 ten sam skrypt kończył się błędem z poleceniem dodania
+warunku lub przekazania `workers=0`.
+
+Aby odzyskać równoległe procesy robocze, należy umieścić wywołanie pod warunkiem:
 
 ```python
 def main():
@@ -143,8 +148,8 @@ if __name__ == "__main__":
     main()
 ```
 
-Ustawienie `workers=0` również pozwala tego uniknąć kosztem przepustowości.
-Warunek jest lepszym rozwiązaniem.
+Notebooki, CLI oraz Linux, gdzie procesy robocze startują przez `fork`, nie są
+tym dotknięte.
 
 ## Dwa problemy, które nie zgłaszają wyjątków
 

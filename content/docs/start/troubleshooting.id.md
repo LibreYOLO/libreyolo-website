@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - troubleshooting libreyolo
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Error dikelompokkan berdasarkan teks yang terlihat. Jika pesan tidak tersedia di
@@ -118,16 +118,21 @@ checkpoint pada setiap halaman model mencantumkan nama berkas terbitan persis.
 ## train() atau val() dipanggil di tingkat atas script Anda
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows tidak memiliki `fork`, dan Python di macOS tidak memakainya secara
 default, sehingga worker dataloader dimulai dengan mengimpor ulang script. Metode
 mulai `spawn` dan `forkserver` melakukan hal yang sama di platform mana pun. Tanpa
 guard `if __name__ == "__main__":`, setiap worker akan menjalankan ulang
-pemanggilan `train()` atau `val()` Anda, sehingga masing-masing berhenti pada
-pemanggilan itu, mencetak baris ini yang menyebut pemanggilannya, dan script keluar
-dengan error.
+pemanggilan `train()` atau `val()` Anda. Sejak 1.7.1, LibreYOLO mendeteksinya
+lebih awal dan menjalankan pemanggilan itu dengan `workers=0`, meskipun Anda
+memberikan nilai lain, lalu mencatat baris di atas satu kali. Pelatihan tetap
+berjalan, tetapi data dimuat di proses utama sehingga lebih lambat. Pada 1.7.0,
+script yang sama berhenti dengan error yang menyarankan menambahkan guard atau
+memberikan `workers=0`.
+
+Untuk mengembalikan worker paralel, letakkan pemanggilan di bawah guard:
 
 ```python
 def main():
@@ -137,8 +142,7 @@ if __name__ == "__main__":
     main()
 ```
 
-Menetapkan `workers=0` juga menghindarinya dengan konsekuensi throughput. Guard
-adalah perbaikan yang lebih baik.
+Notebook, CLI, dan Linux, tempat worker dimulai dengan `fork`, tidak terpengaruh.
 
 ## Dua kegagalan yang tidak memunculkan error
 

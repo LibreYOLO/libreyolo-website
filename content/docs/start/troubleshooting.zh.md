@@ -10,7 +10,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo 问题排查
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 报错按你看到的文字分组。如果你的报错信息不在这里，[FAQ](/docs/faq) 回答的是那些
@@ -99,14 +99,18 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 ## 在脚本顶层调用了 train() 或 val()
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows 没有 `fork`，macOS 上的 Python 默认也不使用它，所以 dataloader 的 worker
 是靠重新导入你的脚本来启动的。`spawn` 和 `forkserver` 启动方式在任何平台上都是
 如此。没有 `if __name__ == "__main__":` 这层保护，每个 worker 都会把你的 `train()` 或
-`val()` 调用再跑一遍，所以每个进程都会在那个调用处中止，打印这行点出该调用的信息，
-脚本随后以错误退出。
+`val()` 调用再跑一遍。从 1.7.1 起，LibreYOLO 会提前发现这种情况，改用 `workers=0`
+执行该调用，即使你传了其他值，并且只记录一次上面那行日志。训练可以正常进行，但数据
+在主进程中加载，速度更慢。在 1.7.0 中，同样的脚本会以错误停止，提示加上这层保护或传入
+`workers=0`。
+
+想要恢复并行 worker，把调用放到这层保护之下：
 
 ```python
 def main():
@@ -116,7 +120,7 @@ if __name__ == "__main__":
     main()
 ```
 
-设 `workers=0` 也能绕开它，代价是吞吐下降。加上这层保护才是更好的修法。
+笔记本、命令行和 Linux（worker 通过 `fork` 启动）不受影响。
 
 ## 两种不抛异常的故障
 

@@ -10,7 +10,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo トラブルシューティング
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 表示されるテキスト別にエラーをまとめています。該当するメッセージがない場合は、[FAQ](/docs/faq)で障害以外の疑問を確認できます。また、`libreyolo models` で現在のインストールが実際に読み込めるものを確認できます。
@@ -79,10 +79,12 @@ Windowsでは、ディスプレイ用GPUにメモリ不足とは別の障害モ�
 ## スクリプトのトップレベルでtrain()またはval()が呼び出された
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
-Windowsには `fork` がなく、macOSのPythonもデフォルトでは使わないため、dataloaderのworkerはスクリプトを再インポートして起動します。`spawn`と`forkserver`の起動方式は、どのプラットフォームでも同じ動作をします。`if __name__ == "__main__":`ガードがないと、各workerが`train()`または`val()`の呼び出しをもう一度実行することになるため、各workerはその呼び出しの時点で停止してその呼び出しを示すこの行を出力し、スクリプトはエラーで終了します。
+Windowsには `fork` がなく、macOSのPythonもデフォルトでは使わないため、dataloaderのworkerはスクリプトを再インポートして起動します。`spawn`と`forkserver`の起動方式は、どのプラットフォームでも同じ動作をします。`if __name__ == "__main__":`ガードがないと、各workerが`train()`または`val()`の呼び出しをもう一度実行することになります。1.7.1以降、LibreYOLOはこれを事前に検知し、別の値を渡していても、その呼び出しを代わりに `workers=0` で実行して、上の行を一度だけログに出力します。学習は動作しますが、データはメインプロセスで読み込まれるため遅くなります。1.7.0では、同じスクリプトはガードを追加するか `workers=0` を渡すよう促すエラーで停止していました。
+
+並列workerを戻すには、呼び出しをガードの下に置いてください。
 
 ```python
 def main():
@@ -92,7 +94,7 @@ if __name__ == "__main__":
     main()
 ```
 
-`workers=0` を設定しても回避できますが、スループットが低下します。ガードを使う方が適切な修正です。
+ノートブック、CLI、およびworkerが `fork` で起動するLinuxは影響を受けません。
 
 ## 例外を送出しない2つの障害
 

@@ -13,7 +13,7 @@ keywords:
   - notimplementederror libreyolo
   - dépannage libreyolo
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Les erreurs sont regroupées selon le texte affiché. Si votre message n'est pas
@@ -116,15 +116,21 @@ tableau des checkpoints de chaque page de modèle énumère les noms exacts.
 ## train() ou val() a été appelé au niveau supérieur de votre script
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows ne possède pas `fork`, et Python sur macOS ne l'utilise pas par défaut.
 Les workers du dataloader démarrent donc en réimportant votre script. Les
 méthodes de démarrage `spawn` et `forkserver` font de même sur n'importe quelle
 plateforme. Sans garde `if __name__ == "__main__":`, chaque worker exécuterait de
-nouveau votre appel `train()` ou `val()`. Chacun s'arrête donc à cet appel,
-affiche cette ligne qui nomme l'appel, et le script se termine avec une erreur.
+nouveau votre appel `train()` ou `val()`. Depuis la 1.7.1, LibreYOLO le détecte à
+l'avance et exécute l'appel avec `workers=0` à la place, même si vous avez passé
+une autre valeur, et affiche la ligne ci-dessus une seule fois. L'entraînement
+fonctionne, mais les données sont chargées dans le processus principal, ce qui
+est plus lent. Dans la 1.7.0, le même script s'arrêtait avec une erreur
+indiquant d'ajouter la garde ou de passer `workers=0`.
+
+Pour retrouver des workers parallèles, placez l'appel sous la garde :
 
 ```python
 def main():
@@ -134,8 +140,8 @@ if __name__ == "__main__":
     main()
 ```
 
-Définir `workers=0` évite aussi le problème, au prix du débit. La garde est la
-meilleure correction.
+Les notebooks, la CLI et Linux, où les workers démarrent avec `fork`, ne sont
+pas concernés.
 
 ## Deux échecs qui ne lèvent aucune erreur
 

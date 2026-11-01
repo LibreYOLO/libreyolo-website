@@ -14,7 +14,7 @@ keywords:
   - libreyolo notimplementederror
   - khắc phục sự cố libreyolo
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 Các lỗi được nhóm theo nội dung bạn nhìn thấy. Nếu thông báo của bạn không có ở
 đây, [FAQ](/docs/faq) trả lời những câu hỏi không phải lỗi, còn `libreyolo
@@ -109,15 +109,20 @@ tên file đã công bố.
 ## train() hoặc val() được gọi ở cấp cao nhất của script
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows không có `fork`, và Python trên macOS mặc định không dùng nó, nên worker
 dataloader bắt đầu bằng cách import lại script của bạn. Các phương thức khởi động
 `spawn` và `forkserver` cũng làm như vậy trên mọi nền tảng. Nếu thiếu guard
 `if __name__ == "__main__":`, mỗi worker sẽ chạy lại lệnh `train()` hoặc `val()`
-của bạn, nên mỗi worker dừng tại lệnh gọi đó, in dòng này nêu tên lệnh gọi, và
-script thoát với một lỗi.
+của bạn. Từ 1.7.1, LibreYOLO nhận ra điều này từ trước và chạy lệnh gọi đó với
+`workers=0`, kể cả khi bạn đã truyền giá trị khác, đồng thời ghi dòng ở trên vào
+log một lần. Việc huấn luyện vẫn chạy, nhưng dữ liệu được tải trong tiến trình
+chính nên chậm hơn. Ở 1.7.0, cùng script đó dừng với một lỗi yêu cầu thêm guard
+hoặc truyền `workers=0`.
+
+Để có lại worker song song, hãy đặt lệnh gọi dưới guard:
 
 ```python
 def main():
@@ -127,8 +132,7 @@ if __name__ == "__main__":
     main()
 ```
 
-Đặt `workers=0` cũng tránh được lỗi nhưng làm giảm throughput. Guard là cách
-sửa tốt hơn.
+Notebook, CLI và Linux, nơi worker khởi động bằng `fork`, không bị ảnh hưởng.
 
 ## Hai lỗi không phát ngoại lệ
 

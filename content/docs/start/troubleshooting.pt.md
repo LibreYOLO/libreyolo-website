@@ -15,7 +15,7 @@ keywords:
   - libreyolo notimplementederror
   - resolver erros libreyolo
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Os erros estão agrupados pelo texto que você vê. Se a sua mensagem não estiver
@@ -118,15 +118,20 @@ em cada página de modelo lista os nomes de arquivo publicados exatos.
 ## train() ou val() foi chamado no nível superior do seu script
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 O Windows não tem `fork`, e o Python no macOS não o usa por padrão, então os
 workers do dataloader começam reimportando o seu script. Os métodos de início
 `spawn` e `forkserver` fazem o mesmo em qualquer plataforma. Sem uma guarda
 `if __name__ == "__main__":`, cada worker rodaria de novo a sua chamada de
-`train()` ou `val()`, então cada um para nessa chamada, imprime essa linha
-nomeando a chamada, e o script sai com um erro.
+`train()` ou `val()`. Desde a 1.7.1, o LibreYOLO percebe isso de antemão e roda
+a chamada com `workers=0` no lugar, mesmo que você tenha passado outro valor, e
+registra a linha acima uma vez. O treinamento funciona, mas os dados são
+carregados no processo principal, o que é mais lento. Na 1.7.0, o mesmo script
+parava com um erro que mandava adicionar a guarda ou passar `workers=0`.
+
+Para ter os workers paralelos de volta, coloque a chamada sob a guarda:
 
 ```python
 def main():
@@ -136,8 +141,8 @@ if __name__ == "__main__":
     main()
 ```
 
-Definir `workers=0` também evita isso, ao custo de throughput. A guarda é a
-solução melhor.
+Notebooks, a CLI e o Linux, onde os workers começam com `fork`, não são
+afetados.
 
 ## Duas falhas que não lançam erro
 
