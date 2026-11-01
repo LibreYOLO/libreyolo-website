@@ -16,7 +16,7 @@ keywords:
   - cuda out of memory обучение yolo
   - libreyolo не работает
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Ошибки сгруппированы по тексту, который вы видите. Если вашего сообщения здесь
@@ -120,15 +120,20 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 ## train() или val() вызван на верхнем уровне скрипта
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 В Windows нет `fork`, а Python на macOS по умолчанию его не использует,
 поэтому воркеры загрузчика данных запускаются, заново импортируя ваш скрипт.
 Методы запуска `spawn` и `forkserver` делают то же самое на любой платформе. Без
 защиты `if __name__ == "__main__":` каждый воркер выполнил бы ваш вызов `train()`
-или `val()` снова, поэтому каждый из них останавливается на этом вызове, печатает
-эту строку с именем вызова, а скрипт завершается с ошибкой.
+или `val()` снова. Начиная с 1.7.1, LibreYOLO замечает это заранее и вместо этого
+выполняет вызов с `workers=0`, даже если вы передали другое значение, и один раз
+пишет в лог строку выше. Обучение работает, но данные загружаются в основном
+процессе, что медленнее. В 1.7.0 тот же скрипт останавливался с ошибкой, которая
+советовала добавить защиту или передать `workers=0`.
+
+Чтобы вернуть параллельные воркеры, поместите вызов под защиту:
 
 ```python
 def main():
@@ -138,8 +143,7 @@ if __name__ == "__main__":
     main()
 ```
 
-`workers=0` тоже это устраняет, но ценой пропускной способности. Защита —
-более правильное решение.
+Ноутбуки, CLI и Linux, где воркеры запускаются через `fork`, это не затрагивает.
 
 ## Два сбоя, которые не выбрасывают исключение
 

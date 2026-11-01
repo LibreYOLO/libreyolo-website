@@ -16,7 +16,7 @@ keywords:
   - libreyolo notimplementederror
   - risolvere errori libreyolo
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Gli errori sono raggruppati per il testo che vedi. Se il tuo messaggio non è
@@ -123,15 +123,21 @@ pubblicati.
 ## train() o val() è stato chiamato al livello superiore del tuo script
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows non ha `fork`, e Python su macOS non lo usa per impostazione
 predefinita, quindi i worker del dataloader partono reimportando il tuo script.
 I metodi di avvio `spawn` e `forkserver` fanno lo stesso su qualsiasi piattaforma.
 Senza una guardia `if __name__ == "__main__":`, ogni worker eseguirebbe di nuovo
-la tua chiamata a `train()` o `val()`, quindi ognuna si ferma a quella chiamata,
-stampa questa riga con il nome della chiamata, e lo script esce con un errore.
+la tua chiamata a `train()` o `val()`. Dalla 1.7.1, LibreYOLO lo rileva in
+anticipo ed esegue la chiamata con `workers=0`, anche se hai passato un altro
+valore, e registra la riga qui sopra una sola volta. L'addestramento funziona, ma
+i dati vengono caricati nel processo principale, il che è più lento. Nella 1.7.0
+lo stesso script si fermava con un errore che diceva di aggiungere la guardia o
+di passare `workers=0`.
+
+Per riavere i worker paralleli, metti la chiamata sotto la guardia:
 
 ```python
 def main():
@@ -141,8 +147,7 @@ if __name__ == "__main__":
     main()
 ```
 
-Anche impostare `workers=0` lo evita, a costo del throughput. La guardia è la
-soluzione migliore.
+Notebook, CLI e Linux, dove i worker partono con `fork`, non sono interessati.
 
 ## Due malfunzionamenti che non sollevano eccezioni
 

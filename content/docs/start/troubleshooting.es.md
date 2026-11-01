@@ -16,7 +16,7 @@ keywords:
   - solucionar errores libreyolo
   - libreyolo no descarga pesos
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Los errores están agrupados por el texto que ves. Si tu mensaje no está aquí,
@@ -122,15 +122,20 @@ que se han publicado.
 ## Se llamó a train() o val() en el nivel superior de tu script
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows no tiene `fork`, y Python en macOS no lo usa por defecto, así que los
 workers del dataloader arrancan reimportando tu script. Los métodos de arranque
 `spawn` y `forkserver` hacen lo mismo en cualquier plataforma. Sin una guarda
 `if __name__ == "__main__":`, cada worker volvería a ejecutar tu llamada a
-`train()` o `val()`, así que cada uno se detiene en esa llamada, imprime esta línea
-con el nombre de la llamada, y el script sale con un error.
+`train()` o `val()`. Desde la 1.7.1, LibreYOLO lo detecta de antemano y ejecuta
+la llamada con `workers=0` en su lugar, incluso si pasaste otro valor, y registra
+la línea de arriba una vez. El entrenamiento funciona, pero los datos se cargan
+en el proceso principal, lo que es más lento. En la 1.7.0 el mismo script se
+detenía con un error que indicaba añadir la guarda o pasar `workers=0`.
+
+Para recuperar los workers en paralelo, pon la llamada bajo la guarda:
 
 ```python
 def main():
@@ -140,8 +145,8 @@ if __name__ == "__main__":
     main()
 ```
 
-Poner `workers=0` también lo evita, a costa del rendimiento. La guarda es la
-mejor solución.
+Los notebooks, la CLI y Linux, donde los workers arrancan con `fork`, no se
+ven afectados.
 
 ## Dos fallos que no lanzan excepción
 

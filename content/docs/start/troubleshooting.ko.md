@@ -12,7 +12,7 @@ keywords:
   - libreyolo 미구현 오류
   - libreyolo 문제 해결
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 오류는 보는 텍스트별로 그룹화됩니다. 메시지가 여기에 없다면, [FAQ](/docs/faq)는 실패가 아닌 질문에 답변하며, `libreyolo models`는 설치한 프로그램이 실제로 로드할 수 있는 내용을 보고합니다.
@@ -81,10 +81,12 @@ Windows에서는 디스플레이 GPU에 또 다른 고장 모드가 있으며, �
 ## 스크립트 최상위에서 train() 또는 val()을 호출함
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
-Windows에는 `fork`가 없고 macOS의 Python은 기본적으로 이를 사용하지 않기 때문에 dataloader 작업자는 스크립트를 다시 가져오는 것으로 시작합니다. `spawn`과 `forkserver` 시작 방식은 어느 플랫폼에서든 똑같이 동작합니다. `if __name__ == "__main__":` 보호가 없으면 각 작업자가 `train()` 또는 `val()` 호출을 다시 실행하게 되므로, 각 작업자는 그 호출에서 멈추고 호출을 알리는 이 줄을 출력하며, 스크립트는 오류로 종료됩니다.
+Windows에는 `fork`가 없고 macOS의 Python은 기본적으로 이를 사용하지 않기 때문에 dataloader 작업자는 스크립트를 다시 가져오는 것으로 시작합니다. `spawn`과 `forkserver` 시작 방식은 어느 플랫폼에서든 똑같이 동작합니다. `if __name__ == "__main__":` 보호가 없으면 각 작업자가 `train()` 또는 `val()` 호출을 다시 실행하게 됩니다. 1.7.1부터 LibreYOLO는 이를 미리 감지하여 다른 값을 전달했더라도 해당 호출을 대신 `workers=0`으로 실행하고, 위의 줄을 한 번 로그로 남깁니다. 학습은 정상적으로 동작하지만 데이터가 메인 프로세스에서 로드되므로 더 느립니다. 1.7.0에서는 같은 스크립트가 보호를 추가하거나 `workers=0`을 전달하라는 오류와 함께 중단되었습니다.
+
+병렬 작업자를 되찾으려면 호출을 보호 아래에 두십시오.
 
 ```python
 def main():
@@ -94,7 +96,7 @@ if __name__ == "__main__":
     main()
 ```
 
-`workers=0`를 설정하는 것도 이를 피할 수 있지만, 처리량에는 비용이 듭니다. 가드가 더 나은 해결책입니다.
+노트북, CLI, 그리고 작업자가 `fork`로 시작하는 Linux는 영향을 받지 않습니다.
 
 ## 성장시키지 않는 두 가지 실패
 

@@ -16,7 +16,7 @@ keywords:
   - LibreYOLO NotImplementedError
   - усунення несправностей LibreYOLO
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: 9644a377afc524f9
 ---
 
 Помилки згруповано за текстом повідомлення. Якщо вашого повідомлення тут
@@ -122,15 +122,21 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 ## train() або val() викликано на верхньому рівні скрипту
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows не має `fork`, а Python у macOS типово його не використовує, тому
 робочі процеси завантажувача даних запускаються повторним імпортом вашого
 скрипту. Методи запуску `spawn` і `forkserver` роблять те саме на будь-якій
 платформі. Без захисної умови `if __name__ == "__main__":` кожен процес знову
-запускав би ваш виклик `train()` або `val()`, тому кожен зупиняється на цьому
-виклику, виводить цей рядок із назвою виклику, а скрипт завершується з помилкою.
+запускав би ваш виклик `train()` або `val()`. Починаючи з 1.7.1, LibreYOLO
+помічає це заздалегідь і замість цього виконує виклик з `workers=0`, навіть якщо
+ви передали інше значення, і один раз записує в журнал рядок вище. Навчання
+працює, але дані завантажуються в основному процесі, що повільніше. У 1.7.0 той
+самий скрипт зупинявся з помилкою, яка радила додати захисну умову або передати
+`workers=0`.
+
+Щоб повернути паралельні робочі процеси, помістіть виклик під захисну умову:
 
 ```python
 def main():
@@ -140,8 +146,8 @@ if __name__ == "__main__":
     main()
 ```
 
-`workers=0` також запобігає цьому ціною пропускної здатності. Захисна умова
-є кращим виправленням.
+Ноутбуки, CLI та Linux, де робочі процеси запускаються через `fork`, це не
+стосується.
 
 ## Дві несправності без помилки
 
