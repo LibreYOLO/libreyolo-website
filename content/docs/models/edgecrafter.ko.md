@@ -175,7 +175,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: "521fde8f10ac8c57"
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## 설치
@@ -243,6 +243,10 @@ pip install "libreyolo[lora]"
 내보낸 아티팩트는 파일 접미사에 따라 `LibreYOLO()`로 다시 불러오므로 `.onnx` 또는 `.engine` 파일은 체크포인트처럼 동작하며 동일한 `Results`를 반환합니다. 자세 추정과 분할은 동적 형태가 아닌 고정 640x640 입력으로 내보내며 OpenVINO, Paddle, MNN, ExecuTorch, Core AI를 포함한 여러 탐지 대상도 고정 캔버스를 사용합니다. 각 형식이 받는 인수와 일부 형식이 추가하는 extra는 [내보내기](/docs/export)에 나와 있습니다.
 
 <code-tabs name="export" />
+
+### ONNX 입력과 출력
+
+<onnx-io />
 
 ## 체크포인트
 

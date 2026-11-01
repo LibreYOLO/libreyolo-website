@@ -143,7 +143,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Установка
@@ -241,6 +241,10 @@ pip install "libreyolo[lora]"
 что добавляют некоторые из них.
 
 <code-tabs name="export" />
+
+### Входы и выходы ONNX
+
+<onnx-io />
 
 ## Чекпойнты
 

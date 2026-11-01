@@ -173,7 +173,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## 安装
@@ -242,6 +242,10 @@ COCO 平均查全率，在任何与你训练时所用格式相同的数据集上
 这张计算图同样是支持的，但那样预处理和后处理就得你自己写。
 
 <code-tabs name="export" />
+
+### ONNX 输入与输出
+
+<onnx-io />
 
 ## 检查点
 

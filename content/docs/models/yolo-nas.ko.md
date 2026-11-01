@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## 설치
@@ -169,6 +169,10 @@ pip install libreyolo
 내보내기는 같은 가중치를 다른 컨테이너에 복제하는 일입니다. Deci 체크포인트를 내보내도 가중치의 출처나 적용되는 라이선스는 바뀌지 않습니다.
 
 <code-tabs name="export" />
+
+### ONNX 입력과 출력
+
+<onnx-io />
 
 ## 체크포인트
 

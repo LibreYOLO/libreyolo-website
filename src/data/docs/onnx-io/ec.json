@@ -1,0 +1,110 @@
+{
+  "family": "ec",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": ["ec"],
+      "label": "LibreEC",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": [0.485, 0.456, 0.406],
+        "std": [0.229, 0.224, 0.225],
+        "resize": "stretch",
+        "interpolation": "pillow-bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height and width are 640 by default.",
+          "Detect and segment: batch size 1 only. The graph declares a dynamic batch axis, but batches of 2 or more fail in 1.7.0. Pose runs with any batch size.",
+          "For a bit-exact match, use Pillow's integer math: multiply each weight by 2^22 and round half away from zero, sum weight x pixel in integers, add 2^21, shift right by 22 and clip to 0 to 255.",
+          "Divide by 255 after the resize, then subtract the ImageNet mean and divide by the ImageNet std per channel."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "Raw class logits per query, sigmoid not applied. 300 queries and 80 classes for the COCO checkpoints."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Boxes as cx, cy, w, h, normalized 0 to 1 of the input."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the scores to queries x nc and take the top max_det (300 by default) over all queries x classes. For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the entries whose score is strictly above the confidence threshold (0.25 by default). There is no NMS.",
+              "Convert the query's box to x1, y1, x2, y2 with x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2.",
+              "Map boxes back to the original image: multiply x by the original width and y by the original height. The input was stretched, so no pad offset applies. LibreYOLO does not clip these boxes to the image.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ],
+        "segment": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "Raw class logits per query, sigmoid not applied. 300 queries and 80 classes for the COCO checkpoints."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Boxes as cx, cy, w, h, normalized 0 to 1 of the input."
+              },
+              {
+                "name": "pred_masks",
+                "shape": "[batch, queries, mask_h, mask_w]",
+                "meaning": "Raw mask logits per query over the whole input canvas, sigmoid not applied. mask_h and mask_w are a quarter of the input, 160 x 160 at 640 x 640."
+              }
+            ],
+            "postprocess": [
+              "Select detections exactly as for detect: sigmoid on pred_logits, top max_det (300 by default) over all queries x classes, keep scores strictly above the confidence threshold (0.25 by default). There is no NMS.",
+              "Convert and map the boxes as for detect: cx, cy, w, h to x1, y1, x2, y2, then multiply x by the original width and y by the original height. LibreYOLO does not clip these boxes to the image.",
+              "For each kept detection, take the mask logits of its query and resize them straight to the original image size with bilinear interpolation, half-pixel centers (align_corners=False) and no antialiasing. cv2.resize with INTER_LINEAR on float32 does this.",
+              "The mask is the pixels whose resized logit is above 0. Masks are not cropped to the box.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ],
+        "pose": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, 2]",
+                "meaning": "Raw logits per query, sigmoid not applied. 60 queries. Index 1, the last one, is the person class. Index 0 is an unused slot."
+              },
+              {
+                "name": "pred_keypoints",
+                "shape": "[batch, queries, num_keypoints * 2]",
+                "meaning": "Keypoints as x0, y0, x1, y1 and so on, normalized 0 to 1 of the input. num_keypoints is 17 (COCO order) and is recorded in the num_keypoints metadata key. There is no box output and no keypoint visibility or confidence."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to the last logit of each query. That is the person score.",
+              "Sort the queries by score, highest first, and keep at most max_det (300 by default, so all 60 queries). Keep the queries whose score is at or above the confidence threshold (0.25 by default). Note at or above here, strictly above for detect and segment. There is no NMS.",
+              "Reshape each kept query's keypoints to [num_keypoints, 2]. Map them back to the original image: multiply x by the original width and y by the original height.",
+              "The box is the extent of the mapped keypoints: x1, y1 are the minimum x and y, x2, y2 the maximum. The class is always 0 (person).",
+              "LibreYOLO reports visibility 1 for every keypoint, since the graph predicts xy only.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

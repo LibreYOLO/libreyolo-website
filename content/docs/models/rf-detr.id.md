@@ -219,7 +219,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## Instalasi
@@ -299,6 +299,10 @@ sehingga berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengem
 didukung, tetapi prapemrosesan dan pascapemrosesannya harus ditulis sendiri.
 
 <code-tabs name="export" />
+
+### Input dan output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

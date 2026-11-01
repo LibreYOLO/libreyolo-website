@@ -373,7 +373,11 @@
     "outputMeaning": "Signification",
     "postprocess": "Post-traitement",
     "reference": "Pour vérifier votre propre implémentation, passez le même fichier dans LibreYOLO : <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> renvoie les résultats de référence.",
-    "verified": "Vérifié avec LibreYOLO {version}."
+    "verified": "Vérifié avec LibreYOLO {version}.",
+    "resizeStretch": "étirer à largeur x hauteur (sans remplissage, le rapport d'aspect n'est pas conservé)",
+    "interpPillow": "Pillow bilinear",
+    "pillowTitle": "Comment reproduire le redimensionnement bilinéaire de Pillow",
+    "pillowBody": "LibreYOLO redimensionne avec le filtre BILINEAR de Pillow (Image.resize). Ce n'est ni OpenCV INTER_LINEAR ni INTER_AREA : en réduction, Pillow élargit le filtre du facteur de réduction, et les redimensionnements d'OpenCV modifient les détections et déplacent les boîtes de plusieurs pixels. Pour le reproduire sans Pillow, redimensionnez un axe, arrondissez sur 8 bits, puis redimensionnez l'autre axe et arrondissez de nouveau. Par axe, posons s = in_size / out_size et f = max(s, 1). Le pixel de sortie i a pour centre c = (i + 0.5) * s et lit les pixels source j de int(c - f + 0.5) à int(c + f + 0.5) - 1, limités à l'image, chacun avec le poids max(0, 1 - |j + 0.5 - c| / f), divisé par la somme des poids. Pillow calcule en virgule fixe et choisit l'ordre des axes selon la forme de l'image, donc des poids en virgule flottante peuvent s'en écarter d'un niveau sur quelques pixels. Cela ne change pas les résultats dans nos vérifications."
   },
   "DocsLanding": {
     "metaTitle": "Documentation LibreYOLO",

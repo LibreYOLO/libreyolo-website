@@ -1,0 +1,179 @@
+{
+  "family": "yolonas",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": ["yolonas"],
+      "label": "LibreYOLONAS detect",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "custom",
+        "interpolation": "pillow-bilinear",
+        "pad_value": 114,
+        "pad_position": "center",
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height equals width, 640 by default.",
+          "The image is not scaled to fill the canvas. The longest side goes to R = min(636, height, width), so 636 at 640 x 640.",
+          "Scale by r = min(R / h, R / w) and resize to (round(w * r), round(h * r)). The rounding is Python round, so an exact .5 goes to the even neighbor.",
+          "Paste the resized image onto a canvas filled with 114 at left = (width - new_w) // 2 and top = (height - new_h) // 2.",
+          "On the test image, cv2.resize with INTER_LINEAR loses two of the eight detections, and INTER_AREA moves boxes by up to 1.4 px.",
+          "Divide by 255 after the resize. There is no mean or std normalization."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, anchors, 4]",
+                "meaning": "Boxes, despite the name. x1, y1, x2, y2 in input-canvas pixels. anchors is the cell count over strides 8, 16 and 32, 8400 at 640 x 640."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, anchors, nc]",
+                "meaning": "Class scores, despite the name. Sigmoid already applied. 80 classes for the COCO checkpoints."
+              }
+            ],
+            "postprocess": [
+              "The output names are swapped relative to their content. Read boxes from pred_logits and scores from pred_boxes, or tell them apart by the last dimension (4 for boxes).",
+              "Take the best class per anchor: score = max over classes, class = argmax. One anchor yields at most one detection.",
+              "Keep anchors whose score is strictly above the confidence threshold (0.25 by default).",
+              "Keep the 1000 highest scoring candidates.",
+              "Map boxes back to the original image: subtract left from x and top from y, divide by r, clip to the image. Drop boxes left with zero width or height.",
+              "Run NMS per class with IoU 0.45 and keep at most 300 detections.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "keys": ["yolonas"],
+      "label": "LibreYOLONAS pose",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "BGR",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "custom",
+        "interpolation": "pillow-bilinear",
+        "pad_value": 127,
+        "pad_position": "topleft",
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height equals width, 640 by default.",
+          "Channels are BGR, unlike detection. Pad value and position also differ from detection.",
+          "The longest side goes to R = min(640, height, width), so it fills the canvas.",
+          "Scale by r = min(R / h, R / w) and resize to (round(w * r), round(h * r)). The rounding is Python round, so an exact .5 goes to the even neighbor.",
+          "Paste the resized image in the top-left corner of a canvas filled with 127. All padding is on the bottom and the right.",
+          "On the test image, cv2.resize with INTER_LINEAR or INTER_AREA moves boxes by up to 5 px and keypoints by more than 10 px.",
+          "Divide by 255 after the resize. There is no mean or std normalization."
+        ]
+      },
+      "tasks": {
+        "pose": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "boxes",
+                "shape": "[batch, anchors, 4]",
+                "meaning": "Person boxes as x1, y1, x2, y2 in input-canvas pixels. anchors is the cell count over strides 8, 16 and 32, 8400 at 640 x 640."
+              },
+              {
+                "name": "scores",
+                "shape": "[batch, anchors, nc]",
+                "meaning": "Class scores, sigmoid already applied. nc is 1 (person) for the COCO pose checkpoints."
+              },
+              {
+                "name": "keypoints_xy",
+                "shape": "[batch, anchors, num_keypoints, 2]",
+                "meaning": "Keypoint x, y in input-canvas pixels. num_keypoints is 17 (COCO order) for the COCO pose checkpoints."
+              },
+              {
+                "name": "keypoints_conf",
+                "shape": "[batch, anchors, num_keypoints]",
+                "meaning": "Per-keypoint visibility score, sigmoid already applied."
+              }
+            ],
+            "postprocess": [
+              "Take the best class per anchor: score = max over classes, class = argmax. With one class this is just the person score.",
+              "Keep anchors whose score is at or above the confidence threshold (0.25 by default). This is >=, not > as in detection.",
+              "Keep the 1000 highest scoring candidates.",
+              "Map boxes and keypoints back to the original image: divide x and y by r. The image sits in the top-left corner, so there is no pad offset to subtract.",
+              "Clip boxes to the image and drop boxes left with zero width or height. Keypoints are not clipped and can fall outside the image.",
+              "Run NMS per class with IoU 0.45 and keep at most 300 detections. Keep each survivor's keypoints as (x, y, keypoints_conf).",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "keys": ["yolonas"],
+      "label": "LibreYOLONAS obb",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "BGR",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "custom",
+        "interpolation": "bilinear",
+        "pad_value": 114,
+        "pad_position": "topleft",
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height equals width, 1024 by default.",
+          "Channels are BGR, unlike detection. The resize filter and the pad position also differ from detection.",
+          "The longest side goes to R = min(1024, height, width), so it fills the canvas.",
+          "Scale by r = min(R / h, R / w) and resize to (round(w * r), round(h * r)). The rounding is Python round, so an exact .5 goes to the even neighbor.",
+          "The resize is cv2.resize with INTER_LINEAR, not Pillow as in detection and pose. It is skipped when the image already has that size. On the test image, Pillow's filter here changes the detection count.",
+          "Paste the resized image in the top-left corner of a canvas filled with 114. All padding is on the bottom and the right.",
+          "Divide by 255 after the resize. There is no mean or std normalization."
+        ]
+      },
+      "tasks": {
+        "obb": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "boxes",
+                "shape": "[batch, anchors, 5]",
+                "meaning": "Rotated boxes as cx, cy, w, h, angle. cx, cy, w and h are in input-canvas pixels. The angle is in radians. The graph computes it as (sigmoid(logit) - 0.25) x pi, so it lies between -pi/4 and 3pi/4 and is not wrapped yet. The w side points along (cos angle, sin angle) in image coordinates, y down. anchors is the cell count over strides 8, 16 and 32, 21504 at 1024 x 1024."
+              },
+              {
+                "name": "scores",
+                "shape": "[batch, anchors, nc]",
+                "meaning": "Class scores, sigmoid already applied. 18 classes (DOTA 2.0) for the published checkpoints."
+              }
+            ],
+            "postprocess": [
+              "Take the best class per anchor: score = max over classes, class = argmax. One anchor yields at most one detection.",
+              "Keep anchors whose score is at or above the confidence threshold (0.25 by default). This is >=, not > as in detection.",
+              "Keep the 1000 highest scoring candidates.",
+              "Map boxes back to the original image: divide cx, cy, w and h by r. The image sits in the top-left corner, so there is no pad offset, and the angle does not change.",
+              "Clip cx to 0 to the image width and cy to 0 to the image height. w and h are not clipped. Drop boxes with w or h at or below 0.",
+              "Put the long side first: if h > w, swap w and h and add pi/2 to the angle. Then wrap the angle to [-pi/2, pi/2) with angle = ((angle + pi/2) mod pi) - pi/2.",
+              "Run greedy NMS per class on exact rotated-box IoU (polygon intersection area over union, for example cv2.rotatedRectangleIntersection) with IoU 0.45, and keep at most 300 detections. LibreYOLO does not use upstream's matrix soft-NMS.",
+              "LibreYOLO also reports an axis-aligned box per detection. With ex = abs(cos angle) * w / 2 + abs(sin angle) * h / 2 and ey = abs(sin angle) * w / 2 + abs(cos angle) * h / 2, it is cx - ex, cy - ey, cx + ex, cy + ey, clipped to the image.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

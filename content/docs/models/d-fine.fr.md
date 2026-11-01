@@ -151,7 +151,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Installation
@@ -254,6 +254,10 @@ Core AI exportent à taille de canevas fixe plutôt qu'en formes dynamiques.
 que les extras que quelques-uns ajoutent.
 
 <code-tabs name="export" />
+
+### Entrées et sorties ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

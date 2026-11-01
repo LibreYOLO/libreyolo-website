@@ -4,12 +4,12 @@ families:
   - ec
 seo_title: 'EdgeCrafter: phát hiện, ước lượng tư thế và phân đoạn trong LibreYOLO'
 description: >-
-  Dùng EdgeCrafter trong LibreYOLO để phát hiện, ước lượng tư thế và phân đoạn thực thể. Cài đặt, dự đoán, xác
-  thực và xuất với mã nguồn dùng giấy phép MIT.
+  Dùng EdgeCrafter trong LibreYOLO để phát hiện, ước lượng tư thế và phân đoạn
+  thực thể. Cài đặt, dự đoán, xác thực và xuất với mã nguồn dùng giấy phép MIT.
 lead: >-
-  Một vision transformer nhỏ gọn cho dự đoán dày đặc trên phần cứng biên, được upstream công bố dưới dạng ba
-  mô hình cùng họ: ECDet, ECPose và ECSeg. LibreYOLO nạp cả ba thành một family, với tác vụ được xác định bởi
-  checkpoint.
+  Một vision transformer nhỏ gọn cho dự đoán dày đặc trên phần cứng biên, được
+  upstream công bố dưới dạng ba mô hình cùng họ: ECDet, ECPose và ECSeg.
+  LibreYOLO nạp cả ba thành một family, với tác vụ được xác định bởi checkpoint.
 keywords:
   - EdgeCrafter
   - ECDet
@@ -76,8 +76,9 @@ snippets:
         )
     - label: CLI
       language: bash
-      code: |
-        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50 imgsz=640 batch=8 lr0=5e-4
+      code: >
+        libreyolo train model=LibreECs.pt data=my-dataset.yaml epochs=50
+        imgsz=640 batch=8 lr0=5e-4
     - label: Tư thế
       language: python
       code: |
@@ -175,7 +176,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 ## Cài đặt
 
@@ -286,6 +287,10 @@ MNN, ExecuTorch và Core AI. Phần [Xuất](/docs/export) liệt kê các đố
 định dạng chấp nhận và những thành phần bổ sung mà một số định dạng yêu cầu.
 
 <code-tabs name="export" />
+
+### Đầu vào và đầu ra ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

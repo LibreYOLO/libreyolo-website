@@ -1,0 +1,132 @@
+{
+  "family": "deim",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": ["deim", "deimv2"],
+      "label": "LibreDEIM, and LibreDEIMv2 atto, femto, pico and n",
+      "sizes": {
+        "deim": [
+          "n",
+          "s",
+          "m",
+          "l",
+          "x"
+        ],
+        "deimv2": [
+          "atto",
+          "femto",
+          "pico",
+          "n"
+        ]
+      },
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "stretch",
+        "interpolation": "pillow-bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz. height and width equal the imgsz metadata key: 640 by default, 320 for DEIMv2 atto and 416 for DEIMv2 femto.",
+          "Batch size 1 only. The graph declares a dynamic batch axis, but batches of 2 or more fail in 1.7.0.",
+          "To run several images per call, export with batch=2. That graph takes any batch size and gives the same results per image.",
+          "Divide by 255 after the resize. There is no mean or std normalization for these sizes.",
+          "Only the default export exists. nms=True raises NotImplementedError for this family."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "One logit per query and class. Sigmoid is not applied, and there is no background class. 300 queries, except DEIMv2 atto with 100 queries, femto with 150 queries and pico with 200 queries."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "cx, cy, w, h of each query, normalized 0 to 1 of the input. The input is the whole image stretched, so these are also fractions of the original image."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the [queries, nc] scores and take the top 300 (max_det, 300 by default). For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the pairs whose score is above the confidence threshold (0.25 by default).",
+              "Convert the query's box to x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2. Multiply x by the original image width and y by the original image height.",
+              "There is no NMS and the iou threshold is not used. DEIM predicts a set of boxes.",
+              "LibreYOLO does not clip these boxes, so an edge can sit slightly outside the image."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "keys": ["deimv2"],
+      "label": "LibreDEIMv2 s, m, l and x",
+      "sizes": {
+        "deimv2": [
+          "s",
+          "m",
+          "l",
+          "x"
+        ]
+      },
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": [0.485, 0.456, 0.406],
+        "std": [0.229, 0.224, 0.225],
+        "resize": "stretch",
+        "interpolation": "pillow-bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "These sizes use a DINOv3 backbone, so they take ImageNet mean and std. The atto, femto, pico and n sizes do not.",
+          "Square input only. Export rejects a non-square imgsz. height and width equal the imgsz metadata key, 640 by default.",
+          "Batch size 1 only. The graph declares a dynamic batch axis, but batches of 2 or more fail in 1.7.0.",
+          "To run several images per call, export with batch=2. That graph takes any batch size and gives the same results per image.",
+          "After the resize, divide by 255, then subtract the ImageNet mean and divide by the ImageNet std, per channel in RGB order.",
+          "Only the default export exists. nms=True raises NotImplementedError for this family."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "One logit per query and class. Sigmoid is not applied, and there is no background class. 300 queries."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "cx, cy, w, h of each query, normalized 0 to 1 of the input. The input is the whole image stretched, so these are also fractions of the original image."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the [queries, nc] scores and take the top 300 (max_det, 300 by default). For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the pairs whose score is above the confidence threshold (0.25 by default).",
+              "Convert the query's box to x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2. Multiply x by the original image width and y by the original image height.",
+              "There is no NMS and the iou threshold is not used. DEIM predicts a set of boxes.",
+              "LibreYOLO does not clip these boxes, so an edge can sit slightly outside the image."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

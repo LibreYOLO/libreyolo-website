@@ -70,7 +70,6 @@ Training accepts a detection dataset YAML. Omitted `epochs`, `batch`, `imgsz`, `
 
 <code-tabs name="train" />
 
-
 ## Validate
 
 <code-tabs name="val" />
@@ -84,6 +83,10 @@ Use the dataset format for this task. [Validation](/docs/train/validation) expla
 <code-tabs name="export" />
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
+
+### ONNX inputs and outputs
+
+<onnx-io />
 
 ## Checkpoints
 

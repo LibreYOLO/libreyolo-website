@@ -21,7 +21,7 @@ keywords:
   - objekterkennung python
   - echtzeit objekterkennung
   - deim mit eigenem datensatz trainieren
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: "8dc052b83d5f1ac0"
+source_hash: 879518aa7326392d
 ---
 
 ## Installation
@@ -253,6 +253,10 @@ Ein exportiertes Artefakt lädt über seine Dateiendung wieder durch
 Checkpoint und liefert dieselben `Results`.
 
 <code-tabs name="export" />
+
+### ONNX-Ein- und Ausgaben
+
+<onnx-io />
 
 ## Checkpoints
 

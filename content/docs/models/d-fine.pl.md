@@ -154,7 +154,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Instalacja
@@ -256,6 +256,10 @@ i Core AI eksportują ze stałym obszarem zamiast kształtów dynamicznych. Stro
 dodatki wymagane przez niektóre z nich.
 
 <code-tabs name="export" />
+
+### Wejścia i wyjścia ONNX
+
+<onnx-io />
 
 ## Checkpointy
 

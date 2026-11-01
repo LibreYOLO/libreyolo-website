@@ -1,0 +1,90 @@
+{
+  "family": "dfine",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": [
+        "dfine"
+      ],
+      "label": "LibreDFINE",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "stretch",
+        "interpolation": "pillow-bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height and width are 640 by default.",
+          "Batch size 1 only. The graph declares a dynamic batch axis, but batches of 2 or more fail in 1.7.0.",
+          "Divide by 255 after the resize. There is no mean or std normalization."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "One logit per query and class. Sigmoid is not applied. queries is 300 for every size."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "cx, cy, w, h of each query, normalized 0 to 1 of the input. The input is the whole image stretched, so these are also fractions of the original image."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the [queries, nc] scores and take the top 300 (max_det, 300 by default). For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the pairs whose score is above the confidence threshold (0.25 by default).",
+              "Convert the query's box to x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2. Multiply x by the original image width and y by the original image height.",
+              "There is no NMS and the iou threshold is not used. D-FINE predicts a set of boxes, and export with nms=True raises NotImplementedError.",
+              "LibreYOLO does not clip these boxes, so an edge can sit slightly outside the image."
+            ]
+          }
+        ],
+        "segment": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "One logit per query and class. Sigmoid is not applied. queries is 300 for every size."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "cx, cy, w, h of each query, normalized 0 to 1 of the input. The input is the whole image stretched, so these are also fractions of the original image."
+              },
+              {
+                "name": "pred_masks",
+                "shape": "[batch, queries, mask_h, mask_w]",
+                "meaning": "One mask per query, sigmoid already applied. mask_h is height / 4 and mask_w is width / 4, 160 x 160 at 640 x 640."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the [queries, nc] scores and take the top 300 (max_det, 300 by default). For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the pairs whose score is above the confidence threshold (0.25 by default).",
+              "Convert the query's box to x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2. Multiply x by the original image width and y by the original image height.",
+              "For each kept pair, take its query's mask. Resize it with bilinear interpolation and half-pixel centers (align_corners=False, no antialiasing) to height x width, then again to the original image size.",
+              "A pixel belongs to the mask when its value is 0.5 or more.",
+              "Clear every mask pixel outside the box. Pixel (x, y) stays only when x1 <= x < x2 and y1 <= y < y2, in original-image pixels.",
+              "There is no NMS and the iou threshold is not used. D-FINE predicts a set of boxes, and export with nms=True raises NotImplementedError.",
+              "LibreYOLO does not clip the boxes of a .pt predict, so an edge can sit slightly outside the image. Its ONNX backend clips them to the image."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

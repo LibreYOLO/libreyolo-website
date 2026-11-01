@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## インストール
@@ -168,6 +168,10 @@ pip install libreyolo
 エクスポートは、同じ重みを別のコンテナに収めたもう1つのコピーです。Deciのチェックポイントをエクスポートしても、重みの由来や適用されるライセンスは変わりません。
 
 <code-tabs name="export" />
+
+### ONNX の入力と出力
+
+<onnx-io />
 
 ## チェックポイント
 

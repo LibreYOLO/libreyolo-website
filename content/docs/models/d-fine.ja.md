@@ -138,7 +138,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## インストール
@@ -200,6 +200,10 @@ pip install "libreyolo[lora]"
 エクスポートした成果物は、ファイルサフィックスに基づいて`LibreYOLO()`から再度読み込めます。そのため、`.onnx`または`.engine`ファイルはチェックポイントと同様に動作し、同じ`Results`を返します。OpenVINO、Paddle、MNN、Core AIへのエクスポートでは、動的形状ではなく固定キャンバスを使用します。各形式が受け付ける引数と、一部の形式に追加される引数については[エクスポート](/docs/export)を参照してください。
 
 <code-tabs name="export" />
+
+### ONNX の入力と出力
+
+<onnx-io />
 
 ## チェックポイント
 

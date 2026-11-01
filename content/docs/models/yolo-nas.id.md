@@ -135,7 +135,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## Instalasi
@@ -214,6 +214,10 @@ Ekspor merupakan salinan lain dari bobot yang sama dalam container berbeda. Meng
 checkpoint Deci tidak mengubah asal bobot maupun lisensi yang mencakupnya.
 
 <code-tabs name="export" />
+
+### Input dan output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

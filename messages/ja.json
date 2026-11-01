@@ -373,7 +373,11 @@
     "outputMeaning": "意味",
     "postprocess": "後処理",
     "reference": "自分の実装を確認するには、同じファイルを LibreYOLO で実行します。<code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> が基準となる結果を返します。",
-    "verified": "LibreYOLO {version} で検証済み。"
+    "verified": "LibreYOLO {version} で検証済み。",
+    "resizeStretch": "幅 x 高さに引き伸ばす(パディングなし、アスペクト比は保持しない)",
+    "interpPillow": "Pillow bilinear",
+    "pillowTitle": "Pillow のバイリニアリサイズを再現する方法",
+    "pillowBody": "LibreYOLO は Pillow の BILINEAR フィルタ(Image.resize)でリサイズします。これは OpenCV の INTER_LINEAR や INTER_AREA ではありません。縮小時、Pillow は縮小率の分だけフィルタを広げます。OpenCV のリサイズでは検出結果が変わり、ボックスが数ピクセルずれます。Pillow なしで再現するには、片方の軸をリサイズして 8 ビットに丸め、もう片方の軸をリサイズして再び丸めます。軸ごとに s = in_size / out_size、f = max(s, 1) とします。出力ピクセル i の中心は c = (i + 0.5) * s で、元画像のピクセル j を int(c - f + 0.5) から int(c + f + 0.5) - 1 まで(画像内に制限して)読み取り、それぞれの重みは max(0, 1 - |j + 0.5 - c| / f) で、重みの合計で割ります。Pillow は固定小数点で計算し、画像の形状から軸の順序を選ぶため、浮動小数点の重みでは一部のピクセルで 1 レベル異なることがあります。これは私たちの検証の結果を変えません。"
   },
   "DocsLanding": {
     "metaTitle": "LibreYOLOドキュメント",

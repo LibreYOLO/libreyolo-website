@@ -176,7 +176,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## インストール
@@ -234,6 +234,10 @@ pip install "libreyolo[rfdetr]"
 エクスポートした成果物は、ファイルサフィックスに基づいて`LibreYOLO()`から再度読み込めます。そのため、`.onnx`または`.engine`ファイルはチェックポイントと同様に動作し、同じ`Results`を返します。LibreYOLOをインストールせず、単独のランタイムでグラフを実行することもサポートされますが、その場合は前処理と後処理を自分で実装する必要があります。
 
 <code-tabs name="export" />
+
+### ONNX の入力と出力
+
+<onnx-io />
 
 ## チェックポイント
 

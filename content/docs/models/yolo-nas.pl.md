@@ -133,7 +133,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## Instalacja
@@ -215,6 +215,10 @@ Eksport jest kolejną kopią tych samych wag w innym kontenerze. Eksportowanie
 punktu kontrolnego Deci nie zmienia ani pochodzenia wag, ani obejmującej je licencji.
 
 <code-tabs name="export" />
+
+### Wejścia i wyjścia ONNX
+
+<onnx-io />
 
 ## Punkty kontrolne
 

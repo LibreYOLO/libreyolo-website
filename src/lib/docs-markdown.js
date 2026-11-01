@@ -1,5 +1,6 @@
 import { getModelDiagram } from '@/lib/model-diagrams'
 import { getOnnxIo, scalingOf, normalizationOf } from '@/lib/onnx-io'
+import messages from '../../messages/en.json'
 import registry, { currentDocs, expandSelfClosingTags } from '@/lib/docs'
 
 /*
@@ -61,7 +62,8 @@ function onnxIo(family, { getTaskMeta, archived }) {
     const i = v.input
     const scale = scalingOf(i)
     const norm = normalizationOf(i)
-    const resize = [`\`${i.resize}\``, i.interpolation && `\`${i.interpolation}\``,
+    const resize = [i.resize === 'stretch' ? messages.OnnxIo.resizeStretch : `\`${i.resize}\``,
+      i.interpolation && (i.interpolation === 'pillow-bilinear' ? messages.OnnxIo.interpPillow : `\`${i.interpolation}\``),
       i.resize === 'letterbox' && i.pad_value != null && `pad value ${i.pad_value}`,
       i.resize === 'letterbox' && i.pad_position &&
         (i.pad_position === 'metadata' ? 'pad position from the `letterbox_pad` metadata key' : `pad position ${i.pad_position}`),
@@ -75,6 +77,7 @@ function onnxIo(family, { getTaskMeta, archived }) {
       ['Normalization', norm ? [norm.mean && `mean ${norm.mean}`, norm.std && `std ${norm.std}`].filter(Boolean).join(', ') : 'none'],
       ['Resize', resize],
     ]))
+    if (i.interpolation === 'pillow-bilinear') parts.push(`${messages.OnnxIo.pillowTitle}: ${messages.OnnxIo.pillowBody}`)
     if (i.notes?.length) parts.push(i.notes.join('\n\n'))
     for (const [task, entries] of Object.entries(v.tasks || {})) {
       for (const e of entries) {

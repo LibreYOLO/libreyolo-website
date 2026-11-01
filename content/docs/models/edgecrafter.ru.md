@@ -23,7 +23,6 @@ keywords:
   - сегментация экземпляров python
   - инференс на edge-устройствах
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Python
@@ -185,7 +184,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Установка
@@ -298,6 +297,10 @@ Core AI. [Экспорт](/docs/export) перечисляет аргумент�
 формат, и те дополнительные, что добавляют некоторые из них.
 
 <code-tabs name="export" />
+
+### Входы и выходы ONNX
+
+<onnx-io />
 
 ## Чекпойнты
 

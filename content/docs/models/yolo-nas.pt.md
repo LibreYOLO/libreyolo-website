@@ -131,7 +131,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## Instalação
@@ -215,6 +215,10 @@ Exportar um checkpoint da Deci não muda nem de onde os pesos vieram nem a
 licença que os cobre.
 
 <code-tabs name="export" />
+
+### Entradas e saídas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

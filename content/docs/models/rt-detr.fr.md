@@ -22,7 +22,7 @@ keywords:
   - détection de boîtes orientées
   - OBB
   - DOTA
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -209,7 +209,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 75454e612d7e2247
+source_hash: 952ce8da92f61d29
 ---
 
 ## Installer
@@ -360,6 +360,10 @@ fichier. Un fichier `.onnx` ou `.engine` se comporte donc comme un checkpoint et
 renvoie le même objet `Results`.
 
 <code-tabs name="export" />
+
+### Entrées et sorties ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 
 ## Installazione
@@ -252,6 +252,10 @@ file, quindi un file `.onnx` o `.engine` si comporta come un checkpoint e
 restituisce lo stesso `Results`.
 
 <code-tabs name="export" />
+
+### Input e output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

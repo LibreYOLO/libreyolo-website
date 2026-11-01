@@ -146,7 +146,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 ## Cài đặt
 
@@ -207,6 +207,10 @@ Với checkpoint `-seg`, key `metrics/mAP50-95` thuần túy chứa điểm mặ
 Artifact đã xuất được tải lại qua `LibreYOLO()` dựa trên hậu tố tệp, vì vậy tệp `.onnx` hoặc `.engine` hoạt động như checkpoint và trả về cùng đối tượng `Results`. Các tuyến OpenVINO, Paddle, MNN và Core AI xuất trên canvas cố định thay vì shape động. Trang [Xuất](/docs/export) liệt kê các đối số được mọi định dạng chấp nhận và các extra mà một số định dạng bổ sung.
 
 <code-tabs name="export" />
+
+### Đầu vào và đầu ra ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

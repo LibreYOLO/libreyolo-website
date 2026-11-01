@@ -399,6 +399,10 @@ returns the same `Results`.
 
 [Export setup](/docs/export) lists format dependencies and loading exported artifacts.
 
+### ONNX inputs and outputs
+
+<onnx-io />
+
 ## Checkpoints
 
 Every published weight file for this family.

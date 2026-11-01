@@ -34,6 +34,42 @@ INTERPOLATION = {
     "bicubic": cv2.INTER_CUBIC,
     "area": cv2.INTER_AREA,
 }
+# Plus "pillow-bilinear": Pillow's BILINEAR filter, which widens the kernel when
+# shrinking. OpenCV has no equivalent; see pillow_bilinear_resize below.
+
+
+def pillow_bilinear_weights(in_size: int, out_size: int) -> np.ndarray:
+    """Pillow BILINEAR (Image.resize) weights for one axis, as an [out, in] matrix.
+
+    s = in / out, f = max(s, 1). Output pixel i has center c = (i + 0.5) * s and
+    reads source pixels int(c - f + 0.5) .. int(c + f + 0.5) - 1, clipped to the
+    image, each weighted max(0, 1 - |j + 0.5 - c| / f), normalized to sum 1.
+    """
+    s = in_size / out_size
+    f = max(s, 1.0)
+    weights = np.zeros((out_size, in_size), np.float64)
+    for i in range(out_size):
+        center = (i + 0.5) * s
+        lo = max(int(center - f + 0.5), 0)
+        hi = min(int(center + f + 0.5), in_size)
+        j = np.arange(lo, hi)
+        w = np.maximum(0.0, 1.0 - np.abs(j + 0.5 - center) / f)
+        weights[i, lo:hi] = w / w.sum()
+    return weights
+
+
+def pillow_bilinear_resize(img: np.ndarray, out_w: int, out_h: int) -> np.ndarray:
+    """Width pass, round to uint8, height pass, round to uint8 (Pillow's order)."""
+    x = img.astype(np.float64)
+    x = np.clip(np.floor(np.einsum("ow,hwc->hoc", pillow_bilinear_weights(img.shape[1], out_w), x) + 0.5), 0, 255)
+    x = np.clip(np.floor(np.einsum("oh,hwc->owc", pillow_bilinear_weights(img.shape[0], out_h), x) + 0.5), 0, 255)
+    return x.astype(np.uint8)
+
+
+def resize_to(img: np.ndarray, out_w: int, out_h: int, interpolation: str) -> np.ndarray:
+    if interpolation == "pillow-bilinear":
+        return pillow_bilinear_resize(img, out_w, out_h)
+    return cv2.resize(img, (out_w, out_h), interpolation=INTERPOLATION[interpolation])
 
 
 def load_entry(family: str) -> dict:
@@ -83,7 +119,7 @@ def preprocess(image_bgr: np.ndarray, inp: dict, H: int, W: int, metadata: dict)
     else:
         raise ValueError(f"color={inp['color']!r}")
     oh, ow = img.shape[:2]
-    interp = INTERPOLATION[inp.get("interpolation", "bilinear")]
+    interp = inp.get("interpolation", "bilinear")
     geo = {"orig_w": ow, "orig_h": oh, "input_w": W, "input_h": H}
 
     if inp["resize"] == "letterbox":
@@ -99,12 +135,10 @@ def preprocess(image_bgr: np.ndarray, inp: dict, H: int, W: int, metadata: dict)
         else:
             raise ValueError(f"pad_position={position!r}")
         canvas = np.full((H, W, 3), inp.get("pad_value", 114), dtype=np.uint8)
-        canvas[top : top + nh, left : left + nw] = cv2.resize(
-            img, (nw, nh), interpolation=interp
-        )
+        canvas[top : top + nh, left : left + nw] = resize_to(img, nw, nh, interp)
         geo.update(scale_x=r, scale_y=r, pad_left=left, pad_top=top)
     elif inp["resize"] == "stretch":
-        canvas = cv2.resize(img, (W, H), interpolation=interp)
+        canvas = resize_to(img, W, H, interp)
         geo.update(scale_x=W / ow, scale_y=H / oh, pad_left=0, pad_top=0)
     else:
         raise NotImplementedError(

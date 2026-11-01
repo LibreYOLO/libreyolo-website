@@ -144,7 +144,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Instalasi
@@ -232,6 +232,10 @@ memuat daftar argumen yang diterima setiap format dan tambahan yang dipakai
 beberapa di antaranya.
 
 <code-tabs name="export" />
+
+### Input dan output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

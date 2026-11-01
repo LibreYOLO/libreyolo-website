@@ -20,7 +20,7 @@ keywords:
   - DETR
   - виявлення об'єктів
   - виявлення в реальному часі
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -161,7 +161,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 
 ## Встановлення
@@ -268,6 +268,10 @@ LibreYOLO; у примітці під таблицею зазначено дат
 той самий `Results`.
 
 <code-tabs name="export" />
+
+### Входи та виходи ONNX
+
+<onnx-io />
 
 ## Контрольні точки
 

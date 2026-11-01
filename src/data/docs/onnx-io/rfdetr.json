@@ -1,0 +1,158 @@
+{
+  "family": "rfdetr",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": [
+        "rfdetr"
+      ],
+      "label": "LibreRFDETR",
+      "input": {
+        "name": "input",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "resize": "custom",
+        "interpolation": "bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "The input tensor is named input, not images.",
+          "Square input only. Export rejects a non-square imgsz. The default size comes from the checkpoint and is stored in the imgsz metadata key: 384 for LibreRFDETRn, 312 for LibreRFDETRn-seg, 576 for LibreRFDETRx-pose.",
+          "A custom imgsz must be a multiple of patch size x windows: 32 for detection and OBB, 12 for segmentation n, 24 for the other segmentation sizes and for pose.",
+          "Stretch the whole image to width x height. There is no letterbox and no padding, so the aspect ratio is not kept.",
+          "Detection, segmentation and OBB: convert the 8-bit RGB image to float32 and divide by 255 first, then resize the float image with cv2.resize INTER_LINEAR (half-pixel centers, no antialiasing). Resizing the 8-bit image before dividing is close but moves scores by up to about 0.01.",
+          "Pose resizes differently: divide by 255 the same way, then resize the float image with antialiased bilinear, as torch.nn.functional.interpolate does with mode bilinear, align_corners False and antialias True. This is the filter of Pillow's BILINEAR, which widens by the shrink factor, but in float with no rounding to 8 bits. Per axis, let s = in_size / out_size and f = max(s, 1). Output pixel i has center c = (i + 0.5) * s. It reads source pixels j from int(c - f + 0.5) to int(c + f + 0.5) - 1, clipped to the image, each with weight max(0, 1 - |j + 0.5 - c| / f). Divide the weights by their sum.",
+          "The pose model is sensitive to this. On the test image, cv2.resize INTER_LINEAR or INTER_AREA adds 3 to 9 detections, and Pillow on the 8-bit image adds one and moves keypoints by more than 4 px.",
+          "Then subtract the mean and divide by the std per channel.",
+          "nms=True is not available for this family: export raises NotImplementedError."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "dets",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Boxes as cx, cy, w, h, normalized 0 to 1 of the input. 300 queries."
+              },
+              {
+                "name": "labels",
+                "shape": "[batch, queries, columns]",
+                "meaning": "Raw class logits per query, sigmoid not applied. The COCO checkpoints have 91 columns, where column k is COCO category id k. For other checkpoints column j is class j."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to labels.",
+              "Flatten the scores of one image to queries x columns and take the top k over all of them, with k equal to queries (300). For flat index i, the query is i // columns and the column is i % columns. One query can yield several classes.",
+              "Keep the entries whose score is strictly above the confidence threshold (0.25 by default). There is no NMS.",
+              "When labels has 91 columns and nc is 80 (the COCO checkpoints), the column is a COCO category id. Class i is the i-th id, counting from 0, in this list: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 67, 70, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85, 86, 87, 88, 89, 90. Drop entries whose id is not in the list. With any other column count the column is the class.",
+              "Convert the query's box to x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2.",
+              "Map boxes back to the original image: multiply x by the original width and y by the original height. The input was stretched, so no pad offset applies. LibreYOLO does not clip these boxes."
+            ]
+          }
+        ],
+        "segment": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "dets",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Boxes as cx, cy, w, h, normalized 0 to 1 of the input. 100 queries for sizes n and s, 200 for m and l, 300 for x and xx."
+              },
+              {
+                "name": "labels",
+                "shape": "[batch, queries, columns]",
+                "meaning": "Raw class logits per query, sigmoid not applied. 91 columns for the COCO checkpoints, where column k is COCO category id k."
+              },
+              {
+                "name": "masks",
+                "shape": "[batch, queries, mask_h, mask_w]",
+                "meaning": "Raw mask logits per query over the whole input, at a quarter of the input size: 78 x 78 at 312 x 312."
+              }
+            ],
+            "postprocess": [
+              "Select, threshold, map classes and decode boxes exactly as for detection, with k equal to queries.",
+              "Take the mask of each kept query and resize the logits straight to the original image size with bilinear, half-pixel centers and no antialiasing (cv2.resize INTER_LINEAR on the float logits gives the same).",
+              "A pixel is foreground when its resized logit is above 0."
+            ]
+          }
+        ],
+        "pose": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "dets",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Boxes as cx, cy, w, h, normalized 0 to 1 of the input. 100 queries."
+              },
+              {
+                "name": "labels",
+                "shape": "[batch, queries, columns]",
+                "meaning": "Raw class logits per query, sigmoid not applied, with the keypoint class term already added inside the graph. Column 0 is an empty slot and column j + 1 is class j, so the person checkpoint has 2 columns."
+              },
+              {
+                "name": "keypoints",
+                "shape": "[batch, queries, columns * num_keypoints, 8]",
+                "meaning": "One block of num_keypoints rows per label column, 2 x 17 = 34 rows here. Each row is x, y normalized 0 to 1 of the input, findable logit, visible logit, log_l11, l21, log_l22 and a class logit term. The num_keypoints_per_class metadata key ([0, 17]) says how many rows of each block are real keypoints."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to labels. Flatten to queries x columns and take the top k over all of them, with k equal to queries (100). For flat index i, the query is i // columns and the column is i % columns.",
+              "For each entry take its column's keypoint block: rows column * num_keypoints onward, of which the first num_keypoints_per_class[column] are used.",
+              "Rescore each entry whose column has keypoints. Per used keypoint, with a = log_l11, b = l21, d = log_l22 and p = sigmoid(findable logit): sigma = exp(-2a) + exp(-2d) + b^2 * exp(-2a - 2d). Then trace = log(sum of p * sigma / sum of p) over the used keypoints, and score = score * exp(-0.2 * trace). Scores can go above 1.",
+              "Drop entries whose column is 0. The class is column - 1.",
+              "Keep the entries whose new score is strictly above the confidence threshold (0.25 by default). There is no NMS.",
+              "Decode and map the box as for detection. LibreYOLO does not clip these boxes.",
+              "Keypoint x is x * original width and keypoint y is y * original height. Keypoint confidence is sigmoid(findable logit). LibreYOLO does not use the visible logit."
+            ]
+          }
+        ],
+        "obb": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "dets",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Rotated boxes as cx, cy, w, h, normalized 0 to 1 of the input. 300 queries."
+              },
+              {
+                "name": "labels",
+                "shape": "[batch, queries, columns]",
+                "meaning": "Raw class logits per query, sigmoid not applied. Column j is class j. The 6-class checkpoint has 7 columns: the last one is not a class and LibreYOLO does not drop it."
+              },
+              {
+                "name": "angles",
+                "shape": "[batch, queries, 1]",
+                "meaning": "Rotation in radians from -pi / 2 to pi / 2, tanh already applied, measured on the square input. The width side points along (cos(angle), sin(angle)) with y pointing down."
+              }
+            ],
+            "postprocess": [
+              "Select and threshold as for detection, with k equal to queries (300). The column is the class.",
+              "The stretch scales x and y by different amounts, so map each box back through its corners. In normalized input units, with c = cos(angle) and s = sin(angle), the corners are (cx, cy) - u - v, + u - v, + u + v and - u + v, with u = (c * w / 2, s * w / 2) and v = (-s * h / 2, c * h / 2).",
+              "Multiply corner x by the original width and corner y by the original height.",
+              "Fit cv2.minAreaRect to the 4 corners and convert its angle to radians. Raise w and h to at least 1e-4. If h > w, swap them and add pi / 2 to the angle. Then wrap the angle to [-pi / 2, pi / 2) with angle = (angle + pi / 2) mod pi - pi / 2.",
+              "The result is cx, cy, w, h, angle in original-image pixels, with w the long side."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

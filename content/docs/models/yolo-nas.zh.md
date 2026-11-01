@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## 安装
@@ -185,6 +185,10 @@ mAP 50-95，衡量对象是任何符合你训练时所用格式的数据集。
 的来源，也不会改变覆盖它们的许可。
 
 <code-tabs name="export" />
+
+### ONNX 输入与输出
+
+<onnx-io />
 
 ## 检查点
 

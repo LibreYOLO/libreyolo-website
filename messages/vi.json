@@ -373,7 +373,11 @@
     "outputMeaning": "Ý nghĩa",
     "postprocess": "Hậu xử lý",
     "reference": "Để kiểm tra bản triển khai của bạn, hãy chạy cùng tệp đó qua LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> trả về kết quả tham chiếu.",
-    "verified": "Đã kiểm chứng với LibreYOLO {version}."
+    "verified": "Đã kiểm chứng với LibreYOLO {version}.",
+    "resizeStretch": "kéo giãn về rộng x cao (không đệm, không giữ tỉ lệ khung hình)",
+    "interpPillow": "Pillow bilinear",
+    "pillowTitle": "Cách tái tạo phép đổi kích thước bilinear của Pillow",
+    "pillowBody": "LibreYOLO đổi kích thước bằng bộ lọc BILINEAR của Pillow (Image.resize). Đó không phải OpenCV INTER_LINEAR hay INTER_AREA: khi thu nhỏ, Pillow nới rộng bộ lọc theo hệ số thu nhỏ, còn các phép đổi kích thước của OpenCV làm thay đổi kết quả phát hiện và dịch các hộp đi vài pixel. Để tái tạo mà không dùng Pillow, hãy đổi kích thước một trục, làm tròn về 8 bit, rồi đổi kích thước trục còn lại và làm tròn lần nữa. Với mỗi trục, đặt s = in_size / out_size và f = max(s, 1). Pixel đầu ra i có tâm c = (i + 0.5) * s và đọc các pixel nguồn j từ int(c - f + 0.5) đến int(c + f + 0.5) - 1, giới hạn trong ảnh, mỗi pixel có trọng số max(0, 1 - |j + 0.5 - c| / f), chia cho tổng các trọng số. Pillow tính bằng dấu phẩy cố định và chọn thứ tự trục theo hình dạng ảnh, nên trọng số dấu phẩy động có thể lệch một mức ở vài pixel. Điều đó không làm thay đổi kết quả trong các kiểm tra của chúng tôi."
   },
   "DocsLanding": {
     "metaTitle": "Tài liệu LibreYOLO",

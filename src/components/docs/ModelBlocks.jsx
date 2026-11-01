@@ -516,7 +516,8 @@ function InputTable({ input }) {
       : t('none')],
     [t('resize'), (
       <Fragment key="v">
-        <C>{input.resize}</C>{input.interpolation && <>, <C>{input.interpolation}</C></>}
+        {input.resize === 'stretch' ? t('resizeStretch') : <C>{input.resize}</C>}
+        {input.interpolation && <>, {input.interpolation === 'pillow-bilinear' ? t('interpPillow') : <C>{input.interpolation}</C>}</>}
         {input.resize === 'letterbox' && input.pad_value != null && <>, {t('padValue', { value: input.pad_value })}</>}
         {input.resize === 'letterbox' && input.pad_position && (
           <>, {input.pad_position === 'metadata'
@@ -538,6 +539,12 @@ function InputTable({ input }) {
           ))}
         </tbody>
       </Table>
+      {input.interpolation === 'pillow-bilinear' && (
+        <details className="mt-2 text-[13px] text-surface-500">
+          <summary className="cursor-pointer select-none">{t('pillowTitle')}</summary>
+          <p className="mt-1 max-w-[68ch] leading-relaxed">{t('pillowBody')}</p>
+        </details>
+      )}
       {input.notes?.length > 0 && (
         <div className="mt-2 space-y-1">
           {input.notes.map((n) => <Note key={n}>{n}</Note>)}
@@ -551,10 +558,14 @@ function ExportOutputs({ taskLabel, entry }) {
   const t = useTranslations('OnnxIo')
   const when = entry.when === 'default' ? t('defaultExport') : entry.when
   return (
-    <div className="mt-6">
-      <p className="mb-1 text-[13.5px] font-semibold text-surface-800 dark:text-surface-200">
+    <details className="group mt-4">
+      <summary className="flex cursor-pointer select-none list-none items-center gap-1.5 rounded text-[13.5px] font-semibold text-surface-800 marker:hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-libre-500 dark:text-surface-200 [&::-webkit-details-marker]:hidden">
+        <svg aria-hidden="true" viewBox="0 0 12 12" className="h-3 w-3 shrink-0 text-surface-400 transition-transform group-open:rotate-90">
+          <path d="M4 2l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
         {t('exportHeading', { task: taskLabel, when })}
-      </p>
+      </summary>
+      <div className="mt-1">
       <Table>
         <thead>
           <tr>
@@ -581,7 +592,8 @@ function ExportOutputs({ taskLabel, entry }) {
           </ol>
         </>
       )}
-    </div>
+      </div>
+    </details>
   )
 }
 

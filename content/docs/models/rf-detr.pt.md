@@ -215,7 +215,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## Instalação
@@ -301,6 +301,10 @@ instalado, também é suportado, mas aí o pré-processamento e o pós-processam
 ficam por sua conta.
 
 <code-tabs name="export" />
+
+### Entradas e saídas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

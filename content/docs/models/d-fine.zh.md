@@ -136,7 +136,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## 安装
@@ -211,6 +211,10 @@ CPU：Integral 的分箱矩阵乘法在反向传播时会撞上 Metal 编译失�
 参数，以及其中少数几种额外增加的参数。
 
 <code-tabs name="export" />
+
+### ONNX 输入与输出
+
+<onnx-io />
 
 ## 检查点
 

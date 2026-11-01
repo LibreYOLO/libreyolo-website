@@ -373,7 +373,11 @@
     "outputMeaning": "Arti",
     "postprocess": "Pascapemrosesan",
     "reference": "Untuk memeriksa implementasi Anda sendiri, jalankan file yang sama lewat LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> mengembalikan hasil acuan.",
-    "verified": "Diverifikasi dengan LibreYOLO {version}."
+    "verified": "Diverifikasi dengan LibreYOLO {version}.",
+    "resizeStretch": "regangkan ke lebar x tinggi (tanpa padding, rasio aspek tidak dipertahankan)",
+    "interpPillow": "Pillow bilinear",
+    "pillowTitle": "Cara mereproduksi resize bilinear Pillow",
+    "pillowBody": "LibreYOLO mengubah ukuran dengan filter BILINEAR milik Pillow (Image.resize). Ini bukan OpenCV INTER_LINEAR maupun INTER_AREA: saat memperkecil, Pillow memperlebar filter sebesar faktor pengecilan, dan resize OpenCV mengubah deteksi serta menggeser kotak beberapa piksel. Untuk mereproduksinya tanpa Pillow, ubah ukuran satu sumbu, bulatkan ke 8 bit, lalu ubah ukuran sumbu lainnya dan bulatkan lagi. Per sumbu, misalkan s = in_size / out_size dan f = max(s, 1). Piksel keluaran i berpusat di c = (i + 0.5) * s dan membaca piksel sumber j dari int(c - f + 0.5) sampai int(c + f + 0.5) - 1, dibatasi pada gambar, masing-masing dengan bobot max(0, 1 - |j + 0.5 - c| / f), dibagi jumlah bobot. Pillow bekerja dengan fixed point dan memilih urutan sumbu dari bentuk gambar, sehingga bobot float dapat berbeda satu level pada beberapa piksel. Hal itu tidak mengubah hasil pada pemeriksaan kami."
   },
   "DocsLanding": {
     "metaTitle": "Dokumentasi LibreYOLO",

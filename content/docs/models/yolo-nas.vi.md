@@ -131,7 +131,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 ## Cài đặt
 
@@ -209,6 +209,10 @@ Bản xuất là một bản sao khác của cùng trọng số trong container 
 checkpoint Deci không thay đổi nguồn gốc trọng số hay giấy phép áp dụng cho chúng.
 
 <code-tabs name="export" />
+
+### Đầu vào và đầu ra ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

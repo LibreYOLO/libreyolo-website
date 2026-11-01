@@ -144,7 +144,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## Installation
@@ -200,6 +200,10 @@ Ein exportiertes Artefakt wird über seine Dateiendung wieder durch `LibreYOLO()
 Ein Export ist eine weitere Kopie derselben Gewichte in einem anderen Container. Der Export eines Deci-Checkpoints ändert weder die Herkunft der Gewichte noch die dafür geltende Lizenz.
 
 <code-tabs name="export" />
+
+### ONNX-Ein- und Ausgaben
+
+<onnx-io />
 
 ## Checkpoints
 

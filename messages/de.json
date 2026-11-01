@@ -373,7 +373,11 @@
     "outputMeaning": "Bedeutung",
     "postprocess": "Nachbearbeitung",
     "reference": "Um deine eigene Implementierung zu prüfen, lade dieselbe Datei mit LibreYOLO: <code>LibreYOLO(\"model.onnx\").predict(\"image.jpg\")</code> liefert die Referenzergebnisse.",
-    "verified": "Geprüft mit LibreYOLO {version}."
+    "verified": "Geprüft mit LibreYOLO {version}.",
+    "resizeStretch": "auf Breite x Höhe strecken (ohne Auffüllen, Seitenverhältnis wird nicht beibehalten)",
+    "interpPillow": "Pillow bilinear",
+    "pillowTitle": "So reproduzierst du die bilineare Skalierung von Pillow",
+    "pillowBody": "LibreYOLO skaliert mit dem BILINEAR-Filter von Pillow (Image.resize). Das ist weder OpenCV INTER_LINEAR noch INTER_AREA: Beim Verkleinern weitet Pillow den Filter um den Verkleinerungsfaktor, und die Skalierungen von OpenCV verändern Detektionen und verschieben Boxen um mehrere Pixel. Um es ohne Pillow nachzubauen, skaliere eine Achse, runde auf 8 Bit, skaliere dann die andere Achse und runde erneut. Pro Achse gilt s = in_size / out_size und f = max(s, 1). Ausgabepixel i hat das Zentrum c = (i + 0.5) * s und liest Quellpixel j von int(c - f + 0.5) bis int(c + f + 0.5) - 1, auf das Bild begrenzt, jeweils mit dem Gewicht max(0, 1 - |j + 0.5 - c| / f), geteilt durch die Summe der Gewichte. Pillow rechnet in Festkomma und wählt die Achsenreihenfolge anhand der Bildform, daher können Gleitkomma-Gewichte bei einigen Pixeln um eine Stufe abweichen. Das ändert die Ergebnisse in unseren Prüfungen nicht."
   },
   "DocsLanding": {
     "metaTitle": "LibreYOLO-Dokumentation",

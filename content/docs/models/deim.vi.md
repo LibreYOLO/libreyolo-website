@@ -4,12 +4,12 @@ families:
   - deim
 seo_title: DEIM và DEIMv2 trong LibreYOLO
 description: >-
-  Dùng DEIM và DEIMv2 trong LibreYOLO để phát hiện đối tượng. Cài đặt, dự đoán, huấn luyện, xác thực và xuất,
-  từ kích thước nửa triệu tham số trở lên.
+  Dùng DEIM và DEIMv2 trong LibreYOLO để phát hiện đối tượng. Cài đặt, dự đoán,
+  huấn luyện, xác thực và xuất, từ kích thước nửa triệu tham số trở lên.
 lead: >-
-  Một detection transformer được huấn luyện bằng phép ghép one-to-one dense, hội tụ trong số epoch ít hơn
-  nhiều so với các công thức DETR làm nền tảng cho nó. LibreYOLO có hai phiên bản, được phân biệt bằng
-  checkpoint bạn tải.
+  Một detection transformer được huấn luyện bằng phép ghép one-to-one dense, hội
+  tụ trong số epoch ít hơn nhiều so với các công thức DETR làm nền tảng cho nó.
+  LibreYOLO có hai phiên bản, được phân biệt bằng checkpoint bạn tải.
 keywords:
   - DEIM
   - DEIMv2
@@ -38,27 +38,39 @@ snippets:
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
     - label: Video
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
+
         # Phiên bản là một phần của tên tệp và factory định tuyến theo
+
         # checkpoint, vì vậy cả hai đều tải theo cùng một cách.
+
         model = LibreYOLO("LibreDEIMv2pico.pt")
 
-        # Bất kỳ nguồn nào thư viện chấp nhận: tệp, thư mục, URL, chỉ mục webcam,
+
+        # Bất kỳ nguồn nào thư viện chấp nhận: tệp, thư mục, URL, chỉ mục
+        webcam,
+
         # luồng RTSP hoặc danh sách .streams
+
         for result in model.predict("clip.mp4", stream=True, save=True):
             print(len(result.boxes))
   train:
     - label: Python
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
+
 
         model = LibreYOLO("LibreDEIMn.pt")
 
-        # coco128.yaml tải mẫu 128 ảnh trong lần sử dụng đầu tiên. Hãy trỏ `data`
+
+        # coco128.yaml tải mẫu 128 ảnh trong lần sử dụng đầu tiên. Hãy trỏ
+        `data`
+
         # đến YAML dataset của bạn cho một lượt chạy thực tế.
+
         model.train(data="coco128.yaml", epochs=50, batch=8, lr0=1e-4)
     - label: CLI
       language: bash
@@ -67,12 +79,17 @@ snippets:
           epochs=50 batch=8 lr0=1e-4
     - label: DEIMv2
       language: python
-      code: |
+      code: >
         from libreyolo import LibreYOLO
 
-        # Khi không đặt, epochs, batch, imgsz và lr0 lấy từ công thức đã phát hành
+
+        # Khi không đặt, epochs, batch, imgsz và lr0 lấy từ công thức đã phát
+        hành
+
         # cho kích thước được tải.
+
         model = LibreYOLO("LibreDEIMv2pico.pt")
+
         model.train(data="coco128.yaml", epochs=50)
     - label: LoRA
       language: python
@@ -138,7 +155,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 ## Cài đặt
 
@@ -205,6 +222,10 @@ Ma trận bao quát cả hai phiên bản trên một trang: khi hai phiên bả
 Artifact đã xuất được tải lại qua `LibreYOLO()` dựa trên hậu tố tệp, vì vậy tệp `.onnx` hoặc `.engine` hoạt động như checkpoint và trả về cùng đối tượng `Results`.
 
 <code-tabs name="export" />
+
+### Đầu vào và đầu ra ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

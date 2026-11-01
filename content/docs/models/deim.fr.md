@@ -20,7 +20,7 @@ keywords:
   - DETR
   - détection d'objets temps réel
   - détection d'objets python
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 
 ## Installation
@@ -254,6 +254,10 @@ fichier, si bien qu'un fichier `.onnx` ou `.engine` se comporte comme un
 checkpoint et renvoie le même `Results`.
 
 <code-tabs name="export" />
+
+### Entrées et sorties ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

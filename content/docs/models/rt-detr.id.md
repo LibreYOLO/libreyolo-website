@@ -219,7 +219,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 75454e612d7e2247
+source_hash: 952ce8da92f61d29
 ---
 
 ## Instalasi
@@ -351,6 +351,10 @@ sehingga berkas `.onnx` atau `.engine` berperilaku seperti checkpoint dan mengem
 `Results` yang sama.
 
 <code-tabs name="export" />
+
+### Input dan output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

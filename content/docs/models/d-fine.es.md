@@ -157,7 +157,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Instalación
@@ -261,6 +261,10 @@ exportan con un lienzo fijo en lugar de con formas dinámicas.
 extras que añaden unos pocos de ellos.
 
 <code-tabs name="export" />
+
+### Entradas y salidas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

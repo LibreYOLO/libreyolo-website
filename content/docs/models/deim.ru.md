@@ -21,7 +21,6 @@ keywords:
   - трансформер для детекции объектов
   - детекция в реальном времени
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Python
@@ -141,7 +140,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 
 ## Установка
@@ -248,6 +247,10 @@ DEIM по умолчанию включает AMP с `amp_dtype="float16"`. Дл
 тот же `Results`.
 
 <code-tabs name="export" />
+
+### Входы и выходы ONNX
+
+<onnx-io />
 
 ## Чекпойнты
 
