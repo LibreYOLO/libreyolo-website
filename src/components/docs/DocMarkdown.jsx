@@ -14,7 +14,7 @@ import Code from '@/components/docs/Code'
 import { slugifyHeading } from '@/lib/docs'
 import CodeTabs from '@/components/docs/CodeTabs'
 import {
-  SectionTitle, BenchmarkTable, VaEmbed, CheckpointTable, ExportMatrix,
+  SectionTitle, BenchmarkTable, VaEmbed, CheckpointTable, ExportMatrix, OnnxIo,
   Provenance, Citation,
 } from '@/components/docs/ModelBlocks'
 import { externalRel } from '@/lib/links'
@@ -61,7 +61,7 @@ export default function DocMarkdown({ children, family, snippets = {}, source, h
       // Markdown treats custom tags as inline HTML. Their React renderers emit
       // block elements, which cannot sit inside a p without hydration repair.
       const hasBlock = node?.children?.some(child => child.type === 'element' &&
-        ['code-tabs', 'benchmark-table', 'checkpoint-table', 'export-matrix',
+        ['code-tabs', 'benchmark-table', 'checkpoint-table', 'export-matrix', 'onnx-io',
           'citation-block', 'provenance-box', 'va-embed', 'task-support', 'idol-gallery'].includes(child.tagName))
       const Tag = hasBlock ? 'div' : 'p'
       return <Tag className={hasBlock ? "mb-5" : "mb-5 max-w-[68ch] text-[15px] leading-[1.6] text-surface-600 dark:text-surface-400"} {...dom(props)} />
@@ -125,6 +125,7 @@ export default function DocMarkdown({ children, family, snippets = {}, source, h
     'idol-gallery': () => <IdolGallery />,
     'checkpoint-table': () => <CheckpointTable family={family} {...(source ? { source } : {})} />,
     'export-matrix': () => <ExportMatrix family={family} {...(source ? { source } : {})} />,
+    'onnx-io': () => <OnnxIo family={family} {...(source ? { source } : {})} />,
     'code-tabs': ({ name }) => <CodeTabs tabs={snippets[name] || []} />,
     'provenance-box': ({ children: kids }) => <Provenance family={family}>{kids}</Provenance>,
     'citation-block': () => <Citation family={family} />,

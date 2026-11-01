@@ -231,6 +231,10 @@ also supported, but then preprocessing and postprocessing are yours to write.
 
 <code-tabs name="export" />
 
+### ONNX inputs and outputs
+
+<onnx-io />
+
 ## Checkpoints
 
 Every published weight file for this family.

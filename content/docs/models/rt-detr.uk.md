@@ -22,7 +22,7 @@ keywords:
   - виявлення орієнтованих обмежувальних рамок
   - OBB
   - DOTA
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -210,7 +210,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 75454e612d7e2247
+source_hash: 952ce8da92f61d29
 ---
 
 ## Встановлення
@@ -353,6 +353,10 @@ LibreYOLO; у примітці під таблицею зазначено дат
 той самий `Results`.
 
 <code-tabs name="export" />
+
+### Входи та виходи ONNX
+
+<onnx-io />
 
 ## Контрольні точки
 

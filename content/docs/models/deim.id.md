@@ -142,7 +142,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 
 ## Instalasi
@@ -252,6 +252,10 @@ berkasnya, jadi berkas `.onnx` atau `.engine` berperilaku seperti checkpoint
 dan mengembalikan `Results` yang sama.
 
 <code-tabs name="export" />
+
+### Input dan output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

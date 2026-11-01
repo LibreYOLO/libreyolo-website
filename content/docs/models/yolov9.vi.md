@@ -130,7 +130,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 ## Cài đặt
 
@@ -242,6 +242,10 @@ Mỗi định dạng cài một extra khác nhau và nhận một số đối s�
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite) dùng `int8=True` cùng dữ liệu hiệu chuẩn.
+
+### Đầu vào và đầu ra ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

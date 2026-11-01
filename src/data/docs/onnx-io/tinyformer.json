@@ -1,0 +1,55 @@
+{
+  "family": "tinyformer",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": ["tinyformer"],
+      "label": "LibreTinyFormer",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": [0.485, 0.456, 0.406],
+        "std": [0.229, 0.224, 0.225],
+        "resize": "stretch",
+        "interpolation": "pillow-bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height and width are 640 by default for every size. Another square imgsz must be a multiple of 32.",
+          "Batch size 1 only. The graph declares a dynamic batch axis, but batches of 2 or more fail in 1.7.0.",
+          "After the resize, divide by 255, then subtract the ImageNet mean and divide by the ImageNet std, per channel in RGB order."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "One logit per query and class. Sigmoid is not applied. queries is 300 for every size."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "cx, cy, w, h of each query, normalized 0 to 1 of the input. The input is the whole image stretched, so these are also fractions of the original image."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the [queries, nc] scores and take the top 300 (max_det, 300 by default). For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the pairs whose score is above the confidence threshold (0.25 by default).",
+              "Convert the query's box to x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2. Multiply x by the original image width and y by the original image height.",
+              "There is no NMS and the iou threshold is not used. TinyFormer predicts a set of boxes, and export with nms=True raises NotImplementedError.",
+              "LibreYOLO does not clip these boxes, so an edge can sit slightly outside the image."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

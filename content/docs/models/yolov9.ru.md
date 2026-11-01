@@ -140,7 +140,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 
 ## Установка
@@ -265,6 +265,10 @@ End-to-end модель и модель с шагом 4 этот флаг не �
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite) использует `int8=True` с калибровочными данными.
+
+### Входы и выходы ONNX
+
+<onnx-io />
 
 ## Чекпойнты
 

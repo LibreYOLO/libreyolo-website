@@ -220,7 +220,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## Встановлення
@@ -307,6 +307,10 @@ LibreYOLO перевіряє це до початку запуску й нази
 обробку потрібно написати самостійно.
 
 <code-tabs name="export" />
+
+### Входи та виходи ONNX
+
+<onnx-io />
 
 ## Контрольні точки
 

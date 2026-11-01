@@ -124,7 +124,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 
 ## 설치
@@ -194,6 +194,10 @@ YOLO9과 YOLOX 모자이크는 최대 20번 추출하여 어노테이션이 있�
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite)는 보정 데이터와 `int8=True`를 사용합니다.
+
+### ONNX 입력과 출력
+
+<onnx-io />
 
 ## 체크포인트
 

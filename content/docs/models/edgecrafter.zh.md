@@ -17,7 +17,7 @@ keywords:
   - 姿态估计
   - 实例分割
   - 边缘设备 推理
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -173,7 +173,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## 安装
@@ -267,6 +267,10 @@ MNN、ExecuTorch 和 Core AI。[导出](/docs/export)列出了每种格式接受
 其中少数几种额外增加的参数。
 
 <code-tabs name="export" />
+
+### ONNX 输入与输出
+
+<onnx-io />
 
 ## 检查点
 

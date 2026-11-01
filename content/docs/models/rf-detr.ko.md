@@ -177,7 +177,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## 설치
@@ -235,6 +235,10 @@ pip install "libreyolo[rfdetr]"
 내보낸 아티팩트는 파일 접미사에 따라 `LibreYOLO()`로 다시 불러오므로 `.onnx` 또는 `.engine` 파일은 체크포인트처럼 동작하며 동일한 `Results`를 반환합니다. LibreYOLO가 설치되지 않은 기본 런타임에서 그래프를 실행할 수도 있지만 이 경우 전처리와 후처리를 직접 작성해야 합니다.
 
 <code-tabs name="export" />
+
+### ONNX 입력과 출력
+
+<onnx-io />
 
 ## 체크포인트
 

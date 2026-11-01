@@ -210,7 +210,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 ## Cài đặt
 
@@ -283,6 +283,10 @@ hỗ trợ chạy đồ thị trong runtime độc lập không cài LibreYOLO, 
 phải tự viết bước tiền xử lý và hậu xử lý.
 
 <code-tabs name="export" />
+
+### Đầu vào và đầu ra ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

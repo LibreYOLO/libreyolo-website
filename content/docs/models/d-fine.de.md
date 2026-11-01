@@ -145,7 +145,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Installation
@@ -236,6 +236,10 @@ und Core AI exportieren mit fester Canvas-Größe statt mit dynamischen Formen.
 und die Extras, die einige davon ergänzen.
 
 <code-tabs name="export" />
+
+### ONNX-Ein- und Ausgaben
+
+<onnx-io />
 
 ## Checkpoints
 

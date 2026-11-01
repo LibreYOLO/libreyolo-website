@@ -184,7 +184,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## Instalación
@@ -270,6 +270,10 @@ sin LibreYOLO instalado, también está soportado, pero entonces el preprocesado
 el postprocesado corren de tu cuenta.
 
 <code-tabs name="export" />
+
+### Entradas y salidas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

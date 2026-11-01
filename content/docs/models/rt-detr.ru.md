@@ -23,7 +23,6 @@ keywords:
   - OBB
   - DOTA
 last_verified: 1.6.0
-
 snippets:
   predict:
     - label: Python
@@ -188,7 +187,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 75454e612d7e2247
+source_hash: 952ce8da92f61d29
 ---
 
 ## Установка
@@ -326,6 +325,10 @@ mAP 50 и mAP 50-95, посчитанные на любом датасете в 
 тот же `Results`.
 
 <code-tabs name="export" />
+
+### Входы и выходы ONNX
+
+<onnx-io />
 
 ## Чекпойнты
 

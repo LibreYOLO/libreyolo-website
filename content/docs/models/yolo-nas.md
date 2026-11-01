@@ -183,6 +183,10 @@ license that covers them.
 
 <code-tabs name="export" />
 
+### ONNX inputs and outputs
+
+<onnx-io />
+
 ## Checkpoints
 
 There are none to list. Deci's license forbids redistribution, so the LibreYOLO

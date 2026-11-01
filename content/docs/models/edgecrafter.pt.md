@@ -182,7 +182,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Instalação
@@ -299,6 +299,10 @@ canvas fixo, incluindo OpenVINO, Paddle, MNN, ExecuTorch e Core AI.
 extras que alguns deles acrescentam.
 
 <code-tabs name="export" />
+
+### Entradas e saídas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

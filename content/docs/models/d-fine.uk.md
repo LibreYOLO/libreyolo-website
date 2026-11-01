@@ -155,7 +155,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Встановлення
@@ -256,6 +256,10 @@ Python має суворіші обмеження: потрібно безпос
 пакети, потрібні деяким із них.
 
 <code-tabs name="export" />
+
+### Входи та виходи ONNX
+
+<onnx-io />
 
 ## Контрольні точки
 

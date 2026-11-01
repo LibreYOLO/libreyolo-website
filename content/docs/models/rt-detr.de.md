@@ -21,7 +21,7 @@ keywords:
   - orientierte bounding boxes
   - obb
   - dota
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -214,7 +214,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: "75454e612d7e2247"
+source_hash: 952ce8da92f61d29
 ---
 
 ## Installation
@@ -364,6 +364,10 @@ geladen. Eine `.onnx`- oder `.engine`-Datei verhält sich daher wie ein Checkpoi
 und gibt dasselbe `Results`-Objekt zurück.
 
 <code-tabs name="export" />
+
+### ONNX-Ein- und Ausgaben
+
+<onnx-io />
 
 ## Checkpoints
 

@@ -144,7 +144,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 
 ## Установлення
@@ -270,6 +270,10 @@ mAP 50 і mAP 50-95, виміряні на будь-якому датасеті 
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite) використовує `int8=True` з калібрувальними даними.
+
+### Входи та виходи ONNX
+
+<onnx-io />
 
 ## Контрольні точки
 

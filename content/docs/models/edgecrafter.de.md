@@ -22,7 +22,7 @@ keywords:
   - pose schätzung
   - instanzsegmentierung
   - edge inference
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -188,7 +188,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: "521fde8f10ac8c57"
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Installation
@@ -308,6 +308,10 @@ Argumente auf, die jedes Format akzeptiert, sowie die Zusatzpakete, die einige
 davon benötigen.
 
 <code-tabs name="export" />
+
+### ONNX-Ein- und Ausgaben
+
+<onnx-io />
 
 ## Checkpoints
 

@@ -228,6 +228,10 @@ An exported artifact loads back through `LibreYOLO()` on its file suffix, so a
 
 <code-tabs name="export" />
 
+### ONNX inputs and outputs
+
+<onnx-io />
+
 ## Checkpoints
 
 Every published weight file for this family.

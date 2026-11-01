@@ -135,7 +135,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: "8dc052b83d5f1ac0"
+source_hash: 879518aa7326392d
 ---
 
 ## 설치
@@ -203,6 +203,10 @@ DEIM은 기본적으로 `amp_dtype="float16"`으로 AMP를 활성화합니다. F
 내보낸 아티팩트는 파일 접미사에 따라 `LibreYOLO()`로 다시 불러오므로 `.onnx` 또는 `.engine` 파일은 체크포인트처럼 동작하며 동일한 `Results`를 반환합니다.
 
 <code-tabs name="export" />
+
+### ONNX 입력과 출력
+
+<onnx-io />
 
 ## 체크포인트
 

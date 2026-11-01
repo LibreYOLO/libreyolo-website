@@ -216,7 +216,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## Installer
@@ -303,6 +303,10 @@ installation de LibreYOLO, est également prise en charge, mais vous devez alors
 écrire vous-même le prétraitement et le post-traitement.
 
 <code-tabs name="export" />
+
+### Entrées et sorties ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

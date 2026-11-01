@@ -179,7 +179,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Instalasi
@@ -293,6 +293,10 @@ kanvas tetap, termasuk OpenVINO, Paddle, MNN, ExecuTorch dan Core AI.
 tambahan yang disediakan sebagian di antaranya.
 
 <code-tabs name="export" />
+
+### Input dan output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

@@ -183,7 +183,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Installazione
@@ -301,6 +301,10 @@ Core AI. [Esportazione](/docs/export) elenca gli argomenti che ogni formato
 accetta e gli extra che qualcuno di essi aggiunge.
 
 <code-tabs name="export" />
+
+### Input e output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

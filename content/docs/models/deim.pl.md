@@ -162,7 +162,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 
 ## Instalacja
@@ -244,6 +244,10 @@ Macierz obejmuje obie wersje jako jedną stronę: tam, gdzie nie zgadzają się 
 Eksportowany artefakt ładuje się ponownie przez `LibreYOLO()` na swoim rozszerzeniu pliku, więc plik `.onnx` lub `.engine` działa jak checkpoint i zwraca ten sam `Results`.
 
 <code-tabs name="export" />
+
+### Wejścia i wyjścia ONNX
+
+<onnx-io />
 
 ## Checkpointy
 

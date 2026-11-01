@@ -187,7 +187,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## Installazione
@@ -276,6 +276,10 @@ runtime nudo, senza LibreYOLO installato, ma allora preprocessing e
 postprocessing tocca scriverli a te.
 
 <code-tabs name="export" />
+
+### Input e output ONNX
+
+<onnx-io />
 
 ## Checkpoint
 

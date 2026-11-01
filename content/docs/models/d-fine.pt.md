@@ -149,7 +149,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: bfc9280d61063ff7
+source_hash: 4ecc96af379fe8d6
 ---
 
 ## Instalação
@@ -239,6 +239,10 @@ exportam com um canvas fixo em vez de formas dinâmicas.
 extras que alguns deles acrescentam.
 
 <code-tabs name="export" />
+
+### Entradas e saídas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

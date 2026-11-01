@@ -200,7 +200,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Instalacja
@@ -285,6 +285,10 @@ Raporty pozycji kluczowych Pose zawierają metryki OKS pod `metrics/keypoints_*`
 Eksportowany artefakt ładuje się z powrotem przez `LibreYOLO()` na podstawie jego sufiksu pliku, więc plik `.onnx` lub `.engine` zachowuje się jak checkpoint i zwraca ten sam `Results`. Eksport pozycji i segmentacji odbywa się przy stałym wejściu 640 na 640 zamiast dynamicznych kształtów, a kilka celów detekcji jest również w stałym układzie, w tym OpenVINO, Paddle, MNN, ExecuTorch i Core AI. [Eksport](/docs/export) wymienia argumenty, które akceptuje każdy format, oraz dodatkowe, które dodaje kilka z nich.
 
 <code-tabs name="export" />
+
+### Wejścia i wyjścia ONNX
+
+<onnx-io />
 
 ## Checkpointy
 

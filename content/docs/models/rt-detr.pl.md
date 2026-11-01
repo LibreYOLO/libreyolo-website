@@ -203,7 +203,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 75454e612d7e2247
+source_hash: 952ce8da92f61d29
 ---
 
 ## Instalacja
@@ -340,6 +340,10 @@ rozszerzenia pliku, więc plik `.onnx` lub `.engine` zachowuje się jak punkt
 kontrolny i zwraca ten sam obiekt `Results`.
 
 <code-tabs name="export" />
+
+### Wejścia i wyjścia ONNX
+
+<onnx-io />
 
 ## Punkty kontrolne
 

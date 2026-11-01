@@ -122,7 +122,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: c322dd68d42cdf24
+source_hash: 54bb4d5cc2bb92d9
 ---
 
 ## 安装
@@ -208,6 +208,10 @@ mAP 50-95，在任何采用你训练时所用格式的数据集上测量。
 <code-tabs name="export" />
 
 [TFLite INT8](/docs/export/tflite) 使用 `int8=True` 并提供校准数据。
+
+### ONNX 输入与输出
+
+<onnx-io />
 
 ## 检查点
 

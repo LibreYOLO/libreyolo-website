@@ -15,7 +15,7 @@ keywords:
   - DETR
   - 目标检测 python
   - 实时目标检测
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -135,7 +135,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 8dc052b83d5f1ac0
+source_hash: 879518aa7326392d
 ---
 
 ## 安装
@@ -224,6 +224,10 @@ mAP 50-95，在任何与你训练时格式相同的数据集上测量。
 文件的表现和检查点一样，返回同样的 `Results`。
 
 <code-tabs name="export" />
+
+### ONNX 输入与输出
+
+<onnx-io />
 
 ## 检查点
 

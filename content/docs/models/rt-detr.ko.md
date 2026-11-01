@@ -172,7 +172,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: "75454e612d7e2247"
+source_hash: 952ce8da92f61d29
 ---
 
 ## 설치
@@ -246,6 +246,10 @@ RT-DETRv4는 기본적으로 `amp=True`와 `amp_dtype="float16"`을 사용합니
 내보낸 아티팩트는 파일 접미사에 따라 `LibreYOLO()`로 다시 불러오므로 `.onnx` 또는 `.engine` 파일은 체크포인트처럼 동작하며 동일한 `Results`를 반환합니다.
 
 <code-tabs name="export" />
+
+### ONNX 입력과 출력
+
+<onnx-io />
 
 ## 체크포인트
 

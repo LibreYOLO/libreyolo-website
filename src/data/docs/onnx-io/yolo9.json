@@ -1,0 +1,155 @@
+{
+  "family": "yolo9",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": ["yolo9"],
+      "label": "LibreYOLO9",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "letterbox",
+        "interpolation": "bilinear",
+        "pad_value": 114,
+        "pad_position": "metadata",
+        "notes": [
+          "Scale by r = min(height / h, width / w), resize to (int(w * r), int(h * r)) and paste onto a canvas filled with 114.",
+          "Paste position comes from the letterbox_pad metadata key: topleft puts the image in the top-left corner, center splits the padding on both sides. A missing key means topleft."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "output",
+                "shape": "[batch, 4 + nc, anchors]",
+                "meaning": "Rows 0 to 3 are x1, y1, x2, y2 in input-canvas pixels. Rows 4 onward are per-class scores, sigmoid already applied. anchors is the cell count over strides 8, 16 and 32, 8400 at 640 x 640."
+              }
+            ],
+            "postprocess": [
+              "Transpose to [anchors, 4 + nc].",
+              "Keep every (anchor, class) pair whose score is above the confidence threshold (0.25 by default). One anchor can yield several classes.",
+              "Run NMS per class with IoU 0.45 and keep at most 300 detections.",
+              "Map boxes back to the original image: subtract the pad offset, divide by r, clip to the image.",
+              "Drop boxes whose width or height is 0 after clipping."
+            ]
+          },
+          {
+            "when": "nms=True",
+            "outputs": [
+              {
+                "name": "output",
+                "shape": "[1, max_det, 6]",
+                "meaning": "Rows are x1, y1, x2, y2, score, class in input-canvas pixels, zero-padded past the detection count. Confidence, IoU and max_det are baked in and recorded as nms_conf, nms_iou and max_det metadata."
+              },
+              {
+                "name": "raw",
+                "shape": "[1, 4 + nc, anchors]",
+                "meaning": "The same tensor as the default export's output, before suppression."
+              }
+            ],
+            "postprocess": [
+              "Drop rows whose score is 0 or below your threshold.",
+              "Map boxes back to the original image: subtract the pad offset, divide by r, clip to the image."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "keys": ["yolo9_e2e"],
+      "label": "LibreYOLO9E2E",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "letterbox",
+        "interpolation": "bilinear",
+        "pad_value": 114,
+        "pad_position": "metadata",
+        "notes": [
+          "Scale by r = min(height / h, width / w), resize to (int(w * r), int(h * r)) and paste onto a canvas filled with 114.",
+          "Paste position comes from the letterbox_pad metadata key: topleft puts the image in the top-left corner, center splits the padding on both sides. A missing key means topleft.",
+          "This model has no nms=True export. The exporter raises NotImplementedError, so only the default export below exists."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "output",
+                "shape": "[batch, 4 + nc, anchors]",
+                "meaning": "Predictions of the one-to-one head only. Rows 0 to 3 are x1, y1, x2, y2 in input-canvas pixels. Rows 4 onward are per-class scores, sigmoid already applied. anchors is the cell count over strides 8, 16 and 32, 8400 at 640 x 640."
+              }
+            ],
+            "postprocess": [
+              "Transpose to [anchors, 4 + nc].",
+              "Flatten the [anchors, nc] scores into one list of anchors x nc (anchor, class) pairs. Pair i belongs to anchor i / nc (integer division) and class i % nc.",
+              "Keep the 300 highest-scoring pairs (max_det), highest first. One anchor can yield several classes.",
+              "Of those, keep the pairs whose score is above the confidence threshold (0.25 by default).",
+              "Do not run NMS. The one-to-one head is trained to fire once per object, and LibreYOLO ignores the iou setting for this model.",
+              "Map boxes back to the original image: subtract the pad offset, divide by r, clip to the image.",
+              "Drop boxes whose width or height is 0 after clipping."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "keys": ["yolo9_p2"],
+      "label": "LibreYOLO9P2",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "letterbox",
+        "interpolation": "bilinear",
+        "pad_value": 114,
+        "pad_position": "metadata",
+        "notes": [
+          "Scale by r = min(height / h, width / w), resize to (int(w * r), int(h * r)) and paste onto a canvas filled with 114.",
+          "Paste position comes from the letterbox_pad metadata key: topleft puts the image in the top-left corner, center splits the padding on both sides. A missing key means topleft.",
+          "This model has no nms=True export. The exporter raises NotImplementedError, so only the default export below exists."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "output",
+                "shape": "[batch, 4 + nc, anchors]",
+                "meaning": "Rows 0 to 3 are x1, y1, x2, y2 in input-canvas pixels. Rows 4 onward are per-class scores, sigmoid already applied. anchors is the cell count over strides 4, 8, 16 and 32, 34000 at 640 x 640. nc is 10 for LibreYOLO9P2s-visdrone."
+              }
+            ],
+            "postprocess": [
+              "Transpose to [anchors, 4 + nc].",
+              "Keep every (anchor, class) pair whose score is above the confidence threshold (0.25 by default). One anchor can yield several classes.",
+              "Run NMS per class with IoU 0.45 and keep at most 300 detections.",
+              "Map boxes back to the original image: subtract the pad offset, divide by r, clip to the image.",
+              "Drop boxes whose width or height is 0 after clipping."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

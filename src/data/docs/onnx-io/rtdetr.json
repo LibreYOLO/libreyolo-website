@@ -1,0 +1,160 @@
+{
+  "family": "rtdetr",
+  "verified_with": "1.7.0",
+  "variants": [
+    {
+      "keys": ["rtdetr", "rtdetrv2"],
+      "label": "LibreRTDETR and LibreRTDETRv2",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "stretch",
+        "interpolation": "bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height equals width, 640 by default.",
+          "LibreRTDETR also exports at other square sizes, such as 512. LibreRTDETRv2 exports at 640 only: any other imgsz fails during export with a tensor size mismatch.",
+          "Stretch the whole image to width x height with cv2.resize and INTER_LINEAR on the 8-bit RGB image. There is no letterbox and no padding, so the aspect ratio is not kept.",
+          "Then divide by 255. There is no mean or std normalization."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "Raw class logits per query, sigmoid not applied. 300 queries and 80 classes for the COCO checkpoints."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Boxes as cx, cy, w, h, normalized 0 to 1 of the input."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the scores to queries x nc and take the top max_det (300 by default) over all queries x classes. For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the entries whose score is strictly above the confidence threshold (0.25 by default). There is no NMS, so the IoU threshold is not used.",
+              "Convert the query's box to x1, y1, x2, y2 with x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2.",
+              "Map boxes back to the original image: multiply x by the original width and y by the original height. The input was stretched, so no pad offset applies. LibreYOLO does not clip these boxes.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "keys": ["rtdetrv2"],
+      "label": "LibreRTDETRv2 OBB",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "custom",
+        "interpolation": "pillow-bilinear",
+        "pad_value": 0,
+        "pad_position": "topleft",
+        "notes": [
+          "Square input only, 1024 x 1024. Export rejects a non-square imgsz, and any other square size fails during export with a tensor size mismatch.",
+          "Scale by r = min(height / h, width / w) and resize to (round(w * r), round(h * r)). This rounds to the nearest integer instead of truncating. An exact half goes to the even integer, as Python round does.",
+          "Paste the resized image in the top-left corner of a canvas filled with 0. The padding is on the right and bottom only.",
+          "On the test image, cv2.resize with INTER_LINEAR or INTER_AREA changes the detection count and moves boxes by more than 2 px.",
+          "Pillow computes each pass in fixed point: it rounds every weight to an integer with 22 fractional bits (round half away from zero), sums weight x pixel in integers, adds 2^21, shifts right by 22 and clips to 0 to 255.",
+          "Use that integer arithmetic for this model. Float weights differ from Pillow by a level on a few pixels, and on the test image that turns one box by 0.2 rad.",
+          "Divide the whole canvas by 255 after the resize. There is no mean or std normalization."
+        ]
+      },
+      "tasks": {
+        "obb": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "Raw class logits per query, sigmoid not applied. 300 queries and 15 DOTA classes for the released checkpoints."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 5]",
+                "meaning": "Rotated boxes as cx, cy, w, h, a. cx and w are normalized 0 to 1 of the input width, cy and h of the input height, both on the padded canvas. a is the angle divided by pi, 0 to 1."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the scores to queries x nc and take the top max_det (300 by default) over all queries x classes. For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the entries whose score is strictly above the confidence threshold (0.25 by default). There is no NMS, rotated or axis-aligned, so the IoU threshold is not used.",
+              "Map boxes back to the original image: multiply cx and w by the input width, cy and h by the input height, then divide all four by r. The padding is on the right and bottom, so no offset applies. LibreYOLO does not clip these boxes.",
+              "The angle in radians is a x pi. LibreYOLO reports each box as cx, cy, w, h, angle in original-image pixels and radians.",
+              "The corners are (cx + dx cos(angle) - dy sin(angle), cy + dx sin(angle) + dy cos(angle)) for (dx, dy) = (-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2). With y pointing down, a positive angle turns the box clockwise on screen.",
+              "LibreYOLO's axis-aligned box for a detection is the smallest box that encloses its four corners.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "keys": ["rtdetrv4"],
+      "label": "LibreRTDETRv4",
+      "input": {
+        "name": "images",
+        "shape": "[batch, 3, height, width]",
+        "dtype": "float32",
+        "color": "RGB",
+        "scale": 255,
+        "mean": null,
+        "std": null,
+        "resize": "stretch",
+        "interpolation": "pillow-bilinear",
+        "pad_value": null,
+        "pad_position": null,
+        "notes": [
+          "Square input only. Export rejects a non-square imgsz, and height equals width, 640 by default. Other square sizes, such as 512, also export.",
+          "Batch size 1 only. The graph declares a dynamic batch axis, but batches of 2 or more fail in 1.7.0.",
+          "Divide by 255 after the resize. There is no mean or std normalization."
+        ]
+      },
+      "tasks": {
+        "detect": [
+          {
+            "when": "default",
+            "outputs": [
+              {
+                "name": "pred_logits",
+                "shape": "[batch, queries, nc]",
+                "meaning": "Raw class logits per query, sigmoid not applied. 300 queries and 80 classes for the COCO checkpoints."
+              },
+              {
+                "name": "pred_boxes",
+                "shape": "[batch, queries, 4]",
+                "meaning": "Boxes as cx, cy, w, h, normalized 0 to 1 of the input."
+              }
+            ],
+            "postprocess": [
+              "Apply sigmoid to pred_logits.",
+              "Flatten the scores to queries x nc and take the top max_det (300 by default) over all queries x classes. For flat index k, the query is k // nc and the class is k % nc. One query can yield several classes.",
+              "Keep the entries whose score is strictly above the confidence threshold (0.25 by default). There is no NMS, so the IoU threshold is not used.",
+              "Convert the query's box to x1, y1, x2, y2 with x1 = cx - w / 2, y1 = cy - h / 2, x2 = cx + w / 2, y2 = cy + h / 2.",
+              "Map boxes back to the original image: multiply x by the original width and y by the original height. The input was stretched, so no pad offset applies. LibreYOLO does not clip these boxes.",
+              "nms=True is not available for this family: export raises NotImplementedError."
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -22,7 +22,7 @@ keywords:
   - оцінювання пози
   - сегментація екземплярів
   - інференс на edge-пристроях
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -194,7 +194,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Встановлення
@@ -309,6 +309,10 @@ EMA зі значенням 0.9999 і вхідні дані, нормалізо�
 і додаткові пакети, потрібні деяким із них.
 
 <code-tabs name="export" />
+
+### Входи та виходи ONNX
+
+<onnx-io />
 
 ## Контрольні точки
 

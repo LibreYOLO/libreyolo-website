@@ -226,7 +226,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: 1b6651371762ad63
+source_hash: d4997243f17fa381
 ---
 
 ## Instalacja
@@ -309,6 +309,10 @@ grafu w samym środowisku uruchomieniowym bez zainstalowanego LibreYOLO, ale wó
 samodzielnie trzeba zaimplementować przetwarzanie wstępne i końcowe.
 
 <code-tabs name="export" />
+
+### Wejścia i wyjścia ONNX
+
+<onnx-io />
 
 ## Punkty kontrolne
 

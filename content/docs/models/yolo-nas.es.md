@@ -134,7 +134,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 52050c4046781a6e
+source_hash: e51e8f0b0a3d9314
 ---
 
 ## Instalación
@@ -219,6 +219,10 @@ Exportar un checkpoint de Deci no cambia ni de dónde vienen los pesos ni la
 licencia que los cubre.
 
 <code-tabs name="export" />
+
+### Entradas y salidas ONNX
+
+<onnx-io />
 
 ## Checkpoints
 

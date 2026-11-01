@@ -18,7 +18,7 @@ keywords:
   - estimation de pose python
   - segmentation d'instances
   - inférence sur appareil edge
-last_verified: "1.6.0"
+last_verified: 1.6.0
 snippets:
   predict:
     - label: Python
@@ -184,7 +184,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 521fde8f10ac8c57
+source_hash: 520e31a0ca84f8d9
 ---
 
 ## Installation
@@ -303,6 +303,10 @@ ExecuTorch et Core AI. [L'export](/docs/export) liste les arguments que chaque
 format accepte, ainsi que les extras que quelques-uns ajoutent.
 
 <code-tabs name="export" />
+
+### Entrées et sorties ONNX
+
+<onnx-io />
 
 ## Checkpoints
 
