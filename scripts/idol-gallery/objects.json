@@ -1,0 +1,145 @@
+[
+  {
+    "slug": "peine-del-viento",
+    "ply": "results/sculptures/peine-del-viento-7.ply",
+    "photo": "results/sculptures/photos/peine-del-viento.jpg",
+    "title": "Peine del Viento",
+    "artist": "Eduardo Chillida",
+    "seconds": 10.1,
+    "photo_credit": {
+      "author": "Ermell",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:San_Sebastian_Peine_del_Viento-Haizearen_Orrazia_1190518.jpg"
+    }
+  },
+  {
+    "slug": "guggenheim",
+    "ply": "results/new/guggenheim-1.ply",
+    "photo": "results/new/photos/guggenheim.jpg",
+    "title": "Guggenheim Museum Bilbao",
+    "artist": "Frank Gehry",
+    "seconds": 10.1,
+    "photo_credit": {
+      "author": "Jules Verne Times Two",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:North_view_of_the_Guggenheim_Museum,_Bilbao,_Spain_(PPL3-Altered)_julesvernex2.jpg"
+    }
+  },
+  {
+    "slug": "puppy",
+    "ply": "results/sculptures/puppy-7.ply",
+    "photo": "results/sculptures/photos/puppy.jpg",
+    "title": "Puppy",
+    "artist": "Jeff Koons",
+    "seconds": 9.8,
+    "photo_credit": {
+      "author": "José Ligero Loarte",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Puppy_de_Jeff_Koons_(2)_--_2021_--_Bilbao,_Espa%C3%B1a.jpg"
+    }
+  },
+  {
+    "slug": "maman",
+    "ply": "results/sculptures/maman-42.ply",
+    "photo": "results/sculptures/photos/maman.jpg",
+    "title": "Maman",
+    "artist": "Louise Bourgeois",
+    "seconds": 10.0,
+    "photo_credit": {
+      "author": "Didier Descouens",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Maman_de_Louise_Bourgeois_-_Bilbao.jpg"
+    }
+  },
+  {
+    "slug": "el-caminante",
+    "ply": "results/sculptures/el-caminante-7.ply",
+    "photo": "results/sculptures/photos/el-caminante.jpg",
+    "title": "El Caminante",
+    "artist": "Juan José Eguizábal",
+    "seconds": 10.1,
+    "photo_credit": {
+      "author": "Oscar Lafuente",
+      "license": "CC BY-SA 3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:El_Caminante_(Eguizabal).jpg"
+    }
+  },
+  {
+    "slug": "construccion-vacia",
+    "ply": "results/sculptures/construccion-vacia-7.ply",
+    "photo": "results/sculptures/photos/construccion-vacia.jpg",
+    "title": "Construcción vacía",
+    "artist": "Jorge Oteiza",
+    "seconds": 10.1,
+    "photo_credit": {
+      "author": "Iñaki LLM",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Oteiza_eraikuntza_hutsa.jpg"
+    }
+  },
+  {
+    "slug": "variante-ovoide",
+    "ply": "results/sculptures/variante-ovoide-42.ply",
+    "photo": "results/sculptures/photos/variante-ovoide.jpg",
+    "title": "Variante ovoide",
+    "artist": "Jorge Oteiza",
+    "seconds": 10.0,
+    "photo_credit": {
+      "author": "Kamahele",
+      "license": "CC BY-SA 3.0 de",
+      "url": "https://commons.wikimedia.org/wiki/File:Bilbao-Oteiza-11_219.jpg"
+    }
+  },
+  {
+    "slug": "paloma-de-la-paz",
+    "ply": "results/sculptures/paloma-de-la-paz-42.ply",
+    "photo": "results/sculptures/photos/paloma-de-la-paz.jpg",
+    "title": "Paloma de la Paz",
+    "artist": "Néstor Basterretxea",
+    "seconds": 10.0,
+    "photo_credit": {
+      "author": "DONOSTIA KULTURA",
+      "license": "CC BY-SA 2.0",
+      "url": "https://commons.wikimedia.org/wiki/File:%E2%80%9CPaloma_de_la_Paz%E2%80%9D_eskultura_Zurriolan_-_Escultura_%E2%80%9CPaloma_de_la_Paz%E2%80%9D_en_la_Zurriola._(23535395510).jpg"
+    }
+  },
+  {
+    "slug": "tall-tree",
+    "ply": "results/sculptures/tall-tree-7.ply",
+    "photo": "results/sculptures/photos/tall-tree.jpg",
+    "title": "Tall Tree & The Eye",
+    "artist": "Anish Kapoor",
+    "seconds": 10.2,
+    "photo_credit": {
+      "author": "Zarateman",
+      "license": "CC0",
+      "url": "https://commons.wikimedia.org/wiki/File:Bilbao_-_Museo_Guggenheim_-_Tall_Tree_and_the_Eye_(Anish_Kapoor)_4.JPG"
+    }
+  },
+  {
+    "slug": "gure-aitaren-etxea",
+    "ply": "results/sculptures/gure-aitaren-etxea-42.ply",
+    "photo": "results/sculptures/photos/gure-aitaren-etxea.jpg",
+    "title": "Gure Aitaren Etxea",
+    "artist": "Eduardo Chillida",
+    "seconds": 10.0,
+    "photo_credit": {
+      "author": "Andy Roberts from East London, England",
+      "license": "CC BY 2.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Chillida_statue.jpg"
+    }
+  },
+  {
+    "slug": "loyola",
+    "ply": "results/loyola/loyola-real-7.ply",
+    "photo": "results/loyola/photo.jpg",
+    "title": "Sanctuary of Loyola",
+    "artist": "",
+    "seconds": 9.8,
+    "photo_credit": {
+      "author": "Jose Luis Filpo Cabana",
+      "license": "CC BY 3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Santuario_de_Loyola._Bas%C3%ADlica.jpg"
+    }
+  }
+]

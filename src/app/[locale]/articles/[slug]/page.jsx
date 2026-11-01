@@ -23,6 +23,7 @@ import RF100VLResults from '@/components/articles/rf100vl/RF100VLResults'
 import RF100VLPanel from '@/components/articles/rf100vl/RF100VLPanel'
 import RF100VLChart from '@/components/benchmarks/RF100VLChart'
 import UnderConstruction from '@/components/articles/UnderConstruction'
+import IdolGallery from '@/components/idol/IdolGallery'
 import { externalRel } from '@/lib/links'
 
 export function generateStaticParams() {
@@ -117,7 +118,11 @@ function createMarkdownComponents() {
       {children}
     </h3>
   ),
-  p: (props) => <p className="text-surface-600 dark:text-surface-400 leading-relaxed mb-5" {...props} />,
+  // The gallery renders block elements, which cannot sit inside a p.
+  p: ({ node, ...props }) =>
+    node?.children?.some((child) => child.type === 'element' && child.tagName === 'idol-gallery')
+      ? <div {...props} />
+      : <p className="text-surface-600 dark:text-surface-400 leading-relaxed mb-5" {...props} />,
   a: (props) => (
     <a
       className="text-libre-600 dark:text-libre-400 hover:text-libre-700 dark:hover:text-libre-300 underline underline-offset-2 transition-colors"
@@ -163,6 +168,7 @@ function createMarkdownComponents() {
   // Custom widgets an article can drop inline via raw-HTML tags in the markdown,
   // e.g. <rf100vl-results />. rehype-raw keeps unknown tags, so they land here.
   'rf100vl-results': () => <RF100VLResults />,
+  'idol-gallery': () => <IdolGallery />,
   'rf100vl-explorer': () => (
     <div className="not-prose my-8 overflow-hidden rounded-xl border border-surface-200 dark:border-surface-800" style={{ width: 'min(94vw, 1040px)', marginLeft: 'calc(50% - min(47vw, 520px))' }}>
       <RF100VLPanel initialTab="datasets" />
