@@ -1,0 +1,278 @@
+[
+  {
+    "slug": "elkano-boat",
+    "title": "Galleon",
+    "artist": null,
+    "photo": "/idol-vs/elkano-boat.webp",
+    "photo_credit": {
+      "author": "elkano.dev",
+      "license": null,
+      "url": "https://elkano.dev"
+    },
+    "models": {
+      "speridlabs-idol": {
+        "label": "Speridlabs Idol",
+        "file": "/idol-vs/speridlabs-idol/elkano-boat.lyg",
+        "gaussians": 258858,
+        "bytes": 3886481,
+        "camera": {
+          "yaw": 0.827956542260111,
+          "pitch": -0.1443474737910197,
+          "radius": 1000.0,
+          "fov": 0.12112904313587197,
+          "margin": 1.7
+        }
+      },
+      "triposplat": {
+        "label": "TripoSplat",
+        "file": "/idol-vs/triposplat/elkano-boat.lyg",
+        "gaussians": 258440,
+        "bytes": 3817717,
+        "camera": {
+          "yaw": 0.9331318711251047,
+          "pitch": -0.03322133523285004,
+          "radius": 2.7019426938490487,
+          "fov": 37.49074739841027,
+          "margin": 1.2
+        }
+      },
+      "trellis": {
+        "label": "TRELLIS",
+        "file": "/idol-vs/trellis/elkano-boat.lyg",
+        "gaussians": 290916,
+        "bytes": 4375826,
+        "camera": {
+          "margin": 1.2
+        }
+      }
+    }
+  },
+  {
+    "slug": "puppy",
+    "title": "Puppy",
+    "artist": "Jeff Koons",
+    "photo": "/idol-vs/puppy.webp",
+    "photo_credit": {
+      "author": "José Ligero Loarte",
+      "license": "CC BY-SA 4.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Puppy_de_Jeff_Koons_(2)_--_2021_--_Bilbao,_Espa%C3%B1a.jpg"
+    },
+    "models": {
+      "speridlabs-idol": {
+        "label": "Speridlabs Idol",
+        "file": "/idol-vs/speridlabs-idol/puppy.lyg",
+        "gaussians": 261443,
+        "bytes": 3895245,
+        "camera": {
+          "yaw": 1.8196499624571538,
+          "pitch": -0.26052923453301885,
+          "radius": 1.653825964782645,
+          "fov": 69.59374465651892,
+          "margin": 1.7
+        }
+      },
+      "triposplat": {
+        "label": "TripoSplat",
+        "file": "/idol-vs/triposplat/puppy.lyg",
+        "gaussians": 261546,
+        "bytes": 3950990,
+        "camera": {
+          "yaw": 2.291101366939724,
+          "pitch": -0.0542422719895435,
+          "radius": 14.131630012459881,
+          "fov": 6.3556740526426525,
+          "margin": 1.2
+        }
+      },
+      "trellis": {
+        "label": "TRELLIS",
+        "file": "/idol-vs/trellis/puppy.lyg",
+        "gaussians": 862023,
+        "bytes": 12681279,
+        "camera": {
+          "margin": 1.2
+        }
+      }
+    }
+  },
+  {
+    "slug": "loyola",
+    "title": "Sanctuary of Loyola",
+    "artist": null,
+    "photo": "/idol-vs/loyola.webp",
+    "photo_credit": {
+      "author": "Jose Luis Filpo Cabana",
+      "license": "CC BY 3.0",
+      "url": "https://commons.wikimedia.org/wiki/File:Santuario_de_Loyola._Bas%C3%ADlica.jpg"
+    },
+    "models": {
+      "speridlabs-idol": {
+        "label": "Speridlabs Idol",
+        "file": "/idol-vs/speridlabs-idol/loyola.lyg",
+        "gaussians": 260967,
+        "bytes": 3905105,
+        "camera": {
+          "yaw": 1.4827437286285086,
+          "pitch": 0.08420397079849672,
+          "radius": 8.913787169800093,
+          "fov": 11.718321525838626,
+          "margin": 1.7
+        }
+      },
+      "triposplat": {
+        "label": "TripoSplat",
+        "file": "/idol-vs/triposplat/loyola.lyg",
+        "gaussians": 261813,
+        "bytes": 3969043,
+        "camera": {
+          "yaw": 1.5780038548719661,
+          "pitch": -0.014178999820921578,
+          "radius": 1000.0,
+          "fov": 0.07254611374699098,
+          "margin": 1.2
+        }
+      },
+      "trellis": {
+        "label": "TRELLIS",
+        "file": "/idol-vs/trellis/loyola.lyg",
+        "gaussians": 538977,
+        "bytes": 8133724,
+        "camera": {
+          "margin": 1.2
+        }
+      }
+    }
+  },
+  {
+    "slug": "egg-chair",
+    "title": "Egg chair",
+    "artist": null,
+    "photo": "/idol-vs/egg-chair.webp",
+    "photo_credit": null,
+    "models": {
+      "speridlabs-idol": {
+        "label": "Speridlabs Idol",
+        "file": "/idol-vs/speridlabs-idol/egg-chair.lyg",
+        "gaussians": 261317,
+        "bytes": 4011190,
+        "camera": {
+          "yaw": 0.7561560300932526,
+          "pitch": 0.0492039467364474,
+          "radius": 4.395912930497744,
+          "fov": 23.47127142916142,
+          "margin": 1.2
+        }
+      },
+      "triposplat": {
+        "label": "TripoSplat",
+        "file": "/idol-vs/triposplat/egg-chair.lyg",
+        "gaussians": 256875,
+        "bytes": 3853926,
+        "camera": {
+          "yaw": 0.7482959819898368,
+          "pitch": 0.09958493919101861,
+          "radius": 3.284290363001713,
+          "fov": 30.484537155743972,
+          "margin": 1.2
+        }
+      },
+      "trellis": {
+        "label": "TRELLIS",
+        "file": "/idol-vs/trellis/egg-chair.lyg",
+        "gaussians": 678101,
+        "bytes": 9991503,
+        "camera": {
+          "margin": 1.2
+        }
+      }
+    }
+  },
+  {
+    "slug": "panda",
+    "title": "Toy panda",
+    "artist": null,
+    "photo": "/idol-vs/panda.webp",
+    "photo_credit": null,
+    "models": {
+      "speridlabs-idol": {
+        "label": "Speridlabs Idol",
+        "file": "/idol-vs/speridlabs-idol/panda.lyg",
+        "gaussians": 198722,
+        "bytes": 3047973,
+        "camera": {
+          "yaw": 2.1485740890041263,
+          "pitch": 0.02994578468994149,
+          "radius": 2.2648768920192635,
+          "fov": 45.55138547798283,
+          "margin": 1.2
+        }
+      },
+      "triposplat": {
+        "label": "TripoSplat",
+        "file": "/idol-vs/triposplat/panda.lyg",
+        "gaussians": 261916,
+        "bytes": 3846311,
+        "camera": {
+          "yaw": 2.2130470370917297,
+          "pitch": 0.11317123665918855,
+          "radius": 4.807982575478759,
+          "fov": 19.54260460002487,
+          "margin": 1.2
+        }
+      },
+      "trellis": {
+        "label": "TRELLIS",
+        "file": "/idol-vs/trellis/panda.lyg",
+        "gaussians": 468265,
+        "bytes": 6824332,
+        "camera": {
+          "margin": 1.2
+        }
+      }
+    }
+  },
+  {
+    "slug": "microscope",
+    "title": "Microscope",
+    "artist": null,
+    "photo": "/idol-vs/microscope.webp",
+    "photo_credit": null,
+    "models": {
+      "speridlabs-idol": {
+        "label": "Speridlabs Idol",
+        "file": "/idol-vs/speridlabs-idol/microscope.lyg",
+        "gaussians": 260986,
+        "bytes": 3950655,
+        "camera": {
+          "yaw": 2.253141859193054,
+          "pitch": 0.17580673957749013,
+          "radius": 2.485322019637006,
+          "fov": 39.97259164201884,
+          "margin": 1.2
+        }
+      },
+      "triposplat": {
+        "label": "TripoSplat",
+        "file": "/idol-vs/triposplat/microscope.lyg",
+        "gaussians": 260908,
+        "bytes": 3866009,
+        "camera": {
+          "yaw": 2.185927083230914,
+          "pitch": 0.20013443612556003,
+          "radius": 4.164820972037635,
+          "fov": 23.35477392305169,
+          "margin": 1.2
+        }
+      },
+      "trellis": {
+        "label": "TRELLIS",
+        "file": "/idol-vs/trellis/microscope.lyg",
+        "gaussians": 218110,
+        "bytes": 3345076,
+        "camera": {
+          "margin": 1.2
+        }
+      }
+    }
+  }
+]
