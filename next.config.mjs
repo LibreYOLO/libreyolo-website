@@ -11,10 +11,11 @@ const nextConfig = {
   turbopack: {
     root: '.',
   },
-  // The Speridlabs Idol gallery objects (about 40 MB) are static files the
-  // browser fetches; no server function reads them.
+  // The Speridlabs Idol gallery objects (about 40 MB) and the Idol vs
+  // TripoSplat vs TRELLIS objects (about 90 MB) are static files the browser
+  // fetches; no server function reads them.
   outputFileTracingExcludes: {
-    '*': ['public/idol-gallery/**'],
+    '*': ['public/idol-gallery/**', 'public/idol-vs/**'],
   },
   // Hand-written pages that predate the docs tree, or are placeholders and
   // past events. Each goes to the page that now covers its subject, in every
