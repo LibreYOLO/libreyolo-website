@@ -63,7 +63,7 @@ snippets:
         # 登録済みの各ファミリーと、タスク、サイズ、入力解像度を表示します。
         # 追加パッケージがないファミリーには、有効化するpipコマンドも表示されます。
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## インストール
@@ -138,7 +138,7 @@ cloneすると、安定版ブランチ`release`がcheckoutされます。この�
 
 | 追加パッケージ | 追加内容 |
 |---|---|
-| `hf` | 読み込み、公開、Hubロガー用の`huggingface_hub>=1.0.0` |
+| `hf` | 公開、Hubロガー、ゲート付き（gated）ダウンロード用の`huggingface_hub>=1.0.0` |
 | `llm` | 互換APIエンドポイント用の`openai>=1.66.0` |
 | `fiftyone` | データセットの整理用の`fiftyone>=1.0.0` |
 | `stream` | YouTubeページURLの解決にだけ必要な`yt-dlp` |
@@ -156,7 +156,7 @@ Webカメラ、RTSP、RTMP、TCP、UDP、HLS、ローカルのマルチストリ
 
 `all`には`hf`、`llm`、`gen`が含まれます。`fiftyone`、`vla`、`marigold`、`molmo2`は個別にインストールします。FiftyOneはheadless OpenCVを導入し、基本パッケージの`cv2`と重複します。
 
-基本インストールにはPython 3.10以降が必要で、コーディネーターが管理するDDP向けの`cloudpickle>=3.0.0`が追加されます。
+基本インストールにはPython 3.10以降が必要で、コーディネーターが管理するDDP向けの`cloudpickle>=3.0.0`と`huggingface_hub>=0.34.0`が追加されます。そのため`LibreYOLO("owner/repo")`は`hf`エクストラなしでHubのモデルを読み込めます。
 
 Molmo2には別の環境を使ってください。Transformers 4.57.1への固定が、新しいVLM、Hub、Marigoldの依存関係と競合し、`libreyolo[gen]`は`libreyolo[molmo2]`と同時にインストールできません。Marigoldはdiffusers 0.38.0、peft 0.18.1、accelerate 1.13.0、Transformers 5.4.0に固定し、LinuxとWindowsではbitsandbytes 0.49.2も使います。Marigoldのデフォルトの4ビット推論にはCUDAが必要です。North Micro VisionにはTransformers 5.16以降、Gemma 4には5.10以降が必要で、共通VLMの最低要件より新しいバージョンです。
 

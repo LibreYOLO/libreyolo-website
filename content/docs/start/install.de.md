@@ -66,7 +66,7 @@ snippets:
         # Alle registrierten Familien mit Aufgaben, Größen und Eingabe-
         # auflösungen. Bei fehlendem Extra wird der passende pip-Befehl gezeigt.
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## Installation
@@ -151,7 +151,7 @@ zurück und der Lauf wird fortgesetzt.
 
 | Extra | Ergänzt |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` zum Laden, Veröffentlichen und für den Hub-Logger |
+| `hf` | `huggingface_hub>=1.0.0` zum Veröffentlichen, für den Hub-Logger und für geschützte (gated) Downloads |
 | `llm` | `openai>=1.66.0` für kompatible API-Endpunkte |
 | `fiftyone` | `fiftyone>=1.0.0` zur Datensatzkuratierung |
 | `stream` | `yt-dlp`, nur zum Auflösen von YouTube-Seiten-URLs erforderlich |
@@ -176,7 +176,7 @@ Umgebung auf diese Version umstellen würde. Auch `fast-eval`, `hub-kernels`,
 `clip-convert` und `siglip2-convert` sind ausgeschlossen. Installiere diese
 Extras bei Bedarf einzeln. `all` enthält `hf`, `llm` und `gen`; `fiftyone`, `vla`, `marigold` und `molmo2` bleiben separat. FiftyOne bringt Headless-OpenCV mit, das sich mit dem Kernpaket `cv2` überschneidet.
 
-Die Basisinstallation benötigt Python 3.10 oder neuer und ergänzt `cloudpickle>=3.0.0` für vom Koordinator verwaltetes DDP.
+Die Basisinstallation benötigt Python 3.10 oder neuer und ergänzt `cloudpickle>=3.0.0` für vom Koordinator verwaltetes DDP sowie `huggingface_hub>=0.34.0`, sodass `LibreYOLO("owner/repo")` Hub-Modelle ohne das Extra `hf` lädt.
 
 Verwende eine separate Umgebung für Molmo2: Seine festgelegte Transformers-Version 4.57.1 steht im Konflikt mit den neueren VLM-, Hub- und Marigold-Stacks, und `libreyolo[gen]` lässt sich nicht zusammen mit `libreyolo[molmo2]` installieren. Marigold legt diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 und Transformers 5.4.0 sowie bitsandbytes 0.49.2 unter Linux/Windows fest. Die standardmäßige Vier-Bit-Inferenz von Marigold benötigt CUDA. North Micro Vision benötigt Transformers 5.16 oder neuer; Gemma 4 benötigt 5.10 oder neuer, oberhalb der gemeinsamen VLM-Mindestversion.
 

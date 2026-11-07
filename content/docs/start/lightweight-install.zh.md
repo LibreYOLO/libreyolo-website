@@ -39,7 +39,8 @@ snippets:
       code: |
         # 先试这个，它保留全部功能，并避开 CUDA wheel，
         # 磁盘占用主要就出在那里
-        pip install libreyolo --index-url https://download.pytorch.org/whl/cpu
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        pip install libreyolo
   predict:
     - label: Python
       language: python
@@ -60,7 +61,7 @@ snippets:
         print(result.boxes.conf)
 
         print(result.boxes.cls)
-source_hash: e60e83d32d13026e
+source_hash: 591b0a18fa5c2b09
 ---
 
 ## 这为什么可行

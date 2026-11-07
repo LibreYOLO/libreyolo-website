@@ -68,7 +68,7 @@ snippets:
         # resoluções de entrada. Famílias cujo extra está faltando são
         # listadas com o comando pip que as habilita.
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## Instalação
@@ -152,7 +152,7 @@ ausente, a avaliação COCO recorre ao pycocotools e a execução continua.
 
 | Extra | Adiciona |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` para carregamento, publicação e logger do Hub |
+| `hf` | `huggingface_hub>=1.0.0` para publicação, logger do Hub e downloads restritos (gated) |
 | `llm` | `openai>=1.66.0` para endpoints de API compatíveis |
 | `fiftyone` | `fiftyone>=1.0.0` para curadoria de datasets |
 | `stream` | `yt-dlp`, necessário apenas para resolver URLs de páginas do YouTube |
@@ -169,7 +169,7 @@ precisam de extra. Só as URLs de páginas do YouTube precisam.
 
 `libreyolo[all]` instala os extras de modelos, exportação, rastreamento e logging em um comando. Alguns ficam de fora deliberadamente. `neptune` é excluído porque o `neptune-scale` estável exige protobuf abaixo de 7, enquanto o caminho TFLite exige protobuf 7. `executorch` é excluído porque ExecuTorch restringe a versão de PyTorch com que funciona, e `coreai` porque `coreai-torch` fixa PyTorch em 2.11.x e levaria todo o ambiente para essa versão. `fast-eval`, `hub-kernels`, `clip-convert` e `siglip2-convert` também ficam de fora. Instale qualquer um deles pelo nome. `all` inclui `hf`, `llm` e `gen`; `fiftyone`, `vla`, `marigold` e `molmo2` permanecem separados. FiftyOne traz OpenCV headless, que se sobrepõe ao pacote base `cv2`.
 
-A instalação base exige Python 3.10 ou superior e adiciona `cloudpickle>=3.0.0` para DDP gerenciado pelo coordenador.
+A instalação base exige Python 3.10 ou superior e adiciona `cloudpickle>=3.0.0` para DDP gerenciado pelo coordenador e `huggingface_hub>=0.34.0`, de modo que `LibreYOLO("owner/repo")` carrega modelos do Hub sem o extra `hf`.
 
 Use um ambiente separado para Molmo2: sua versão fixada de Transformers 4.57.1 conflita com os stacks mais recentes de VLM, Hub e Marigold, e o `libreyolo[gen]` não pode ser instalado junto com o `libreyolo[molmo2]`. Marigold fixa diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 e Transformers 5.4.0, além de bitsandbytes 0.49.2 em Linux/Windows. A inferência padrão de quatro bits do Marigold exige CUDA. North Micro Vision exige Transformers 5.16 ou superior; Gemma 4 exige 5.10 ou superior, acima do mínimo compartilhado de VLM.
 

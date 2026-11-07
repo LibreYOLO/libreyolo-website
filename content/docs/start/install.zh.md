@@ -64,7 +64,7 @@ snippets:
         # 缺少对应 extra 的家族会连同启用它们的那条 pip
         # 命令一起列出
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## 安装
@@ -145,7 +145,7 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 
 | Extra | 新增依赖 |
 |---|---|
-| `hf` | 用于加载、发布和 Hub 日志记录器的 `huggingface_hub>=1.0.0` |
+| `hf` | 用于发布、Hub 日志记录器和受限（gated）下载的 `huggingface_hub>=1.0.0` |
 | `llm` | 用于兼容 API 端点的 `openai>=1.66.0` |
 | `fiftyone` | 用于数据集整理的 `fiftyone>=1.0.0` |
 | `stream` | `yt-dlp`，仅用于解析 YouTube 页面 URL |
@@ -162,7 +162,7 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 
 `libreyolo[all]` 用一条命令安装模型、导出、跟踪和日志 extra。有些依赖明确排除在外。`neptune` 被排除，因为稳定版 `neptune-scale` 要求 protobuf 低于 7，而 TFLite 路径要求 protobuf 7。`executorch` 被排除，因为 ExecuTorch 限制了配套的 PyTorch 版本；`coreai` 被排除，因为 `coreai-torch` 将 PyTorch 固定在 2.11.x，会把整个环境切换到这个版本。`fast-eval`、`hub-kernels`、`clip-convert` 和 `siglip2-convert` 也不包含在内。请按名称单独安装。`all` 包含 `hf`、`llm` 和 `gen`；`fiftyone`、`vla`、`marigold` 和 `molmo2` 仍需单独安装。FiftyOne 引入 headless OpenCV，与核心 `cv2` 包重叠。
 
-核心安装需要 Python 3.10 或更高版本，并新增 `cloudpickle>=3.0.0`，用于协调器管理的 DDP。
+核心安装需要 Python 3.10 或更高版本，并新增 `cloudpickle>=3.0.0`（用于协调器管理的 DDP）和 `huggingface_hub>=0.34.0`，因此 `LibreYOLO("owner/repo")` 无需 `hf` extra 即可加载 Hub 模型。
 
 请为 Molmo2 使用独立环境：它固定的 Transformers 4.57.1 与较新的 VLM、Hub 和 Marigold 技术栈冲突，而且 `libreyolo[gen]` 不能和 `libreyolo[molmo2]` 装在一起。Marigold 固定使用 diffusers 0.38.0、peft 0.18.1、accelerate 1.13.0 和 Transformers 5.4.0，在 Linux/Windows 上还使用 bitsandbytes 0.49.2。Marigold 默认四位推理需要 CUDA。North Micro Vision 需要 Transformers 5.16 或更高版本；Gemma 4 需要 5.10 或更高版本，高于共用 VLM 的最低要求。
 

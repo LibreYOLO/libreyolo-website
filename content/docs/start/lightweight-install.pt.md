@@ -41,7 +41,8 @@ snippets:
       code: |
         # Tente isso primeiro. Mantém todos os recursos e evita o wheel de
         # CUDA, que é onde a maior parte do disco vai embora.
-        pip install libreyolo --index-url https://download.pytorch.org/whl/cpu
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        pip install libreyolo
   predict:
     - label: Python
       language: python
@@ -62,7 +63,7 @@ snippets:
         print(result.boxes.conf)
 
         print(result.boxes.cls)
-source_hash: e60e83d32d13026e
+source_hash: 591b0a18fa5c2b09
 ---
 
 ## Por que isso funciona

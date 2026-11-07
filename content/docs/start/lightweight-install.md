@@ -27,7 +27,8 @@ snippets:
       code: |
         # Try this first. It keeps every feature and avoids the CUDA wheel,
         # which is where most of the disk goes.
-        pip install libreyolo --index-url https://download.pytorch.org/whl/cpu
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        pip install libreyolo
   predict:
     - label: Python
       language: python

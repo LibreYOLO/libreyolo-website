@@ -39,7 +39,8 @@ snippets:
       code: |
         # 먼저 이것을 시도해 보십시오. 모든 기능을 유지하고 CUDA 휠을 피합니다.
         # 그것이 디스크의 대부분이 차지되는 곳입니다.
-        pip install libreyolo --index-url https://download.pytorch.org/whl/cpu
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        pip install libreyolo
   predict:
     - label: Python
       language: python
@@ -60,7 +61,7 @@ snippets:
         print(result.boxes.conf)
 
         print(result.boxes.cls)
-source_hash: e60e83d32d13026e
+source_hash: 591b0a18fa5c2b09
 ---
 
 ## 왜 이 방법이 효과가 있는가

@@ -69,7 +69,7 @@ snippets:
         # Family yang ekstra-nya belum ada dicantumkan bersama perintah pip
         # yang mengaktifkannya.
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## Instalasi
@@ -154,7 +154,7 @@ COCO kembali ke pycocotools dan run berlanjut.
 
 | Ekstra | Menambahkan |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` untuk pemuatan, publikasi, dan logger Hub |
+| `hf` | `huggingface_hub>=1.0.0` untuk publikasi, logger Hub, dan unduhan terbatas (gated) |
 | `llm` | `openai>=1.66.0` untuk endpoint API yang kompatibel |
 | `fiftyone` | `fiftyone>=1.0.0` untuk kurasi dataset |
 | `stream` | `yt-dlp`, hanya diperlukan untuk me-resolve URL halaman YouTube |
@@ -171,7 +171,7 @@ ekstra. Hanya URL halaman YouTube yang memerlukannya.
 
 `libreyolo[all]` memasang extra model, ekspor, pelacakan, dan logging dalam satu perintah. Beberapa sengaja tidak disertakan. `neptune` dikecualikan karena `neptune-scale` stabil memerlukan protobuf di bawah 7, sedangkan jalur TFLite memerlukan protobuf 7. `executorch` dikecualikan karena ExecuTorch membatasi versi PyTorch yang kompatibel, dan `coreai` karena `coreai-torch` mematok PyTorch ke 2.11.x dan akan memindahkan seluruh lingkungan ke versi itu. `fast-eval`, `hub-kernels`, `clip-convert`, dan `siglip2-convert` juga tidak disertakan. Pasang masing-masing dengan namanya. `all` mencakup `hf`, `llm`, dan `gen`; `fiftyone`, `vla`, `marigold`, dan `molmo2` tetap terpisah. FiftyOne membawa OpenCV headless, yang bertumpang tindih dengan paket inti `cv2`.
 
-Instalasi inti memerlukan Python 3.10 atau lebih baru dan menambahkan `cloudpickle>=3.0.0` untuk DDP yang dikelola koordinator.
+Instalasi inti memerlukan Python 3.10 atau lebih baru dan menambahkan `cloudpickle>=3.0.0` untuk DDP yang dikelola koordinator serta `huggingface_hub>=0.34.0`, sehingga `LibreYOLO("owner/repo")` memuat model Hub tanpa extra `hf`.
 
 Gunakan lingkungan terpisah untuk Molmo2: pin Transformers 4.57.1 bertentangan dengan stack VLM, Hub, dan Marigold yang lebih baru, dan `libreyolo[gen]` tidak dapat diinstal bersama `libreyolo[molmo2]`. Marigold mematok diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0, dan Transformers 5.4.0, serta bitsandbytes 0.49.2 pada Linux/Windows. Inferensi Marigold empat-bit default memerlukan CUDA. North Micro Vision memerlukan Transformers 5.16 atau lebih baru; Gemma 4 memerlukan 5.10 atau lebih baru, di atas batas minimum VLM bersama.
 

@@ -75,7 +75,7 @@ snippets:
 
 Python 3.10 or newer is required. The base install pulls PyTorch, torchvision,
 NumPy, Pillow, OpenCV, PyYAML, requests, mss, tqdm, pycocotools, typer, click,
-safetensors and SciPy, so YOLOv9 and the other families that need nothing more
+safetensors, SciPy, cloudpickle and huggingface_hub, so YOLOv9 and the other families that need nothing more
 work straight after `pip install libreyolo`.
 
 A clone checks out `release`, the stable branch whose code matches these docs.
@@ -149,7 +149,7 @@ evaluation falls back to pycocotools and the run continues.
 
 | Extra | Adds |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` for loading, publishing and the Hub logger |
+| `hf` | `huggingface_hub>=1.0.0` for publishing, the Hub logger and gated downloads |
 | `llm` | `openai>=1.66.0` for compatible API endpoints |
 | `fiftyone` | `fiftyone>=1.0.0` for dataset curation |
 | `stream` | `yt-dlp`, needed only to resolve YouTube page URLs |
@@ -173,7 +173,7 @@ version it pairs with, and `coreai` because `coreai-torch` pins PyTorch to
 `hub-kernels`, `clip-convert` and `siglip2-convert` are also left out. Install
 any of them by name. `all` includes `hf`, `llm` and `gen`; `fiftyone`, `vla`, `marigold` and `molmo2` stay separate. FiftyOne brings headless OpenCV, which overlaps the core `cv2` package.
 
-Core installation requires Python 3.10 or later and adds `cloudpickle>=3.0.0` for coordinator-managed DDP.
+Core installation requires Python 3.10 or later and adds `cloudpickle>=3.0.0` for coordinator-managed DDP and `huggingface_hub>=0.34.0`, so `LibreYOLO("owner/repo")` loads Hub models without the `hf` extra.
 
 Use a separate environment for Molmo2: its Transformers 4.57.1 pin conflicts with the newer VLM, Hub and Marigold stacks, and `libreyolo[gen]` cannot be installed together with `libreyolo[molmo2]`. Marigold pins diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 and Transformers 5.4.0, plus bitsandbytes 0.49.2 on Linux/Windows. Default four-bit Marigold inference requires CUDA. North Micro Vision requires Transformers 5.16 or later; Gemma 4 requires 5.10 or later, above the shared VLM floor.
 

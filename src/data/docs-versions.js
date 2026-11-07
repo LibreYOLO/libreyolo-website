@@ -24,7 +24,7 @@
 export const DOCS_PRERELEASE = false
 
 // The version a reader gets from `pip install libreyolo` today.
-export const DOCS_CURRENT_VERSION = '1.7.0'
+export const DOCS_CURRENT_VERSION = '1.7.3'
 
 export const CURRENT_DOCS_VERSION = 'v1.7.0'
 

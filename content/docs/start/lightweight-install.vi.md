@@ -39,7 +39,8 @@ snippets:
       code: |
         # Hãy thử cách này trước. Nó giữ lại mọi tính năng và tránh wheel CUDA,
         # nơi chiếm phần lớn dung lượng ổ đĩa.
-        pip install libreyolo --index-url https://download.pytorch.org/whl/cpu
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        pip install libreyolo
   predict:
     - label: Python
       language: python
@@ -60,7 +61,7 @@ snippets:
         print(result.boxes.conf)
 
         print(result.boxes.cls)
-source_hash: e60e83d32d13026e
+source_hash: 591b0a18fa5c2b09
 ---
 
 ## Vì sao cách này hoạt động

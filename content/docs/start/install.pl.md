@@ -74,7 +74,7 @@ snippets:
         # pip, które je włącza.
 
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## Instalacja
@@ -157,7 +157,7 @@ nie ma, ewaluacja COCO przechodzi na pycocotools i przebieg jest kontynuowany.
 
 | Dodatek | Dodaje |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` do wczytywania, publikowania i loggera Hub |
+| `hf` | `huggingface_hub>=1.0.0` do publikowania, loggera Hub i pobierania z ograniczonym dostępem (gated) |
 | `llm` | `openai>=1.66.0` do zgodnych punktów końcowych API |
 | `fiftyone` | `fiftyone>=1.0.0` do przygotowywania zbiorów danych |
 | `stream` | `yt-dlp`, wymagane tylko do rozwiązywania adresów stron YouTube |
@@ -181,7 +181,7 @@ PyTorch do 2.11.x i przeniosłoby całe środowisko na tę wersję. `fast-eval`,
 `hub-kernels`, `clip-convert` i `siglip2-convert` również są pominięte. Każdy
 z nich należy zainstalować według nazwy. `all` obejmuje `hf`, `llm` i `gen`; `fiftyone`, `vla`, `marigold` i `molmo2` pozostają osobne. FiftyOne instaluje OpenCV bez interfejsu graficznego, który nakłada się na podstawowy pakiet `cv2`.
 
-Podstawowa instalacja wymaga Pythona 3.10 lub nowszego i dodaje `cloudpickle>=3.0.0` do DDP zarządzanego przez koordynator.
+Podstawowa instalacja wymaga Pythona 3.10 lub nowszego i dodaje `cloudpickle>=3.0.0` do DDP zarządzanego przez koordynator oraz `huggingface_hub>=0.34.0`, dzięki czemu `LibreYOLO("owner/repo")` wczytuje modele z Hub bez extra `hf`.
 
 Molmo2 wymaga osobnego środowiska: ustalona wersja Transformers 4.57.1 koliduje z nowszymi stosami VLM, Hub i Marigold, a `libreyolo[gen]` nie można zainstalować razem z `libreyolo[molmo2]`. Marigold ustala diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 i Transformers 5.4.0 oraz bitsandbytes 0.49.2 w Linux/Windows. Domyślna czterobitowa inferencja Marigold wymaga CUDA. North Micro Vision wymaga Transformers 5.16 lub nowszego; Gemma 4 wymaga 5.10 lub nowszego, powyżej wspólnego minimum VLM.
 

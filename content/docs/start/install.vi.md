@@ -67,7 +67,7 @@ snippets:
         # đầu vào. Họ còn thiếu gói bổ sung được liệt kê kèm lệnh pip
         # để kích hoạt.
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 ## Cài đặt
 
@@ -149,7 +149,7 @@ về pycocotools và quá trình chạy tiếp tục.
 
 | Gói bổ sung | Thành phần thêm vào |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` để tải, công bố và dùng logger Hub |
+| `hf` | `huggingface_hub>=1.0.0` để công bố, dùng logger Hub và tải các repo bị giới hạn (gated) |
 | `llm` | `openai>=1.66.0` cho endpoint API tương thích |
 | `fiftyone` | `fiftyone>=1.0.0` để tuyển chọn dataset |
 | `stream` | `yt-dlp`, chỉ cần để phân giải URL trang YouTube |
@@ -172,7 +172,7 @@ kèm, còn `coreai` vì `coreai-torch` cố định PyTorch ở 2.11.x và sẽ 
 môi trường sang phiên bản đó. `fast-eval`, `hub-kernels`, `clip-convert` và
 `siglip2-convert` cũng không được đưa vào. Hãy cài riêng theo tên nếu cần. `all` bao gồm `hf`, `llm` và `gen`; `fiftyone`, `vla`, `marigold` và `molmo2` vẫn riêng biệt. FiftyOne mang theo OpenCV headless, trùng lặp với package `cv2` lõi.
 
-Cài đặt lõi yêu cầu Python 3.10 trở lên và bổ sung `cloudpickle>=3.0.0` cho DDP do bộ điều phối quản lý.
+Cài đặt lõi yêu cầu Python 3.10 trở lên và bổ sung `cloudpickle>=3.0.0` cho DDP do bộ điều phối quản lý cùng `huggingface_hub>=0.34.0`, nên `LibreYOLO("owner/repo")` tải mô hình từ Hub mà không cần extra `hf`.
 
 Dùng môi trường riêng cho Molmo2: phiên bản Transformers 4.57.1 được ghim xung đột với các bộ thư viện VLM, Hub và Marigold mới hơn, và `libreyolo[gen]` không thể cài cùng `libreyolo[molmo2]`. Marigold ghim diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 và Transformers 5.4.0, cùng bitsandbytes 0.49.2 trên Linux/Windows. Inference Marigold bốn bit mặc định cần CUDA. North Micro Vision cần Transformers 5.16 trở lên; Gemma 4 cần 5.10 trở lên, cao hơn mức tối thiểu chung của VLM.
 

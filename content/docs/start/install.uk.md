@@ -70,7 +70,7 @@ snippets:
         # роздільною здатністю входу. Для сімейств без потрібного набору
         # залежностей наведено команду pip, яка їх вмикає.
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## Встановлення
@@ -154,7 +154,7 @@ typer, click, safetensors і SciPy, тому YOLOv9 та інші сімейст
 
 | Набір | Додає |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` для завантаження, публікації й логера Hub |
+| `hf` | `huggingface_hub>=1.0.0` для публікації, логера Hub і завантаження закритих (gated) репозиторіїв |
 | `llm` | `openai>=1.66.0` для сумісних кінцевих точок API |
 | `fiftyone` | `fiftyone>=1.0.0` для підготовки датасетів |
 | `stream` | `yt-dlp`, потрібний лише для визначення URL-адрес сторінок YouTube |
@@ -178,7 +178,7 @@ typer, click, safetensors і SciPy, тому YOLOv9 та інші сімейст
 середовище. `fast-eval`, `hub-kernels`, `clip-convert` і `siglip2-convert`
 також не включено. Установлюйте будь-який із них за назвою. `all` містить `hf`, `llm` і `gen`; `fiftyone`, `vla`, `marigold` і `molmo2` залишаються окремими. FiftyOne додає OpenCV без графічного інтерфейсу, який перетинається з основним пакетом `cv2`.
 
-Базове встановлення потребує Python 3.10 або новішої й додає `cloudpickle>=3.0.0` для DDP під керуванням координатора.
+Базове встановлення потребує Python 3.10 або новішої й додає `cloudpickle>=3.0.0` для DDP під керуванням координатора та `huggingface_hub>=0.34.0`, тож `LibreYOLO("owner/repo")` завантажує моделі з Hub без extra `hf`.
 
 Використовуйте окреме середовище для Molmo2: його зафіксована версія Transformers 4.57.1 конфліктує з новішими стеками VLM, Hub і Marigold, а `libreyolo[gen]` не можна встановити разом із `libreyolo[molmo2]`. Marigold фіксує diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 і Transformers 5.4.0, а також bitsandbytes 0.49.2 на Linux/Windows. Типовий чотирибітний інференс Marigold потребує CUDA. North Micro Vision потребує Transformers 5.16 або новішої; Gemma 4 потребує 5.10 або новішої, вище спільного мінімуму VLM.
 

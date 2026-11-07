@@ -41,7 +41,8 @@ snippets:
       code: |
         # Сначала попробуйте этот вариант. Он сохраняет все возможности и
         # обходится без wheel с CUDA, на который уходит большая часть места.
-        pip install libreyolo --index-url https://download.pytorch.org/whl/cpu
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        pip install libreyolo
   predict:
     - label: Python
       language: python
@@ -62,7 +63,7 @@ snippets:
         print(result.boxes.conf)
 
         print(result.boxes.cls)
-source_hash: e60e83d32d13026e
+source_hash: 591b0a18fa5c2b09
 ---
 
 ## Почему это работает

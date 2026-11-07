@@ -71,7 +71,7 @@ snippets:
         # résolutions d'entrée. Les familles dont l'extra manque sont
         # accompagnées de la commande pip qui les active.
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## Installer
@@ -157,7 +157,7 @@ pycocotools et l'exécution se poursuit.
 
 | Extra | Ajouts |
 |---|---|
-| `hf` | `huggingface_hub>=1.0.0` pour le chargement, la publication et le logger Hub |
+| `hf` | `huggingface_hub>=1.0.0` pour la publication, le logger Hub et les téléchargements restreints (gated) |
 | `llm` | `openai>=1.66.0` pour les endpoints d'API compatibles |
 | `fiftyone` | `fiftyone>=1.0.0` pour la curation de datasets |
 | `stream` | `yt-dlp`, nécessaire uniquement pour résoudre les URL de pages YouTube |
@@ -183,7 +183,7 @@ l'environnement vers cette version. `fast-eval`, `hub-kernels`,
 `clip-convert` et `siglip2-convert` sont également laissés de côté. Installez
 chacun d'eux par son nom. `all` inclut `hf`, `llm` et `gen` ; `fiftyone`, `vla`, `marigold` et `molmo2` restent séparés. FiftyOne installe OpenCV sans interface graphique, qui recoupe le package `cv2` principal.
 
-L'installation de base exige Python 3.10 ou plus récent et ajoute `cloudpickle>=3.0.0` pour DDP géré par coordinateur.
+L'installation de base exige Python 3.10 ou plus récent et ajoute `cloudpickle>=3.0.0` pour DDP géré par coordinateur ainsi que `huggingface_hub>=0.34.0`, si bien que `LibreYOLO("owner/repo")` charge les modèles du Hub sans l'extra `hf`.
 
 Utilisez un environnement séparé pour Molmo2 : sa version imposée Transformers 4.57.1 entre en conflit avec les piles VLM, Hub et Marigold plus récentes, et `libreyolo[gen]` ne peut pas être installé avec `libreyolo[molmo2]`. Marigold impose diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0 et Transformers 5.4.0, ainsi que bitsandbytes 0.49.2 sous Linux/Windows. L'inférence Marigold en quatre bits par défaut exige CUDA. North Micro Vision nécessite Transformers 5.16 ou plus récent ; Gemma 4 nécessite 5.10 ou plus récent, au-dessus du minimum VLM partagé.
 

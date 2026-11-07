@@ -66,7 +66,7 @@ snippets:
         # 결의안. 여분이 없는 계열은 다음과 같이 나열됩니다
         # 그들을 가능하게 하는 pip 명령어.
         libreyolo models
-source_hash: a4a8cf3926eeb9bb
+source_hash: d5ad0986bb550209
 ---
 
 ## 설치
@@ -141,7 +141,7 @@ Python 3.10 이상이 필요합니다. 기본 설치는 PyTorch, torchvision, Nu
 
 | 추가 | 추가함 |
 |---|---|
-| `hf` | 로드, 게시, Hub 로거용 `huggingface_hub>=1.0.0` |
+| `hf` | 게시, Hub 로거, 접근 제한(gated) 다운로드용 `huggingface_hub>=1.0.0` |
 | `llm` | 호환 API 엔드포인트용 `openai>=1.66.0` |
 | `fiftyone` | 데이터셋 정리용 `fiftyone>=1.0.0` |
 | `stream` | `yt-dlp`, YouTube 페이지 URL을 해결하는 데만 필요 |
@@ -157,7 +157,7 @@ Python 3.10 이상이 필요합니다. 기본 설치는 PyTorch, torchvision, Nu
 
 `libreyolo[all]`은 모델, 내보내기, 추적, 로깅 추가 패키지를 한 명령으로 설치합니다. 일부는 의도적으로 제외합니다. 안정 버전 `neptune-scale`은 protobuf 7 미만을 요구하지만 TFLite 경로는 protobuf 7을 요구하므로 `neptune`은 제외합니다. ExecuTorch는 함께 사용할 PyTorch 버전을 제한하므로 `executorch`를 제외하며, `coreai-torch`는 PyTorch를 2.11.x로 고정하여 전체 환경을 해당 버전으로 바꾸므로 `coreai`도 제외합니다. `fast-eval`, `hub-kernels`, `clip-convert`, `siglip2-convert`도 제외합니다. 필요하면 이름으로 따로 설치합니다. `all`에는 `hf`, `llm`, `gen`이 포함되며, `fiftyone`, `vla`, `marigold`, `molmo2`는 별도로 유지합니다. FiftyOne은 기본 `cv2` 패키지와 겹치는 headless OpenCV를 설치합니다.
 
-기본 설치에는 Python 3.10 이상이 필요하며, 코디네이터가 관리하는 DDP용 `cloudpickle>=3.0.0`을 추가합니다.
+기본 설치에는 Python 3.10 이상이 필요하며, 코디네이터가 관리하는 DDP용 `cloudpickle>=3.0.0`과 `huggingface_hub>=0.34.0`을 추가합니다. 따라서 `LibreYOLO("owner/repo")`는 `hf` extra 없이 Hub 모델을 로드합니다.
 
 Molmo2는 별도 환경을 사용합니다. Transformers 4.57.1 고정 버전이 더 새로운 VLM, Hub, Marigold 구성과 충돌하며, `libreyolo[gen]`은 `libreyolo[molmo2]`와 함께 설치할 수 없습니다. Marigold는 diffusers 0.38.0, peft 0.18.1, accelerate 1.13.0, Transformers 5.4.0을 고정하며 Linux/Windows에서는 bitsandbytes 0.49.2도 고정합니다. 기본 4비트 Marigold 추론에는 CUDA가 필요합니다. North Micro Vision에는 Transformers 5.16 이상이, Gemma 4에는 5.10 이상이 필요하며, 둘 다 공통 VLM 최저 버전보다 높습니다.
 

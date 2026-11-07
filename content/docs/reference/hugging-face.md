@@ -25,8 +25,10 @@ snippets:
 ## Install
 
 ```bash
-pip install "libreyolo[hf]"
+pip install libreyolo
 ```
+
+`huggingface_hub` is a core dependency since 1.7.3, so loading Hub models needs no extra. Install `libreyolo[hf]` to publish, use the training logger or download gated repositories.
 
 ## Load
 
