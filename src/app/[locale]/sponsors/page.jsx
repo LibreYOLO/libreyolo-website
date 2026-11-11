@@ -30,6 +30,10 @@ const components = {
   ),
   th: ({ node, ...props }) => <th className="text-left font-semibold text-surface-800 dark:text-white border-b border-surface-300 dark:border-surface-700 px-3 py-2" {...props} />,
   td: ({ node, ...props }) => <td className="text-surface-600 dark:text-surface-400 border-b border-surface-200 dark:border-surface-800 px-3 py-2 align-top" {...props} />,
+  // Supporter avatars: small round images in a row, each linking to a profile.
+  img: ({ node, ...props }) => (
+    <img className="inline-block w-12 h-12 rounded-full mr-1" width={48} height={48} loading="lazy" {...props} />
+  ),
   code: ({ node, ...props }) => (
     <code className="font-mono text-sm px-1.5 py-0.5 rounded bg-surface-100 dark:bg-surface-800 text-libre-700 dark:text-libre-300" {...props} />
   ),

@@ -98,6 +98,9 @@ None yet.
 
 ## Supporters (individuals)
 
-People who contribute any amount, listed by name.
+People who contribute any amount, listed by name. Thank you to everyone who has donated:
 
-None yet.
+[![Mattia Di Giusto](/supporters/picjul.png)](https://github.com/picjul) [![Thomas Lefebvre](/supporters/Magellol.png)](https://github.com/Magellol)
+
+- Mattia Di Giusto
+- Thomas Lefebvre (ma.ge)
