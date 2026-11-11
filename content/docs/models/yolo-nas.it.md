@@ -50,7 +50,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLONASs.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Posa
       language: python
       code: |
@@ -133,7 +133,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: e51e8f0b0a3d9314
+source_hash: 32af588411029bb1
 ---
 
 ## Installazione

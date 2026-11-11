@@ -22,7 +22,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreDeepLabv3r50-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+        libreyolo predict model=LibreDeepLabv3r50-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg save=True
   val:
     - label: Python
       language: python

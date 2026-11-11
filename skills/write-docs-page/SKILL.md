@@ -77,9 +77,15 @@ Rules that follow:
   show one. When a page needs to describe a set of families, name the families
   and link them, the way the task pages do. A reader cannot act on a tier code
   and has no way to look one up.
-- **The only images that ship are `parkour.jpg` and `guggenheim-bilbao.jpg`**,
-  in `libreyolo/assets/`. In Python use `SAMPLE_IMAGE`, which resolves to the
-  first. In shell use its raw URL on the `release` branch. Never type a sample
+- **The only showcase/sample image is `guggenheim-bilbao.jpg`** (one person
+  flipping in front of the Guggenheim), in `libreyolo/assets/`, with
+  `guggenheim-bilbao_result.jpg` as its detection output. Never use
+  `parkour.jpg` (three people jumping between walls): the maintainer has
+  banned it and the library is deleting it, so its raw URL will 404. In
+  Python use `SAMPLE_IMAGE`. In shell use
+  `https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg`.
+  Example output must come from a real run on that image (LibreYOLO9t finds
+  `1 person`); never invent counts. Never type a sample
   filename you remember from somewhere else: one got through into sixty
   snippets, it was another project's canonical sample, it had never existed in
   this repo, and it failed on line one of a reader's first session. Any path in

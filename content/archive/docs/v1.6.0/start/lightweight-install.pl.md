@@ -55,7 +55,7 @@ snippets:
         model = OnnxBackend("libreyolo9t.onnx")
 
         result =
-        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
+        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg")
 
 
         # W tym miejscu xyxy jest tablicą ndarray z numpy, a nie tensorem torch.

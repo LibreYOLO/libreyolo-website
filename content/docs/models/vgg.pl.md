@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreVGG16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -86,7 +86,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 7e22e5bf59ca038a
+source_hash: 584b4dfeeddd58fa
 ---
 
 ## Instalacja

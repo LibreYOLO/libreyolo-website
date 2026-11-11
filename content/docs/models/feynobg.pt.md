@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreFeyNobgl-matte.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Recorte
       language: python
@@ -64,7 +64,7 @@ snippets:
 
         print(metrics["metrics/MAE"])
         print(metrics["metrics/Smeasure"])
-source_hash: 45de3b578d7ebbf2
+source_hash: 0f865f517fe198c2
 ---
 
 ## Instalação

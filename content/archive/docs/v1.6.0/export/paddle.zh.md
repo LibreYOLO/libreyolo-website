@@ -93,7 +93,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict --model weights/LibreYOLO9t_paddle \
-          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --device cpu --save
+          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg --device cpu --save
     - label: 直接使用后端
       language: python
       code: |
@@ -102,7 +102,7 @@ snippets:
         # LibreYOLO() 遇到 Paddle 目录时构造的就是它，同样的 Results
         # 对象，中间没有工厂路由
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
-        result = backend.predict("parkour.jpg")
+        result = backend.predict("guggenheim-bilbao.jpg")
         print(result.boxes.xyxy[:3])
     - label: 裸 Paddle
       language: python

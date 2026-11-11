@@ -42,13 +42,13 @@ Predict on the shipped sample image. For commands requiring calibration,
 `camera.npy` must contain its measured original-image 3x3 intrinsic matrix.
 
 ```bash
-libreyolo fcos3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy
+libreyolo fcos3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg intrinsics=camera.npy
 ```
 
 Request machine-readable results:
 
 ```bash
-libreyolo fcos3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy --json --quiet
+libreyolo fcos3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg intrinsics=camera.npy --json --quiet
 ```
 
 ## Notes

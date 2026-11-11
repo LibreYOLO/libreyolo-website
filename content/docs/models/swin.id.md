@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreSwint-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -85,7 +85,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 7020bd102e5ba1d6
+source_hash: 4922014e52a9217a
 ---
 
 ## Instalasi

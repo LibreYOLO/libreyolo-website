@@ -42,7 +42,7 @@ snippets:
         # di classe ImageNet con cui il modello viene caricato di default.
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Embedding di immagini e testo
       language: python

@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreRealESRGANx4-restore.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Kafelki dla dużych obrazów
       language: python
@@ -113,7 +113,7 @@ snippets:
 
 
         print(result.restored.array.shape)
-source_hash: f0efb4f65d38e22d
+source_hash: caa14ab4037c9062
 ---
 
 ## Instalacja

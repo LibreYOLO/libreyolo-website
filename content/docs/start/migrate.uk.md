@@ -55,13 +55,13 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=path/to/upstream-checkpoint.pth \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Перевірка результату
       language: bash
       code: |
         # Перетворений файл відповідає тій самій схемі, що й опублікований.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: b19fedcf10862990
+source_hash: 15bae9ceeb9cc546
 ---
 
 Ця сторінка стосується контрольних точок з інших проєктів. Якщо ви переносите

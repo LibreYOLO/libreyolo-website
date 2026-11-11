@@ -93,7 +93,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict --model weights/LibreYOLO9t_paddle \
-          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --device cpu --save
+          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg --device cpu --save
     - label: 백엔드가 직접
       language: python
       code: |
@@ -102,7 +102,7 @@ snippets:
         # Paddle 디렉토리에 대해 LibreYOLO()가 생성하는 것. 동일한 결과
         # 객체, 그 사이에 팩토리 라우팅 없음.
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
-        result = backend.predict("parkour.jpg")
+        result = backend.predict("guggenheim-bilbao.jpg")
         print(result.boxes.xyxy[:3])
     - label: 맨 노
       language: python

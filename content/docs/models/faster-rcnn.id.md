@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreFasterRCNNl.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -81,7 +81,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 3fd82eb835399560
+source_hash: 8b4f8478e1ad7d8d
 ---
 
 ## Instalasi

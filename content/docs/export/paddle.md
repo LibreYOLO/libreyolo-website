@@ -84,7 +84,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict --model weights/LibreYOLO9t_paddle \
-          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --device cpu --save
+          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg --device cpu --save
     - label: The backend directly
       language: python
       code: |
@@ -93,7 +93,7 @@ snippets:
         # What LibreYOLO() constructs for a Paddle directory. Same Results
         # object, no factory routing in between.
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
-        result = backend.predict("parkour.jpg")
+        result = backend.predict("guggenheim-bilbao.jpg")
         print(result.boxes.xyxy[:3])
     - label: Bare Paddle
       language: python

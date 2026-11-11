@@ -38,7 +38,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreRFDETRs.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 동영상
       language: python
@@ -177,7 +177,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: d4997243f17fa381
+source_hash: fbb992f66e66df0c
 ---
 
 ## 설치

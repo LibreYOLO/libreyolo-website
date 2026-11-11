@@ -42,7 +42,7 @@ snippets:
         # ImageNet yang dimuat model secara default.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Penilaian sigmoid multi-label
       language: python

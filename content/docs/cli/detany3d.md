@@ -48,13 +48,13 @@ intrinsics itself, so no calibration file is needed.
 Install the model's runtime before prediction.
 
 ```bash
-libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg text='["person"]'
+libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg text='["person"]'
 ```
 
 Request machine-readable results:
 
 ```bash
-libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg text='["person"]' --json --quiet
+libreyolo detany3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg text='["person"]' --json --quiet
 ```
 
 ## Notes

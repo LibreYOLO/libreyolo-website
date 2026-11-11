@@ -55,7 +55,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: 특정 클래스 필터링
       language: python
@@ -113,8 +113,8 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: fa0e6cee02b3e336
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+source_hash: 779e056e233d376a
 ---
 
 ## 네 가지 논점
@@ -184,8 +184,8 @@ CenterNet, DEIM, DETR, Deformable DETR, D-FINE, DINO-DETR, EdgeCrafter, Faster R
 명령줄에서 `classes`는 단일 정수, 리스트 또는 쉼표로 구분된 문자열을 받습니다:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 필터링이 정확도를 저절로 높이지는 않습니다. 모델은 여전히 나중에 버리는 클래스를 예측하는 데 연산 예산을 사용합니다. `classes`를 설정하면 계열은 박스 300개, 또는 `max_det`가 더 크면 `max_det`만큼의 후보 예산을 유지하며, `max_det`로 자르는 것은 필터 뒤에 이루어지므로 작은 `max_det`가 관심 클래스를 밀어내지 않습니다. 내보낸 백엔드도 배치 TensorRT 엔진을 포함해 같은 예산을 사용합니다. 점수가 더 높은 원치 않는 클래스의 박스가 300개를 넘는 이미지는 관심 클래스에 도달하기 전에 여전히 예산을 채울 수 있습니다. 그런 경우 `max_det`를 300보다 높이십시오.

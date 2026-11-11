@@ -32,7 +32,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreFCOSr50.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -73,7 +73,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 60bd7b8dfd903a8c
+source_hash: ea10c7faefc61640
 ---
 
 ## 설치

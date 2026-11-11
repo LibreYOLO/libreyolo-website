@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreDeiTb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        libreyolo predict model=LibreDeiTb-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   val:
     - label: Python
       language: python

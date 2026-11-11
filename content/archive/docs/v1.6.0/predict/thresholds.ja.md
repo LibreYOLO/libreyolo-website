@@ -48,7 +48,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: 特定クラスに絞り込み
       language: python
@@ -157,8 +157,8 @@ YOLOv1からYOLOv4、YOLOv7、YOLOv9、YOLOX、YOLO-NAS、RTMDet、PicoDet、Eff
 コマンドラインの`classes`には、単独の整数、リスト、カンマ区切り文字列を指定できます。
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 フィルタリングだけで精度が得られるわけではありません。後で破棄するクラスの予測にもモデルは計算量を使い、ファミリーはフィルタリング前に`max_det`を適用します。そのため、不要なクラスが密集した画像では目的のクラスに到達する前に上限に達する可能性があります。その場合は`conf`を下げるか、`max_det`を増やしてください。

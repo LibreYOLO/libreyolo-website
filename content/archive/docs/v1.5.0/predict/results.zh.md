@@ -88,7 +88,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt --json \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   saving:
     - label: 标注后的图像
       language: python

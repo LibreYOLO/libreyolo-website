@@ -60,7 +60,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: Memfilter ke kelas tertentu
       language: python
@@ -209,8 +209,8 @@ menjadi tidak cocok.
 Pada command line, `classes` menerima bilangan bulat tunggal, daftar, atau string dipisahkan koma:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 Pemfilteran bukan akurasi gratis. Model tetap menghabiskan kapasitas untuk memprediksi kelas

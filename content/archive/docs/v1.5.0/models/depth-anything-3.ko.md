@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDepthAnything3l-depth.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 깊이 맵 읽기
       language: python

@@ -31,7 +31,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreRealESRGANx4-restore.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 大きな画像向けのタイル分割
       language: python

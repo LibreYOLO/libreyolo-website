@@ -38,7 +38,7 @@ snippets:
         # ImageNet 클래스 이름 1,000개를 사용합니다.
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 이미지와 텍스트 임베딩
       language: python

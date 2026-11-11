@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreRFDETRs-obb.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 각도 대신 모서리
       language: python
       code: |

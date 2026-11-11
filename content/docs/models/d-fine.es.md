@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDFINEn.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Segmentación de instancias
       language: python
@@ -157,7 +157,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 4ecc96af379fe8d6
+source_hash: 537482ec0a80b7f7
 ---
 
 ## Instalación

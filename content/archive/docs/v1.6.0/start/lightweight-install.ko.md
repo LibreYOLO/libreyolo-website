@@ -50,7 +50,7 @@ snippets:
         model = OnnxBackend("libreyolo9t.onnx")
 
         result =
-        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
+        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg")
 
 
         # xyxy는 여기서 torch 텐서가 아니라 numpy ndarray입니다.

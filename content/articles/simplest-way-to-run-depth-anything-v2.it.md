@@ -46,7 +46,7 @@ Da qui, la stessa chiamata fa anche di più: puoi recuperare i valori di profond
 
 La stessa chiamata su scene molto diverse:
 
-![L'immagine di parkour accanto alla relativa mappa di profondità: chi salta in primo piano si distingue dalle pareti di cemento sullo sfondo.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Una persona che fa un salto mortale davanti al Guggenheim di Bilbao accanto alla relativa mappa di profondità del modello Small: chi salta si distingue dal museo sullo sfondo.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Vista aerea della baia di La Concha a Donostia accanto alla relativa mappa di profondità: le barche e la costa appaiono vicine, il mare aperto si allontana.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

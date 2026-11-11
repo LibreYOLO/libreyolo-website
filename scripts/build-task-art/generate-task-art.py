@@ -45,7 +45,8 @@ DATASETS = SITE / "public" / "articles" / "rf100vl-benchmark" / "datasets"
 # so running a model over one produces an annotation of an annotation.
 ASSETS = Path("C:/Users/Usuario/Documents/GitHub/libreyolo/libreyolo/assets")
 SCENE = ASSETS / "guggenheim-bilbao.jpg"  # person, architecture, sky, trees, water
-PERSON = ASSETS / "parkour.jpg"
+# The only showcase image. Never parkour.jpg (banned, and being deleted upstream).
+PERSON = SCENE
 
 # 16:9 at a size that stays crisp on a 280px column at 2x without shipping a
 # needlessly large file.
@@ -366,7 +367,18 @@ def art_matte():
     # which is what matting actually produces. Light rather than dark: the
     # subjects wear black, and on a dark ground the alpha edge disappears.
     bg = np.full_like(img, (228, 226, 222), dtype=np.uint8)
-    return (img * alpha + bg * (1 - alpha)).astype(np.uint8)
+    out = (img * alpha + bg * (1 - alpha)).astype(np.uint8)
+
+    # Centre the 16:9 crop on the subject, not the frame, so a figure near the
+    # top edge does not lose its head to letterbox_16x9.
+    ys, xs = np.nonzero(alpha[..., 0] > 0.5)
+    if len(ys):
+        h, w = out.shape[:2]
+        ch = min(h, int(w * OUT_H / OUT_W))
+        cy = (ys.min() + ys.max()) // 2
+        y0 = int(np.clip(cy - ch // 2, 0, h - ch))
+        out = out[y0 : y0 + ch]
+    return out
 
 
 def art_restore():

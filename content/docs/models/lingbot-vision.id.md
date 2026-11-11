@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreLingBotVisions-sem.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   train:
     - label: Python (linear probe)
@@ -119,7 +119,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: c2da99ce509aa51e
+source_hash: 636d25f1976b4e20
 ---
 
 ## Instalasi

@@ -37,7 +37,7 @@ snippets:
         # 1,000 个 ImageNet 类别名
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 图像与文本嵌入向量
       language: python
@@ -94,7 +94,7 @@ snippets:
         # task="embed" 只追踪图像塔，不需要类别
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: ac7cfd75ad6c0fa7
+source_hash: 51a9a9fa9c4e73e3
 ---
 
 ## 安装

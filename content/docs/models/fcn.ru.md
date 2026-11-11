@@ -42,7 +42,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreFCNr50.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -85,7 +85,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 7776b0fc85a208fb
+source_hash: 7e9192e01f128b8c
 ---
 
 ## Установка

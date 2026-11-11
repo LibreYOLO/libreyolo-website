@@ -38,7 +38,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=./LibreFOMOs-point.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   train:
     - label: Python
@@ -106,7 +106,7 @@ snippets:
 
 
         print(result.points.xy)
-source_hash: 03015f2bcd9fe99d
+source_hash: 4c3155323bcc951e
 ---
 
 ## Instalasi

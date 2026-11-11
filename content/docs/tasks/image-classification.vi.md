@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreResNet50-cls.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Toàn bộ phân phối
       language: python
       code: |
@@ -130,7 +130,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1, result.probs.top1conf)
-source_hash: 7934244e90056e77
+source_hash: 254717726fe2012d
 ---
 ## Định nghĩa
 

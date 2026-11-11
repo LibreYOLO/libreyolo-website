@@ -50,7 +50,7 @@ snippets:
         model = OnnxBackend("libreyolo9t.onnx")
 
         result =
-        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
+        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg")
 
 
         # 这里的 xyxy 是 numpy ndarray，不是 torch 张量

@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreEfficientDetd0.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -75,7 +75,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 12c61fb0035437ce
+source_hash: c6d8431fa43b2a64
 ---
 
 ## Installation

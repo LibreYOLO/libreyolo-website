@@ -46,7 +46,7 @@ model.predict("image.jpg", save=True)     # 把上色后的深度图写入磁盘
 
 完全相同的一行调用，应用在差异极大的各种场景上：
 
-![跑酷示例图与其深度图的对比：前景中的跳跃者从身后的混凝土墙中凸显出来。](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![一个人在毕尔巴鄂古根海姆博物馆前空翻，与 Small 模型生成的深度图对比：跳跃者从身后的博物馆中凸显出来。](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![多诺斯蒂亚（Donostia）拉孔查（La Concha）海湾的航拍图与其深度图的对比：船只和海岸线被判为近景，开阔水域则向远处退去。](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

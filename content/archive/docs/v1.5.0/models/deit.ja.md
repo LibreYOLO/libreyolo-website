@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDeiTb-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   val:
     - label: Python
       language: python

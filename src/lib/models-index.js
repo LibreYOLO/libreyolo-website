@@ -133,7 +133,8 @@ const TASK_META = {
   mesh: {
     label: 'Mesh',
     blurb: '3D geometry from an image.',
-    image: '/showcase/task-mesh.jpg',
+    // No still until task-mesh.jpg is re-rendered from guggenheim-bilbao.jpg
+    // (SAM 3D Body needs CUDA); the old one showed the banned parkour.jpg.
   },
 }
 

@@ -51,7 +51,7 @@ snippets:
         model = OnnxBackend("libreyolo9t.onnx")
 
         result =
-        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
+        model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg")
 
 
         # xyxy는 여기서 torch 텐서가 아니라 numpy ndarray입니다.
@@ -61,7 +61,7 @@ snippets:
         print(result.boxes.conf)
 
         print(result.boxes.cls)
-source_hash: 591b0a18fa5c2b09
+source_hash: 92d0b04019b88821
 ---
 
 ## 왜 이 방법이 효과가 있는가

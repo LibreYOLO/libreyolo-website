@@ -191,14 +191,14 @@ export function HeroSection({ quickstartTabs = false }) {
                   {/* Mobile-only: full-width result image inside the same card, click to open full-size */}
                   <div className="lg:hidden border-t border-surface-200 dark:border-white/5">
                     <a
-                      href="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
+                      href="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao_result.jpg"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block relative group"
                       aria-label={t('viewFullDetection')}
                     >
                       <img
-                        src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
+                        src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao_result.jpg"
                         alt={t('detectionResultAlt')}
                         className="w-full h-auto block"
                       />
@@ -227,11 +227,11 @@ export function HeroSection({ quickstartTabs = false }) {
                 <div className="relative bg-surface-50 dark:bg-surface-900/80 backdrop-blur-sm border border-surface-200 dark:border-white/10 rounded-2xl lg:rounded-l-none overflow-hidden h-full">
                   <div className="flex items-center gap-2 px-4 py-3 bg-surface-100 dark:bg-surface-900/50 border-b border-surface-200 dark:border-white/5">
                     <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-surface-500 text-sm font-mono">parkour_result.jpg</span>
+                    <span className="text-surface-500 text-sm font-mono">guggenheim-bilbao_result.jpg</span>
                   </div>
                   <div className="p-3">
                     <img
-                      src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour_result.jpg"
+                      src="https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao_result.jpg"
                       alt={t('detectionResultAlt')}
                       className="rounded-lg w-full"
                     />

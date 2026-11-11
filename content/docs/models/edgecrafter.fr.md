@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreECs.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Pose
       language: python
@@ -184,7 +184,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 520e31a0ca84f8d9
+source_hash: cceca8825a867fb3
 ---
 
 ## Installation

@@ -22,7 +22,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg save=True
     - label: Small variant
       language: python
       code: |

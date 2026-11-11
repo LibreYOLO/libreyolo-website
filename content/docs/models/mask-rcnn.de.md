@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreMaskRCNNr50.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Nur Boxen
       language: python
@@ -93,7 +93,7 @@ snippets:
 
 
         print(result.masks.data.shape)
-source_hash: 9608459b801aa6d5
+source_hash: 8f72d0c6c0063150
 ---
 
 ## Installation

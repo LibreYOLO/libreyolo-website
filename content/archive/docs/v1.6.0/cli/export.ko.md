@@ -41,7 +41,7 @@ snippets:
 
         # 팩토리는 파일 접미사를 보고 분기하므로 내보낸 파일이 체크포인트처럼 로드됩니다.
         libreyolo predict model=weights/LibreYOLO9s.onnx \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 source_hash: 290b778a1060a760
 ---
 

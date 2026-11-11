@@ -43,7 +43,7 @@ snippets:
         # ImageNet-Klassennamen, die das Modell standardmäßig lädt.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Sigmoid-Bewertung für mehrere Labels
       language: python

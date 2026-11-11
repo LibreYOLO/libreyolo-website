@@ -42,7 +42,7 @@ snippets:
         # класів ImageNet, які модель стандартно завантажує.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Багатоміткове оцінювання sigmoid
       language: python

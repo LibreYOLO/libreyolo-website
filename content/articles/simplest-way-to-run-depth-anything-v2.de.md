@@ -46,7 +46,7 @@ Mit demselben Aufruf kannst du noch mehr tun: Du kannst die Roh-Tiefenwerte abru
 
 Derselbe einzeilige Aufruf bei sehr unterschiedlichen Szenen:
 
-![Das Parkour-Beispielbild neben seiner Tiefenkarte: Die vorderen Springer heben sich von den Betonwänden im Hintergrund ab.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Eine Person beim Salto vor dem Guggenheim Bilbao neben ihrer Tiefenkarte aus dem Small-Modell: Der Springer hebt sich vom Museum im Hintergrund ab.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Luftaufnahme der Bucht von La Concha in Donostia neben ihrer Tiefenkarte: Boote und Ufer erscheinen nah, das offene Wasser liegt weiter hinten.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

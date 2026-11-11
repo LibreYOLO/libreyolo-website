@@ -37,7 +37,7 @@ snippets:
         # 1,000 个 ImageNet 类别名
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 多标签 sigmoid 打分
       language: python

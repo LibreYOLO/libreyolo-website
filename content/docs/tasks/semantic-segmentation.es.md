@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreSegformerb0-sem.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Una clase cada vez
       language: python
       code: |
@@ -124,7 +124,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: e13acb1e813da7c4
+source_hash: e8b63a9aad21dfd2
 ---
 
 ## Definición

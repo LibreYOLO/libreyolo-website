@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLONASs.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 姿勢推定
       language: python
       code: |

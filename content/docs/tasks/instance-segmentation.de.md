@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreDFINEn-seg.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Maskenkonturen
       language: python
       code: |
@@ -123,7 +123,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.masks.data.shape)
-source_hash: 05c7c0be14c38eef
+source_hash: 96b7618189b6918a
 ---
 
 ## Definition

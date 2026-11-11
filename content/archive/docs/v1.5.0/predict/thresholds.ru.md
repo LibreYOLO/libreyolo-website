@@ -59,7 +59,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: Фильтрация по конкретным классам
       language: python
@@ -214,8 +214,8 @@ NMS нет. И заодно она фильтрует данные, привяз
 значениями через запятую:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 Фильтрация не даёт качества бесплатно. Модель всё равно тратит свой бюджет на

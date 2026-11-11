@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreSwinIRm-restore.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Tile untuk gambar besar
       language: python
@@ -114,7 +114,7 @@ snippets:
 
 
         print(result.restored.array.shape)
-source_hash: 87fc3d5524480eec
+source_hash: 837e414caaf56d96
 ---
 
 ## Instalasi

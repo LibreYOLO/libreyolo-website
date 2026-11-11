@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDeiTb-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   val:
     - label: Python
       language: python
@@ -76,7 +76,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 4dad5f1aa0943dd9
+source_hash: 1859249e52db3cdc
 ---
 
 ## 安装

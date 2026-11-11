@@ -53,7 +53,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=path/to/upstream-checkpoint.pth \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Ergebnis prüfen
       language: bash
       code: >
@@ -61,7 +61,7 @@ snippets:
         veröffentlichte.
 
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: b19fedcf10862990
+source_hash: 15bae9ceeb9cc546
 ---
 
 Diese Seite behandelt Checkpoints aus anderen Projekten. Wenn du eigenen Code

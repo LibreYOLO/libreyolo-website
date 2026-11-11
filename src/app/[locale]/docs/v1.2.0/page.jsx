@@ -1263,7 +1263,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
 
           <SubHeading>Save annotated output</SubHeading>
           <CodeBlock language="python">{`result = model(SAMPLE_IMAGE, save=True)
-print(result.saved_path)   # e.g. runs/detect/predict/parkour.jpg`}</CodeBlock>
+print(result.saved_path)   # e.g. runs/detect/predict/guggenheim-bilbao.jpg`}</CodeBlock>
 
           <SubHeading>Process a directory</SubHeading>
           <CodeBlock language="python">{`results = model("images/", save=True, batch=4)
@@ -2648,7 +2648,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
           <CodeBlock language="text">{`libreyolo/
     __init__.py          # Public API exports + deprecated-alias resolver
     tasks.py             # Task types, suffix conventions, resolution rules
-    assets/parkour.jpg   # SAMPLE_IMAGE
+    assets/guggenheim-bilbao.jpg   # SAMPLE_IMAGE
     models/
         __init__.py      # LibreYOLO() factory + model registry bootstrap
         base/
@@ -3554,7 +3554,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
 
           <SubHeading>保存标注后的输出</SubHeading>
           <CodeBlock language="python">{`result = model(SAMPLE_IMAGE, save=True)
-print(result.saved_path)   # e.g. runs/detect/predict/parkour.jpg`}</CodeBlock>
+print(result.saved_path)   # e.g. runs/detect/predict/guggenheim-bilbao.jpg`}</CodeBlock>
 
           <SubHeading>处理目录</SubHeading>
           <CodeBlock language="python">{`results = model("images/", save=True, batch=4)
@@ -4939,7 +4939,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
           <CodeBlock language="text">{`libreyolo/
     __init__.py          # Public API exports + deprecated-alias resolver
     tasks.py             # Task types, suffix conventions, resolution rules
-    assets/parkour.jpg   # SAMPLE_IMAGE
+    assets/guggenheim-bilbao.jpg   # SAMPLE_IMAGE
     models/
         __init__.py      # LibreYOLO() factory + model registry bootstrap
         base/

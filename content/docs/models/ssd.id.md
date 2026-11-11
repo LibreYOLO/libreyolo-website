@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreSSD300.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -90,7 +90,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 3b3f9ea72291c4fa
+source_hash: ff555c29638e403f
 ---
 
 ## Instalasi

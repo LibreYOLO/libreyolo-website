@@ -98,7 +98,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict --model weights/LibreYOLO9t_paddle \
-          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --device cpu --save
+          --source https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg --device cpu --save
     - label: Langsung lewat backend
       language: python
       code: |
@@ -107,7 +107,7 @@ snippets:
         # Yang dibangun LibreYOLO() untuk direktori Paddle. Objek Results
         # yang sama, tanpa routing factory di antaranya.
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
-        result = backend.predict("parkour.jpg")
+        result = backend.predict("guggenheim-bilbao.jpg")
         print(result.boxes.xyxy[:3])
     - label: Paddle murni
       language: python

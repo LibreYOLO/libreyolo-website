@@ -59,7 +59,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: Filtrare su classi specifiche
       language: python
@@ -218,8 +218,8 @@ Da riga di comando, `classes` accetta un intero singolo, una lista o una stringa
 separata da virgole:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 Filtrare non regala accuratezza. Un modello spende comunque il suo budget per

@@ -41,7 +41,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreMiDaSl-depth.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Varian kecil
       language: python
@@ -102,7 +102,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 64537aa3ad3a6f8f
+source_hash: 1bfc14bc5682cabe
 ---
 
 ## Instalasi

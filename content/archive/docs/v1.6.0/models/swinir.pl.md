@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreSwinIRm-restore.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Kafelki dla dużych obrazów
       language: python

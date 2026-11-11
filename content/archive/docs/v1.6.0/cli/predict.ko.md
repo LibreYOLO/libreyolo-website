@@ -27,13 +27,13 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 어노테이션된 이미지 저장
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt save=true \
-          project=runs/detect name=parkour exist_ok=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          project=runs/detect name=guggenheim-bilbao exist_ok=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: '클래스 필터링, stdout으로 JSON 출력'
       language: bash
       code: >
@@ -42,7 +42,7 @@ snippets:
         libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
         \
           json=true quiet=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 source_hash: 21374ebc0e6cf4d3
 ---
 

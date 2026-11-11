@@ -28,7 +28,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreYOLOXs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+        libreyolo predict model=LibreYOLOXs.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg save=True
   train:
     - label: Python
       language: python
@@ -89,7 +89,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: ddba5fb10bb88ad2
+source_hash: cf19fcd309effb0e
 ---
 
 ## 安装

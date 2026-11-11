@@ -46,7 +46,7 @@ Từ đó, bạn có thể dùng chính lệnh gọi này để lấy các giá 
 
 Cùng một lệnh gọi trên những khung cảnh rất khác nhau:
 
-![Ảnh mẫu parkour bên cạnh bản đồ độ sâu: những người đang nhảy ở phía trước nổi bật trước các bức tường bê tông phía sau.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Một người nhào lộn trước Guggenheim Bilbao bên cạnh bản đồ độ sâu từ mô hình Small: người nhảy nổi bật trước bảo tàng phía sau.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Ảnh chụp từ trên cao vịnh La Concha ở Donostia bên cạnh bản đồ độ sâu: thuyền và bờ biển có vẻ ở gần, vùng nước rộng lùi xa.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

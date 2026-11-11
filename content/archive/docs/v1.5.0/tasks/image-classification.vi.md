@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreResNet50-cls.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Toàn bộ phân phối
       language: python
       code: |

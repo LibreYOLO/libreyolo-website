@@ -46,7 +46,7 @@ To samo wywołanie pozwala też pobrać surowe wartości głębi i bezpośrednio
 
 Dokładnie to samo wywołanie w jednym wierszu, na bardzo różnych scenach:
 
-![Obraz przykładowej sceny parkourowej obok mapy głębi: osoby skaczące z przodu wyraźnie odcinają się od betonowych ścian w tle.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Osoba robiąca salto przed Guggenheim w Bilbao obok mapy głębi z modelu Small: skoczek wyraźnie odcina się od muzeum w tle.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Widok z lotu ptaka na zatokę La Concha w Donostii obok mapy głębi: łodzie i linia brzegowa są widoczne na pierwszym planie, a otwarta woda się oddala.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

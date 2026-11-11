@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDeformableDETRr50.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 35225efc54b5ef91
+source_hash: c847ad3da0ba044b
 ---
 
 ## 설치

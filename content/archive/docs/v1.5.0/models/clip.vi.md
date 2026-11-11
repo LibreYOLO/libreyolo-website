@@ -39,7 +39,7 @@ snippets:
         # ImageNet mà mô hình tải theo mặc định.
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Embedding ảnh và văn bản
       language: python

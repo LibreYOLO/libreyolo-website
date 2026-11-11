@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDeepLabv3r50-sem.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 7abf11ebb6cece18
+source_hash: a2b04c850851e55f
 ---
 
 ## Installation

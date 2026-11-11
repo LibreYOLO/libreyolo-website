@@ -31,7 +31,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreRTMDets.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: インスタンスセグメンテーション
       language: python
@@ -112,7 +112,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: d3d0a78f93c4f53c
+source_hash: b70dad6e4d1ff68d
 ---
 
 ## インストール

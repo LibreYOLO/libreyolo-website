@@ -38,7 +38,7 @@ snippets:
         # ImageNet 클래스 이름 1,000개를 사용합니다.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 멀티 레이블 sigmoid 점수
       language: python
@@ -110,7 +110,7 @@ snippets:
         # task="embed"는 이미지 타워만 추적하므로 클래스가 필요하지 않습니다.
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: 5cb33276cb5efaa8
+source_hash: 01ff8a7794a91eff
 ---
 
 ## 설치

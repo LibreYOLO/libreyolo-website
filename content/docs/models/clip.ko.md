@@ -38,7 +38,7 @@ snippets:
         # ImageNet 클래스 이름 1,000개를 사용합니다.
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 이미지와 텍스트 임베딩
       language: python
@@ -95,7 +95,7 @@ snippets:
         # task="embed"는 이미지 타워만 추적하므로 클래스가 필요하지 않습니다.
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: ac7cfd75ad6c0fa7
+source_hash: 51a9a9fa9c4e73e3
 ---
 
 ## 설치

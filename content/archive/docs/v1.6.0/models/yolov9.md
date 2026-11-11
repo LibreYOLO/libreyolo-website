@@ -22,7 +22,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Without NMS
       language: python
       code: |

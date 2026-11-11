@@ -31,7 +31,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreRFDETRs-obb.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 角度ではなく頂点
       language: python
       code: |
@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 8c2cfd249cfd5ae2
+source_hash: 034f13811b187dcc
 ---
 
 ## 定義

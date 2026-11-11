@@ -48,7 +48,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: 特定クラスに絞り込み
       language: python
@@ -106,8 +106,8 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: fa0e6cee02b3e336
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+source_hash: 779e056e233d376a
 ---
 
 ## 4つの引数
@@ -176,8 +176,8 @@ YOLOv1からYOLOv4、YOLOv7、YOLOv9、YOLOX、YOLO-NAS、RTMDet、PicoDet、Eff
 コマンドラインの`classes`には、単独の整数、リスト、カンマ区切り文字列を指定できます。
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 フィルタリングだけで精度が得られるわけではありません。後で破棄するクラスの予測にもモデルは計算量を使います。`classes`を指定すると、ファミリーは300個（`max_det`の方が大きい場合は`max_det`個）の候補ボックスを確保し、`max_det`への切り詰めはフィルタリングの後に行われるため、`max_det`が小さくても目的のクラスが押し出されることはありません。エクスポートしたバックエンドも、バッチ処理のTensorRTエンジンを含めて同じ候補数を使います。不要なクラスのスコアの高いボックスが300個を超える画像では、目的のクラスに到達する前に候補が埋まる可能性があります。その場合は`max_det`を300より大きくしてください。

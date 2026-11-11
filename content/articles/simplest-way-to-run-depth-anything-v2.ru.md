@@ -46,7 +46,7 @@ model.predict("image.jpg", save=True)     # writes a colorized depth map to disk
 
 Один и тот же вызов в одну строку для совершенно разных сцен:
 
-![Изображение с паркуром рядом с картой глубины: прыгуны на переднем плане выделяются на фоне бетонных стен.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Человек делает сальто перед музеем Гуггенхайма в Бильбао, рядом карта глубины от модели Small: прыгун выделяется на фоне музея.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Вид с воздуха на залив Ла-Конча в Доностии рядом с картой глубины: лодки и береговая линия кажутся близкими, открытая вода уходит вдаль.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

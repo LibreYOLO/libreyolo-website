@@ -32,7 +32,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreBiRefNetl-matte.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 抠图
       language: python

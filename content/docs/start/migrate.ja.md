@@ -41,13 +41,13 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=path/to/upstream-checkpoint.pth \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 結果を確認
       language: bash
       code: |
         # 変換後のファイルは公開済みファイルと同じスキーマを満たす
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: b19fedcf10862990
+source_hash: 15bae9ceeb9cc546
 ---
 
 このページでは、ほかのプロジェクトのチェックポイントを扱います。独自のコードを古いLibreYOLOから移行する場合は、[1.6.0へのアップグレード](/docs/upgrade)を参照してください。

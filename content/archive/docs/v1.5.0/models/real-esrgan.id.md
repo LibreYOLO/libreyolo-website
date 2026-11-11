@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreRealESRGANx4-restore.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Tile untuk gambar besar
       language: python

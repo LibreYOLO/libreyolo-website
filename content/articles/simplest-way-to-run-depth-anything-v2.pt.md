@@ -46,7 +46,7 @@ A partir daí, a mesma chamada faz mais: você pode obter os valores brutos de p
 
 A mesma chamada de uma linha, em cenas bem diferentes:
 
-![A imagem de exemplo de parkour ao lado do mapa de profundidade: as pessoas saltando em primeiro plano se destacam diante das paredes de concreto ao fundo.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Uma pessoa dando um mortal em frente ao Guggenheim Bilbao ao lado do mapa de profundidade do modelo Small: quem salta se destaca diante do museu ao fundo.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Vista aérea da baía de La Concha, em Donostia, ao lado do mapa de profundidade: os barcos e a linha costeira parecem próximos, enquanto o mar aberto fica ao fundo.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

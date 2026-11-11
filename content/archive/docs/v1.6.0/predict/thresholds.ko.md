@@ -55,7 +55,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: 특정 클래스 필터링
       language: python
@@ -164,8 +164,8 @@ CenterNet, DEIM, DETR, Deformable DETR, D-FINE, DINO-DETR, EdgeCrafter, Faster R
 명령줄에서 `classes`는 단일 정수, 리스트 또는 쉼표로 구분된 문자열을 받습니다:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 필터링이 정확도를 저절로 높이지는 않습니다. 모델은 여전히 나중에 버리는 클래스를 예측하는 데 연산 예산을 사용하며, `max_det`는 필터링 전에 계열별로 적용되므로 원치 않는 클래스로 가득 찬 이미지가 관심 클래스에 도달하기 전에 한도에 이를 수 있습니다. 그런 경우 `conf`를 낮추거나 `max_det`를 높이십시오.

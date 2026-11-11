@@ -38,7 +38,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=weights/LibreTEEDt-edge.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -87,7 +87,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.edges.array.shape)
-source_hash: c7203b254e460258
+source_hash: 725610ee2beb6133
 ---
 
 ## Installer

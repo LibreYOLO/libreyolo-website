@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreMoGe2s-normal.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -80,7 +80,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.normal_map.array.shape)
-source_hash: b06daf44f9a58411
+source_hash: 616e77c6d790367b
 ---
 
 ## Встановлення

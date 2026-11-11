@@ -65,7 +65,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreEoMTl-sem.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Semántica
@@ -136,7 +136,7 @@ snippets:
 
 
         print(result.semantic_mask.data.shape)
-source_hash: 64b2da642999f150
+source_hash: a01d160adb85c8ef
 ---
 
 ## Instalación

@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9t.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 'Outra família, mesma chamada'
       language: python
       code: |
@@ -119,7 +119,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: e74fa360e2f7ed1d
+source_hash: f458d3e280ada077
 ---
 
 ## Definição

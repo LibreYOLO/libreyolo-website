@@ -44,7 +44,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreSegformerb0-sem.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Jedna klasa naraz
       language: python
       code: |

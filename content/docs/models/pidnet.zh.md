@@ -31,7 +31,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibrePIDNets-sem.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   val:
     - label: Python
@@ -73,7 +73,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: 489db64a39e3a61a
+source_hash: 4a6c5b9681270ddd
 ---
 
 ## 安装

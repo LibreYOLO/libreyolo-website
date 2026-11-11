@@ -36,7 +36,7 @@ snippets:
         # 読み込む1,000個のImageNetクラス名を使用
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 画像とテキストの埋め込み
       language: python
@@ -93,7 +93,7 @@ snippets:
         # task="embed"は画像towerだけをトレース。クラスは不要
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: ac7cfd75ad6c0fa7
+source_hash: 51a9a9fa9c4e73e3
 ---
 
 ## インストール

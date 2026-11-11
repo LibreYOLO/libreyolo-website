@@ -46,8 +46,8 @@ snippets:
         checkpoint.
 
         libreyolo predict model=weights/LibreYOLO9s.onnx \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: 6e4d764c73b71b5b
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+source_hash: e8638b76b7dbf326
 ---
 
 ## Składnia

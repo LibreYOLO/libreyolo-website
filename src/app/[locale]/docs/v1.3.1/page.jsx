@@ -1261,7 +1261,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
 
           <SubHeading>Save annotated output</SubHeading>
           <CodeBlock language="python">{`result = model(SAMPLE_IMAGE, save=True)
-print(result.saved_path)   # e.g. runs/detect/predict/parkour.jpg`}</CodeBlock>
+print(result.saved_path)   # e.g. runs/detect/predict/guggenheim-bilbao.jpg`}</CodeBlock>
 
           <SubHeading>Process a directory</SubHeading>
           <CodeBlock language="python">{`results = model("images/", save=True, batch=4)
@@ -3030,7 +3030,7 @@ else:
 libreyolo profile run coco128 --weights LibreYOLO9t.pt --batch 16 --repeat 3
 
 # inference: latency percentiles and where they are spent
-libreyolo profile infer https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
+libreyolo profile infer https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
           <P>
             <InlineCode>profile infer</InlineCode> reports p50, p90 and p99 latency, throughput, and a split across preprocess, forward and postprocess (NMS), plus a verdict on what is bounding you. That split is usually the punchline: a model that looks slow is often spending its time in NMS or in preprocessing rather than in the network.
           </P>
@@ -3808,7 +3808,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
           <CodeBlock language="text">{`libreyolo/
     __init__.py          # Public API exports + deprecated-alias resolver
     tasks.py             # Task types, suffix conventions, resolution rules
-    assets/parkour.jpg   # SAMPLE_IMAGE
+    assets/guggenheim-bilbao.jpg   # SAMPLE_IMAGE
     models/
         __init__.py      # LibreYOLO() factory + model registry bootstrap
         base/
@@ -4720,7 +4720,7 @@ print(result.boxes.xyxy)`}</CodeBlock>
 
           <SubHeading>保存标注后的输出</SubHeading>
           <CodeBlock language="python">{`result = model(SAMPLE_IMAGE, save=True)
-print(result.saved_path)   # e.g. runs/detect/predict/parkour.jpg`}</CodeBlock>
+print(result.saved_path)   # e.g. runs/detect/predict/guggenheim-bilbao.jpg`}</CodeBlock>
 
           <SubHeading>处理目录</SubHeading>
           <CodeBlock language="python">{`results = model("images/", save=True, batch=4)
@@ -6278,7 +6278,7 @@ if final["state"] == "failed":
 libreyolo profile run coco128 --weights LibreYOLO9t.pt --batch 16 --repeat 3
 
 # 推理：延迟分位数，以及时间花在哪一段
-libreyolo profile infer https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
+libreyolo profile infer https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg --weights LibreYOLO9t.pt --runs 200`}</CodeBlock>
           <P>
             <InlineCode>profile infer</InlineCode> 报告 p50、p90、p99 延迟、吞吐，以及在预处理 / 前向 / 后处理（NMS）之间的耗时拆分。这个拆分往往才是重点：一个看起来很慢的模型，时间常常花在 NMS 或预处理上，而不是网络本身。
           </P>
@@ -7044,7 +7044,7 @@ config.to_yaml("config.yaml")`}</CodeBlock>
           <CodeBlock language="text">{`libreyolo/
     __init__.py          # Public API exports + deprecated-alias resolver
     tasks.py             # Task types, suffix conventions, resolution rules
-    assets/parkour.jpg   # SAMPLE_IMAGE
+    assets/guggenheim-bilbao.jpg   # SAMPLE_IMAGE
     models/
         __init__.py      # LibreYOLO() factory + model registry bootstrap
         base/

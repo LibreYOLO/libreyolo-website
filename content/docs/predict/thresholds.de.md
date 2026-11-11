@@ -60,7 +60,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: Nach bestimmten Klassen filtern
       language: python
@@ -132,8 +132,8 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: fa0e6cee02b3e336
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+source_hash: 779e056e233d376a
 ---
 
 ## Die vier Argumente
@@ -204,8 +204,8 @@ Die Filterung erfolgt zentral nach der Nachverarbeitung jeder Familie in dem gem
 In der Befehlszeile akzeptiert `classes` eine einzelne Ganzzahl, eine Liste oder einen durch Kommas getrennten String:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 Filterung erzeugt keine kostenlose Genauigkeit. Das Modell verwendet weiterhin seine Kapazität für die Vorhersage von Klassen, die du anschließend verwirfst. Ist `classes` gesetzt, behält die Familie ein Kandidatenbudget von 300 Boxen oder `max_det`, wenn dieser Wert höher ist, und der Schnitt auf `max_det` erfolgt nach dem Filter, sodass ein kleines `max_det` deine Klasse nicht verdrängt. Exportierte Backends verwenden dasselbe Budget, auch gebatchte TensorRT-Engines. Ein Bild mit mehr als 300 höher bewerteten Boxen unerwünschter Klassen kann das Budget dennoch füllen, bevor deine Klasse berücksichtigt wird; erhöhe in diesem Fall `max_det` über 300.

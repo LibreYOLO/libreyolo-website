@@ -46,7 +46,7 @@ Dari sini, pemanggilan yang sama juga memungkinkan Anda mengambil nilai kedalama
 
 Pemanggilan satu baris yang sama, pada adegan yang sangat berbeda:
 
-![Gambar sampel parkour di samping peta kedalamannya: para pelompat di depan tampak menonjol dari dinding beton di belakang.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Seseorang melakukan salto di depan Guggenheim Bilbao di samping peta kedalamannya dari model Small: pelompat tampak menonjol dari museum di belakang.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Pemandangan udara teluk La Concha di Donostia di samping peta kedalamannya: perahu dan garis pantai tampak dekat, sementara laut terbuka terlihat menjauh.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

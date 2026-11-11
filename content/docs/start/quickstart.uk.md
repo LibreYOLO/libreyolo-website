@@ -50,7 +50,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=yolo9-t save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Відео й потоки
       language: python
       code: |
@@ -136,7 +136,7 @@ snippets:
       code: |
         pip install "libreyolo[onnx]"
         libreyolo export model=yolo9-t format=onnx imgsz=640
-source_hash: eb6b18dedf1c5f4b
+source_hash: 46c53e793a1b3be6
 ---
 
 ## Встановлення

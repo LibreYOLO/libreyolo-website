@@ -54,13 +54,13 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=path/to/upstream-checkpoint.pth \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Sprawdzenie wyniku
       language: bash
       code: |
         # Przekonwertowany plik spełnia ten sam schemat co plik opublikowany.
         libreyolo metadata path=path/to/upstream-checkpoint-LibreYOLO9t.pt
-source_hash: b19fedcf10862990
+source_hash: 15bae9ceeb9cc546
 ---
 
 Ta strona dotyczy checkpointów z innych projektów. W przypadku przenoszenia

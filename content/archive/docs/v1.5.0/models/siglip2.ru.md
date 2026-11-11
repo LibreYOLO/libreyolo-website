@@ -42,7 +42,7 @@ snippets:
         # классов ImageNet, с которыми модель загружается по умолчанию.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Оценка сигмоидой с несколькими метками
       language: python

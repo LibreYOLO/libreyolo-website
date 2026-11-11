@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreECs-pose.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Chỉ keypoint hiển thị
       language: python
       code: |
@@ -141,7 +141,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.keypoints.xy)
-source_hash: fbabf598151eeac0
+source_hash: bf044388343222fe
 ---
 ## Định nghĩa
 

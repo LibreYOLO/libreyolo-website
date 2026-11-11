@@ -42,7 +42,7 @@ snippets:
         # di classe ImageNet con cui il modello viene caricato di default.
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Embedding di immagini e testo
       language: python
@@ -115,7 +115,7 @@ snippets:
         # task="embed" traccia solo la torre delle immagini; non servono classi.
         model = LibreYOLO("LibreCLIPb32-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: ac7cfd75ad6c0fa7
+source_hash: 51a9a9fa9c4e73e3
 ---
 
 ## Installazione

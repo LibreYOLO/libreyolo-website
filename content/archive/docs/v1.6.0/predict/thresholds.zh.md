@@ -55,7 +55,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: 过滤到指定类别
       language: python
@@ -166,8 +166,8 @@ head。基于这些解码器构建的变体也继承同样的行为。
 在命令行上，`classes` 接受一个裸整数、一个列表，或者一个逗号分隔的字符串：
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 过滤不等于白捡精度。模型仍然会把预算花在预测那些你随后要丢掉的类别上，而且 `max_det` 是由家族在过滤之前应用的，所以一张挤满了你不想要的类别的图，可能在轮到你要的类别之前就已经撞上了上限。真出现这种情况，就把 `conf` 调低或者把 `max_det` 调高。

@@ -46,7 +46,7 @@ A partir de ahí, la misma llamada permite hacer más cosas: puedes obtener dire
 
 La misma llamada de una línea, en escenas muy distintas:
 
-![La imagen de muestra de parkour junto a su mapa de profundidad: quienes saltan en primer plano destacan frente a los muros de hormigón del fondo.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Una persona haciendo un mortal frente al Guggenheim de Bilbao junto a su mapa de profundidad del modelo Small: quien salta destaca frente al museo del fondo.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Vista aérea de la bahía de La Concha, en Donostia, junto a su mapa de profundidad: las embarcaciones y la costa se perciben cerca, y el mar abierto se aleja.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

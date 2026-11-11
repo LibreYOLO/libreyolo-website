@@ -54,7 +54,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: 过滤到指定类别
       language: python
@@ -112,8 +112,8 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt agnostic_nms=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-source_hash: fa0e6cee02b3e336
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+source_hash: 779e056e233d376a
 ---
 
 ## 四个参数
@@ -184,8 +184,8 @@ head。基于这些解码器构建的变体也继承同样的行为。
 在命令行上，`classes` 接受一个裸整数、一个列表，或者一个逗号分隔的字符串：
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 过滤不等于白捡精度。模型仍然会把预算花在预测那些你随后要丢掉的类别上。设置了 `classes` 时，家族会保留 300 个检测框的候选预算，`max_det` 更高时则取 `max_det`，向 `max_det` 的截断发生在过滤之后，所以较小的 `max_det` 不会把你要的类别挤掉。导出的后端使用同样的预算，包括批处理的 TensorRT 引擎。一张图里如果有超过 300 个得分更高、但属于你不想要的类别的检测框，它们仍然可能在轮到你要的类别之前就把预算占满；真出现这种情况，就把 `max_det` 调到 300 以上。

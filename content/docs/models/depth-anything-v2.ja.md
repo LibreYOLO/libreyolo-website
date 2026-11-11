@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDepthAnythingV2s-depth.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 深度マップを読み取る
       language: python
@@ -89,7 +89,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: de71e994a0b6d8b4
+source_hash: e04f6db4a148d95e
 ---
 
 ## インストール

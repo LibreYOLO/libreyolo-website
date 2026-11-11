@@ -21,7 +21,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreCenterNetresdcn18.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+        libreyolo predict model=LibreCenterNetresdcn18.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg save=True
     - label: DLA-34
       language: python
       code: |

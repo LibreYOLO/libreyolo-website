@@ -109,7 +109,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   video:
     - label: Eine Videodatei (verwende einen eigenen Clip)
       language: python
@@ -225,7 +225,7 @@ snippets:
         for result in itertools.islice(model("screen 1 100 200 512 256",
         stream=True), 50):
             print(len(result.boxes))
-source_hash: ea188c1154d0b7f6
+source_hash: 3ef9d48b23c11897
 ---
 
 ## Klassifizierung einer Quelle

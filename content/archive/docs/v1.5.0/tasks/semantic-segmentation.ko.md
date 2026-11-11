@@ -32,7 +32,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreSegformerb0-sem.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 한 번에 한 수업
       language: python
       code: |

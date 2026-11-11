@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreL2CSr50.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 얼굴 소스
       language: python
@@ -77,7 +77,7 @@ snippets:
         yaw_logits, pitch_logits = session.run(
             None, {name: np.zeros((1, 3, 448, 448), dtype=np.float32)}
         )
-source_hash: 1f61c1a61e033bbc
+source_hash: 5aa7fd4a10f56f64
 ---
 
 ## 설치

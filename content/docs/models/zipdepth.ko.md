@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreZipDepthb-depth.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: NPU/엣지 체크포인트
       language: python
@@ -85,7 +85,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: ee5867f8671d1aac
+source_hash: bcf302aac7686ac0
 ---
 
 ## 설치

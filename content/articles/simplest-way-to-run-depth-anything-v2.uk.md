@@ -46,7 +46,7 @@ model.predict("image.jpg", save=True)     # writes a colorized depth map to disk
 
 Той самий виклик в один рядок на зовсім різних сценах:
 
-![Зображення паркурного стрибка поруч із картою глибини: стрибуни на передньому плані вирізняються на тлі бетонних стін.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Людина робить сальто перед музеєм Гуггенгайма в Більбао, поруч карта глибини від моделі Small: стрибун вирізняється на тлі музею.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Вид із повітря на бухту Ла-Конча в Доності поруч із картою глибини: човни та берегова лінія виглядають близькими, відкрита вода віддаляється.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

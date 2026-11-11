@@ -77,7 +77,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   video:
     - label: 视频文件（自备片段）
       language: python

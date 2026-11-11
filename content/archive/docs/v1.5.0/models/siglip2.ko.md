@@ -38,7 +38,7 @@ snippets:
         # ImageNet 클래스 이름 1,000개를 사용합니다.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 멀티 레이블 sigmoid 점수
       language: python

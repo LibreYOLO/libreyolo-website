@@ -52,13 +52,13 @@ Install the model's runtime before prediction. Pass exactly one prompt:
 `text`, `bboxes` or `points`.
 
 ```bash
-libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]'
+libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg intrinsics=camera.npy text='["person"]'
 ```
 
 Request machine-readable results:
 
 ```bash
-libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]' --json --quiet
+libreyolo wilddet3d source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg intrinsics=camera.npy text='["person"]' --json --quiet
 ```
 
 ## Notes

@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreBiRefNetl-matte.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Recorte
       language: python
@@ -86,7 +86,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.matte.array.shape)
-source_hash: 2524eab687f9ebab
+source_hash: d489d34d9d91cdcc
 ---
 
 ## Instalação

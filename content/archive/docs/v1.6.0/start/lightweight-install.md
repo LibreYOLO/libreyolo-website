@@ -35,7 +35,7 @@ snippets:
         from libreyolo.backends.onnx import OnnxBackend
 
         model = OnnxBackend("libreyolo9t.onnx")
-        result = model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg")
+        result = model.predict("https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg")
 
         # xyxy is a numpy ndarray here, not a torch tensor.
         print(result.boxes.xyxy)

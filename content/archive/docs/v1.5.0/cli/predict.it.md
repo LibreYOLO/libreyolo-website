@@ -31,13 +31,13 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Salvare le immagini annotate
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt save=true \
-          project=runs/detect name=parkour exist_ok=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          project=runs/detect name=guggenheim-bilbao exist_ok=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 'Classi filtrate, JSON su stdout'
       language: bash
       code: >
@@ -47,7 +47,7 @@ snippets:
         libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50
         \
           json=true quiet=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 source_hash: 7e46c7ed7dd9e6c4
 ---
 

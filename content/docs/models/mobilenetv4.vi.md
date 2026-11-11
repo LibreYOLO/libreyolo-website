@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreMobileNetV4s-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   train:
     - label: Python
@@ -93,7 +93,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.probs.top1)
-source_hash: 6fe498d802f87c62
+source_hash: aec73dc8aee792df
 ---
 ## Cài đặt
 

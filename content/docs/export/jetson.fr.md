@@ -154,7 +154,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict --source
-        https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         --model libreyolo9s.pt --save
   export:
     - label: Python
@@ -190,7 +190,7 @@ snippets:
 
         tegrastats            # charge en direct ; nvidia-smi est limité sur
         Tegra
-source_hash: 42f4131b1a842bfd
+source_hash: e5e48d9381ff9052
 ---
 
 ## Ce que consigne cette page

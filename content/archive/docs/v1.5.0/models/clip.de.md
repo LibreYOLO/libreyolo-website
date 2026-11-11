@@ -41,7 +41,7 @@ snippets:
         # Klassennamen, mit denen das Modell standardmäßig lädt.
 
         libreyolo predict model=LibreCLIPb32-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Bild- und Text-Embedding
       language: python

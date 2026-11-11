@@ -33,7 +33,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9t.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 'Une autre famille, le même appel'
       language: python
       code: >

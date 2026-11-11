@@ -46,7 +46,7 @@ From there the same call does more: you can pull the raw depth values to work wi
 
 The exact same one-line call, on very different scenes:
 
-![The parkour sample image next to its depth map: the jumpers in front stand out from the concrete walls behind.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![A person flipping in front of the Guggenheim Bilbao next to its depth map from the Small model: the jumper stands out from the museum behind.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Aerial view of La Concha bay in Donostia next to its depth map: the boats and shoreline read as near, the open water recedes.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

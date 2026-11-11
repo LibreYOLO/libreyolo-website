@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Bez NMS
       language: python
       code: >
@@ -147,7 +147,7 @@ snippets:
 
 
         print(result.boxes.xyxy)
-source_hash: 54bb4d5cc2bb92d9
+source_hash: d0bcd12d280a28fa
 ---
 
 ## Instalacja

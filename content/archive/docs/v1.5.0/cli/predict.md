@@ -20,20 +20,20 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Save annotated images
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt save=true \
-          project=runs/detect name=parkour exist_ok=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          project=runs/detect name=guggenheim-bilbao exist_ok=true \
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Filtered classes, JSON on stdout
       language: bash
       code: |
         # class 0 is person in the COCO class list the checkpoint ships with.
         libreyolo predict model=LibreYOLO9s.pt classes="[0]" conf=0.4 max_det=50 \
           json=true quiet=true \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ---
 
 ## Synopsis

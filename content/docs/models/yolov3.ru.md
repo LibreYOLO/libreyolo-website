@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreYOLO3b.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Размер SPP
       language: python
@@ -88,7 +88,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: a4c652bb2707fc8f
+source_hash: a8022070e95a7804
 ---
 
 ## Установка

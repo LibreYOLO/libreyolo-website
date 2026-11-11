@@ -60,7 +60,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt conf=0.4 iou=0.5 max_det=100 \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   classes:
     - label: Nach bestimmten Klassen filtern
       language: python
@@ -177,8 +177,8 @@ Die Filterung erfolgt zentral nach der Nachverarbeitung jeder Familie in dem gem
 In der Befehlszeile akzeptiert `classes` eine einzelne Ganzzahl, eine Liste oder einen durch Kommas getrennten String:
 
 ```bash
-libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
-libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+libreyolo predict model=LibreYOLO9s.pt classes=0 source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
+libreyolo predict model=LibreYOLO9s.pt classes="[0,2,5]" source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ```
 
 Filterung erzeugt keine kostenlose Genauigkeit. Das Modell verwendet weiterhin seine Kapazität für die Vorhersage von Klassen, die du anschließend verwirfst. `max_det` wird von der Familie vor dem Filter angewendet. Ein Bild mit vielen unerwünschten Klassen kann daher das Limit erreichen, bevor deine Klasse berücksichtigt wird. Senke in diesem Fall `conf` oder erhöhe `max_det`.

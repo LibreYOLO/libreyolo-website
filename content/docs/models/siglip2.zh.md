@@ -37,7 +37,7 @@ snippets:
         # 1,000 个 ImageNet 类别名
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 多标签 sigmoid 打分
       language: python
@@ -109,7 +109,7 @@ snippets:
         # task="embed" 只追踪图像塔，不需要类别
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
         model.export(format="onnx")
-source_hash: 5cb33276cb5efaa8
+source_hash: 01ff8a7794a91eff
 ---
 
 ## 安装

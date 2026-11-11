@@ -43,7 +43,7 @@ snippets:
         # nomes de classe do ImageNet que o modelo carrega por padrão.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Pontuação sigmoide multi-rótulo
       language: python
@@ -125,7 +125,7 @@ snippets:
         model = LibreYOLO("LibreSigLIP2b16-cls.pt", task="embed")
 
         model.export(format="onnx")
-source_hash: 5cb33276cb5efaa8
+source_hash: 01ff8a7794a91eff
 ---
 
 ## Instalação

@@ -40,7 +40,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreSegformerb0-sem.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
   train:
     - label: Python (дообучение)
@@ -113,7 +113,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.semantic_mask.data.shape)
-source_hash: d83f0c00236ab502
+source_hash: ea3263d3533f3557
 ---
 
 ## Установка

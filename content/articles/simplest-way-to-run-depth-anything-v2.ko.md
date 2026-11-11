@@ -46,7 +46,7 @@ model.predict("image.jpg", save=True)     # writes a colorized depth map to disk
 
 서로 매우 다른 장면에서도 정확히 같은 한 줄의 호출을 사용합니다.
 
-![파쿠르 샘플 이미지와 깊이 맵: 앞쪽 점프하는 사람들이 뒤쪽 콘크리트 벽과 구분되어 두드러집니다.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![구겐하임 빌바오 앞에서 공중제비를 도는 사람과 Small 모델의 깊이 맵: 점프하는 사람이 뒤쪽 미술관과 구분되어 두드러집니다.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![도노스티아 라 콘차 만의 항공 사진과 깊이 맵: 보트와 해안선은 가까이 보이고 탁 트인 바다는 멀어집니다.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

@@ -88,7 +88,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreYOLO9s.pt --json \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
   saving:
     - label: 标注后的图像
       language: python
@@ -118,7 +118,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: d55562c03633c81e
+source_hash: ae5a337fb86a1305
 ---
 
 ## 一个对象，每种载荷一个槽位

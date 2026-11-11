@@ -34,7 +34,7 @@ snippets:
 
         # The factory routes on the file suffix, so the export loads like a checkpoint.
         libreyolo predict model=weights/LibreYOLO9s.onnx \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 ---
 
 ## Synopsis

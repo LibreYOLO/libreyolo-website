@@ -46,7 +46,7 @@ Le même appel vous donne ensuite accès aux valeurs de profondeur brutes, que v
 
 Le même appel en une ligne, sur des scènes très différentes :
 
-![L'image d'un parcours de parkour à côté de sa carte de profondeur : les sauteurs au premier plan se détachent des murs en béton à l'arrière-plan.](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![Une personne en plein salto devant le Guggenheim de Bilbao à côté de sa carte de profondeur du modèle Small : le sauteur se détache du musée à l'arrière-plan.](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![Vue aérienne de la baie de La Concha à Donostia à côté de sa carte de profondeur : les bateaux et le rivage apparaissent proches, tandis que la pleine mer semble s'éloigner.](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

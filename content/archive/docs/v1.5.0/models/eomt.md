@@ -45,7 +45,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreEoMTl-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+        libreyolo predict model=LibreEoMTl-sem.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg save=True
   val:
     - label: Semantic
       language: python

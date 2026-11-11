@@ -34,7 +34,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+        libreyolo predict model=LibreMiDaSl-depth.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg save=True
     - label: Малий варіант
       language: python
       code: |
@@ -90,7 +90,7 @@ snippets:
 
 
         print(result.depth_map.data.shape)
-source_hash: 64537aa3ad3a6f8f
+source_hash: 1bfc14bc5682cabe
 ---
 
 ## Встановлення

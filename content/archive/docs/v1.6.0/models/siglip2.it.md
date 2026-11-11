@@ -43,7 +43,7 @@ snippets:
         # di classe ImageNet con cui il modello viene caricato di default.
 
         libreyolo predict model=LibreSigLIP2b16-cls.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Punteggi sigmoid multi-etichetta
       language: python

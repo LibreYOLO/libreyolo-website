@@ -35,7 +35,7 @@ snippets:
     - label: CLI
       language: bash
       code: |
-        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg save=True
+        libreyolo predict model=LibreEfficientNetV2b0-cls.pt source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg save=True
   train:
     - label: Python
       language: python
@@ -102,7 +102,7 @@ snippets:
 
 
         print(result.probs.top1)
-source_hash: 23b7d651fb4eae89
+source_hash: cdb86dc904591c98
 ---
 
 ## Встановлення

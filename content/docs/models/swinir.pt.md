@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreSwinIRm-restore.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: 'Por blocos (tiles), para imagens grandes'
       language: python
@@ -93,7 +93,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.restored.array.shape)
-source_hash: 87fc3d5524480eec
+source_hash: 837e414caaf56d96
 ---
 
 ## Instalação

@@ -39,7 +39,7 @@ snippets:
 
         # ファクトリーはファイル拡張子で振り分けるので、エクスポート結果もチェックポイントと同じように読み込まれる
         libreyolo predict model=weights/LibreYOLO9s.onnx \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
 source_hash: 290b778a1060a760
 ---
 

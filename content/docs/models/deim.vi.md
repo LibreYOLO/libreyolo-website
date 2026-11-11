@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreDEIMn.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: Video
       language: python
       code: >
@@ -155,7 +155,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 879518aa7326392d
+source_hash: 96976ccc3d435bb5
 ---
 ## Cài đặt
 

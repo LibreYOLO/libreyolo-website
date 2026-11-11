@@ -34,7 +34,7 @@ snippets:
       language: bash
       code: |
         libreyolo predict model=LibreEoMTl-panoptic.pt save=True \
-          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+          source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
     - label: 한 번에 하나의 구간
       language: python
       code: |

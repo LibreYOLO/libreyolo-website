@@ -37,7 +37,7 @@ snippets:
       language: bash
       code: >
         libreyolo predict model=LibreDFINEn.pt
-        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg
+        source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
         save=True
     - label: Segmentazione di istanze
       language: python
@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.boxes.xyxy)
-source_hash: 4ecc96af379fe8d6
+source_hash: 537482ec0a80b7f7
 ---
 
 ## Installazione

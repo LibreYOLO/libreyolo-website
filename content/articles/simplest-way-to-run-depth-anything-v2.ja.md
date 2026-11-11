@@ -46,7 +46,7 @@ model.predict("image.jpg", save=True)     # 色付き深度マップをディス
 
 まったく同じ1行の呼び出しで、さまざまなシーンを処理できます。
 
-![パルクールのサンプル画像と深度マップ。手前のジャンパーが背後のコンクリート壁より際立っています。](/articles/simplest-way-to-run-depth-anything-v2/parkour-input-vs-depth.jpg)
+![ビルバオのグッゲンハイム美術館の前で宙返りする人物と、Smallモデルによる深度マップ。ジャンパーが背後の美術館より際立っています。](/articles/simplest-way-to-run-depth-anything-v2/guggenheim-input-vs-depth.jpg)
 
 ![ドノスティアのラ・コンチャ湾を上空から見た画像と深度マップ。ボートと海岸線が近く、沖の海が遠くに見えます。](/articles/simplest-way-to-run-depth-anything-v2/donostia-bay-input-vs-depth.jpg)
 

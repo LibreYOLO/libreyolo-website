@@ -47,13 +47,13 @@ Predict on the shipped sample image. For commands requiring calibration,
 Install the model's runtime before prediction.
 
 ```bash
-libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]'
+libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg intrinsics=camera.npy text='["person"]'
 ```
 
 Request machine-readable results:
 
 ```bash
-libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/parkour.jpg intrinsics=camera.npy text='["person"]' --json --quiet
+libreyolo 3dmood source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg intrinsics=camera.npy text='["person"]' --json --quiet
 ```
 
 ## Notes
