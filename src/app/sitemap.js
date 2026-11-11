@@ -99,5 +99,10 @@ export default function sitemap() {
       : englishOnly(path, 0.7, 'monthly', lastModified('en'))
   })
 
-  return [...bilingualRoutes, ...docsIndexRoutes, ...docsContentRoutes, ...articleRoutes]
+  const legalRoutes = [
+    ...englishOnly('/privacy', 0.2, 'yearly'),
+    ...englishOnly('/terms', 0.2, 'yearly'),
+  ]
+
+  return [...bilingualRoutes, ...docsIndexRoutes, ...docsContentRoutes, ...articleRoutes, ...legalRoutes]
 }

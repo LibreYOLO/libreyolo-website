@@ -62,6 +62,8 @@ libreyolo.com is the official site of the LibreYOLO open-source library: documen
 - [Benchmarks](${SITE_URL}/benchmarks): measured COCO accuracy, RF100-VL transfer across 100 real-world datasets, and latency on real hardware
 - [Commercial Guide](${SITE_URL}/commercial): how to use LibreYOLO in proprietary, closed-source commercial applications under the MIT license
 - [Sponsors](${SITE_URL}/sponsors): the LibreYOLO Sponsorship Program, how the project accepts money, what it funds, and what sponsors receive
+- [Privacy Policy](${SITE_URL}/privacy): the library and agent plugins collect no data; what the website measures
+- [Terms of Use](${SITE_URL}/terms): MIT License for the software, per-model licenses for weights, no warranty
 - [Articles](${SITE_URL}/articles): tutorials, comparisons, and news about MIT-licensed object detection
 
 ## Documentation versions
