@@ -65,7 +65,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
-source_hash: d6ec02dfdb1a69a8
+source_hash: aca46053a9da331d
 ---
 
 ## 定义
@@ -83,7 +83,7 @@ source_hash: d6ec02dfdb1a69a8
 
 ## 模型
 
-有三个家族支持 `ocr`。
+有七个家族支持 `ocr`。
 
 [PP-OCRv5](/docs/models/pp-ocrv5) 是专门的流水线：一个可微二值化（differentiable
 binarization）检测器找出文字四边形，一个 SVTR/CTC 识别器把它们读出来，两个阶段连
@@ -96,6 +96,13 @@ binarization）检测器找出文字四边形，一个 SVTR/CTC 识别器把它�
 权重仅限非商业用途；许可证写在它的模型页上。
 
 [WeVisOne-VL](/docs/models/wevisone-vl) 同样把答案生成为带标签的文本，用 `LibreVLM("wevisone-vl", task="ocr")` 加载。它发布的指令要求以框格式输出每一个词，每个框返回为一个轴对齐的四边形，带上它的转写文本。`.conf` 和 `.det_conf` 恒为 1.0，因为模型不输出分数。它需要 `vlm` extra，权重采用 Apache-2.0 许可。
+
+1.8.0 新增了四个文档 OCR 家族，全部用 `LibreVLM` 加载，需要 `vlm` extra。DeepSeek-OCR
+（`deepseek-ocr`，以及 `deepseek-ocr-2`）每个文本行返回一个区域，或者用 `prompt="markdown"`
+把整页返回为 markdown。PaddleOCR-VL（`paddleocr-vl`）和 GLM-OCR（`glm-ocr`）按阅读顺序找出
+版面区域，并把每个区域读成文本、HTML 表格或 LaTeX 公式。Falcon OCR（`falcon-ocr`）一遍读完
+整页，或者用 `layout=True` 逐区域读取。这些家族会把页面文本填进 `Results.ocr.markdown`，把每个
+区域的版面类别填进 `Results.ocr.labels`。
 
 ## 预测
 
@@ -135,8 +142,9 @@ my-ocr-dataset/
 
 ## 训练
 
-没有任何 OCR 家族有训练实现：在这三个家族上调用 `train()` 都会抛出
-`NotImplementedError`。验证只覆盖 PP-OCRv5；在那两个视觉语言家族上，`val()` 会抛错。PP-OCRv5 的模型页指明了采用
+没有任何 OCR 家族有训练实现：在这七个家族上调用 `train()` 都会抛出
+`NotImplementedError`。验证覆盖 PP-OCRv5，以及从 1.8.0 起的 DeepSeek-OCR、PaddleOCR-VL、GLM-OCR 和
+Falcon OCR，它们跑的是同一个 OCR 验证器；在 SenseNova-Vision 和 WeVisOne-VL 上，`val()` 会抛错。PP-OCRv5 的模型页指明了采用
 Apache-2.0 许可的上游训练代码，以及把微调后的检查点带回 LibreYOLO 的转换脚本。
 
 ## 验证
@@ -159,5 +167,5 @@ Apache-2.0 许可的上游训练代码，以及把微调后的检查点带回 Li
 ## 导出
 
 这个任务没有可用的导出格式。PP-OCRv5 是两个网络配合着一起跑，而不是一张可追踪的计
-算图，三个家族上的 `export()` 对每一种格式都会抛异常。要在 LibreYOLO 之外部署，就到
+算图，七个家族上的 `export()` 对每一种格式都会抛异常。要在 LibreYOLO 之外部署，就到
 上游去微调，并走上游的部署路径。

@@ -109,6 +109,8 @@ snippets:
         import coremltools as ct
         from PIL import Image
 
+        from libreyolo import SAMPLE_IMAGE
+
         mlmodel = ct.models.MLModel("weights/LibreYOLO9t.mlpackage")
         print(mlmodel.user_defined_metadata["model_family"])
         print(mlmodel.user_defined_metadata["names"])
@@ -124,7 +126,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 09c5394e3837eca2
+source_hash: d20829937c951b1f
 ---
 
 ## 安装

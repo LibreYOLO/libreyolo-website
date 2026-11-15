@@ -154,19 +154,15 @@ snippets:
   export:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO, LibreYOLO9, SAMPLE_IMAGE
 
-
-        # libreyolo9s.onnxを書き出してからそれをもとにlibreyolo9s.engineをビルド
-
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt",
-        half=True)
-
+        # ONNX中間ファイルを書き出し、それをもとにweights/<stem>_fp16.engineを
+        # ビルドしてそのパスを返す
+        engine = LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
 
         # エンジンも同じエントリーポイントから読み込める
-
-        result = LibreYOLO("libreyolo9s.engine").predict(SAMPLE_IMAGE)
+        result = LibreYOLO(engine).predict(SAMPLE_IMAGE)
     - label: CLI
       language: bash
       code: |
@@ -180,7 +176,7 @@ snippets:
         sudo jetson_clocks
 
         tegrastats            # 負荷をリアルタイム表示; Tegraではnvidia-smiの機能は限定的
-source_hash: e5e48d9381ff9052
+source_hash: e00e408d213a97dd
 ---
 
 ## このページが記録していること

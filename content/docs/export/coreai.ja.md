@@ -86,7 +86,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: a35bfeafac6d6966
+source_hash: 82a97c5d396facd5
 ---
 
 ## インストール
@@ -165,7 +165,7 @@ RT-DETRv4、D-FINE、DEIM、DEIMv2、EC、RF-DETRの物体検出、4つのCNN分
 | EoMTのセマンティックセグメンテーション | 厳格なキャプチャが`GuardOnDataDependentSymNode`で失敗します：マスク経路のどこかがテンソルから値を読み取り、それで分岐しています |
 | SegFormerのセマンティックセグメンテーション | キャプチャ経路は未評価であり、公開されている重みはフォーマットに関係なく非商用です |
 | L2CSの視線推定 | モデル自体がONNX、TorchScript、ExecuTorch、TensorRT、OpenVINOのみをサポートしており、これはモデル側の判断です |
-| Depth Anything 3の深度推定 | このファミリーはすべてのフォーマットでエクスポートを拒否します |
+| Depth Anything 3の深度推定 | このファミリーがエクスポートできるのはONNX、TorchScript、ExecuTorch、TensorRT、OpenVINOのみです |
 
 RF-DETRには、アーティファクトを比較する前に読んでおく価値のある注意点が1つ
 あります。そのパリティはONNXではなくCore AIエクスポーター自身が準備するグラフに

@@ -29,7 +29,7 @@ meta:
     value: LibreYOLO("weights/LibreYOLO9t.engine")
     mono: true
   - label: 形状
-    value: 默认固定；dynamic=True 会加上一条沿 batch 轴的优化配置文件
+    value: Python 导出默认 dynamic=True，即一条沿 batch 轴的优化配置文件；CLI 不加 --dynamic 时是静态的
   - label: 精度
     value: FP32、FP16（half=True）、INT8（int8=True 并配合 data=）
   - label: 环境要求
@@ -80,7 +80,7 @@ snippets:
             half=False,
             int8=False,
             data=None,                      # int8=True 时必填
-            dynamic=False,
+            dynamic=True,                   # Python 默认值；CLI 是静态的
             workspace=4.0,                  # 构建时的临时显存，单位 GiB
             min_batch=1,                    # 动态优化配置文件的上下界
             opt_batch=1,
@@ -150,7 +150,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: a51a22d3ffbd0d84
+source_hash: 02e92f711a42f90d
 ---
 
 ## 安装
@@ -160,8 +160,9 @@ source_hash: a51a22d3ffbd0d84
 
 <code-tabs name="install" />
 
-`tensorrt` 这个 extra 会锁定 `tensorrt-cu12` 和 `pycuda`，而 marker 会在 macOS 上把
-两者都去掉。在 Jetson 上不要用这个 extra：它会把一个 CUDA 12 的构建锁到 CUDA 13 的
+`tensorrt` 这个 extra 会锁定 `tensorrt-cu12`，而 marker 会在 macOS、ARM Linux（aarch64）
+和 Python 3.14 上跳过它。不再需要 `pycuda`：导出和推理用的是 `torch.cuda`，INT8 校准用的是
+`cuda.bindings`，PyPI 上的 torch 在 Linux 上会装好它；其他平台上请 `pip install cuda-python`。在 Jetson 上不要用这个 extra：它会把一个 CUDA 12 的构建锁到 CUDA 13 的
 平台上。改用 JetPack 装好的那份 TensorRT，具体见
 [NVIDIA Jetson](/docs/export/jetson)。
 

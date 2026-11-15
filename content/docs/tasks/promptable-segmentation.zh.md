@@ -3,7 +3,7 @@ title: 可提示分割
 seo_title: LibreYOLO 里的可提示分割
 description: >-
   在 LibreYOLO 里把一个点、一个框或者一段文本概念变成对象掩码。通过 LibreSAM 加载 SAM、SAM 2、SAM
-  3、EdgeTAM、MobileSAM 或 PicoSAM3。
+  3、SAM 3.1、EdgeTAM、MobileSAM 或 PicoSAM3。
 lead: >-
   可提示分割把一次点击变成一张掩码：你指向一个对象，或者围着它画一个框，模型就返回它的轮廓。在 LibreYOLO
   里它不是一个单独的任务键，而是一个模型层级，通过 LibreSAM 工厂函数加载，它的结果就是普通的分割 Results。
@@ -68,7 +68,7 @@ snippets:
             SAMPLE_IMAGE, points=[640, 420], labels=[1], multimask=True
         )
         print(len(result.masks))
-source_hash: bb70ff24e6c0a767
+source_hash: 077bf1655b85eeb7
 ---
 
 ## 定义
@@ -96,7 +96,7 @@ LibreYOLO 没有 `promptable` 这个任务键。这一层注册为 `segment`，�
 
 ## 模型
 
-有六个家族通过别名经 `LibreSAM` 加载。
+有七个家族通过别名经 `LibreSAM` 加载。
 
 [SAM](/docs/models/sam) 是默认项，有 `base`、`large` 和 `huge` 三种尺寸，也可以
 写成 `b`、`l` 和 `h`。
@@ -104,12 +104,15 @@ LibreYOLO 没有 `promptable` 这个任务键。这一层注册为 `segment`，�
 [SAM 2](/docs/models/sam-2)，别名为 `sam2-tiny`、`sam2-small`、`sam2-base-plus`
 和 `sam2-large`。LibreYOLO 支持它的图像路径。
 
-[SAM 3](/docs/models/sam-3)，别名为 `sam3`，是唯一接受文本概念提示的家族：
-`text="yellow school bus"` 会返回每一个匹配的实例。把 `text=` 传给其他任何家族都
-会抛错，错误信息里会点名 SAM 3。它的权重来自 Meta，采用自定义的 SAM 许可证
+[SAM 3](/docs/models/sam-3)，别名为 `sam3`，接受文本概念提示：
+`text="yellow school bus"` 会返回每一个匹配的实例。它的权重来自 Meta，采用自定义的 SAM 许可证
 （SAM License），而不是 LibreYOLO 的 MIT 许可，而且那个仓库是受限（gated）的：
 先在模型页面接受条款，并在第一次下载之前用 `hf auth login` 完成认证。部署它之前
 请先读 [SAM 3](/docs/models/sam-3)。
+
+SAM 3.1，别名为 `sam3.1`，在 SAM 3 的流水线上运行 Meta 的 SAM 3.1 图像路径，接受同样的
+文本提示。它的权重来自受限的 `LibreYOLO/LibreSAM31large` 镜像，采用同样的 SAM 许可证。
+SAM 3 和 SAM 3.1 是仅有的接受 `text=` 的家族；把它传给其他任何家族都会抛错。
 
 [EdgeTAM](/docs/models/edgetam)，别名为 `edgetam`，是 SAM 2 的端侧变体。
 LibreYOLO 支持它的图像路径。
@@ -121,7 +124,7 @@ LibreYOLO 支持它的图像路径。
 传感器上框提示的区域。框提示就是这里的全部契约：点、文本、掩码、multimask 和分割
 一切都会抛错，错误信息会指向 SAM 2 或 SAM 3。
 
-这一层的 extra 覆盖通过 `transformers` 加载的那四个家族：
+这一层的 extra 覆盖通过 `transformers` 加载的那五个家族：
 
 ```bash
 pip install "libreyolo[sam]"

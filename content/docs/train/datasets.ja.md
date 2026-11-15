@@ -57,7 +57,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 84e47ff97fb2e2f3
+source_hash: 4065193d01111f9d
 ---
 
 ## 学習にデータセットを指定する
@@ -92,7 +92,7 @@ source_hash: 84e47ff97fb2e2f3
 
 ## データセットの保存場所
 
-YAMLの`path`キーはデータセットルートを指定します。絶対`path`はそのまま使われます。相対パスは最初にデータセットディレクトリの下、次にYAMLファイル自体の隣で検索されます。ダウンロード予定のデータセットはデータセットディレクトリの下に保存されます。
+YAMLの`path`キーはデータセットルートを指定します。絶対`path`はそのまま使われます。1.8.0以降、自分のYAML内の相対パス（`.`、`./sub`、`sub`）は、Ultralytics形式と同様にYAMLがあるフォルダーを基準に解決されます。そこに何もない場合に限り、LibreYOLOはデータセットディレクトリの下にある同名のフォルダーにフォールバックし、`download:`キーを持ちディスク上にまだ何もないYAMLはそこへダウンロードします。`coco8.yaml`などの同梱YAMLは常にデータセットディレクトリの下で解決されます。画像が見つからない分割は、解決されたパス、データセットルート、YAMLを示す警告をログに出力します。
 
 そのディレクトリは`~/datasets`で、`LIBREYOLO_DATASETS_DIR`環境変数により上書きできます。設定ファイルはありません。
 

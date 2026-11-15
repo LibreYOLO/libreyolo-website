@@ -52,7 +52,7 @@ snippets:
         from libreyolo import LibreYOLO
         from libreyolo.kernels.attention import set_fused_attention
 
-        model = LibreYOLO("LibreSwinIRs.pt")
+        model = LibreYOLO("LibreSwinIRs-restore.pt")
 
         # 返回切换了多少个注意力模块
         print(set_fused_attention(model))
@@ -67,7 +67,7 @@ snippets:
             name="mybackend",
             predicate=my_check,
         )
-source_hash: 2cdb2d344ab3faf5
+source_hash: e4c4bcb6668b4d00
 ---
 
 ## 注册表

@@ -3,7 +3,7 @@ title: プロンプト可能セグメンテーション
 seo_title: LibreYOLOによるプロンプト可能セグメンテーション
 description: >-
   LibreYOLOで点、ボックス、テキスト概念を物体マスクへ変換します。LibreSAMを通してSAM、SAM 2、SAM
-  3、EdgeTAM、MobileSAM、PicoSAM3を読み込みます。
+  3、SAM 3.1、EdgeTAM、MobileSAM、PicoSAM3を読み込みます。
 lead: >-
   プロンプト可能セグメンテーションはクリックをマスクへ変換します。物体を指すか周囲にボックスを描くと、モデルが輪郭を返します。LibreYOLOでは独立したタスクキーではなく、LibreSAMファクトリを通して読み込むモデルティアです。結果は通常のセグメンテーションResultsです。
 keywords:
@@ -67,7 +67,7 @@ snippets:
             SAMPLE_IMAGE, points=[640, 420], labels=[1], multimask=True
         )
         print(len(result.masks))
-source_hash: bb70ff24e6c0a767
+source_hash: 077bf1655b85eeb7
 ---
 
 ## 定義
@@ -82,13 +82,15 @@ LibreYOLOに`promptable`タスクキーはありません。このティアは�
 
 ## モデル
 
-6つのファミリーを別名から`LibreSAM`で読み込めます。
+7つのファミリーを別名から`LibreSAM`で読み込めます。
 
 [SAM](/docs/models/sam)がデフォルトで、`base`、`large`、`huge`のサイズがあり、`b`、`l`、`h`とも記述できます。
 
 [SAM 2](/docs/models/sam-2)は`sam2-tiny`、`sam2-small`、`sam2-base-plus`、`sam2-large`です。LibreYOLOでは画像経路に対応します。
 
-[SAM 3](/docs/models/sam-3)は`sam3`で、テキスト概念のプロンプトを受け付ける唯一のファミリーです。`text="yellow school bus"`は一致するすべてのインスタンスを返します。他のファミリーへ`text=`を渡すと、SAM 3を案内するメッセージとともに例外を送出します。重みにはLibreYOLOのMITライセンスではなくMeta独自のSAM Licenseが適用され、リポジトリはアクセス制限されています。初回ダウンロード前にモデルページで条件に同意し、`hf auth login`で認証してください。デプロイ前に[SAM 3](/docs/models/sam-3)を確認してください。
+[SAM 3](/docs/models/sam-3)は`sam3`で、テキスト概念のプロンプトを受け付けます。`text="yellow school bus"`は一致するすべてのインスタンスを返します。重みにはLibreYOLOのMITライセンスではなくMeta独自のSAM Licenseが適用され、リポジトリはアクセス制限されています。初回ダウンロード前にモデルページで条件に同意し、`hf auth login`で認証してください。デプロイ前に[SAM 3](/docs/models/sam-3)を確認してください。
+
+SAM 3.1は`sam3.1`で、SAM 3のパイプライン上でMetaのSAM 3.1の画像経路を実行し、同じテキストプロンプトを受け付けます。重みは同じSAM Licenseの下で、アクセス制限付きの`LibreYOLO/LibreSAM31large`ミラーから取得します。`text=`を受け付けるファミリーはSAM 3とSAM 3.1だけで、他のファミリーへ渡すと例外を送出します。
 
 [EdgeTAM](/docs/models/edgetam)は`edgetam`で、SAM 2のオンデバイス向けバリアントです。LibreYOLOでは画像経路に対応します。
 
@@ -96,7 +98,7 @@ LibreYOLOに`promptable`タスクキーはありません。このティアは�
 
 [PicoSAM3](/docs/models/picosam3)は`picosam3`で、エッジセンサー上のボックスプロンプト領域向け小型CNNです。ここではボックスプロンプトが契約のすべてです。点、テキスト、マスク、multimask、すべてセグメンテーションは、SAM 2またはSAM 3を案内するメッセージとともに例外を送出します。
 
-このティアの追加パッケージは`transformers`を通して読み込む4つのファミリーに対応します。
+このティアの追加パッケージは`transformers`を通して読み込む5つのファミリーに対応します。
 
 ```bash
 pip install "libreyolo[sam]"

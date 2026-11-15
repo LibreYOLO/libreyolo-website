@@ -67,7 +67,7 @@ snippets:
         print(metrics["metrics/det_hmean"])
         print(metrics["metrics/e2e_f1"])       # fitness
         print(metrics["metrics/rec_1-NED"])
-source_hash: d6ec02dfdb1a69a8
+source_hash: aca46053a9da331d
 ---
 
 ## 定義
@@ -78,13 +78,15 @@ source_hash: d6ec02dfdb1a69a8
 
 ## モデル
 
-3つのファミリーが `ocr` を提供します。
+7つのファミリーが `ocr` を提供します。
 
 [PP-OCRv5](/docs/models/pp-ocrv5)は専用パイプラインです。differentiable binarization検出器がテキスト四角形を見つけ、SVTR・CTC認識器が読み取ります。両段階は認識用charsetとともに1つの `.pt` ファイルへまとめられます。CPU向けの軽量tierと高精度のserver tierの2つがあり、1つの辞書で簡体字中国語、繁体字中国語、英語、日本語、pinyinを扱います。
 
 [SenseNova-Vision](/docs/models/sensenova-vision)は、ほかの6つのタスクも提供する同じ7Bチェックポイントから、tagged textとして単語を生成してOCRに対応します。`LibreVLM("sensenova-vision", task="ocr")` で読み込みます。`sensenova` 追加パッケージが必要で、重みは非商用利用に制限されています。ライセンスはそのページに記載されています。
 
 [WeVisOne-VL](/docs/models/wevisone-vl)も、タグ付きテキストとして答えを生成し、`LibreVLM("wevisone-vl", task="ocr")`で読み込みます。公開されている指示は、すべての単語をボックス形式で出すよう求めており、各ボックスは文字起こしとともに、軸に平行な四角形として返ります。モデルがスコアを出さないため、`.conf`と`.det_conf`は定数の1.0です。`vlm`追加パッケージが必要で、重みはApache-2.0です。
+
+1.8.0では4つのドキュメントOCRファミリーが追加され、いずれも `LibreVLM` と `vlm` 追加パッケージで読み込みます。DeepSeek-OCR（`deepseek-ocr` および `deepseek-ocr-2`）はテキスト行ごとに1つの領域を返すか、`prompt="markdown"` を指定するとページをmarkdownとして返します。PaddleOCR-VL（`paddleocr-vl`）とGLM-OCR（`glm-ocr`）は読み順にレイアウト領域を見つけ、それぞれをテキスト、HTMLの表、LaTeXの数式として読み取ります。Falcon OCR（`falcon-ocr`）はページ全体を1回で読み取るか、`layout=True` で領域ごとに読み取ります。これらのファミリーは、`Results.ocr.markdown` にページのテキストを、`Results.ocr.labels` に各領域のレイアウトカテゴリを格納します。
 
 ## 推論
 
@@ -118,7 +120,7 @@ my-ocr-dataset/
 
 ## 学習
 
-どのOCRファミリーにも学習実装はありません。3つすべてで `train()` が `NotImplementedError` を送出します。検証の対象はPP-OCRv5で、2つのビジョン言語ファミリーでは `val()` が例外を送出します。PP-OCRv5のページには、Apache-2.0のアップストリーム学習コードと、ファインチューニング済みチェックポイントをLibreYOLOへ戻す変換スクリプトが記載されています。
+どのOCRファミリーにも学習実装はありません。7つすべてで `train()` が `NotImplementedError` を送出します。検証の対象はPP-OCRv5と、1.8.0以降は同じOCRバリデーターを実行するDeepSeek-OCR、PaddleOCR-VL、GLM-OCR、Falcon OCRです。SenseNova-VisionとWeVisOne-VLでは `val()` が例外を送出します。PP-OCRv5のページには、Apache-2.0のアップストリーム学習コードと、ファインチューニング済みチェックポイントをLibreYOLOへ戻す変換スクリプトが記載されています。
 
 ## 検証
 
@@ -132,5 +134,5 @@ my-ocr-dataset/
 
 ## エクスポート
 
-このタスクで利用できるエクスポート形式はありません。PP-OCRv5は1つのtrace可能なグラフではなく、連携して動く2つのネットワークであり、3つすべてのファミリーで、すべての形式に対して `export()` が例外を送出します。LibreYOLO外へデプロイするには、アップストリームでファインチューニングし、アップストリームのデプロイ経路を使ってください。
+このタスクで利用できるエクスポート形式はありません。PP-OCRv5は1つのtrace可能なグラフではなく、連携して動く2つのネットワークであり、7つすべてのファミリーで、すべての形式に対して `export()` が例外を送出します。LibreYOLO外へデプロイするには、アップストリームでファインチューニングし、アップストリームのデプロイ経路を使ってください。
 

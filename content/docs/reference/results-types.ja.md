@@ -44,7 +44,7 @@ snippets:
         # 行を通常のdictで取得し、次にJSONへ変換
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: b4e69bd678ede2dd
+source_hash: 5728ec555ba4ef80
 ---
 
 ## Resultsオブジェクト
@@ -57,7 +57,7 @@ source_hash: b4e69bd678ede2dd
 | `orig_shape` | `(int, int)` | 元画像の高さと幅 |
 | `path` | `str` | 入力がディスク由来の場合のソースパス |
 | `names` | `dict[int, str]` | クラスインデックスからクラス名への対応 |
-| `speed` | `dict[str, float]` | ステージごとのミリ秒 |
+| `speed` | `dict[str, float]` | 予測器が記録する場合のステージごとのミリ秒。空の場合もあり、ほとんどの検出器では空です |
 | `track_id` | tensor | 結果が`track()`由来の場合のトラックID |
 | `frame_idx` | `int` | 動画およびストリームソースのフレームインデックス |
 | `restore_scale` | `int` | 復元結果の出力対入力アップスケール係数。他ではすべて`1` |

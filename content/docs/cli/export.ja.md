@@ -40,7 +40,7 @@ snippets:
         # ファクトリーはファイル拡張子で振り分けるので、エクスポート結果もチェックポイントと同じように読み込まれる
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
-source_hash: e8638b76b7dbf326
+source_hash: 470d2a4542784882
 ---
 
 ## 概要
@@ -56,7 +56,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | 引数 | デフォルト | 意味 |
 |---|---|---|
 | `model` | | モデルの重み`.pt`。必須 |
-| `format` | `onnx` | エクスポート形式：`onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、`rknn`、`ncnn`、`tflite`、`coreml`、`coreai` |
+| `format` | `onnx` | エクスポート形式：`onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、`rknn`、`axelera`、`ncnn`、`tflite`、`coreml`、`coreai` |
 | `name` | | RKNNのターゲットプラットフォームで、現在は`rk3588`のみ。他の形式と一緒に渡すと拒否されます |
 | `imgsz` | | 入力画像サイズ：`640`または`480x640`（HxW）。`480,640`も受け付けます。未設定の場合はモデル自身のサイズ |
 | `batch` | `1` | エクスポート時のバッチサイズ |
@@ -77,7 +77,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `json` | `false` | stdoutへのJSON出力 |
 | `quiet` | `false` | stderrを抑制します |
 | `verbose` | `false` | 詳細なエクスポートログ |
-| `verify` | `false` | RKNN Toolkit2のPCシミュレーターを実行し、ONNX Runtimeと比較します。RKNNのみ |
+| `verify` | `false` | RKNN：Toolkit2のPCシミュレーターを実行し、ONNX Runtimeと比較します。Axelera：量子化モデルをFP32と比較し、`<stem>.parity.json`を書き出します。RKNNとAxeleraのみ |
 | `help_json` | `false` | コマンドのスキーマをJSONで出力して終了します |
 
 `engine`は`tensorrt`のエイリアス、`litert`は`tflite`のエイリアスです。どちらも何かが書き出される前に正式な名前へ解決されるため、JSON出力とログ行が報告するのは常に`tensorrt`または`tflite`です。
@@ -98,7 +98,9 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 
 `half=true`と`int8=true`を同時に指定してもエラーにはなりません。INT8が優先され、`half`は破棄され、警告がstderrに出ます。`half`または`int8`と食い違う`quantize`は`config_conflict`で終了します。
 
-`name`と`verify`は現時点ではRKNN用のオプションです。どちらかを別の形式と一緒に渡すと、無視されるのではなく`config_unsupported`で終了します。
+`name`はRKNN用のオプションで、`verify`は`rknn`と`axelera`で使えます。どちらかを別の形式と一緒に渡すと、無視されるのではなく`config_unsupported`で終了します。
+
+1.8.0で追加された`format=axelera`は、AxeleraのMetis AIPU向けにINT8モデルをコンパイルします。INT8専用です。`half=true`、または`8`以外の`quantize`を指定すると`format_precision_unsupported`で終了します。
 
 ### モデルファミリーがどの形式に対応するか
 

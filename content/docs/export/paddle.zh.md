@@ -46,7 +46,7 @@ snippets:
     - label: 安装
       language: bash
       code: |
-        # Python 3.10 到 3.12，Windows 上验证过的路径是带 Ubuntu 22.04 的 WSL2
+        # Python 3.10 或 3.11，Windows 上验证过的路径是带 Ubuntu 22.04 的 WSL2
         pip install "libreyolo[paddle]"
     - label: 确认锁定的版本
       language: bash
@@ -97,12 +97,13 @@ snippets:
     - label: 直接使用后端
       language: python
       code: |
+        from libreyolo import SAMPLE_IMAGE
         from libreyolo.backends.paddle import PaddleBackend
 
         # LibreYOLO() 遇到 Paddle 目录时构造的就是它，同样的 Results
         # 对象，中间没有工厂路由
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
-        result = backend.predict("guggenheim-bilbao.jpg")
+        result = backend.predict(SAMPLE_IMAGE)
         print(result.boxes.xyxy[:3])
     - label: 裸 Paddle
       language: python
@@ -136,7 +137,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: a0a292c513d2dfe8
+source_hash: bc8e8ef246bdf227
 ---
 
 ## 安装

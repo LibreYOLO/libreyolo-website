@@ -64,7 +64,7 @@ snippets:
         # 缺少对应 extra 的家族会连同启用它们的那条 pip
         # 命令一起列出
         libreyolo models
-source_hash: d5ad0986bb550209
+source_hash: 796688d39ae5fe1d
 ---
 
 ## 安装
@@ -93,11 +93,12 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`，Python 3.12 或更高版本 |
 | `marigold` | 固定版本的扩散、加速和 Transformers 依赖 |
 | `molmo2` | `transformers==4.57.1`、`einops` 和 `accelerate` |
-| `gen` | `diffusers>=0.38.0`、`transformers>=5.1.0` 和 `accelerate>=1.7.0`，用于 LibreGen 和 Speridlabs Idol |
+| `gen` | `diffusers>=0.38.0`、`transformers>=5.1.0`、`accelerate>=1.7.0`、`scikit-image>=0.19` 和 `ftfy>=6.0`，用于 LibreGen。PRXPixel 需要 `diffusers>=0.39`，并会在加载时说明 |
 | `rfdetr` | `transformers`，提供 RF-DETR 骨干 |
+| `rfdetr-train` | `transformers` 加 `torch-hungarian==0.1.0rc0`，用于 RF-DETR 训练中可选的 GPU 匹配。没有它时，匹配回退到 SciPy |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x，提供 MiDaS 的 ViT-L/16 和 EfficientNet-Lite3 编码器 |
-| `vlm` | `transformers`、`num2words`、`decord`、`lmdb`、`peft` |
+| `vlm` | `transformers`、`num2words`、`lmdb`、`peft`，以及 Linux x86-64 和 Windows 上的 `decord` |
 | `sam` | `transformers`、`timm` |
 | `openvocab` | `transformers`、`timm`、`regex`、`ftfy` |
 | `sensenova` | `transformers`、`accelerate`，以及非 macOS 平台上的 `bitsandbytes` |
@@ -112,11 +113,11 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 | Extra | 新增依赖 |
 |---|---|
 | `onnx` | `onnx`、`onnxsim`、`onnxruntime>=1.18.0` |
-| `tensorrt` | 非 macOS 平台上的 `tensorrt-cu12` 10.16.1.11 和 `pycuda` |
+| `tensorrt` | 非 macOS 平台上的 `tensorrt-cu12` 10.16.1.11。INT8 校准使用 `cuda.bindings`，PyPI 上的 torch 在 Linux 上会装好它；其他平台上请 `pip install cuda-python` |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
 | `coreai` | `coreai-torch`，仅限 macOS |
-| `tflite`，别名 `litert` | `libreyolo[onnx]` 加 `onnx2tf`、`ai-edge-litert`、`onnx-graphsurgeon` 和 `onnx-simplifier` |
+| `tflite`，别名 `litert` | `libreyolo[onnx]` 加 `onnx2tf`、`ai-edge-litert` 和 `onnx-graphsurgeon` |
 | `mnn` | `libreyolo[onnx]` 加 `MNN` |
 | `ncnn` | `pnnx` 和 `ncnn` |
 | `paddle` | `libreyolo[onnx]` 加 `paddlepaddle` 2.6.2 和 `x2paddle` 1.6.0 |
@@ -160,7 +161,7 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 
 ### 聚合 extra
 
-`libreyolo[all]` 用一条命令安装模型、导出、跟踪和日志 extra。有些依赖明确排除在外。`neptune` 被排除，因为稳定版 `neptune-scale` 要求 protobuf 低于 7，而 TFLite 路径要求 protobuf 7。`executorch` 被排除，因为 ExecuTorch 限制了配套的 PyTorch 版本；`coreai` 被排除，因为 `coreai-torch` 将 PyTorch 固定在 2.11.x，会把整个环境切换到这个版本。`fast-eval`、`hub-kernels`、`clip-convert` 和 `siglip2-convert` 也不包含在内。请按名称单独安装。`all` 包含 `hf`、`llm` 和 `gen`；`fiftyone`、`vla`、`marigold` 和 `molmo2` 仍需单独安装。FiftyOne 引入 headless OpenCV，与核心 `cv2` 包重叠。
+`libreyolo[all]` 用一条命令安装模型、导出、跟踪和日志 extra。有些依赖明确排除在外。`neptune` 被排除，因为稳定版 `neptune-scale` 要求 protobuf 低于 7，而 TFLite 路径要求 protobuf 7。`executorch` 被排除，因为 ExecuTorch 限制了配套的 PyTorch 版本；`coreai` 被排除，因为 `coreai-torch` 将 PyTorch 固定在 2.11.x，会把整个环境切换到这个版本。`fast-eval`、`hub-kernels`、`clip-convert` 和 `siglip2-convert` 也不包含在内，`paddle` 同样不包含，它的 X2Paddle 转换器需要比 `all` 中 TFLite 路径更老的 ONNX。请按名称单独安装。`all` 包含 `hf`、`llm` 和 `gen`；`fiftyone`、`vla`、`marigold` 和 `molmo2` 仍需单独安装。FiftyOne 引入 headless OpenCV，与核心 `cv2` 包重叠。
 
 核心安装需要 Python 3.10 或更高版本，并新增 `cloudpickle>=3.0.0`（用于协调器管理的 DDP）和 `huggingface_hub>=0.34.0`，因此 `LibreYOLO("owner/repo")` 无需 `hf` extra 即可加载 Hub 模型。
 
@@ -174,14 +175,15 @@ wheel 的地方装得少一些。
 | Extra | 约束 |
 |---|---|
 | `coreai` | 仅限 macOS。Core AI 工具链在别处既不能转换也不能运行 |
-| `tensorrt` | 在 macOS 上跳过，那里没有 CUDA |
+| `tensorrt` | 在 macOS 上跳过，那里没有 CUDA；在 ARM Linux 上跳过，那里由 JetPack 提供 TensorRT；在 Python 3.14 上也跳过 |
 | `tflite`、`litert` | `onnx2tf` 和 `ai-edge-litert` 需要 Python 3.12 或更高版本 |
 
 `sensenova` 在 macOS 上跳过 `bitsandbytes`，那里没有发布 wheel；这个 extra 的其余
 部分照常安装。
 
-`vlm` 没有做平台限定：它固定的 `decord==0.6.0` 只有 x86-64 Linux 和 Windows 的
-wheel。在 macOS 和 ARM Linux 上，`vlm`、`ground`、`vlm-train` 和 `all` 会安装失败。
+`vlm`、`ground`、`vlm-train` 和 `all` 能在 macOS 和 ARM Linux 上安装。只有 `decord`
+在那里被排除，它只发布 x86-64 Linux 和 Windows 的 wheel，所以 LocateAnything 是这些平台上
+唯一用不了的模型；在那里加载它时，会在下载权重之前说明这一点。
 
 如果瓶颈是磁盘，那么占地方的大头是 PyTorch，而 PyTorch 里的大头又是它默认 wheel 打包
 的 CUDA 负载。换成仅 CPU 的 wheel 就能去掉这部分，而且什么也不用放弃。如果一台机器

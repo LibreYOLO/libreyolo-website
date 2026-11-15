@@ -118,7 +118,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: ae5a337fb86a1305
+source_hash: b998a5e3d776a229
 ---
 
 ## 一个对象，每种载荷一个槽位
@@ -229,7 +229,10 @@ source_hash: ae5a337fb86a1305
 
 ## 切片与搬移
 
-`result[i]` 返回一个只装着一个实例的新 `Results`。逐实例的载荷会被切片，整图的
+`result[i:i + 1]` 返回一个只装着一个实例的新 `Results`，只要检测框的话，
+`result.boxes[i]` 也一样。从 1.8.0 起，整数 `0` 或 `-1` 返回整个结果，所以 `result[0]`
+在单个 `Results` 上和在 `predict()` 处理多张图像时返回的列表上用法相同；其他整数仍然
+选中一个实例，并发出 `DeprecationWarning`。逐实例的载荷会被切片，整图的
 载荷则原样带过去，所以对一个分类结果切片不会把它的概率向量截断成单个类别，对一
 个深度结果切片也不会破坏 `(H, W)` 的布局。
 
@@ -273,8 +276,10 @@ source_hash: ae5a337fb86a1305
 图，全景结果带上它的分段，matte 写成透明背景的 RGBA PNG，检测器写成检测框、掩码
 画在框下面。写出的路径会作为 `result.saved_path` 挂在结果上。
 
-`Results.save(path)` 同样窄：它写出生成的图像或 3D 对象，格式由扩展名决定；把
-matte 结果写成透明背景的 RGBA PNG 抠图；其他情况一律抛 `NotImplementedError`。
+从 1.8.0 起，`Results.save()` 对每个任务都写出标注后的图像：它运行 `plot(save=True)`，
+文件用 `path` 或 `filename=` 指定，默认是 `results_<image name>`，并返回写出的路径。
+`Results.show()` 显示同一张标注后的图像。有三种载荷会按自身格式保存，且需要给出路径：
+生成的图像或 3D 对象，格式由扩展名决定；以及 matte，写成透明背景的 RGBA PNG 抠图。
 `Results.cutout()` 返回同一个 RGBA 数组，但不写盘。对 matte 来说，两者都需要源图像，
 从 `result.path` 取，或者用 `image=` 传进来。
 

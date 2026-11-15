@@ -27,7 +27,7 @@ meta:
     value: LibreYOLO("weights/LibreYOLO9t.engine")
     mono: true
   - label: 形状
-    value: デフォルトは静的。dynamic=Trueでバッチ軸の最適化プロファイルを追加します
+    value: Pythonのエクスポートはデフォルトでdynamic=True（バッチ軸の最適化プロファイル）。CLIは--dynamicを指定しない限り静的
   - label: 精度
     value: FP32、FP16（half=True）、INT8（int8=Trueとdata=を指定）
   - label: 必要条件
@@ -76,7 +76,7 @@ snippets:
             half=False,
             int8=False,
             data=None,                      # int8=Trueの場合に必須
-            dynamic=False,
+            dynamic=True,                   # Pythonのデフォルト。CLIは静的
             workspace=4.0,                  # ビルド時の作業領域 GiB
             min_batch=1,                    # 動的プロファイルの境界
             opt_batch=1,
@@ -146,7 +146,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: a51a22d3ffbd0d84
+source_hash: 02e92f711a42f90d
 ---
 
 ## インストール
@@ -155,7 +155,7 @@ source_hash: a51a22d3ffbd0d84
 
 <code-tabs name="install" />
 
-`tensorrt`追加パッケージは`tensorrt-cu12`と`pycuda`のバージョンを固定し、マーカーによってmacOSでは両方を除外します。Jetsonではこの追加パッケージを使用しないでください。CUDA 13プラットフォームに対してCUDA 12ビルドが固定されるためです。代わりに、[NVIDIA Jetson](/docs/export/jetson)の説明に従ってJetPackがインストールするTensorRTを使用してください。
+`tensorrt`追加パッケージは`tensorrt-cu12`のバージョンを固定し、マーカーによってmacOS、ARM Linux（aarch64）、Python 3.14ではこれを除外します。`pycuda`は使いません。エクスポートと推論は`torch.cuda`を使い、INT8キャリブレーションはPyPIのtorchがLinuxでインストールする`cuda.bindings`を使います。それ以外の環境では`pip install cuda-python`を実行してください。Jetsonではこの追加パッケージを使用しないでください。CUDA 13プラットフォームに対してCUDA 12ビルドが固定されるためです。代わりに、[NVIDIA Jetson](/docs/export/jetson)の説明に従ってJetPackがインストールするTensorRTを使用してください。
 
 ## エクスポート
 

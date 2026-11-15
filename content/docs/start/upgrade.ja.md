@@ -1,19 +1,43 @@
 ---
-title: 1.7.0へのアップグレード
-seo_title: LibreYOLO 1.6.0から1.7.0へのアップグレード
-description: LibreYOLO 1.7.0のYOLO9チェックポイント、モジュール名と学習レシピ、CLIの実行フォルダー、混同行列、新しいエラーの移行手順を説明します。
+title: 1.8.0へのアップグレード
+seo_title: LibreYOLO 1.7から1.8.0へのアップグレード
+description: >-
+  LibreYOLO 1.8.0の結果のインデックス、検証メトリクス、Results.save()、データセットのパス、サンプル画像、RF-DETR学習のデフォルト、Ultralyticsの名前の移行手順と、1.6.0から1.7.0への注意点を説明します。
 lead: >-
-  バージョン1.7.0でも、以前のYOLO9チェックポイントは同じ浮動小数点のボックスで読み込めます。一方で、YOLO9ファミリーの学習、ネットワーク内部でコードから見える名前、検証と推論のいくつかの契約が変わります。
+  バージョン1.8.0では、結果、メトリクス、エラーがUltralyticsと同じように動作します。いくつかの呼び出しは1.7.4とは異なる数値、形状、ファイルを返すため、アップグレード前に最初のセクションを読んでください。
 keywords:
   - LibreYOLO アップグレード
+  - LibreYOLO 1.8.0 移行
   - LibreYOLO 1.6.0 移行
   - LibreYOLO 破壊的変更
   - YOLO9 モジュール名
   - clip_max_norm
   - YOLO 混同行列
-last_verified: 1.7.0
-source_hash: 895bcd7425f0052f
+last_verified: 1.8.0
+source_hash: 5ac885b012a549e5
 ---
+
+## 1.7から1.8
+
+- 1.8.0以降、単一画像の`Results`に対する`results[0]`は、すべての検出結果を含む結果全体を返し、`results[-1]`も同様です。`for r in results`はそれを1回だけ返します。1.7では`results[0]`は最初の検出結果だけで、反復処理は検出結果を1つずつ進んでいました。`results[0].boxes`としていたコードは、すべてのボックスを受け取るようになります。それ以外の整数（`results[2]`）は引き続き1つの検出結果を選択し、`DeprecationWarning`を出します。`results[2:3]`または`results.boxes[2]`を使ってください。スライスとブールマスクは以前と同様に検出結果を選択し、`len(results)`は引き続き検出結果の数を数えます。
+
+- `val()`の結果はメトリクスに名前を付けます。`metrics.box.map`、`.map50`、`.map75`、`.mp`、`.mr`、`.maps`で、同じ`metrics/...`キーから読み取ります。セグメンテーションではマスクの値を持つ`metrics.seg`が加わります。辞書のキーは変わりません。
+
+- `Results.save()`は、生成とマッティング以外で例外を送出する代わりに、すべてのタスクで注釈付き画像を保存します。パスに加えて`filename=`も受け取り、デフォルトは`results_<image name>`で、パスを返します。`Results.show()`は同じ画像を表示します。生成画像、3Dオブジェクト、matteは以前と同様に保存されます。
+
+- `libreyolo.SAMPLE_IMAGE`は`guggenheim-bilbao.jpg`になり、`parkour.jpg`はパッケージに含まれなくなりました（#1034）。`SAMPLE_IMAGE`を使うスクリプトでは、画像も検出結果も変わります。`libreyolo/assets/parkour.jpg`や`parkour_result.jpg`を直接開いていたコードは、別のファイルを指すようにしてください。
+
+- 自分のデータセットYAML内の相対`path`（`.`、`./sub`、`sub`）は、YAMLのフォルダーを基準に解決されます（#1040）。1.7では最初に`DATASETS_DIR`の下で試されたため、そのフォルダーが存在すると`path: .`は`~/datasets`になり、学習は何も知らせずに0枚の画像しか見つけませんでした。`coco8.yaml`などの同梱YAMLと、フォルダーが`DATASETS_DIR`の下にしか存在しないYAML、または`download:`を持ちディスク上にまだ何もないYAMLは、引き続きそこで解決されます。画像のない分割は警告をログに出力するようになりました。
+
+- 新規のRF-DETR学習の実行では、アップストリームの分類損失係数を使います。`cls_loss_coef`は検出、セグメンテーション、回転バウンディングボックスで1（セグメンテーションは以前5）、姿勢推定で2（以前は1）です（#1044）。再開した実行は、係数を渡さない限り以前の係数を維持します。`early_stopping=True`は無視されていましたが、`patience`を指定しない場合はpatience 10を意味するようになりました。新しい`matcher_backend`引数はマッチャーを選択します。`"auto"`は、compute capability 8.0以降のLinuxのNVIDIA GPUに`libreyolo[rfdetr-train]`がインストールされている場合はGPUのハンガリアンマッチングを使い、それ以外の環境では`"scipy"`と同様にSciPyを使います。学習は1.7.4とビット単位で同一にはなりません。
+
+- エクスポートしたMask R-CNN、Faster R-CNN、FCOS、SSD、RetinaNet、YOLOv7、YOLOv2/v3/v4、YOLO-NAS-Rのモデル、およびPyTorchのYOLOv1に対する`val()`は、異なるmAPを返します（#1045）。これらの検証は誤った前処理を使っており、mAPが0またはそれに近い値になるか、RetinaNetでは例外を送出していました。現在はPyTorchモデルと一致します。`predict()`には影響しませんでした。YOLO-NAS poseとYOLO-NAS-RモデルのINT8エクスポートは、キャリブレーションが変わります。
+
+- 1.0以前のすべて大文字のクラス名`LIBREYOLO`、`LIBREYOLOX`、`LIBREYOLO9`、`LIBREYOLORFDETR`、`LIBREYOLONCNN`は、`DeprecationWarning`付きで再びインポートでき、それぞれ`LibreYOLO`、`LibreYOLOX`、`LibreYOLO9`、`LibreRFDETR`、`NcnnBackend`に解決されます（#1039）。コードを修正する際に名前を変更してください。
+
+- Ultralyticsの名前は失敗し、代わりに入力すべきLibreYOLOの行を示します（#1032、#1039）。`from libreyolo import YOLO`（`RTDETR`、`NAS`、`YOLOWorld`、`YOLOE`、`SAM`も、大文字小文字を問わず）はLibreYOLOのクラスを示す`ImportError`を送出し、`LibreYOLO("yolov8n.pt")`などのUltralyticsの重み名は最も近いLibreYOLOの重みを示し、Ultralyticsで学習したチェックポイントは拒否されます。これらの名前はどれもエイリアスにはなっていません。
+
+- ダウンロードは`HF_ENDPOINT`に従います（#1033）。そこで設定したミラーは、`hf_hub_download`だけでなく、すべての重みとデータセットのダウンロードを提供します。Hugging Faceのトークンはhuggingface.coにのみ送信されます。
 
 ## 1.6.0から1.7.0
 

@@ -52,24 +52,20 @@ snippets:
   export:
     - label: Python
       language: python
-      code: >
+      code: |
         from libreyolo import LibreYOLO9, LibreDFINE
 
+        # デフォルトでは、ONNXファイルとそのconfig_infer_primary_<stem>.txt、
+        # <stem>_labels.txtをweights/に出力
+        LibreYOLO9("libreyolo9s.pt", size="s").export(
+            format="onnx", deepstream=True, output_path="yolo9/libreyolo9s.onnx"
+        )
 
-        # libreyolo9s.onnx、config_infer_primary_libreyolo9s.txt、
-
-        # libreyolo9s_labels.txt を作業ディレクトリに出力
-
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="onnx",
-        deepstream=True)
-
-
-        # 検出モデルはそれぞれ別のディレクトリに置く。どの検出用設定も
-
+        # output_path=で検出モデルはそれぞれ別のディレクトリに置く。どの検出用設定も
         # 同じエンジンキャッシュファイル名を指すため。「よくある落とし穴」を参照
-
-        LibreDFINE("LibreDFINEs.pt", size="s").export(format="onnx",
-        deepstream=True)
+        LibreDFINE("LibreDFINEs.pt", size="s").export(
+            format="onnx", deepstream=True, output_path="dfine/LibreDFINEs.onnx"
+        )
     - label: 引数
       language: python
       code: |
@@ -240,7 +236,7 @@ snippets:
         docker run --rm --gpus all -v "$PWD:/work" -w /work \
           nvcr.io/nvidia/deepstream:8.0-samples-multiarch \
           bash -c "bash build_parser.sh && deepstream-app -c deepstream_app_config.txt"
-source_hash: 1ee91c265753dd9a
+source_hash: c9938ec89d68706d
 ---
 
 ## 提供状況

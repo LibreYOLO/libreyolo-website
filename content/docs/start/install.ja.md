@@ -63,7 +63,7 @@ snippets:
         # 登録済みの各ファミリーと、タスク、サイズ、入力解像度を表示します。
         # 追加パッケージがないファミリーには、有効化するpipコマンドも表示されます。
         libreyolo models
-source_hash: d5ad0986bb550209
+source_hash: 796688d39ae5fe1d
 ---
 
 ## インストール
@@ -87,11 +87,12 @@ cloneすると、安定版ブランチ`release`がcheckoutされます。この�
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`。Python 3.12以降 |
 | `marigold` | 固定された拡散、アクセラレーション、Transformersの依存関係 |
 | `molmo2` | `transformers==4.57.1`、`einops`、`accelerate` |
-| `gen` | LibreGenとSperidlabs Idol向けの`diffusers>=0.38.0`、`transformers>=5.1.0`、`accelerate>=1.7.0` |
+| `gen` | LibreGen向けの`diffusers>=0.38.0`、`transformers>=5.1.0`、`accelerate>=1.7.0`、`scikit-image>=0.19`、`ftfy>=6.0`。PRXPixelには`diffusers>=0.39`が必要で、読み込み時にその旨を表示 |
 | `rfdetr` | RF-DETRのバックボーンを提供する`transformers` |
+| `rfdetr-train` | `transformers`に加え、RF-DETR学習でのオプションのGPUマッチング用に`torch-hungarian==0.1.0rc0`。ない場合、マッチングはSciPyにフォールバック |
 | `eomt` | `transformers` |
 | `midas` | MiDaSのViT-L/16およびEfficientNet-Lite3エンコーダーを提供する`timm` 1.0.x |
-| `vlm` | `transformers`、`num2words`、`decord`、`lmdb`、`peft` |
+| `vlm` | `transformers`、`num2words`、`lmdb`、`peft`、およびx86-64のLinuxとWindowsでは`decord` |
 | `sam` | `transformers`、`timm` |
 | `openvocab` | `transformers`、`timm`、`regex`、`ftfy` |
 | `sensenova` | `transformers`、`accelerate`と、macOS以外では`bitsandbytes` |
@@ -106,11 +107,11 @@ cloneすると、安定版ブランチ`release`がcheckoutされます。この�
 | 追加パッケージ | 追加内容 |
 |---|---|
 | `onnx` | `onnx`、`onnxsim`、`onnxruntime>=1.18.0` |
-| `tensorrt` | macOS以外で`tensorrt-cu12` 10.16.1.11と`pycuda` |
+| `tensorrt` | macOS以外で`tensorrt-cu12` 10.16.1.11。INT8キャリブレーションはPyPIのtorchがLinuxでインストールする`cuda.bindings`を使用。それ以外の環境では`pip install cuda-python` |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
 | `coreai` | `coreai-torch`。macOSのみ |
-| `tflite`（エイリアス`litert`） | `libreyolo[onnx]`に加え、`onnx2tf`、`ai-edge-litert`、`onnx-graphsurgeon`、`onnx-simplifier` |
+| `tflite`（エイリアス`litert`） | `libreyolo[onnx]`に加え、`onnx2tf`、`ai-edge-litert`、`onnx-graphsurgeon` |
 | `mnn` | `libreyolo[onnx]`と`MNN` |
 | `ncnn` | `pnnx`と`ncnn` |
 | `paddle` | `libreyolo[onnx]`に加え、`paddlepaddle` 2.6.2と`x2paddle` 1.6.0 |
@@ -152,7 +153,7 @@ Webカメラ、RTSP、RTMP、TCP、UDP、HLS、ローカルのマルチストリ
 
 ### 集約追加パッケージ
 
-`libreyolo[all]`はモデル、エクスポート、tracking、ロギングの追加パッケージを1つのコマンドでインストールします。意図的に除外されるものもあります。`neptune`は、安定版`neptune-scale`がprotobuf 7未満を要求する一方、TFLite経路がprotobuf 7を要求するため除外されます。`executorch`は組み合わせるPyTorchバージョンを制限し、`coreai`は`coreai-torch`がPyTorchを2.11.xへ固定して環境全体をそのバージョンへ移行させるため除外されます。`fast-eval`、`hub-kernels`、`clip-convert`、`siglip2-convert`も含まれません。必要なものを名前でインストールしてください。
+`libreyolo[all]`はモデル、エクスポート、tracking、ロギングの追加パッケージを1つのコマンドでインストールします。意図的に除外されるものもあります。`neptune`は、安定版`neptune-scale`がprotobuf 7未満を要求する一方、TFLite経路がprotobuf 7を要求するため除外されます。`executorch`は組み合わせるPyTorchバージョンを制限し、`coreai`は`coreai-torch`がPyTorchを2.11.xへ固定して環境全体をそのバージョンへ移行させるため除外されます。`fast-eval`、`hub-kernels`、`clip-convert`、`siglip2-convert`も含まれず、`paddle`も除外されます。X2Paddleコンバーターは、`all`に含まれるTFLite経路より古いONNXを必要とするためです。必要なものを名前でインストールしてください。
 
 `all`には`hf`、`llm`、`gen`が含まれます。`fiftyone`、`vla`、`marigold`、`molmo2`は個別にインストールします。FiftyOneはheadless OpenCVを導入し、基本パッケージの`cv2`と重複します。
 
@@ -167,12 +168,12 @@ Molmo2には別の環境を使ってください。Transformers 4.57.1への固�
 | 追加パッケージ | 制約 |
 |---|---|
 | `coreai` | macOSのみ。Core AIツールチェーンはほかの環境で変換も実行もできない |
-| `tensorrt` | CUDAのないmacOSではスキップ |
+| `tensorrt` | CUDAのないmacOS、JetPackがTensorRTを提供するARMのLinux、Python 3.14ではスキップ |
 | `tflite`、`litert` | `onnx2tf`と`ai-edge-litert`にPython 3.12以降が必要 |
 
 `sensenova`はwheelが公開されていないmacOSで`bitsandbytes`をスキップし、その他は通常どおりインストールします。
 
-`vlm`はプラットフォームが限定されていません：固定されている`decord==0.6.0`には、x86-64のLinuxとWindows向けのwheelしかありません。macOSとARMのLinuxでは、`vlm`、`ground`、`vlm-train`、`all`のインストールに失敗します。
+`vlm`、`ground`、`vlm-train`、`all`はmacOSとARMのLinuxにもインストールできます。そこで除外されるのは、x86-64のLinuxとWindows向けにしかwheelを公開していない`decord`だけなので、これらのプラットフォームで使えないモデルはLocateAnythingのみです。そこで読み込むと、重みをダウンロードする前にその旨を表示します。
 
 ディスク容量が制約なら、その大半はPyTorchで、さらに大半はデフォルトwheelに同梱されるCUDAペイロードです。CPU専用wheelなら機能を失わずにそれを除去できます。PyTorchを一切含めないマシンでONNX物体検出を使う場合は、[軽量インストール](/docs/lightweight-install)を参照してください。
 

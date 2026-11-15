@@ -1,8 +1,8 @@
 ---
 title: トラブルシューティング
 seo_title: LibreYOLOでよくあるエラーの解決方法
-description: LibreYOLOで頻繁に発生するエラー、それぞれの意味、修正方法を説明します。例外を送出せずに誤った出力を生成する2つの問題も含みます。
-lead: 表示されるメッセージ別にエラーをまとめています。最後の2項目では逆の問題を扱います。コードは動作し、もっともらしいものを返しますが、その結果は誤っています。
+description: LibreYOLOで頻繁に発生するエラー、それぞれの意味、修正方法を説明します。1.8.0で変わった、以前のサイレント障害2つ（インデックス指定と指標）も含みます。
+lead: 表示されるメッセージ別にエラーをまとめています。最後の2項目では、以前は実行されて誤ったものを返していたコードと、1.8.0で何が変わったかを扱います。
 keywords:
   - libreyolo エラー
   - modulenotfounderror libreyolo
@@ -10,7 +10,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo トラブルシューティング
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: e5da0ce267fbec05
 ---
 
 表示されるテキスト別にエラーをまとめています。該当するメッセージがない場合は、[FAQ](/docs/faq)で障害以外の疑問を確認できます。また、`libreyolo models` で現在のインストールが実際に読み込めるものを確認できます。
@@ -79,10 +79,12 @@ Windowsでは、ディスプレイ用GPUにメモリ不足とは別の障害モ�
 ## スクリプトのトップレベルでtrain()またはval()が呼び出された
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
-Windowsには `fork` がなく、macOSのPythonもデフォルトでは使わないため、dataloaderのworkerはスクリプトを再インポートして起動します。`spawn`と`forkserver`の起動方式は、どのプラットフォームでも同じ動作をします。`if __name__ == "__main__":`ガードがないと、各workerが`train()`または`val()`の呼び出しをもう一度実行することになるため、各workerはその呼び出しの時点で停止してその呼び出しを示すこの行を出力し、スクリプトはエラーで終了します。
+Windowsには `fork` がなく、macOSのPythonもデフォルトでは使わないため、dataloaderのworkerはスクリプトを再インポートして起動します。`spawn`と`forkserver`の起動方式は、どのプラットフォームでも同じ動作をします。`if __name__ == "__main__":`ガードがないと、各workerが`train()`または`val()`の呼び出しをもう一度実行することになります。1.7.1以降、LibreYOLOはこれを検出し、`workers=0`で呼び出しを実行して、この行を一度だけログに出力します。スクリプトは最後まで実行されますが、データ読み込みはメインプロセスで行われるため遅くなります。
+
+並列のデータ読み込みを取り戻すには、呼び出しをガードの下に置いてください。
 
 ```python
 def main():
@@ -92,35 +94,40 @@ if __name__ == "__main__":
     main()
 ```
 
-`workers=0` を設定しても回避できますが、スループットが低下します。ガードを使う方が適切な修正です。
+ガード付きのスクリプト、ノートブック、CLI、Linuxの `fork` ではworkerが維持されます。
 
-## 例外を送出しない2つの障害
+## 1.8.0で変わった2つのサイレント障害
 
-このページのほかの部分ではエラーを扱っています。次の2つは、コードが実行されて正しそうなものが返るため、さらに深刻です。
+このページのほかの部分ではエラーを扱っています。次の2つは以前はさらに深刻でした。コードが実行され、正しそうに見えるものが返っていたためです。1.8.0以降はどちらもUltralyticsと同じように動作するため、アップグレード後にスクリプトの数値が変わった場合は確認してください。
 
 ### 1つの結果に対するインデックス指定
 
-`predict()` は、画像が1枚なら1つの `Results`、複数ならリストを返します。1枚画像の戻り値にインデックスを指定すると、画像ではなく1件の*検出結果*が選択されます。
+`predict()` は、画像が1枚なら1つの `Results`、複数ならリストを返します。1.8.0以降、1枚画像の `Results` に整数の `0` または `-1` を指定すると結果全体が返るため、リスト形式向けに書いたコードはどちらでも動作します。
 
 ```python
 result = model.predict("image.jpg")   # 1つのResults
-result.boxes                          # すべての検出結果、正しい
-result[0].boxes                       # 1件だけの検出結果、通知なし
+result.boxes                          # すべての検出結果
+result[0].boxes                       # すべての検出結果、同じResults
+result[2:3].boxes                     # 3件目の検出結果のみ
+result.boxes[2]                       # 同じ検出結果
 ```
 
-`Results` へのインデックス指定は部分集合を返す有効な操作なので、例外は送出されません。リスト形式を前提に書いたコードは、画像ごとに1つのボックスだけを黙って報告します。リストであると分かっているものだけにインデックスを指定してください。
+それ以外の整数（`result[2]`）は引き続き1件の検出結果を選択し、`result[2:3]` または `result.boxes[2]` を案内する `DeprecationWarning` を出します。スライス、ブールマスク、インデックス配列は以前と同様に検出結果を選択します。1.8.0より前は `result[0]` が通知なしに最初の検出結果だけを返していたため、1.7で動作していたコードは1.8ではより多くのボックスを報告します。
 
 ### 指標を属性として読み取る
 
-`val()` は指標名をキーとする辞書を返します。唯一の属性である `box` は、指標の値ではなく、画像ごとの結果とクラスごとのしきい値を保持します。
+`val()` は指標名をキーとする辞書を返し、1.8.0以降はその `box` 属性が主な検出指標にも名前を付けます。
 
 ```python
 metrics = model.val(data="coco8.yaml")
-metrics["metrics/mAP50-95"]   # 正しい
-metrics.box.map               # AttributeError
+metrics["metrics/mAP50-95"]   # 辞書のキー
+metrics.box.map               # 同じ値
+metrics.box.map50, metrics.box.map75
+metrics.box.mp, metrics.box.mr  # 平均適合率と平均再現率
+metrics.box.maps              # クラスインデックスごとのAP50-95
 ```
 
-キーは `metrics/` と `speed/` で名前空間化されています。タスクによって項目が異なるため、辞書を一度出力し、そのタスクが生成した内容を確認してください。
+セグメンテーションではマスク用の `map`、`map50`、`map75`、`maps` を持つ `metrics.seg` が加わり、検出結果は `metrics.confusion_matrix` を持ちます。辞書のキーは `metrics/` と `speed/` で名前空間化されています。タスクによって項目が異なるため、辞書を一度出力し、そのタスクが生成した内容を確認してください。
 
 ## 学習前にデータセットを確認
 

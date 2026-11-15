@@ -40,7 +40,7 @@ snippets:
         # 工厂按文件后缀路由，所以导出产物会像检查点一样加载
         libreyolo predict model=weights/LibreYOLO9s.onnx \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
-source_hash: e8638b76b7dbf326
+source_hash: 470d2a4542784882
 ---
 
 ## 概要
@@ -57,7 +57,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | 参数 | 默认值 | 含义 |
 |---|---|---|
 | `model` | | 模型权重 `.pt`。必填 |
-| `format` | `onnx` | 导出格式：`onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、`rknn`、`ncnn`、`tflite`、`coreml`、`coreai` |
+| `format` | `onnx` | 导出格式：`onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、`rknn`、`axelera`、`ncnn`、`tflite`、`coreml`、`coreai` |
 | `name` | | RKNN 目标平台，目前只有 `rk3588`。和其他任何格式一起传都会被拒绝 |
 | `imgsz` | | 输入图像尺寸：`640` 或 `480x640`（HxW）。`480,640` 也接受。未设置时用模型自身的尺寸 |
 | `batch` | `1` | 导出批大小 |
@@ -78,7 +78,7 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 | `json` | `false` | 向 stdout 输出 JSON |
 | `quiet` | `false` | 屏蔽 stderr |
 | `verbose` | `false` | 详细的导出日志 |
-| `verify` | `false` | 运行 RKNN Toolkit2 PC 模拟器并与 ONNX Runtime 对比。仅 RKNN |
+| `verify` | `false` | RKNN：运行 Toolkit2 PC 模拟器并与 ONNX Runtime 对比。Axelera：把量化后的模型与 FP32 对比，并写出 `<stem>.parity.json`。仅 RKNN 和 Axelera |
 | `help_json` | `false` | 以 JSON 打印命令 schema 并退出 |
 
 `engine` 是 `tensorrt` 的别名，`litert` 是 `tflite` 的别名。两者在写入任何东西之前
@@ -109,8 +109,11 @@ libreyolo export model=<name|path> [format=<format>] [key=value ...]
 `half=true` 和 `int8=true` 同时传不是错误。INT8 胜出，`half` 被丢弃，并向 stderr
 发一条警告。`quantize` 与 `half` 或 `int8` 不一致时会以 `config_conflict` 退出。
 
-`name` 和 `verify` 目前是 RKNN 的选项。把其中任何一个和别的格式一起传会以
-`config_unsupported` 退出，而不是被忽略。
+`name` 是 RKNN 的选项，`verify` 适用于 `rknn` 和 `axelera`。把其中任何一个和别的格式
+一起传会以 `config_unsupported` 退出，而不是被忽略。
+
+1.8.0 新增的 `format=axelera` 会为 Axelera 的 Metis AIPU 编译一个 INT8 模型。它只支持
+INT8：`half=true`，或者 `quantize` 不是 `8`，都会以 `format_precision_unsupported` 退出。
 
 ### 一个家族支持哪些格式
 

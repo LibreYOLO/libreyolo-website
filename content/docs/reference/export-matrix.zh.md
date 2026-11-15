@@ -1,7 +1,7 @@
 ---
 title: 完整导出矩阵
 seo_title: LibreYOLO 导出支持矩阵及其规则
-description: LibreYOLO 如何判定一个家族、任务和格式的组合能不能导出：十二种格式、三个等级、兜底规则，以及一致性阈值。
+description: LibreYOLO 如何判定一个家族、任务和格式的组合能不能导出：十三种格式、三个等级、兜底规则，以及一致性阈值。
 lead: >-
   导出支持就是按 (family, task, format)
   三元组做的一次查表。本页讲这个矩阵的形状、没有显式条目覆盖的单元格由哪些规则填上，以及怎么去查你关心的那个组合。
@@ -56,16 +56,18 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: a19c391d4a4d4a1b
+source_hash: 74b25d62a1166f79
 ---
 
 ## 矩阵的形状
 
 矩阵以 `(family, task, format)` 为键。家族键是模型注册表（registry）里的规范名，
-任务键来自 `libreyolo.tasks.TASKS`，格式一共十二种：
+任务键来自 `libreyolo.tasks.TASKS`，格式一共十三种：
 
 `onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、
-`rknn`、`ncnn`、`tflite`、`coreml`、`coreai`。
+`rknn`、`axelera`、`ncnn`、`tflite`、`coreml`、`coreai`。
+
+1.8.0 新增的 `axelera` 会为 Axelera 的 Metis AIPU 编译一个 INT8 模型。
 
 `model.export(format=...)` 还额外接受两个别名：`engine` 对应 `tensorrt`，`litert`
 对应 `tflite`，后者是 TensorFlow Lite 现在的名字。格式本身和 `.tflite` 后缀都没有变。
@@ -100,18 +102,19 @@ validated 和 available 的组合都会直接往下走，不需要额外确认�
 
 `get_support(family, task, fmt)` 按下面的顺序解析。第一条匹配上的规则胜出。
 
-1. 未知的任务，或者不在这十二种之内的格式，返回 `blocked`。
+1. 未知的任务，或者不在这十三种之内的格式，返回 `blocked`。
 2. 存在显式的 `(family, task, format)` 条目时，按记录返回。
 3. 家族级别的屏蔽返回 `blocked`，附带该家族的原因。
 4. 任务级别的屏蔽返回 `blocked`，附带该任务的原因。
 5. 对 `ncnn`，在 NCNN 屏蔽名单上的家族返回 `blocked`。
 6. `mnn` 返回 `blocked`：这个家族和任务没有运行时契约。
 7. `rknn` 返回 `blocked`。这个版本的 RKNN 只限于在模拟器上测过的那几个检测变体：RK3588 上的 YOLO9-t、YOLO9-E2E-t、YOLO-NAS-s 和 PicoDet-s。
-8. `tensorrt` 和 `openvino` 返回 `available`：转换路径是有的，但该家族和任务的运行时一致性没有记录过。
-9. `tflite`、`paddle`、`coreai` 和 `coreml` 返回 `blocked`，各有各自的原因。
-10. 其余一切返回 `available`：转换已经实现，运行时的数值一致性没有记录。
+8. `axelera` 返回 `blocked`：只有在 Axelera Metis 上编译并测量过的家族和尺寸组合才有显式条目。
+9. `tensorrt` 和 `openvino` 返回 `available`：转换路径是有的，但该家族和任务的运行时一致性没有记录过。
+10. `tflite`、`paddle`、`coreai` 和 `coreml` 返回 `blocked`，各有各自的原因。
+11. 其余一切返回 `available`：转换已经实现，运行时的数值一致性没有记录。
 
-第 8 到第 10 步的不对称是有意为之。TensorRT 和 OpenVINO 是从 ONNX 通用转换的，
+第 9 到第 11 步的不对称是有意为之。TensorRT 和 OpenVINO 是从 ONNX 通用转换的，
 所以没列出来的组合值得一试。TFLite、Paddle、Core AI 和 CoreML 各自都需要一条按家族
 写的路径，所以没列出来的组合是一次拒绝，而不是一份邀请。
 
@@ -140,7 +143,7 @@ validated 和 available 的组合都会直接往下走，不需要额外确认�
 
 | 家族 | 屏蔽范围 |
 |---|---|
-| `depth_anything3` | 所有格式；它的深度计算图不在导出运行时契约里 |
+| `depth_anything3` | 除 ONNX、TorchScript、ExecuTorch、TensorRT 和 OpenVINO 之外的所有格式；这五种在 FP32、batch 1 和一个能被 14 整除的固定正方形输入下验证过 |
 | `domedetr` | 所有格式。PAQI 按每张图设定 query 数量，所以 trace 出来的图只对被 trace 的那张图有效。想要一个能导出的 DETR，用 D-FINE |
 | `eomt` | 实例分割和全景分割导出，这两者没有运行时解析 |
 | `l2cs` | ONNX、TorchScript、ExecuTorch、TensorRT 和 OpenVINO 之外的一切 |

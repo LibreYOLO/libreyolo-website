@@ -63,7 +63,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
-source_hash: c4fb6d5a622f99ff
+source_hash: caa96c8ed4765ba6
 ---
 
 ## インストール
@@ -105,9 +105,14 @@ Python APIを使ってください。対応するのは画像推論だけで、S
 
 ## バリアント
 
-サイズはlargeの1種類で、固定1008 px入力です。SAM 3.1には対応しません。その実装はこのMIT
-リポジトリへ同梱できない独自ライセンスを採用しており、LibreYOLOが依存するTransformersの
-バージョンもチェックポイント形式をまだ読み込めないためです。
+サイズはlargeの1種類で、固定1008 px入力です。
+
+SAM 3.1には1.8.0以降、`LibreSAM("sam3.1")`または`LibreSAM31`クラスとして対応しています。
+MetaのSAM 3.1の画像経路をSAM 3と同じパイプラインで実行し、同じプロンプト、同じ`text=`の
+コンセプトプロンプト、同じ`Results`を使います。重みは、Metaのオリジナル形式のチェックポイントから
+変換したアクセス制限付きの`LibreYOLO/LibreSAM31large`ミラーからダウンロードされ、MITではなく
+MetaのSAM Licenseが適用されます。そのため、最初のダウンロードの前にモデルページで規約に同意し、
+認証してください。SAM 3.1 Object Multiplexの動画トラッキングには対応しません。
 
 ## ライセンス
 

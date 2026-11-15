@@ -27,7 +27,7 @@ snippets:
 
         # デフォルトは~/datasetsでインポート時にLIBREYOLO_DATASETS_DIRが上書き
         print(DATASETS_DIR)
-source_hash: 82fbf9f3b1540603
+source_hash: aafd0ee12a2613df
 ---
 
 ## 環境変数
@@ -43,6 +43,8 @@ source_hash: 82fbf9f3b1540603
 | `LIBRELABEL_ENABLE_LOCATE` | 未設定 | ラベル付けツールでLocateAnythingアシスタントを公開するには、正確に `1`、`true`、`yes`、`on` のいずれかが必要。その他の値では無効 |
 | `SAM_3D_BODY_PATH` | 未設定 | コンストラクターへ渡さない場合の、メッシュファミリー用SAM 3D Bodyパッケージへのパス |
 | `HF_TOKEN` | 未設定 | アクセス制限されたリポジトリに使用するHugging Faceアクセストークン |
+| `HF_ENDPOINT` | `https://huggingface.co` | 1.8.0以降、すべての重みとデータセットのダウンロードに使うHugging Faceミラー。チェックサムは引き続きhuggingface.coのURLと照合し、トークンはhuggingface.coにのみ送信します |
+| `LIBREYOLO_AUTOINSTALL` | 未設定 | `1`または`true`にすると、`axelera`フォーマットで必要になったときに、LibreYOLOがAxeleraのプロプライエタリSDKパッケージをAxeleraのインデックスからインストールします。未設定の場合は、代わりにインストールコマンドを表示します |
 
 <code-tabs name="usage" />
 

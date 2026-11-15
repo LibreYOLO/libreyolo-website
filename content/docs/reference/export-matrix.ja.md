@@ -2,7 +2,7 @@
 title: 完全なエクスポートマトリックス
 seo_title: LibreYOLOのエクスポート対応マトリックスと規則
 description: >-
-  LibreYOLOがファミリー、タスク、形式の組み合わせをエクスポートできるか判断する仕組みを解説します。12形式、3ティア、フォールバック規則、一致度のしきい値を扱います。
+  LibreYOLOがファミリー、タスク、形式の組み合わせをエクスポートできるか判断する仕組みを解説します。13形式、3ティア、フォールバック規則、一致度のしきい値を扱います。
 lead: >-
   エクスポート対応状況は（ファミリー、タスク、形式）の3つ組で検索されます。このページではマトリックスの構造、明示的な項目がないセルを埋める規則、目的の組み合わせを問い合わせる方法を解説します。
 keywords:
@@ -53,14 +53,16 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: a19c391d4a4d4a1b
+source_hash: 74b25d62a1166f79
 ---
 
 ## マトリックスの構造
 
-マトリックスのキーは`(family, task, format)`です。ファミリーキーはモデルレジストリの標準名、タスクキーは`libreyolo.tasks.TASKS`から取得し、形式は次の12種類です。
+マトリックスのキーは`(family, task, format)`です。ファミリーキーはモデルレジストリの標準名、タスクキーは`libreyolo.tasks.TASKS`から取得し、形式は次の13種類です。
 
-`onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、`rknn`、`ncnn`、`tflite`、`coreml`、`coreai`。
+`onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、`rknn`、`axelera`、`ncnn`、`tflite`、`coreml`、`coreai`。
+
+1.8.0で追加された`axelera`は、AxeleraのMetis AIPU向けにINT8モデルをコンパイルします。
 
 `model.export(format=...)`はさらに2つの別名を受け付けます。`tensorrt`を表す`engine`と、TensorFlow Liteの現在の名称である`tflite`を表す`litert`です。形式と`.tflite`接尾辞は変わりません。
 
@@ -88,18 +90,19 @@ validatedの項目を追加するには一致度テストと`since`フィール�
 
 `get_support(family, task, fmt)`は次の順序で解決します。最初に一致した規則が適用されます。
 
-1. 未知のタスク、または12形式以外は`blocked`を返します。
+1. 未知のタスク、または13形式以外は`blocked`を返します。
 2. 明示的な`(family, task, format)`項目があれば、記録どおりに返します。
 3. ファミリー全体のブロックがあれば、そのファミリーの理由とともに`blocked`を返します。
 4. タスク全体のブロックがあれば、そのタスクの理由とともに`blocked`を返します。
 5. `ncnn`では、NCNNブロックリストにあるファミリーが`blocked`を返します。
 6. `mnn`は`blocked`を返します。このファミリーとタスクのランタイム契約がありません。
 7. `rknn`は`blocked`を返します。このバージョンのRKNNは、RK3588上でシミュレーター検証済みの正確な検出バリアント、YOLO9-t、YOLO9-E2E-t、YOLO-NAS-s、PicoDet-sだけに限定されます。
-8. `tensorrt`と`openvino`は`available`を返します。変換経路は存在しますが、このファミリーとタスクでのランタイム一致は未記録です。
-9. `tflite`、`paddle`、`coreai`、`coreml`は、それぞれ固有の理由とともに`blocked`を返します。
-10. それ以外は`available`を返します。変換は実装済みですが、数値的なランタイム一致は未記録です。
+8. `axelera`は`blocked`を返します。明示的な項目があるのは、Axelera Metis上でコンパイルして測定したファミリーとサイズの組み合わせだけです。
+9. `tensorrt`と`openvino`は`available`を返します。変換経路は存在しますが、このファミリーとタスクでのランタイム一致は未記録です。
+10. `tflite`、`paddle`、`coreai`、`coreml`は、それぞれ固有の理由とともに`blocked`を返します。
+11. それ以外は`available`を返します。変換は実装済みですが、数値的なランタイム一致は未記録です。
 
-手順8から10の非対称性は意図的です。TensorRTとOpenVINOはONNXから汎用的に変換するため、一覧にない組み合わせも試す価値があります。TFLite、Paddle、Core AI、CoreMLにはファミリーごとの経路が必要なので、一覧にない組み合わせは試行の案内ではなく拒否になります。
+手順9から11の非対称性は意図的です。TensorRTとOpenVINOはONNXから汎用的に変換するため、一覧にない組み合わせも試す価値があります。TFLite、Paddle、Core AI、CoreMLにはファミリーごとの経路が必要なので、一覧にない組み合わせは試行の案内ではなく拒否になります。
 
 ## ブロックされるタスク
 
@@ -126,7 +129,7 @@ validatedの項目を追加するには一致度テストと`since`フィール�
 
 | ファミリー | ブロック対象 |
 |---|---|
-| `depth_anything3` | 全形式。深度グラフがエクスポート済みランタイム契約の対象外 |
+| `depth_anything3` | ONNX、TorchScript、ExecuTorch、TensorRT、OpenVINOを除く全形式。これら5形式はFP32、バッチ1、14で割り切れる固定の正方形入力で検証済み |
 | `domedetr` | 全形式。PAQIが画像ごとにクエリ数を設定するため、トレース済みグラフはトレースに使用した画像だけで有効。エクスポート可能なDETRにはD-FINEを使用 |
 | `eomt` | ランタイム解析のないインスタンスおよびパノプティックのエクスポート |
 | `l2cs` | ONNX、TorchScript、ExecuTorch、TensorRT、OpenVINO以外 |

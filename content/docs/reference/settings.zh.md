@@ -26,7 +26,7 @@ snippets:
 
         # 默认为 ~/datasets，LIBREYOLO_DATASETS_DIR 在导入时覆盖它
         print(DATASETS_DIR)
-source_hash: 82fbf9f3b1540603
+source_hash: aafd0ee12a2613df
 ---
 
 ## 环境变量
@@ -42,6 +42,8 @@ source_hash: 82fbf9f3b1540603
 | `LIBRELABEL_ENABLE_LOCATE` | 未设置 | 必须恰好是 `1`、`true`、`yes` 或 `on`，才会在标注工具里开放 LocateAnything 助手。其他任何值都保持关闭 |
 | `SAM_3D_BODY_PATH` | 未设置 | mesh 家族用的 SAM 3D Body 包路径，在没有传给构造函数时使用 |
 | `HF_TOKEN` | 未设置 | Hugging Face 访问令牌，用于受限（gated）仓库 |
+| `HF_ENDPOINT` | `https://huggingface.co` | 从 1.8.0 起，所有权重和数据集下载使用的 Hugging Face 镜像。校验和仍然对照 huggingface.co 的 URL，令牌也只发给 huggingface.co |
+| `LIBREYOLO_AUTOINSTALL` | 未设置 | 设为 `1` 或 `true` 时，`axelera` 格式需要 Axelera 的专有 SDK 包时，LibreYOLO 会从 Axelera 的索引安装它们。未设置时改为打印安装命令 |
 
 <code-tabs name="usage" />
 

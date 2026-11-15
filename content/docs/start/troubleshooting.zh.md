@@ -1,8 +1,8 @@
 ---
 title: 疑难排查
 seo_title: 修复 LibreYOLO 常见报错
-description: LibreYOLO 最常抛出的报错、每一条的含义，以及修复办法。还包括两种不抛异常、直接给出错误输出的故障。
-lead: 报错按你看到的信息分组。最后两条讲的是相反的问题：代码跑得通，返回的东西看着也合理，但它是错的。
+description: LibreYOLO 最常抛出的报错、每一条的含义，以及修复办法。还包括两种以前不报错的故障——取下标和指标——以及 1.8.0 对它们的改动。
+lead: 报错按你看到的信息分组。最后两条讲的是以前跑得通却返回错误结果的代码，以及 1.8.0 改了什么。
 keywords:
   - libreyolo 报错
   - libreyolo modulenotfounderror
@@ -10,7 +10,7 @@ keywords:
   - libreyolo notimplementederror
   - libreyolo 问题排查
 last_verified: 1.6.0
-source_hash: 754a74f67274fca4
+source_hash: e5da0ce267fbec05
 ---
 
 报错按你看到的文字分组。如果你的报错信息不在这里，[FAQ](/docs/faq) 回答的是那些
@@ -99,14 +99,16 @@ NotImplementedError: LibreEoMT instance and panoptic export need query-mask runt
 ## 在脚本顶层调用了 train() 或 val()
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows 没有 `fork`，macOS 上的 Python 默认也不使用它，所以 dataloader 的 worker
 是靠重新导入你的脚本来启动的。`spawn` 和 `forkserver` 启动方式在任何平台上都是
 如此。没有 `if __name__ == "__main__":` 这层保护，每个 worker 都会把你的 `train()` 或
-`val()` 调用再跑一遍，所以每个进程都会在那个调用处中止，打印这行点出该调用的信息，
-脚本随后以错误退出。
+`val()` 调用再跑一遍。从 1.7.1 起，LibreYOLO 会检测到这种情况，用 `workers=0` 运行该调用，
+并只记录一次这行信息。脚本能跑完，但数据加载在主进程里进行，速度更慢。
+
+把调用放进这层保护，就能恢复并行数据加载：
 
 ```python
 def main():
@@ -116,38 +118,48 @@ if __name__ == "__main__":
     main()
 ```
 
-设 `workers=0` 也能绕开它，代价是吞吐下降。加上这层保护才是更好的修法。
+加了保护的脚本、notebook、CLI 以及 Linux 的 `fork` 都会保留各自的 worker。
 
-## 两种不抛异常的故障
+## 1.8.0 改掉的两种静默故障
 
-本页其余部分讲的都是报错。这两种更糟，因为代码照跑，还递回来一个看着没问题的东西。
+本页其余部分讲的都是报错。这两种以前更糟：代码照跑，还递回来一个看着没问题的东西。
+从 1.8.0 起，两者的行为都与 Ultralytics 一致，所以升级后脚本给出的数字不一样时，先检查这两处。
 
 ### 对单个结果取下标
 
-`predict()` 对一张图片返回一个 `Results`，对多张图片返回一个列表。对单图的返回值
-取下标，选中的是一个*检测结果*，而不是一张图片：
+`predict()` 对一张图片返回一个 `Results`，对多张图片返回一个列表。从 1.8.0 起，
+在单图的 `Results` 上用整数 `0` 或 `-1` 取下标会返回整个结果，所以照着列表形式写的
+代码在两种情况下都能用：
 
 ```python
 result = model.predict("image.jpg")   # 一个 Results
-result.boxes                          # 全部检测结果，正确
-result[0].boxes                       # 只有一个检测结果，而且悄无声息
+result.boxes                          # 全部检测结果
+result[0].boxes                       # 全部检测结果，同一个 Results
+result[2:3].boxes                     # 只有第三个检测结果
+result.boxes[2]                       # 同一个检测结果
 ```
 
-什么都不会抛出，因为对 `Results` 取下标是一个返回子集的合法操作。照着列表形式写的
-代码会悄悄地每张图片只报一个检测框。只对你确知是列表的东西取下标。
+其他整数（`result[2]`）仍然选中一个检测结果，并发出一条点名 `result[2:3]` 或
+`result.boxes[2]` 的 `DeprecationWarning`。切片、布尔掩码和索引数组照旧选中检测结果。
+在 1.8.0 之前，`result[0]` 会悄悄地只返回第一个检测结果，所以在 1.7 上跑过的代码在
+1.8 上会报出更多检测框。
 
 ### 把指标当属性读
 
-`val()` 返回的是一个以指标名为键的字典。它唯一的属性 `box` 携带逐图像结果和逐类别阈值，
-而不是指标值：
+`val()` 返回的是一个以指标名为键的字典，从 1.8.0 起，它的 `box` 属性也给出了主要的
+检测指标：
 
 ```python
 metrics = model.val(data="coco8.yaml")
-metrics["metrics/mAP50-95"]   # 正确
-metrics.box.map               # AttributeError
+metrics["metrics/mAP50-95"]   # 字典键
+metrics.box.map               # 同一个值
+metrics.box.map50, metrics.box.map75
+metrics.box.mp, metrics.box.mr  # 平均查准率和查全率
+metrics.box.maps              # 按类别索引的 AP50-95
 ```
 
-键带有 `metrics/` 和 `speed/` 命名空间前缀。先把字典打印一次，看看你的任务产出了
+分割任务会额外提供 `metrics.seg`，其中的 `map`、`map50`、`map75` 和 `maps` 针对掩码；
+检测结果还带有 `metrics.confusion_matrix`。字典的键带有 `metrics/` 和 `speed/` 命名空间前缀。先把字典打印一次，看看你的任务产出了
 什么，因为这个集合因任务而异。
 
 ## 训练前先检查数据集

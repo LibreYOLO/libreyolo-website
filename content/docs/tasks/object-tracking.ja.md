@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: b24043e73b35092d
+source_hash: 59f9dda224ff681a
 ---
 
 ## 定義
@@ -90,7 +90,9 @@ source_hash: b24043e73b35092d
 
 LibreYOLOの2つのモデル階層も追跡に対応しません。`LibreSAM` で読み込むモデルは画像セグメンターで、`LibreOpenVocab` で読み込むモデルはフレームごとの検出器です。どちらも `track()` から例外を送出するため、代わりにフレームごとに `predict()` を使います。
 
-追跡はネイティブPyTorchモデルで実行されます。`LibreYOLO("model.onnx")` で読み込んだエクスポート済み成果物はランタイムバックエンドオブジェクトを返します。このオブジェクトは `predict()` を提供しますが、`track()` は提供しません。
+1.8.0以降、追跡はすべてのバックエンドで実行できます。`LibreYOLO("model.onnx")` で読み込んだエクスポート済み成果物は、PyTorchモデルと同じ `track()` シグネチャを持つランタイムバックエンドオブジェクトを返し、同じクリップではネイティブとONNXの追跡で同じトラックIDが得られます。バックエンドは `track(augment=True)` で `ValueError` を送出します。
+
+シェルでは、`libreyolo track` がフレームごとに1行を出力し、`--json` を付けるとフレームごとに1つのJSONオブジェクトを出力します。`persist` オプションはなく、ライブソースとWebカメラのソースは拒否します。
 
 ライブラリには4つのトラッカーが含まれ、`tracker` 引数で選択します。`"bytetrack.yaml"` のような `.yaml` 付きの表記も同じ組み込みトラッカーを選択します。LibreYOLOはトラッカーのYAMLファイルを読み込まず、作業ディレクトリにその名前のファイルが存在すると例外を送出します。
 

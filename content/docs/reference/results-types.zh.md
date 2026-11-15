@@ -42,7 +42,7 @@ snippets:
         # 行数据，先是普通 dict，再是 JSON
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: b4e69bd678ede2dd
+source_hash: 5728ec555ba4ef80
 ---
 
 ## Results 对象
@@ -55,7 +55,7 @@ source_hash: b4e69bd678ede2dd
 | `orig_shape` | `(int, int)` | 原始图像的高和宽 |
 | `path` | `str` | 输入来自磁盘时的源路径 |
 | `names` | `dict[int, str]` | 类别索引到类别名 |
-| `speed` | `dict[str, float]` | 每个阶段的毫秒数 |
+| `speed` | `dict[str, float]` | 每个阶段的毫秒数，前提是预测器记录了它们；它可以为空，大多数检测器就是这样 |
 | `track_id` | 张量 | 结果来自 `track()` 时的跟踪 ID |
 | `frame_idx` | `int` | 视频和流源的帧索引 |
 | `restore_scale` | `int` | 复原结果输出对输入的放大倍数；其他情况下都是 `1` |

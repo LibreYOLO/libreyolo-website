@@ -42,7 +42,7 @@ snippets:
     - label: インストール
       language: bash
       code: |
-        # Python 3.10〜3.12。WindowsではUbuntu 22.04のWSL2経路を検証済み
+        # Python 3.10または3.11。WindowsではUbuntu 22.04のWSL2経路を検証済み
         pip install "libreyolo[paddle]"
     - label: 固定バージョンを確認
       language: bash
@@ -93,12 +93,13 @@ snippets:
     - label: バックエンドを直接使用
       language: python
       code: |
+        from libreyolo import SAMPLE_IMAGE
         from libreyolo.backends.paddle import PaddleBackend
 
         # LibreYOLO()がPaddleディレクトリ用に構築するもの。同じResults
         # オブジェクトを返し、ファクトリの振り分けを経由しない
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
-        result = backend.predict("guggenheim-bilbao.jpg")
+        result = backend.predict(SAMPLE_IMAGE)
         print(result.boxes.xyxy[:3])
     - label: Paddleを直接使用
       language: python
@@ -132,7 +133,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: a0a292c513d2dfe8
+source_hash: bc8e8ef246bdf227
 ---
 
 ## インストール

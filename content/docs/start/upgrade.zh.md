@@ -1,18 +1,41 @@
 ---
-title: 升级到 1.7.0
-seo_title: LibreYOLO 从 1.6.0 升级到 1.7.0
-description: LibreYOLO 1.7.0 的迁移步骤：YOLO9 检查点、模块名称和训练配方，CLI 运行目录，混淆矩阵，以及新增的报错。
-lead: 1.7.0 让旧的 YOLO9 检查点继续以相同的浮点检测框加载。它改变了 YOLO9 家族的训练、代码在网络内部看到的名称，以及少数几处验证和预测的约定。
+title: 升级到 1.8.0
+seo_title: LibreYOLO 从 1.7 升级到 1.8.0
+description: LibreYOLO 1.8.0 的迁移步骤：结果取下标、验证指标、Results.save()、数据集路径、示例图像、RF-DETR 训练默认值和 Ultralytics 名称，另附 1.6.0 到 1.7.0 的说明。
+lead: 1.8.0 让结果、指标和报错的行为与 Ultralytics 一致。有几处调用返回的数字、形状或文件与 1.7.4 不同，所以升级前请先读第一节。
 keywords:
   - libreyolo 升级
+  - libreyolo 1.8.0 迁移
   - libreyolo 1.6.0 迁移
   - libreyolo 破坏性变更
   - yolo9 模块名称
   - clip_max_norm
   - yolo 混淆矩阵
-last_verified: 1.7.0
-source_hash: 895bcd7425f0052f
+last_verified: 1.8.0
+source_hash: 5ac885b012a549e5
 ---
+
+## 从 1.7 升级到 1.8
+
+- 从 1.8.0 起，在单图 `Results` 上用 `results[0]` 返回整个结果，包含它的全部检测结果，`results[-1]` 也一样；`for r in results` 只产出它一次。在 1.7 中，`results[0]` 只是第一个检测结果，迭代则逐个遍历检测结果。原来写 `results[0].boxes` 的代码现在会看到每一个检测框。其他整数（`results[2]`）仍然选中一个检测结果，并发出 `DeprecationWarning`：请改用 `results[2:3]` 或 `results.boxes[2]`。切片和布尔掩码照旧选中检测结果，`len(results)` 仍然统计检测结果的数量。
+
+- `val()` 的结果给指标起了名字：`metrics.box.map`、`.map50`、`.map75`、`.mp`、`.mr` 和 `.maps`，读自同样的 `metrics/...` 键。分割任务额外提供带掩码指标值的 `metrics.seg`。字典的键不变。
+
+- `Results.save()` 对每个任务都保存标注后的图像，而不再在生成和抠图之外的任务上抛异常。它既接受路径，也接受 `filename=`，默认是 `results_<image name>`，并返回该路径；`Results.show()` 显示同一张图像。生成的图像、3D 对象和 matte 的保存方式照旧。
+
+- `libreyolo.SAMPLE_IMAGE` 是 `guggenheim-bilbao.jpg`，`parkour.jpg` 已不在包里（#1034）。使用 `SAMPLE_IMAGE` 的脚本会拿到一张不同的图像和不同的检测结果。直接打开 `libreyolo/assets/parkour.jpg` 或 `parkour_result.jpg` 的代码必须改指向别的文件。
+
+- 你自己的数据集 YAML 里的相对 `path`（`.`、`./sub` 或 `sub`）会相对于 YAML 所在的文件夹解析（#1040）。在 1.7 中它会先在 `DATASETS_DIR` 下尝试，所以只要那个文件夹存在，`path: .` 就会变成 `~/datasets`，训练找到 0 张图像却一声不吭。内置的 YAML（例如 `coco8.yaml`），以及所在文件夹只存在于 `DATASETS_DIR` 下、或者带有 `download:` 而磁盘上还什么都没有的 YAML，仍然在那里解析。没有图像的划分现在会记录一条警告。
+
+- 新开始的 RF-DETR 训练运行使用上游的分类损失系数：检测、分割和旋转框的 `cls_loss_coef` 为 1（分割原来是 5），姿态为 2（原来是 1）（#1044）。续训的运行保留原来的系数，除非你传入一个。`early_stopping=True` 以前会被忽略，现在在没有给出 `patience` 时表示 patience 为 10。新的 `matcher_backend` 参数选择匹配器：`"auto"` 在计算能力 8.0 或更高的 Linux NVIDIA GPU 上装了 `libreyolo[rfdetr-train]` 时使用 GPU 匈牙利匹配，在其他所有地方使用 SciPy，`"scipy"` 也一样。训练结果与 1.7.4 不是逐位一致的。
+
+- 在导出的 Mask R-CNN、Faster R-CNN、FCOS、SSD、RetinaNet、YOLOv7、YOLOv2/v3/v4 和 YOLO-NAS-R 模型上，以及在 PyTorch 的 YOLOv1 上，`val()` 返回的 mAP 不同了（#1045）。这些验证以前用错了预处理，报告的 mAP 为 0 或接近 0，RetinaNet 则直接抛异常；现在它们与 PyTorch 模型一致。`predict()` 不受影响。YOLO-NAS 姿态模型和 YOLO-NAS-R 模型的 INT8 导出校准方式不同了。
+
+- 1.0 之前的全大写类名 `LIBREYOLO`、`LIBREYOLOX`、`LIBREYOLO9`、`LIBREYOLORFDETR` 和 `LIBREYOLONCNN` 又能导入了，会发出 `DeprecationWarning`，并解析为 `LibreYOLO`、`LibreYOLOX`、`LibreYOLO9`、`LibreRFDETR` 和 `NcnnBackend`（#1039）。改到这部分代码时顺手重命名。
+
+- Ultralytics 的名称会失败，并给出应当改写的 LibreYOLO 那一行（#1032、#1039）。`from libreyolo import YOLO`（`RTDETR`、`NAS`、`YOLOWorld`、`YOLOE`、`SAM` 也一样，大小写不限）会抛出点名 LibreYOLO 类的 `ImportError`，`LibreYOLO("yolov8n.pt")` 和其他 Ultralytics 权重名会给出最接近的 LibreYOLO 权重，用 Ultralytics 训练的检查点会被拒绝。这些名称都没有变成别名。
+
+- 下载会遵循 `HF_ENDPOINT`（#1033）。在这里设置的镜像服务所有权重和数据集下载，而不只是 `hf_hub_download`；Hugging Face 令牌只发给 huggingface.co。
 
 ## 从 1.6.0 升级到 1.7.0
 

@@ -31,7 +31,7 @@ meta:
   - label: 精度
     value: "FP32；YOLO9 和 YOLOX 检测支持 INT8。FP16 会被拒绝。"
   - label: 环境要求
-    value: Python 3.12 或更高版本，因为 onnx2tf 2.4.x 没有发布更早的 wheel
+    value: 导出需要 Python 3.12 或 3.13，因为 onnx2tf 没有发布这个范围之外的 wheel
 verification: >-
   读自 dev 分支上的
   libreyolo/export/tflite.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/tflite.py
@@ -47,7 +47,7 @@ snippets:
     - label: 先确认 Python 版本
       language: bash
       code: |
-        python -c "import sys; print(sys.version_info >= (3, 12))"
+        python -c "import sys; print((3, 12) <= sys.version_info[:2] <= (3, 13))"
   export:
     - label: Python
       language: python
@@ -130,15 +130,16 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 3548d74e992bb76d
+source_hash: 692d49f527c3c14c
 ---
 
 ## 安装
 
 <code-tabs name="install" />
 
-这个额外依赖会拉进 `onnx2tf` 做转换，拉进 `ai-edge-litert` 来运行结果，两者都挂在
-Python 3.12 的版本标记后面。在更老的解释器上，导出会抛出一个点明版本要求的
+这个额外依赖会在 Python 3.12 和 3.13 上拉进 `onnx2tf` 做转换，在 Python 3.12 或更高版本上
+拉进 `ai-edge-litert` 来运行结果。在 Python 3.14 上转换器会被跳过，所以 `.tflite` 文件能在那里
+运行，但无法导出。在不受支持的解释器上，导出会抛出一个点明版本要求的
 `ImportError`，而不是在转换器内部失败。
 
 `libreyolo[litert]` 装的是完全一样的东西。格式字符串 `litert` 是 `tflite` 的别名，

@@ -45,7 +45,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 31c5b44171cbcd0e
+source_hash: 328b226c6ad9acdf
 ---
 
 ## 定義
@@ -60,7 +60,11 @@ source_hash: 31c5b44171cbcd0e
 
 ## モデル
 
-[SAM 3D Body](/docs/models/sam-3d-body)はこのタスクを提供する唯一のファミリーで、移植版ではなくラッパーです。Metaの `sam-3d-body` パッケージはSAM Licenseの下で公開され、LibreYOLO独自のコードはそこから派生できないため、何も組み込みません。2つのバックボーンが同じMHR身体モデルを共有します。`d3` はDINOv3 ViT-H/16+エンコーダー、`h` は初代ViT-Hです。
+このタスクを提供するファミリーは2つです。
+
+1.8.0で追加されたInstantHMRは、n、t、s、mの4サイズで提供され、`LibreYOLO("LibreInstantHMRm-mesh.pt")` のように読み込みます。RF-DETRで人物を検出するか、`person_boxes=` または `person_detector=` を受け取り、同じ `Results.meshes` にMHR身体メッシュを返します。n、t、s、mの重みはCC BY-NC 4.0で、`LibreInstantHMRm-mesh-commercial` はApache-2.0です。ONNXへのエクスポートと、学習済みチェックポイントからのファインチューニングに対応し、`val()` はありません。
+
+[SAM 3D Body](/docs/models/sam-3d-body)は移植版ではなくラッパーです。Metaの `sam-3d-body` パッケージはSAM Licenseの下で公開され、LibreYOLO独自のコードはそこから派生できないため、何も組み込みません。2つのバックボーンが同じMHR身体モデルを共有します。`d3` はDINOv3 ViT-H/16+エンコーダー、`h` は初代ViT-Hです。
 
 最初の推論前に3つの要件があり、いずれも省略できません。
 

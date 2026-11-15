@@ -69,7 +69,7 @@ snippets:
             format="openvino",
             imgsz=640,
             batch=1,
-            dynamic=False,    # True 会在 IR 中保留动态 batch 轴
+            dynamic=True,     # Python 默认值；False 会固定 batch 轴。CLI 是静态的
             half=False,       # True 会存储 FP16 权重
             int8=False,       # True 会运行 NNCF 训练后量化
             data=None,        # int8=True 时必填
@@ -141,7 +141,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 519816615e3aca3c
+source_hash: 76f01667129b8c4e
 ---
 
 ## 安装

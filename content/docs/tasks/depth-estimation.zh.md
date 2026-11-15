@@ -77,7 +77,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 23e295da8ac303cf
+source_hash: 5da2f221870e9e51
 ---
 
 ## 定义
@@ -121,7 +121,16 @@ Anything V2 Large 蒸馏而来，另有一个检查点，它的解码器避开�
 
 [Marigold V2](/docs/models/marigold-v2) 提供基于扩散模型的深度适配器，并明确记录深度编码。
 
-[GTR](/docs/models/gtr) 预测度量深度（metric depth），并以相对逆深度的形式返回，因此对于与其训练数据相似的场景，`1 / result.depth_map.data` 可以还原出以米为单位的深度。它使用基础包运行，支持训练，并可导出为 ONNX 和 TorchScript。
+1.8.0 新增了四个深度来源，全部仅支持推理。MoGe-3
+（`LibreYOLO("LibreMoGe3l-depth.pt")`，尺寸 l 和 g）返回以米为单位的度量深度（metric depth），
+并把相机空间点图、像素内参和有效性掩码附在 `depth_map.point_map`、`depth_map.intrinsics` 和
+`depth_map.valid_mask` 上。Video Depth Anything（尺寸 s、b 和 l）把一组帧、一个目录或一段视频
+当作一个序列，在同一个相对尺度上为每帧返回一张深度图；它的 b 和 l 权重仅限非商用。
+Speridlabs Iris-Z 用 `LibreGen("speridlabs-iris-z", task="depth")` 加载，4 步返回相对对数深度；
+Open Vision Banana 通过 `LibreGen("open-vision-banana")` 用一张灰度逆深度图回应深度提示。
+Iris-Z 和 Open Vision Banana 的权重采用 FLUX Non-Commercial License。
+
+[GTR](/docs/models/gtr) 预测度量深度，并以相对逆深度的形式返回，因此对于与其训练数据相似的场景，`1 / result.depth_map.data` 可以还原出以米为单位的深度。它使用基础包运行，支持训练，并可导出为 ONNX 和 TorchScript。
 
 ## 预测
 

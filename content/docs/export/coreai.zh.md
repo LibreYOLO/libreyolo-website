@@ -88,7 +88,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: a35bfeafac6d6966
+source_hash: 82a97c5d396facd5
 ---
 
 ## 安装
@@ -157,7 +157,7 @@ PIDNet 和 LingBotVision 的语义分割；以及 FOMO 点检测。每一项都�
 | EoMT 语义分割 | 严格捕获失败并报 `GuardOnDataDependentSymNode`：掩码路径里有地方从张量上读了一个值并据此分支 |
 | SegFormer 语义分割 | 捕获路径尚未评估，而且不管什么格式，它公布的权重都是非商用的 |
 | L2CS 视线估计 | 模型本身只支持 ONNX、TorchScript、ExecuTorch、TensorRT 和 OpenVINO，这是模型侧的决定 |
-| Depth Anything 3 深度估计 | 这个家族对所有格式都拒绝导出 |
+| Depth Anything 3 深度估计 | 这个家族只能导出为 ONNX、TorchScript、ExecuTorch、TensorRT 和 OpenVINO |
 
 RF-DETR 有一条注意事项，值得在比较产物之前先读一遍。它的一致性是对着 Core AI
 导出器自己准备的那张图记录的，而不是对着 ONNX；在 640 画布下，RF-DETR 的 ONNX

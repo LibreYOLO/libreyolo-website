@@ -78,7 +78,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.depth_map.data.shape)
-source_hash: 23e295da8ac303cf
+source_hash: 5da2f221870e9e51
 ---
 
 ## 定義
@@ -104,6 +104,8 @@ source_hash: 23e295da8ac303cf
 [SenseNova-Vision](/docs/models/sensenova-vision)は、7つのタスクに対応する同じ7Bチェックポイントを使い、拡散デコードを通して深度マップを画像として生成します。`sensenova`追加パッケージが必要で、重みの利用は非商用に制限されます。ライセンスはモデルページに記載されています。
 
 [Marigold V2](/docs/models/marigold-v2)は、明示的な深度エンコーディングを持つ拡散ベースの深度アダプターを追加します。
+
+1.8.0では4つの深度ソースが追加され、いずれも推論専用です。MoGe-3（`LibreYOLO("LibreMoGe3l-depth.pt")`、サイズはlとg）はメートル単位のメトリック深度を返し、カメラ空間の点群マップ、ピクセル単位の内部パラメータ、有効マスクを`depth_map.point_map`、`depth_map.intrinsics`、`depth_map.valid_mask`として付加します。Video Depth Anything（サイズはs、b、l）は、フレームのリスト、ディレクトリ、動画を1つのシーケンスとして扱い、単一の相対スケールでフレームごとに1つの深度マップを返します。bとlの重みは非商用です。`LibreGen("speridlabs-iris-z", task="depth")`で読み込むSperidlabs Iris-Zは4ステップで相対対数深度を返し、`LibreGen("open-vision-banana")`経由のOpen Vision Bananaは深度プロンプトに対してグレーの逆深度画像を返します。Iris-ZとOpen Vision Bananaの重みはFLUX Non-Commercial Licenseの下にあります。
 
 [GTR](/docs/models/gtr)はメトリック深度を予測して相対逆深度として返すため、学習データに似たシーンでは`1 / result.depth_map.data`でメートル単位の値を復元できます。基本パッケージで実行でき、学習にも対応し、ONNXとTorchScriptへエクスポートできます。
 

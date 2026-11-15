@@ -61,7 +61,7 @@ snippets:
         a = model.predict(points=[640, 420], labels=[1])
         b = model.predict(bboxes=[300, 200, 900, 700])
         model.reset_image()
-source_hash: c4fb6d5a622f99ff
+source_hash: caa96c8ed4765ba6
 ---
 
 ## 安装
@@ -103,9 +103,13 @@ labels 或掩码组合使用。那里的 `conf` 是 PCS 检测分数，而不是
 
 ## 变体
 
-只有一个尺寸 large，输入固定为 1008 px。SAM 3.1 不支持：它的实现带有一个自定义
-许可证，无法收录进这个 MIT 许可的仓库，而且 LibreYOLO 依赖的 Transformers 版本
-还加载不了它的检查点（checkpoint）格式。
+只有一个尺寸 large，输入固定为 1008 px。
+
+从 1.8.0 起支持 SAM 3.1，写作 `LibreSAM("sam3.1")`，或者用 `LibreSAM31` 类。它在与
+SAM 3 相同的流水线上运行 Meta 的 SAM 3.1 图像路径，提示方式相同，`text=` 概念提示相同，
+返回的 `Results` 也相同。它的权重从需要申请访问的 `LibreYOLO/LibreSAM31large` 镜像下载，
+由 Meta 原始格式的检查点（checkpoint）转换而来，采用 Meta 的 SAM 许可证而不是 MIT，所以
+首次下载前要在模型页面上接受条款并完成认证。SAM 3.1 的 Object Multiplex 视频跟踪不受支持。
 
 ## 许可
 

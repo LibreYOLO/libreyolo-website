@@ -148,7 +148,7 @@ snippets:
         result = model(SAMPLE_IMAGE)
 
         print(result.obb.xywhr)
-source_hash: 034f13811b187dcc
+source_hash: 7d9ae48252f2c1c7
 ---
 
 ## 定义
@@ -161,7 +161,7 @@ source_hash: 034f13811b187dcc
 
 ## 模型
 
-四个家族支持这个任务。
+五个家族支持这个任务。
 
 [RF-DETR](/docs/models/rf-detr) 支持训练。它可以预测、训练、验证和导出旋转框，并提供 n、s、m、l 四种尺寸的已发布旋转框检查点。它需要自己的 extra，`pip install "libreyolo[rfdetr]"`，模型页面列出了权重许可和来源。
 
@@ -174,6 +174,11 @@ source_hash: 034f13811b187dcc
 [YOLO-NAS](/docs/models/yolo-nas) 也支持 OBB 训练和推理。其预训练权重保留上游的非商用条款。
 
 [GTR](/docs/models/gtr) 发布了 `LibreGTRs-obb.pt` 和 `LibreGTRx-obb.pt`，在固定的 1024 输入尺寸下预测 DOTA v1.0 的 15 个类别。它使用基础包运行，支持预测、训练、验证以及 ONNX 和 TorchScript 导出。
+
+1.8.0 新增的 RiO-DETRv2 是一个实时旋转框 DETR，有 n、s、m、l 和 x 五种尺寸，以
+`LibreRiODETRv2` 加载。`LibreRiODETRv2n-obb.pt` 是 DOTA v1.0 检查点，在 1024 px 下有 15 个类别；
+`-obb-diorr` 是 DIOR-R，在 800 px 下有 20 个类别。它能导出为 ONNX 和 TorchScript，仅支持推理：
+`train()` 会抛异常。
 
 ## 预测
 

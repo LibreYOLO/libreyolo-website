@@ -34,7 +34,6 @@ snippets:
         result = model(SAMPLE_IMAGE, conf=0.25, iou=0.45)
 
         print(result.boxes.xyxy)
-        print(result.speed)
   stream:
     - label: Python
       language: python
@@ -46,7 +45,7 @@ snippets:
         # stream=True 返回一个生成器，每帧或每张图像一个 Results
         for result in model([SAMPLE_IMAGE, SAMPLE_IMAGE], stream=True):
             print(len(result))
-source_hash: 9403676faa1daecc
+source_hash: 011fa4d8664de5a6
 ---
 
 ## 构造

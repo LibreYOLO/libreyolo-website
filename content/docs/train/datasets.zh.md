@@ -57,7 +57,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 84e47ff97fb2e2f3
+source_hash: 4065193d01111f9d
 ---
 
 ## 把 train 指向一个数据集
@@ -95,8 +95,11 @@ Python 下载代码块，需要下面讲的那个显式开关，要么就默认�
 
 ## 数据集在磁盘上的位置
 
-YAML 里的 `path` 键指定数据集根目录。绝对的 `path` 按原样使用。相对的先在数据集
-目录下找，然后在 YAML 文件自己旁边找，而即将下载的数据集会放进数据集目录。
+YAML 里的 `path` 键指定数据集根目录。绝对的 `path` 按原样使用。从 1.8.0 起，你自己
+YAML 里的相对 `path`（`.`、`./sub` 或 `sub`）会相对于 YAML 所在的文件夹解析，与 Ultralytics 格式
+一致。只有那里什么都不存在时，LibreYOLO 才会回退到数据集目录下同名的文件夹，而带有 `download:` 键、
+磁盘上还什么都没有的 YAML 会下载到那里。内置的 YAML（例如 `coco8.yaml`）总是在数据集目录下解析。
+找不到图像的划分会记录一条警告，点出解析后的路径、数据集根目录和 YAML。
 
 这个目录是 `~/datasets`，可以用 `LIBREYOLO_DATASETS_DIR` 环境变量覆盖。它没有配置
 文件。

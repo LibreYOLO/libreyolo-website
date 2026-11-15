@@ -44,7 +44,7 @@ snippets:
         model = LibreSAM3DBody(None, size="d3", device="cuda")
 
         result = model(SAMPLE_IMAGE, person_detector=detector)
-source_hash: 31c5b44171cbcd0e
+source_hash: 328b226c6ad9acdf
 ---
 
 ## 定义
@@ -70,8 +70,15 @@ Rig，旋转是以弧度表示的欧拉角而不是轴角，`body_pose` 是一�
 
 ## 模型
 
-[SAM 3D Body](/docs/models/sam-3d-body) 是唯一服务这个任务的家族，而且它是一层
-封装而不是移植：Meta 的 `sam-3d-body` 包以 SAM License 发布，LibreYOLO 自己的
+有两个家族服务这个任务。
+
+1.8.0 新增的 InstantHMR 提供 n、t、s 和 m 四种尺寸，写作
+`LibreYOLO("LibreInstantHMRm-mesh.pt")`。它用 RF-DETR 找人，或者接受
+`person_boxes=` 或 `person_detector=`，并在同样的 `Results.meshes` 里返回 MHR 人体网格。
+它的 n、t、s 和 m 权重采用 CC BY-NC 4.0 许可，`LibreInstantHMRm-mesh-commercial` 采用
+Apache-2.0 许可。它能导出为 ONNX，并能从预训练检查点微调，没有 `val()`。
+
+[SAM 3D Body](/docs/models/sam-3d-body) 是一层封装而不是移植：Meta 的 `sam-3d-body` 包以 SAM License 发布，LibreYOLO 自己的
 代码不能从它派生，所以其中没有任何一行被收进仓库。两个骨干共用同一个 MHR 人体
 模型，`d3` 用 DINOv3 ViT-H/16+ 编码器，`h` 用原始的 ViT-H。
 

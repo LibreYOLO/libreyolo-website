@@ -30,7 +30,7 @@ meta:
   - label: 精度
     value: FP32。YOLO9とYOLOXの物体検出ではINT8に対応します。FP16は拒否されます。
   - label: 要件
-    value: Python 3.12以降。onnx2tf 2.4.xは古いバージョン向けのwheelを公開していないためです。
+    value: エクスポートにはPython 3.12または3.13が必要。onnx2tfはその範囲外のwheelを公開していないためです。
 verification: >-
   devブランチのlibreyolo/export/tflite.py、libreyolo/export/exporter.py、libreyolo/export/support.py、libreyolo/backends/tflite.py、pyproject.tomlを参照しました。
 snippets:
@@ -44,7 +44,7 @@ snippets:
     - label: 最初にPythonバージョンを確認
       language: bash
       code: |
-        python -c "import sys; print(sys.version_info >= (3, 12))"
+        python -c "import sys; print((3, 12) <= sys.version_info[:2] <= (3, 13))"
   export:
     - label: Python
       language: python
@@ -127,14 +127,14 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 3548d74e992bb76d
+source_hash: 692d49f527c3c14c
 ---
 
 ## インストール
 
 <code-tabs name="install" />
 
-追加パッケージは、変換用の `onnx2tf` と結果の実行用の `ai-edge-litert` を導入します。どちらにもPython 3.12のマーカーがあります。古いインタープリターでは、コンバーター内で失敗する代わりに、必要なバージョンを示す `ImportError` がエクスポート時に発生します。
+追加パッケージは、Python 3.12と3.13では変換用の `onnx2tf` を、Python 3.12以降では結果の実行用の `ai-edge-litert` を導入します。Python 3.14ではコンバーターが除外されるため、`.tflite` ファイルは実行できますがエクスポートはできません。サポート対象外のインタープリターでは、コンバーター内で失敗する代わりに、必要なバージョンを示す `ImportError` がエクスポート時に発生します。
 
 `libreyolo[litert]` もまったく同じものをインストールします。フォーマット文字列 `litert` は `tflite` の別名であり、どちらでも出力ファイルは `.tflite` です。
 

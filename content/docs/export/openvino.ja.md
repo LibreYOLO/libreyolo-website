@@ -67,7 +67,7 @@ snippets:
             format="openvino",
             imgsz=640,
             batch=1,
-            dynamic=False,    # TrueはIR全体で動的バッチ軸を維持
+            dynamic=True,     # Pythonのデフォルト。Falseでバッチ軸を固定。CLIは静的
             half=False,       # TrueはFP16の重みを保存
             int8=False,       # TrueはNNCFの学習後量子化を実行
             data=None,        # int8=Trueの場合に必須
@@ -139,7 +139,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 519816615e3aca3c
+source_hash: 76f01667129b8c4e
 ---
 
 ## インストール
