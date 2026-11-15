@@ -297,6 +297,21 @@ explicit keyword arguments, so a kwarg always wins over the file.
 already owns them. There is no `--cfg` flag on the CLI; the file path is a Python
 argument.
 
+## RF-DETR options
+
+RF-DETR takes a few trainer arguments of its own since 1.8.0:
+
+| Argument | Default | Meaning |
+|---|---|---|
+| `matcher_backend` | `"auto"` | `"auto"` uses the `torch-hungarian` GPU solver from `libreyolo[rfdetr-train]` on Linux CUDA devices of compute capability 8.0 or newer, else SciPy. `"scipy"` forces SciPy |
+| `early_stopping` | | `True` means `patience=10` unless `patience` is given |
+| `lr_encoder`, `lr_vit_layer_decay`, `lr_component_decay` | from the model | Backbone learning rate and its per-layer and per-component decay |
+| `focal_alpha` | from the model | Focal loss alpha, also used by the matcher |
+| `cls_loss_coef` | `1`, or `2` for pose | Classification loss weight. Resumed runs keep their recorded value |
+| `pin_memory`, `prefetch_factor`, `persistent_workers` | `None` | Dataloader settings. `None` keeps the task's previous defaults |
+
+See [RF-DETR](/docs/models/rf-detr#train) for the measured speedup.
+
 ## Related
 
 - [Datasets](/docs/train/datasets) for what `data=` accepts.

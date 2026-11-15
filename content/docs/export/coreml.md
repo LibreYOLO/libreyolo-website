@@ -125,6 +125,8 @@ snippets:
 
 <code-tabs name="install" />
 
+`coremltools` publishes wheels for macOS and Linux x86_64 only, and none for
+Python 3.14, so the extra installs nothing on Windows, ARM Linux or 3.14.
 Prediction needs macOS. `LibreYOLO()` refuses a `.mlpackage` on any other platform
 with a message naming the current one, and the support matrix records these
 combinations as available on the grounds that runtime parity needs a macOS runner.

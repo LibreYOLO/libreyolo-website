@@ -142,6 +142,13 @@ metadata field, so the two files travel together.
 
 YOLO9 and YOLOX detection support `int8=True` with `data=...`, `fraction=1.0`, `batch=1` and `dynamic=False`. Install `onnx2tf[tensorflow]`. Missing calibration data falls back to `coco8.yaml` with a warning. Separate normalized-box and score outputs use independent quantization scales; retain the sidecar `output_layout` metadata when deploying. Some internal operators can remain floating point.
 
+Since 1.7.3, INT8 builds a SavedModel with onnx2tf and runs one in-process
+`TFLiteConverter` pass, `int8_backend="converter"`, the default.
+`int8_backend="onnx2tf"` keeps the older two-pass `onnx2tf -oiqt` route as a
+fallback. `int8_output_dtype` is `"int8"` by default; `"float32"` keeps float
+output tensors and needs the converter backend, since the onnx2tf route always
+writes int8 inputs and outputs.
+
 ## Run the artifact
 
 <code-tabs name="run" />

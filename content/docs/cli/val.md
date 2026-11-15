@@ -102,7 +102,7 @@ Classification reports `accuracy_top1` and `accuracy_top5`. Point detection
 reports `precision`, `recall`, `f1`, `MLE`, `MAE`, `RMSE` and `mAP_sweep`.
 Depth reports `abs_rel`, `rmse`, `delta1`, `delta2` and `delta3`. Semantic
 segmentation reports `mIoU` and `pixel_accuracy`. Restoration reports `PSNR`
-and `SSIM`.
+and `SSIM`. Optical flow reports `epe`, `px1`, `px3` and `fl_all`.
 
 The JSON result also carries `eval_backend`, naming the COCO evaluation library
 and version that produced the numbers, so two runs can be compared knowing

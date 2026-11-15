@@ -127,6 +127,11 @@ an extra is present.
 | `executorch` | `executorch` |
 | `triton` | `tritonclient[http]` for HTTP and HTTPS V2 inference |
 
+Axelera Metis export has no extra: `axelera-devkit` and `axelera-rt` come from
+Axelera's own package index and pin `torch<2.15`, `typer<0.13` and
+`click==8.1.8`, so they go in a dedicated environment. See
+[Axelera Metis](/docs/export/axelera).
+
 ### Training, evaluation and logging
 
 | Extra | Adds |

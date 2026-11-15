@@ -41,6 +41,7 @@ Applies to `detect`, `segment`, `pose` and `obb`.
 | `nc` | | Class count; must match `names` when present |
 | `download` | | Download instructions; Python scripts need explicit opt-in |
 | `annotations` | | Split to native COCO JSON file, for detect, segment and obb |
+| `channels` | | `1` for a grayscale model, `3` (default) for RGB. `2` is reserved for event histograms |
 
 `train`, `val` and `test` may be image directories, image-list `.txt` files,
 or lists of those. Label paths follow one substitution:
@@ -67,6 +68,12 @@ category IDs are sorted and mapped densely to `0..N-1`.
 
 A dataset YAML does not carry a `task` key. Explicit model and task selection
 wins.
+
+With `channels: 1`, every image is converted to grayscale when read, for
+training, validation and prediction, and the model's input convolution takes
+one channel. Supported on YOLO9 (with YOLO9-E2E and YOLO9-P2), YOLOv7, YOLOX, YOLO-NAS, RTMDet,
+PP-YOLOE, PicoDet, D-FINE, DEIM, DEIMv2, RT-DETR, RT-DETRv2, RT-DETRv4,
+RF-DETR, EC and FOMO; other models raise a `ValueError`.
 
 Rules common to every text label file:
 

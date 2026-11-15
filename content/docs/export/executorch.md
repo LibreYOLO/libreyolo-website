@@ -110,9 +110,15 @@ This extra is deliberately outside `libreyolo[all]`, because ExecuTorch pins whi
 Torch version it works with and installing it would drag the whole environment
 onto that pair. Install it into an environment you are willing to constrain.
 
-On Windows the lowering step calls the `flatc` executable that ships with
-ExecuTorch. If it is not on `PATH` the export raises a `RuntimeError` saying so,
-and running from a Visual Studio 2022 Developer PowerShell is the fix.
+The extra pins `executorch>=1.2,<1.3` with `torch>=2.11,<2.12` and
+`torchvision>=0.26,<0.27`, the pair ExecuTorch 1.2's runtime is built against.
+ExecuTorch publishes no Python 3.14 wheels, so on 3.14 the extra installs
+nothing and the export raises a clear error.
+
+The lowering step calls the `flatc` executable that ships with ExecuTorch. The
+exporter points ExecuTorch at the environment's own `flatc` through
+`FLATC_EXECUTABLE`, so it is found even when the virtual environment is not
+activated.
 
 ## Export
 

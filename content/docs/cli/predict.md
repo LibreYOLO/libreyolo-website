@@ -54,7 +54,7 @@ word is stripped before parsing.
 
 | Argument | Default | Meaning |
 |---|---|---|
-| `source` | | Image path, directory, or URL. Required |
+| `source` | | Image path, directory, URL, or a comma-separated `a.jpg,b.jpg` list of existing files. Required |
 | `model` | `yolox-s` | Model name or path |
 | `conf` | `0.25` | Confidence threshold |
 | `iou` | `0.45` | NMS IoU threshold |
@@ -64,6 +64,9 @@ word is stripped before parsing.
 | `agnostic_nms` | `false` | Class-agnostic NMS: among boxes overlapping above `iou`, keep only the highest-scoring one whatever their classes. Detect, segment, pose and OBB |
 | `half` | `false` | FP16 inference (CUDA only, requires model support) |
 | `save` | `false` | Save annotated images |
+| `save_flow` | `false` | Optical flow only: also write each pair's raw field as a Middlebury `.flo` file next to the rendered output |
+| `arrows` | `false` | Optical flow only: save or show the arrows view, one arrow every 16 px, instead of the colour wheel. Needs `save` or `show` |
+| `warp` | `false` | Optical flow only: save or show the warp check, frame t beside frame t+1 warped back onto it. Needs `save` or `show` |
 | `batch` | `1` | Images per forward pass for directory sources. Above 1 runs true batched inference on models that support it |
 | `stream` | `false` | Yield results incrementally. Turned on automatically for webcams and live streams |
 | `stream_buffer` | `false` | Buffer every live frame instead of keeping only the newest |

@@ -131,6 +131,7 @@ slots, and a model fills only the ones its task produces. Every other slot is
 | `panoptic` | `PanopticSegmentation` | `(H, W)` segment ids plus `segments_info` | Panoptic segmentation |
 | `depth_map` | `DepthMap` | `(H, W)` floats | Depth estimation |
 | `normal_map` | `NormalMap` | `(H, W, 3)` unit vectors | Surface normals |
+| `flow` | `FlowField` | `(H, W, 2)` pixel displacements to the next frame | Optical flow |
 | `edges` | `EdgeMap` | `(H, W)` floats in `[0, 1]` | Edge detection |
 | `restored` | `RestoredImage` | `(H, W, 3)` uint8 RGB | Restoration and super-resolution |
 | `matte` | `Matte` | `(H, W)` floats in `[0, 1]` | Alpha matting and background removal |

@@ -99,7 +99,7 @@ through `LibreYOLO("model.onnx")` returns a runtime backend object with the same
 same track IDs on the same clip. Backends raise a `ValueError` on
 `track(augment=True)`.
 
-From a shell, `libreyolo track` prints one line per frame, or one JSON object
+From a shell, [`libreyolo track`](/docs/cli/track) prints one line per frame, or one JSON object
 per frame with `--json`. It has no `persist` option and rejects live and webcam
 sources.
 

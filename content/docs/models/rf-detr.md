@@ -62,6 +62,22 @@ snippets:
       code: |
         libreyolo train model=LibreRFDETRs.pt data=my-dataset.yaml \
           epochs=50 device=0,1 batch=-1
+    - label: Faster training options
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        # pip install "libreyolo[rfdetr-train]" for the GPU matcher.
+        model = LibreYOLO("LibreRFDETRs.pt")
+        model.train(
+            data="my-dataset.yaml",
+            epochs=50,
+            matcher_backend="auto",    # torch-hungarian on Linux CUDA sm80+, else SciPy
+            early_stopping=True,       # patience 10 unless patience= is given
+            pin_memory=True,
+            prefetch_factor=2,
+            persistent_workers=True,
+        )
   val:
     - label: Python
       language: python
@@ -208,6 +224,30 @@ Segment fine-tuning starts from a segment checkpoint, because RF-DETR has no
 detect-to-segment transfer. `libreyolo train model=LibreRFDETRn-seg.pt task=segment`
 loads that checkpoint, and a detection checkpoint with `task=segment` stops
 with an error.
+
+Since 1.8.0 the trainer carries upstream RF-DETR's training optimizations
+(#1044): batched matching, merged optimizer groups and leaner proposal and
+decoder execution, with the same API, checkpoint format and parameter names.
+The pull request measured about 1.7x per step for Nano and 1.5x for Large on an
+RTX 3090 in BF16. Our own A/B against 1.7.4, an RF100 fine-tune, ran about 20%
+faster per epoch with identical COCO mAP and identical loss and matching.
+
+`matcher_backend="auto"`, the default, uses the pinned `torch-hungarian` solver
+from the `rfdetr-train` extra on Linux NVIDIA CUDA devices of compute
+capability 8.0 or newer, and falls back to SciPy everywhere else, or when the
+package is missing. `matcher_backend="scipy"` forces the original solver. On
+equal-cost ties the two solvers may pick different but equally optimal
+assignments.
+
+`lr_encoder`, `lr_vit_layer_decay`, `lr_component_decay`, `focal_alpha` and
+`cls_loss_coef` can now be passed to `train()`; unset, they resolve from the
+model and are recorded in the run's configuration. A fresh run's
+`cls_loss_coef` follows upstream: 1 for detection, segmentation and oriented
+boxes, 2 for pose. Resumed runs keep their old coefficient unless you override
+it. `early_stopping=True` means a patience of 10 when no `patience` is given.
+`pin_memory`, `prefetch_factor` and `persistent_workers` are honored; `None`
+keeps the previous task defaults. The trainer is AdamW only, and another
+`optimizer` logs a warning.
 
 See [training](/docs/train) for datasets, augmentation, multi-GPU and loggers.
 

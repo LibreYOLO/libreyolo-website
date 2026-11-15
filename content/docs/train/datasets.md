@@ -130,6 +130,17 @@ lines starting with `#` are skipped.
 `names` may be a list or an integer-keyed mapping. `nc` is optional; when both
 are present and disagree, the doctor reports it as an error.
 
+`channels: 1`, new in 1.8.0, trains a grayscale model, with the same key and
+behavior as Ultralytics. Images are converted to gray as they are read, for
+training, validation and prediction, so a colour dataset needs no converted
+copy. The input convolution becomes one-channel, initialized from the
+pretrained RGB weights summed. The checkpoint stores `channels: 1`, and exports
+take a one-channel `(N, 1, H, W)` input. Supported on YOLO9 (with YOLO9-E2E and YOLO9-P2), YOLOv7, YOLOX, YOLO-NAS, RTMDet,
+PP-YOLOE, PicoDet, D-FINE, DEIM, DEIMv2, RT-DETR, RT-DETRv2, RT-DETRv4,
+RF-DETR, EC and FOMO; other models raise.
+`channels: 3` is the default, and `channels: 2` keeps its event-histogram
+meaning.
+
 RF-DETR pose reads `kpt_names` keyed by class ID or name. It keeps the first named keypoint rows per class; an empty list denotes a box-only class. Multi-class pose requires `names` and at least one keypoint-bearing class.
 
 ## Directory layout and label files

@@ -126,6 +126,12 @@ for next to the active Python interpreter first and on `PATH` second. A missing
 converter raises an `ImportError` naming the install command rather than failing
 mid-conversion.
 
+MNN's Linux wheels ask for an executable stack, which glibc 2.41 and newer refuse
+(Ubuntu 25.04 and later, Fedora 42 and later), so `import MNN` fails although the
+package is installed. LibreYOLO's error names the library. Start Python with
+`GLIBC_TUNABLES=glibc.rtld.execstack=2` (glibc 2.42 and newer), or clear the flag
+once with `patchelf --clear-execstack` on that library.
+
 ## Export
 
 <code-tabs name="export" />

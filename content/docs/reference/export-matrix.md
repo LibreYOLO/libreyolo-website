@@ -61,7 +61,8 @@ and there are thirteen formats:
 `onnx`, `torchscript`, `executorch`, `tensorrt`, `openvino`, `paddle`, `mnn`,
 `rknn`, `axelera`, `ncnn`, `tflite`, `coreml`, `coreai`.
 
-`axelera`, added in 1.8.0, compiles an INT8 model for Axelera's Metis AIPU.
+`axelera`, added in 1.8.0, compiles an INT8 model for Axelera's Metis AIPU; see
+[Axelera Metis](/docs/export/axelera) for the families and sizes it covers.
 
 `model.export(format=...)` additionally accepts two aliases: `engine` for
 `tensorrt`, and `litert` for `tflite`, which is the current name for TensorFlow
@@ -137,6 +138,7 @@ These tasks are blocked for any family with no explicit entry.
 | `normal` | The family is not wired to the fixed-canvas dense unit-normal and backend renormalization contract |
 | `panoptic` | Panoptic export has no backend runtime contract |
 | `gaze` | The family is not wired to the shared two-head logits and backend expectation-decoding contract |
+| `flow` | The two-input graph (`image1`, `image2`) and the backend vector-rescale contract are not implemented for any family yet |
 
 An explicit entry overrides these, which is how, for example, a wired
 semantic family still exports.
@@ -150,9 +152,14 @@ semantic family still exports.
 | `eomt` | Instance and panoptic export, which have no runtime parsing |
 | `l2cs` | Anything outside ONNX, TorchScript, ExecuTorch, TensorRT and OpenVINO |
 | `hrnet` | Anything outside ONNX, TorchScript, OpenVINO and TensorRT |
-| `sam`, `sam2`, `sam3`, `edgetam`, `mobilesam` | Every format; promptable model export is out of scope for the v1 runtime contract |
+| `dekr` | Anything outside ONNX, TorchScript, OpenVINO and TensorRT, the formats its raw two-output pose graph supports |
+| `video_depth_anything` | Every format. The network reads a 32-frame window and windows are stitched on the host, which the single-image depth contract does not describe |
+| `speridlabs_irisz` | Every format, for both tasks. Image generation and depth run a multi-step sampling loop over a transformer and the FLUX.2 VAE |
+| `marigold_v2` | Every format; its quantized diffusion export has not been integrated or validated |
+| `sam`, `sam2`, `sam3`, `sam31`, `edgetam`, `mobilesam` | Every format; promptable model export is out of scope for the v1 runtime contract |
 | `grounding_dino`, `owlv2`, `omdet_turbo`, `ov_deim` | Every format; open-vocabulary runtime export is out of scope for v1 |
-| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl` | Every format; generative VLM export is out of scope for v1 |
+| `florence2`, `kosmos2`, `lfm2vl`, `internvl3`, `qwen3vl`, `smolvlm2`, `locateanything`, `northmicrovision`, `gemma4`, `moondream`, `sensenovavision`, `libremodus`, `wevisonevl`, `deepseekocr`, `paddleocrvl`, `glmocr`, `falconocr`, `falconperception` | Every format; generative VLM export is out of scope for v1 |
+| `qwen3vl_embedding` | Every format; VLM embedding export is out of scope for v1 |
 
 PicoSAM3 is the exception in the promptable tier: it exports its raw 96 pixel
 ROI network to ONNX.
@@ -162,8 +169,9 @@ ROI network to ONNX.
 DETR-style decoders need sampling operations NCNN does not implement, so these
 families are blocked for `ncnn` unless an explicit entry says otherwise:
 Deformable DETR, DETR, DINO-DETR, D-FINE, LW-DETR, DEIM, DEIMv2, RT-DETR,
-RT-DETRv2, RT-DETRv4, RF-DETR and EC. The rejection names ONNX, OpenVINO,
-TorchScript and TensorRT as the alternatives.
+RT-DETRv2, RT-DETRv4, RF-DETR, EC, TinyFormer, RiO-DETRv2 and PP-DocLayoutV3.
+The rejection names ONNX, OpenVINO, TorchScript and TensorRT as the
+alternatives.
 
 ## Parity thresholds
 
@@ -191,6 +199,16 @@ A blocked combination raises `NotImplementedError` in preflight and the
 message carries the recorded reason. `validated_alternatives(family, task)`
 returns the formats that are validated for that pair, which is the useful
 thing to print next to a rejection.
+
+Ultralytics format names LibreYOLO does not produce are rejected with a hint
+naming the closest format: `saved_model` and `pb` point to `tflite` or `onnx`,
+`tfjs` to `onnx` with onnxruntime-web, and `edgetpu` to `tflite`.
+
+An exported artifact loaded back through `LibreYOLO()` supports `track()` since
+1.8.0, on every format, with the same signature as the PyTorch model. 1.8.0
+also fixes `val()` on exported Mask R-CNN, Faster R-CNN, FCOS, SSD, RetinaNet,
+YOLOv7, YOLOv2, YOLOv3, YOLOv4 and YOLO-NAS-R models, so their exported metrics
+can differ from what 1.7.4 reported.
 
 The arguments every exporter shares are listed on the
 [model API page](/docs/reference/model-api). Format-specific arguments live on

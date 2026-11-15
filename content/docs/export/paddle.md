@@ -141,6 +141,10 @@ the expected one. Newer Paddle releases reject parts of the static code X2Paddle
 1.6.0 generates, so failing early is better than producing an artifact nobody has
 validated.
 
+Since 1.7.2, `paddle` is not part of `libreyolo[all]`: its X2Paddle converter
+needs an older ONNX than the TFLite path in `all`. Install
+`libreyolo[paddle]` on its own, in an environment without `tflite`.
+
 ## Export
 
 <code-tabs name="export" />

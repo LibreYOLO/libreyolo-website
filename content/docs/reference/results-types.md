@@ -80,6 +80,7 @@ decided by its task.
 | `panoptic` | `PanopticSegmentation` | panoptic |
 | `depth_map` | `DepthMap` | depth |
 | `normal_map` | `NormalMap` | normal |
+| `flow` | `FlowField` | flow |
 | `edges` | `EdgeMap` | edge |
 | `restored` | `RestoredImage` | restore |
 | `matte` | `Matte` | matte |
@@ -196,6 +197,17 @@ Dense surface-normal field, float32 `(H, W, 3)` on the original image canvas,
 in the OpenCV camera frame: `+x` right, `+y` down, `+z` into the scene.
 Normals face the camera, so a fronto-parallel surface is `(0, 0, -1)`. Every
 pixel is a unit vector. `assert_normalized(atol=1e-4)` checks that invariant.
+
+## FlowField
+
+Dense optical flow, float32 `(H, W, 2)` on the original canvas of the first
+frame of a pair. `data[y, x]` is `(dx, dy)`, the displacement in pixels to the
+next frame, `+x` right and `+y` down. `dx`, `dy`, `magnitude`, `angle`,
+`max_magnitude` and `mean_magnitude` read it, `to_rgb()` renders the colour
+wheel and `warp(image)` warps an image back with the field. `confidence` is an
+optional `(H, W)` map in `[0, 1]`, and `next_frame` the second frame as uint8
+RGB, attached by predict for the warp view. `save(path)` writes a Middlebury
+`.flo` or a `.npy` file. See [optical flow](/docs/tasks/optical-flow).
 
 ## EdgeMap
 
