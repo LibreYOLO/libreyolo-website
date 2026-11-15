@@ -127,7 +127,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 692d49f527c3c14c
+source_hash: ac0b7892b3f1cac8
 ---
 
 ## インストール
@@ -147,6 +147,12 @@ source_hash: 692d49f527c3c14c
 メタデータはサイドカーです。`weights/LibreYOLO9t.tflite.json` にはファミリー、タスク、クラス名、入力サイズ、姿勢スキーマが含まれます。FlatBuffer自体にLibreYOLOのメタデータフィールドはないため、2つのファイルを一緒に扱います。
 
 YOLO9とYOLOXの物体検出は、`data=...`、`fraction=1.0`、`batch=1`、`dynamic=False`を指定した`int8=True`に対応します。`onnx2tf[tensorflow]`をインストールしてください。キャリブレーションデータがない場合は警告を表示し、`coco8.yaml`にフォールバックします。正規化されたボックスとスコアの個別出力は、それぞれ独立した量子化スケールを使います。デプロイ時にはサイドカーの`output_layout`メタデータを保持してください。内部演算子の一部は浮動小数点のまま残る場合があります。
+
+1.7.3以降、INT8ではonnx2tfでSavedModelを構築し、プロセス内で`TFLiteConverter`を1回だけ実行します。
+これがデフォルトの`int8_backend="converter"`です。
+`int8_backend="onnx2tf"`は、従来の2パスの`onnx2tf -oiqt`経路をフォールバックとして残します。
+`int8_output_dtype`のデフォルトは`"int8"`です。`"float32"`は出力テンソルを浮動小数点のまま保ち、
+converterバックエンドが必要です。onnx2tfの経路は常にint8の入出力を書き出すためです。
 
 ## 成果物の実行
 

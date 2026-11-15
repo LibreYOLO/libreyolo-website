@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: 59f9dda224ff681a
+source_hash: e374bdc809893033
 ---
 
 ## 定義
@@ -92,7 +92,7 @@ LibreYOLOの2つのモデル階層も追跡に対応しません。`LibreSAM` �
 
 1.8.0以降、追跡はすべてのバックエンドで実行できます。`LibreYOLO("model.onnx")` で読み込んだエクスポート済み成果物は、PyTorchモデルと同じ `track()` シグネチャを持つランタイムバックエンドオブジェクトを返し、同じクリップではネイティブとONNXの追跡で同じトラックIDが得られます。バックエンドは `track(augment=True)` で `ValueError` を送出します。
 
-シェルでは、`libreyolo track` がフレームごとに1行を出力し、`--json` を付けるとフレームごとに1つのJSONオブジェクトを出力します。`persist` オプションはなく、ライブソースとWebカメラのソースは拒否します。
+シェルでは、[`libreyolo track`](/docs/cli/track) がフレームごとに1行を出力し、`--json` を付けるとフレームごとに1つのJSONオブジェクトを出力します。`persist` オプションはなく、ライブソースとWebカメラのソースは拒否します。
 
 ライブラリには4つのトラッカーが含まれ、`tracker` 引数で選択します。`"bytetrack.yaml"` のような `.yaml` 付きの表記も同じ組み込みトラッカーを選択します。LibreYOLOはトラッカーのYAMLファイルを読み込まず、作業ディレクトリにその名前のファイルが存在すると例外を送出します。
 

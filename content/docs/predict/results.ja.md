@@ -113,7 +113,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: b998a5e3d776a229
+source_hash: bdaffa93b1526d7e
 ---
 
 ## 1オブジェクト、ペイロードごとに1スロット
@@ -133,6 +133,7 @@ source_hash: b998a5e3d776a229
 | `panoptic` | `PanopticSegmentation` | `(H, W)`のセグメントIDと`segments_info` | パノプティックセグメンテーション |
 | `depth_map` | `DepthMap` | `(H, W)`の浮動小数点数 | 深度推定 |
 | `normal_map` | `NormalMap` | `(H, W, 3)`の単位ベクトル | 表面法線 |
+| `flow` | `FlowField` | 次のフレームへのピクセル変位の`(H, W, 2)` | オプティカルフロー |
 | `edges` | `EdgeMap` | `[0, 1]`内の`(H, W)`浮動小数点数 | エッジ検出 |
 | `restored` | `RestoredImage` | `(H, W, 3)`のuint8 RGB | 復元と超解像 |
 | `matte` | `Matte` | `[0, 1]`内の`(H, W)`浮動小数点数 | アルファマッティングと背景除去 |

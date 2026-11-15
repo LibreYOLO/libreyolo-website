@@ -133,7 +133,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: bc8e8ef246bdf227
+source_hash: be749fc9d4101a3f
 ---
 
 ## インストール
@@ -145,6 +145,10 @@ X2Paddle 1.6.0、ONNX 1.17以前です。この固定条件はインストール
 確認され、異なるバージョンでは期待するバージョンを示す`ImportError`が発生します。新しい
 PaddleリリースはX2Paddle 1.6.0が生成する静的コードの一部を拒否します。そのため、未検証の
 成果物を生成するより早期に失敗する方が適切です。
+
+1.7.2以降、`paddle`は`libreyolo[all]`に含まれません：そのX2Paddleコンバーターは、`all`に含まれるTFLiteの
+経路よりも古いONNXを必要とするためです。`libreyolo[paddle]`は単独で、`tflite`のない環境に
+インストールしてください。
 
 ## エクスポート
 

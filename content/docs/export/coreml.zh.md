@@ -126,13 +126,14 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: d20829937c951b1f
+source_hash: 56e30b21a7f1bd6d
 ---
 
 ## 安装
 
 <code-tabs name="install" />
 
+`coremltools` 只发布 macOS 和 Linux x86_64 的 wheel，也没有 Python 3.14 的 wheel，所以在 Windows、ARM Linux 或 3.14 上这个 extra 什么也不会安装。
 预测需要 macOS。在其他任何平台上，`LibreYOLO()` 都会拒绝 `.mlpackage`，并在消息里
 指出当前平台；支持矩阵把这些组合记为可用，理由是运行时一致性需要一台 macOS runner。
 

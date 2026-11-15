@@ -42,7 +42,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
-source_hash: ec6dd516d1f8cca4
+source_hash: e75eda5a939bd964
 ---
 
 ## 書式
@@ -63,7 +63,7 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 
 | 引数 | デフォルト | 意味 |
 |---|---|---|
-| `source` | | 画像のパス、ディレクトリ、またはURL。必須 |
+| `source` | | 画像のパス、ディレクトリ、URL、または既存ファイルのカンマ区切りの`a.jpg,b.jpg`形式のリスト。必須 |
 | `model` | `yolox-s` | モデル名またはパス |
 | `conf` | `0.25` | 信頼度のしきい値 |
 | `iou` | `0.45` | NMSのIoUしきい値 |
@@ -73,6 +73,9 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `agnostic_nms` | `false` | クラス非依存NMS：`iou`を超えて重なるボックスのうち、クラスにかかわらずスコアが最も高いものだけを残す。検出、セグメンテーション、姿勢推定、OBB |
 | `half` | `false` | FP16推論（CUDAのみ、モデル側の対応が必要） |
 | `save` | `false` | アノテーション済み画像の保存 |
+| `save_flow` | `false` | オプティカルフローのみ：各組の生のフィールドも、描画した出力の隣にMiddleburyの`.flo`ファイルとして出力 |
+| `arrows` | `false` | オプティカルフローのみ：カラーホイールの代わりに、16 pxごとに1本の矢印を描く矢印表示を保存または表示。`save`または`show`が必要 |
+| `warp` | `false` | オプティカルフローのみ：フレームtと、それに向けて逆方向にワープしたフレームt+1を並べたワープ確認を保存または表示。`save`または`show`が必要 |
 | `batch` | `1` | ディレクトリをソースにしたときの1回の順伝播あたりの画像数。1より大きいと、対応するモデルでは実際のバッチ推論を実行 |
 | `stream` | `false` | 結果を逐次生成。Webカメラとライブストリームでは自動的に有効 |
 | `stream_buffer` | `false` | 最新の1フレームだけを保持するのではなく、ライブの全フレームをバッファリング |

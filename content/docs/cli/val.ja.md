@@ -36,7 +36,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: 587851b0988347c3
+source_hash: a2416919dec36f46
 ---
 
 ## 構文
@@ -108,7 +108,7 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 `recall`、`f1`、`MLE`、`MAE`、`RMSE`、`mAP_sweep`を報告します。深度推定は
 `abs_rel`、`rmse`、`delta1`、`delta2`、`delta3`を報告します。セマンティック
 セグメンテーションは`mIoU`と`pixel_accuracy`を報告します。復元は`PSNR`と`SSIM`
-を報告します。
+を報告します。オプティカルフローは`epe`、`px1`、`px3`、`fl_all`を報告します。
 
 JSON結果には`eval_backend`も含まれ、その数値を出したCOCO評価ライブラリと
 バージョンが示されるため、2回の実行を比較するときに同じバックエンドで採点された

@@ -35,7 +35,7 @@ snippets:
       language: bash
       code: |
         libreyolo val model=LibreYOLO9s.pt data=coco8.yaml json=true quiet=true
-source_hash: 587851b0988347c3
+source_hash: a2416919dec36f46
 ---
 
 ## 概要
@@ -105,7 +105,7 @@ libreyolo val model=<name|path> data=<dataset.yaml> [key=value ...]
 分类报告 `accuracy_top1` 和 `accuracy_top5`。点检测报告 `precision`、`recall`、
 `f1`、`MLE`、`MAE`、`RMSE` 和 `mAP_sweep`。深度估计报告 `abs_rel`、`rmse`、
 `delta1`、`delta2` 和 `delta3`。语义分割报告 `mIoU` 和 `pixel_accuracy`。图像
-复原（restoration）报告 `PSNR` 和 `SSIM`。
+复原（restoration）报告 `PSNR` 和 `SSIM`。光流报告 `epe`、`px1`、`px3` 和 `fl_all`。
 
 JSON 结果里还带有 `eval_backend`，标明算出这些数字的 COCO 评估库和版本，这样比较
 两次运行时就知道它们是不是由同一个后端打的分。

@@ -110,7 +110,7 @@ snippets:
         # yaml 里的键就是 TrainConfig 的字段名，显式传入的 kwargs 优先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: 3ae91092dda49658
+source_hash: 4719637513da8f99
 ---
 
 ## 设置参数
@@ -228,6 +228,21 @@ Float16 需要动态损失缩放，会拿到一个真正在工作的 `GradScaler
 <code-tabs name="cfg" />
 
 `size` 和 `num_classes` 会从文件里剥掉，因为模型实例本身已经拥有它们。CLI 上没有 `--cfg` 标志；这个文件路径是一个 Python 参数。
+
+## RF-DETR 选项
+
+从 1.8.0 起，RF-DETR 有几个自己的训练器参数：
+
+| 参数 | 默认值 | 含义 |
+|---|---|---|
+| `matcher_backend` | `"auto"` | `"auto"` 在计算能力 8.0 或更高的 Linux CUDA 设备上使用 `libreyolo[rfdetr-train]` 中的 `torch-hungarian` GPU 求解器，否则用 SciPy。`"scipy"` 强制使用 SciPy |
+| `early_stopping` | | `True` 表示 `patience=10`，除非给出了 `patience` |
+| `lr_encoder`、`lr_vit_layer_decay`、`lr_component_decay` | 取自模型 | 骨干的学习率，以及它的逐层和逐组件衰减 |
+| `focal_alpha` | 取自模型 | Focal loss 的 alpha，匹配器也会用到 |
+| `cls_loss_coef` | `1`，姿态为 `2` | 分类损失权重。断点续训的运行保留其记录的值 |
+| `pin_memory`、`prefetch_factor`、`persistent_workers` | `None` | 数据加载器设置。`None` 保持该任务之前的默认值 |
+
+实测的加速见 [RF-DETR](/docs/models/rf-detr#train)。
 
 ## 相关内容
 

@@ -120,7 +120,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 00a8615a22e818f3
+source_hash: bfbe5816727728f1
 ---
 
 ## 安装
@@ -130,9 +130,12 @@ source_hash: 00a8615a22e818f3
 这个 extra 特意放在 `libreyolo[all]` 之外，因为 ExecuTorch 会锁定它能配合的 Torch
 版本，装上它会把整个环境都拖到那个组合上。请把它装进一个你愿意为此受限的环境里。
 
-在 Windows 上，lowering 这一步会调用 ExecuTorch 附带的 `flatc` 可执行文件。如果它
-不在 `PATH` 上，导出会抛出一个 `RuntimeError` 说明这件事，解决办法是从 Visual
-Studio 2022 Developer PowerShell 里运行。
+这个 extra 锁定 `executorch>=1.2,<1.3`，配合 `torch>=2.11,<2.12` 和
+`torchvision>=0.26,<0.27`，这正是 ExecuTorch 1.2 的运行时构建时所针对的组合。
+ExecuTorch 没有发布 Python 3.14 的 wheel，所以在 3.14 上这个 extra 什么也不会安装，导出会抛出明确的错误。
+
+lowering 这一步会调用 ExecuTorch 附带的 `flatc` 可执行文件。导出器通过 `FLATC_EXECUTABLE`
+把 ExecuTorch 指向当前环境自己的 `flatc`，所以即使虚拟环境没有激活也能找到它。
 
 ## 导出
 

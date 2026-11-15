@@ -57,7 +57,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 4065193d01111f9d
+source_hash: 145bc57f9858ab9b
 ---
 
 ## 把 train 指向一个数据集
@@ -125,6 +125,13 @@ download: https://example.com/my-dataset.zip   # 可选
 
 `names` 可以是列表，也可以是整数键的映射。`nc` 是可选的；两者都给出且对不上时，
 doctor 会把它报成错误。
+
+1.8.0 新增的 `channels: 1` 用于训练灰度模型，键名和行为都与 Ultralytics 相同。图像在读取时转换为灰度，
+训练、验证和预测都是如此，所以彩色数据集不需要另存一份转换后的副本。输入卷积变为单通道，用预训练 RGB 权重
+求和来初始化。检查点会保存 `channels: 1`，导出产物接收单通道的 `(N, 1, H, W)` 输入。支持的模型有 YOLO9
+（包括 YOLO9-E2E 和 YOLO9-P2）、YOLOv7、YOLOX、YOLO-NAS、RTMDet、PP-YOLOE、PicoDet、D-FINE、DEIM、
+DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、EC 和 FOMO；其他模型会抛错。
+`channels: 3` 是默认值，`channels: 2` 保持其事件直方图的含义。
 
 RF-DETR 姿态读取以类别 ID 或名称为键的 `kpt_names`。它为每个类别保留前几个已命名的关键点行；空列表表示只有检测框的类别。多类别姿态需要 `names`，且至少有一个含关键点的类别。
 

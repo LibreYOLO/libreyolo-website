@@ -130,7 +130,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 692d49f527c3c14c
+source_hash: ac0b7892b3f1cac8
 ---
 
 ## 安装
@@ -157,6 +157,11 @@ ONNX 中间产物上，以 `flatbuffer_direct` 模式对 `onnx2tf` 的一次子�
 尺寸和姿态 schema；FlatBuffer 本身没有 LibreYOLO 的元数据字段，所以这两个文件要一起走。
 
 YOLO9 和 YOLOX 检测支持 `int8=True`，配合 `data=...`、`fraction=1.0`、`batch=1` 和 `dynamic=False`。请安装 `onnx2tf[tensorflow]`。缺少校准数据时会警告并回退到 `coco8.yaml`。分离的归一化检测框输出与分数输出使用独立的量化尺度；部署时请保留附属文件中的 `output_layout` 元数据。部分内部算子可能仍使用浮点。
+
+从 1.7.3 起，INT8 会先用 onnx2tf 构建 SavedModel，再在进程内跑一次 `TFLiteConverter`，
+即 `int8_backend="converter"`，这是默认值。`int8_backend="onnx2tf"` 保留旧的两遍
+`onnx2tf -oiqt` 路线作为后备。`int8_output_dtype` 默认是 `"int8"`；`"float32"` 保留浮点输出张量，
+并且需要 converter 后端，因为 onnx2tf 路线总是写出 int8 的输入和输出。
 
 ## 运行产物
 

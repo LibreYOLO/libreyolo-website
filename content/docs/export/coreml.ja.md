@@ -125,13 +125,14 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: d20829937c951b1f
+source_hash: 56e30b21a7f1bd6d
 ---
 
 ## インストール
 
 <code-tabs name="install" />
 
+`coremltools`はmacOSとLinux x86_64向けのwheelしか公開しておらず、Python 3.14向けのものもないため、Windows、ARM Linux、3.14ではこの追加インストールは何もインストールしません。
 推論にはmacOSが必要です。`LibreYOLO()`はそれ以外のプラットフォームでは`.mlpackage`を
 拒否して現在のプラットフォーム名を含むメッセージを返し、対応表は、ランタイムの同等性を
 確認するにはmacOSのランナーが必要だという理由から、これらの組み合わせを利用可能として

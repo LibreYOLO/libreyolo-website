@@ -77,6 +77,22 @@ snippets:
       code: |
         libreyolo train model=LibreRFDETRs.pt data=my-dataset.yaml \
           epochs=50 device=0,1 batch=-1
+    - label: 学習を高速化するオプション
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        # GPUマッチャーを使うには pip install "libreyolo[rfdetr-train]"
+        model = LibreYOLO("LibreRFDETRs.pt")
+        model.train(
+            data="my-dataset.yaml",
+            epochs=50,
+            matcher_backend="auto",    # Linux CUDA sm80+ではtorch-hungarian、それ以外はSciPy
+            early_stopping=True,       # patience=の指定がなければpatienceは10
+            pin_memory=True,
+            prefetch_factor=2,
+            persistent_workers=True,
+        )
   val:
     - label: Python
       language: python
@@ -176,7 +192,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: fbb992f66e66df0c
+source_hash: 8e5c6e428703d06c
 ---
 
 ## インストール
@@ -216,6 +232,12 @@ pip install "libreyolo[rfdetr]"
 ここでは、CNN検出器の場合より2つの引数が重要です。Transformer検出器はYOLOモデルが許容する学習率では発散するため、`lr0`を`1e-4`以下に保ってください。変更する理由がない限り、`imgsz`はチェックポイントのネイティブ解像度のままにしてください。入力はバックボーンのパッチサイズとウィンドウ数の積で割り切れる必要があります。LibreYOLOは実行開始前にこれを確認し、最も近い有効なサイズを示します。
 
 セグメンテーションのファインチューニングはセグメンテーションチェックポイントから始めます。RF-DETRには検出からセグメンテーションへの転移がないためです。`libreyolo train model=LibreRFDETRn-seg.pt task=segment`はそのチェックポイントを読み込み、`task=segment`を指定した検出チェックポイントはエラーで停止します。
+
+1.8.0以降、トレーナーにはアップストリームのRF-DETRの学習最適化（#1044）が取り込まれています：バッチ化したマッチング、統合したオプティマイザーグループ、より軽量なプロポーザルとデコーダーの実行です。API、チェックポイント形式、パラメータ名は変わりません。このプルリクエストでは、RTX 3090上のBF16で、Nanoは1ステップあたり約1.7倍、Largeは約1.5倍と計測されました。1.7.4と比較した独自のA/Bテスト（RF100でのファインチューニング）では、COCO mAPも損失もマッチングも同一のまま、1エポックあたり約20%高速でした。
+
+デフォルトの`matcher_backend="auto"`は、計算能力8.0以降のLinux NVIDIA CUDAデバイスでは`rfdetr-train`追加インストールに含まれるバージョン固定の`torch-hungarian`ソルバーを使い、それ以外の環境やパッケージがない場合はSciPyにフォールバックします。`matcher_backend="scipy"`は元のソルバーを強制します。コストが等しい場合、2つのソルバーは異なるものの同等に最適な割り当てを選ぶことがあります。
+
+`lr_encoder`、`lr_vit_layer_decay`、`lr_component_decay`、`focal_alpha`、`cls_loss_coef`を`train()`に渡せるようになりました。未設定の場合はモデルから決まり、実行の設定に記録されます。新規の実行の`cls_loss_coef`はアップストリームに従い、検出、セグメンテーション、回転バウンディングボックスでは1、姿勢推定では2です。再開した実行は、上書きしない限り以前の係数を保ちます。`early_stopping=True`は、`patience`の指定がない場合はpatienceが10であることを意味します。`pin_memory`、`prefetch_factor`、`persistent_workers`は反映され、`None`はタスクの従来のデフォルトを保ちます。トレーナーはAdamWのみで、別の`optimizer`を指定すると警告がログに出ます。
 
 データセット、データ拡張、マルチGPU、ロガーについては[学習](/docs/train)を参照してください。
 

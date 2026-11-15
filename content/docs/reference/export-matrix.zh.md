@@ -56,7 +56,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 74b25d62a1166f79
+source_hash: 9af1179faad62fed
 ---
 
 ## 矩阵的形状
@@ -67,7 +67,8 @@ source_hash: 74b25d62a1166f79
 `onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、
 `rknn`、`axelera`、`ncnn`、`tflite`、`coreml`、`coreai`。
 
-1.8.0 新增的 `axelera` 会为 Axelera 的 Metis AIPU 编译一个 INT8 模型。
+1.8.0 新增的 `axelera` 会为 Axelera 的 Metis AIPU 编译一个 INT8 模型；它覆盖哪些家族和尺寸，见
+[Axelera Metis](/docs/export/axelera)。
 
 `model.export(format=...)` 还额外接受两个别名：`engine` 对应 `tensorrt`，`litert`
 对应 `tflite`，后者是 TensorFlow Lite 现在的名字。格式本身和 `.tflite` 后缀都没有变。
@@ -136,6 +137,7 @@ validated 和 available 的组合都会直接往下走，不需要额外确认�
 | `normal` | 该家族没有接入固定画布的稠密单位法线和后端重归一化契约 |
 | `panoptic` | 全景分割导出没有后端运行时契约 |
 | `gaze` | 该家族没有接入共享的双 head logits 和后端期望解码契约 |
+| `flow` | 双输入图（`image1`、`image2`）和后端向量缩放契约目前还没有为任何家族实现 |
 
 显式条目会覆盖这些规则，所以比如一个已经接好线的语义分割家族照样能导出。
 
@@ -148,9 +150,14 @@ validated 和 available 的组合都会直接往下走，不需要额外确认�
 | `eomt` | 实例分割和全景分割导出，这两者没有运行时解析 |
 | `l2cs` | ONNX、TorchScript、ExecuTorch、TensorRT 和 OpenVINO 之外的一切 |
 | `hrnet` | ONNX、TorchScript、OpenVINO 和 TensorRT 之外的一切 |
-| `sam`、`sam2`、`sam3`、`edgetam`、`mobilesam` | 所有格式；可提示模型的导出不在 v1 运行时契约的范围内 |
+| `dekr` | ONNX、TorchScript、OpenVINO 和 TensorRT 之外的一切，这些是它原始的双输出姿态图所支持的格式 |
+| `video_depth_anything` | 所有格式。网络读取一个 32 帧的窗口，窗口在主机上拼接，单图深度契约描述不了这种方式 |
+| `speridlabs_irisz` | 所有格式，两个任务都是。图像生成和深度都要在一个 transformer 和 FLUX.2 VAE 上跑多步采样循环 |
+| `marigold_v2` | 所有格式；它的量化扩散模型导出还没有集成或验证 |
+| `sam`、`sam2`、`sam3`、`sam31`、`edgetam`、`mobilesam` | 所有格式；可提示模型的导出不在 v1 运行时契约的范围内 |
 | `grounding_dino`、`owlv2`、`omdet_turbo`、`ov_deim` | 所有格式；开放词汇的运行时导出不在 v1 的范围内 |
-| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything`、`northmicrovision`、`gemma4`、`moondream`、`sensenovavision`、`libremodus`、`wevisonevl` | 所有格式；生成式 VLM 的导出不在 v1 的范围内 |
+| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything`、`northmicrovision`、`gemma4`、`moondream`、`sensenovavision`、`libremodus`、`wevisonevl`、`deepseekocr`、`paddleocrvl`、`glmocr`、`falconocr`、`falconperception` | 所有格式；生成式 VLM 的导出不在 v1 的范围内 |
+| `qwen3vl_embedding` | 所有格式；VLM 嵌入向量的导出不在 v1 的范围内 |
 
 PicoSAM3 是可提示这一档里的例外：它会把自己那个原始的 96 像素 ROI 网络导出成 ONNX。
 
@@ -158,7 +165,7 @@ PicoSAM3 是可提示这一档里的例外：它会把自己那个原始的 96 �
 
 DETR 风格的解码器需要 NCNN 没有实现的采样算子，所以除非有显式条目另作规定，
 下面这些家族对 `ncnn` 都是屏蔽的：Deformable DETR、DETR、DINO-DETR、D-FINE、
-LW-DETR、DEIM、DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR 和 EC。
+LW-DETR、DEIM、DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、EC、TinyFormer、RiO-DETRv2 和 PP-DocLayoutV3。
 拒绝信息会把 ONNX、OpenVINO、TorchScript 和 TensorRT 列为替代方案。
 
 ## 一致性阈值
@@ -185,6 +192,13 @@ DETR 的 query 行是一个无序集合，所以 DETR 家族的一致性是把 q
 被屏蔽的组合会在预检阶段抛出 `NotImplementedError`，报错信息里带着记录下来的原因。
 `validated_alternatives(family, task)` 返回这一对组合下已验证的格式，这正是紧挨着
 一条拒绝打印出来最有用的东西。
+
+LibreYOLO 不生成的 Ultralytics 格式名会被拒绝，并提示最接近的格式：`saved_model` 和 `pb` 指向
+`tflite` 或 `onnx`，`tfjs` 指向配合 onnxruntime-web 使用的 `onnx`，`edgetpu` 指向 `tflite`。
+
+从 1.8.0 起，通过 `LibreYOLO()` 重新加载的导出产物在每种格式上都支持 `track()`，签名与 PyTorch 模型相同。
+1.8.0 还修复了导出的 Mask R-CNN、Faster R-CNN、FCOS、SSD、RetinaNet、YOLOv7、YOLOv2、YOLOv3、YOLOv4
+和 YOLO-NAS-R 模型上的 `val()`，所以它们导出后的指标可能与 1.7.4 报告的不同。
 
 所有导出器共享的参数列在[模型 API 页面](/docs/reference/model-api)上。
 格式专属的参数在各自的格式页面上。

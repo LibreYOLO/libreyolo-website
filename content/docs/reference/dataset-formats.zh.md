@@ -30,7 +30,7 @@ snippets:
         # (class_id, x1, y1, x2, y2, area)，单位为像素
 
         print(row)
-source_hash: 5f4bc7d17822a85d
+source_hash: 3ed811963891afe6
 ---
 
 ## 通用 YAML
@@ -47,6 +47,7 @@ source_hash: 5f4bc7d17822a85d
 | `nc` | | 类别数量；存在时必须与 `names` 一致 |
 | `download` | | 下载说明；Python 脚本需要显式开启 |
 | `annotations` | | 把数据集划分（split）映射到原生 COCO JSON 文件，适用于 detect、segment 和 obb |
+| `channels` | | 灰度模型为 `1`，RGB 为 `3`（默认）。`2` 保留给事件直方图 |
 
 `train`、`val` 和 `test` 可以是图像目录、图像列表 `.txt` 文件，或者由它们组成的
 列表。标注路径遵循一次替换：
@@ -72,6 +73,10 @@ annotations:
 `0..N-1`。
 
 数据集 YAML 不带 `task` 键。显式指定的模型和任务优先。
+
+设置 `channels: 1` 时，每张图像在读取时都会转换为灰度，训练、验证和预测都是如此，模型的输入卷积只接收一个通道。
+支持的模型有 YOLO9（包括 YOLO9-E2E 和 YOLO9-P2）、YOLOv7、YOLOX、YOLO-NAS、RTMDet、PP-YOLOE、PicoDet、
+D-FINE、DEIM、DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、EC 和 FOMO；其他模型会抛出 `ValueError`。
 
 对每个文本标注文件都适用的规则：
 

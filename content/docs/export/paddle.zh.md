@@ -137,7 +137,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: bc8e8ef246bdf227
+source_hash: be749fc9d4101a3f
 ---
 
 ## 安装
@@ -148,6 +148,9 @@ source_hash: bc8e8ef246bdf227
 1.6.0 和 ONNX 1.17 或更早。这些锁定不只在安装时检查，导出时也会检查，版本不对会抛
 `ImportError` 并点出期望的版本。更新的 Paddle 版本会拒绝 X2Paddle 1.6.0 生成的部分
 静态代码，所以早点失败好过产出一个没人验证过的产物。
+
+从 1.7.2 起，`paddle` 不再属于 `libreyolo[all]`：它的 X2Paddle 转换器需要比 `all` 中 TFLite
+路径更旧的 ONNX。请单独安装 `libreyolo[paddle]`，放在一个没有 `tflite` 的环境里。
 
 ## 导出
 

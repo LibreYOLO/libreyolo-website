@@ -33,7 +33,7 @@ snippets:
         # ピクセル単位の (class_id, x1, y1, x2, y2, area)
 
         print(row)
-source_hash: 5f4bc7d17822a85d
+source_hash: 3ed811963891afe6
 ---
 
 ## 共通YAML
@@ -50,6 +50,7 @@ source_hash: 5f4bc7d17822a85d
 | `nc` | | クラス数。存在する場合は`names`と一致する必要がある |
 | `download` | | ダウンロード手順。Pythonスクリプトには明示的な許可が必要 |
 | `annotations` | | detect、segment、obb向けの、splitからネイティブCOCO JSONファイルへのマッピング |
+| `channels` | | グレースケールモデルでは`1`、RGBでは`3`（デフォルト）。`2`はイベントヒストグラム用に予約 |
 
 `train`、`val`、`test`には画像ディレクトリ、画像一覧の`.txt`ファイル、またはそれらのリストを指定できます。ラベルパスは1つの置換規則に従います。
 
@@ -71,6 +72,8 @@ annotations:
 `names`が存在する場合、ネイティブCOCO JSONのカテゴリ名はYAMLのクラス名と一致する必要があり、その名前がモデルのラベルIDを定義します。`names`がない場合、COCOカテゴリIDを並べ替えて`0..N-1`へ密にマッピングします。
 
 データセットYAMLは`task`キーを持ちません。明示的なモデルとタスクの選択が優先されます。
+
+`channels: 1`では、学習、検証、推論のいずれでも、各画像は読み込み時にグレースケールへ変換され、モデルの入力畳み込みは1チャンネルを受け取ります。対応モデルはYOLO9（YOLO9-E2EとYOLO9-P2を含む）、YOLOv7、YOLOX、YOLO-NAS、RTMDet、PP-YOLOE、PicoDet、D-FINE、DEIM、DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、EC、FOMOで、それ以外のモデルは`ValueError`を送出します。
 
 すべてのテキストラベルファイルに共通する規則は次のとおりです。
 

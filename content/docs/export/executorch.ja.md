@@ -117,7 +117,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 00a8615a22e818f3
+source_hash: bfbe5816727728f1
 ---
 
 ## インストール
@@ -128,10 +128,14 @@ source_hash: 00a8615a22e818f3
 Torchのバージョンを固定してしまい、インストールすると環境全体がその組み合わせに
 引きずられるからです。制約を受け入れられる環境にインストールしてください。
 
-Windowsでは、ローワリングの段階でExecuTorchに同梱される`flatc`実行ファイルを
-呼び出します。`PATH`に見つからない場合はエクスポートがその旨を伝える
-`RuntimeError`を送出しますが、Visual Studio 2022のDeveloper PowerShellから
-実行すれば解決します。
+この追加インストールは`executorch>=1.2,<1.3`を、`torch>=2.11,<2.12`および
+`torchvision>=0.26,<0.27`とともに固定します。これはExecuTorch 1.2のランタイムがビルドされた組み合わせです。
+ExecuTorchはPython 3.14向けのwheelを公開していないため、3.14ではこの追加インストールは
+何もインストールせず、エクスポートはわかりやすいエラーを送出します。
+
+ローワリングの段階では、ExecuTorchに同梱される`flatc`実行ファイルを呼び出します。
+エクスポーターは`FLATC_EXECUTABLE`を通じてExecuTorchに環境自身の`flatc`を指定するため、
+仮想環境が有効化されていなくても見つかります。
 
 ## エクスポート
 

@@ -132,7 +132,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 68fad34d07aea149
+source_hash: 5bcc94515b3df0a6
 ---
 
 ## 安装
@@ -142,6 +142,11 @@ source_hash: 68fad34d07aea149
 这个 extra 包含 `libreyolo[onnx]`，因为转换要经过一个 ONNX 中间产物。它还会带上
 `mnnconvert` 可执行文件，导出器先在当前 Python 解释器旁边找它，再去 `PATH` 上找。
 转换器缺失时会抛出 `ImportError` 并给出安装命令，而不是在转换中途失败。
+
+MNN 的 Linux wheel 要求可执行栈，而 glibc 2.41 及更新版本会拒绝它（Ubuntu 25.04 及之后、
+Fedora 42 及之后），所以即使包已经安装，`import MNN` 也会失败。LibreYOLO 的错误信息会点出是哪个库。
+启动 Python 时加上 `GLIBC_TUNABLES=glibc.rtld.execstack=2`（glibc 2.42 及更新版本），或者用
+`patchelf --clear-execstack` 对那个库清除一次这个标志。
 
 ## 导出
 

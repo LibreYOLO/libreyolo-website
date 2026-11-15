@@ -42,7 +42,7 @@ snippets:
         # 行数据，先是普通 dict，再是 JSON
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 5728ec555ba4ef80
+source_hash: ade9e46a38e5c627
 ---
 
 ## Results 对象
@@ -79,6 +79,7 @@ source_hash: 5728ec555ba4ef80
 | `panoptic` | `PanopticSegmentation` | panoptic |
 | `depth_map` | `DepthMap` | depth |
 | `normal_map` | `NormalMap` | normal |
+| `flow` | `FlowField` | flow |
 | `edges` | `EdgeMap` | edge |
 | `restored` | `RestoredImage` | restore |
 | `matte` | `Matte` | matte |
@@ -186,6 +187,14 @@ thing 与 stuff 的区分是类别的属性，不是分段的属性。载荷可�
 系：`+x` 向右，`+y` 向下，`+z` 指向场景内部。法线朝向相机，所以一个正对相机的
 平面是 `(0, 0, -1)`。每个像素都是单位向量。`assert_normalized(atol=1e-4)` 会
 检查这条不变式。
+
+## FlowField
+
+稠密光流，一对帧中第一帧原图画布上的 float32 `(H, W, 2)`。`data[y, x]` 是 `(dx, dy)`，即到下一帧的
+像素位移，`+x` 向右，`+y` 向下。`dx`、`dy`、`magnitude`、`angle`、`max_magnitude` 和 `mean_magnitude`
+用来读取它，`to_rgb()` 渲染色轮，`warp(image)` 用这个场把一张图像变形回去。`confidence` 是一张可选的
+`(H, W)` 图，取值在 `[0, 1]`；`next_frame` 是第二帧，uint8 RGB，由 predict 附上，供变形视图使用。
+`save(path)` 写出 Middlebury `.flo` 或 `.npy` 文件。见[光流](/docs/tasks/optical-flow)。
 
 ## EdgeMap
 

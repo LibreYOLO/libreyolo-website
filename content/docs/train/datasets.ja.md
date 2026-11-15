@@ -57,7 +57,7 @@ snippets:
             print(finding.severity.value, finding.check_id, finding.message)
 
         raise SystemExit(report.exit_code(strict=False))
-source_hash: 4065193d01111f9d
+source_hash: 145bc57f9858ab9b
 ---
 
 ## 学習にデータセットを指定する
@@ -114,6 +114,9 @@ download: https://example.com/my-dataset.zip   # 任意
 `train`、`val`、`test`はそれぞれ、画像ディレクトリ、1行に1つの画像パスを記載した`.txt`ファイル、または両方を混在させたリストを受け付けます。`.txt`リストの行は相対パスでもよく、その場合はリストファイル自身のディレクトリを基準に解決されます。`#`で始まる行はスキップされます。
 
 `names`にはリストまたは整数をキーとするマッピングを指定できます。`nc`は任意です。両方が存在して一致しない場合、doctorはエラーとして報告します。
+
+1.8.0で追加された`channels: 1`は、Ultralyticsと同じキーと動作でグレースケールモデルを学習します。学習、検証、推論のいずれでも、画像は読み込み時にグレーに変換されるため、カラーのデータセットを変換したコピーは不要です。入力畳み込みは1チャンネルになり、学習済みRGB重みを合計した値で初期化されます。チェックポイントは`channels: 1`を保存し、エクスポートは1チャンネルの`(N, 1, H, W)`入力を受け取ります。対応モデルはYOLO9（YOLO9-E2EとYOLO9-P2を含む）、YOLOv7、YOLOX、YOLO-NAS、RTMDet、PP-YOLOE、PicoDet、D-FINE、DEIM、DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、EC、FOMOで、それ以外のモデルは例外を送出します。
+`channels: 3`がデフォルトで、`channels: 2`はイベントヒストグラムという従来の意味を保ちます。
 
 RF-DETRの姿勢推定は、クラスIDまたは名前をキーとする`kpt_names`を読み取ります。クラスごとに先頭から名前付きキーポイントの行を残し、空のリストはボックスのみのクラスを表します。複数クラスの姿勢推定には`names`と、少なくとも1つのキーポイントを持つクラスが必要です。
 

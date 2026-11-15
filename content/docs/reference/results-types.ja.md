@@ -44,7 +44,7 @@ snippets:
         # 行を通常のdictで取得し、次にJSONへ変換
         print(result.summary()[:1])
         print(result.to_json())
-source_hash: 5728ec555ba4ef80
+source_hash: ade9e46a38e5c627
 ---
 
 ## Resultsオブジェクト
@@ -82,6 +82,7 @@ source_hash: 5728ec555ba4ef80
 | `panoptic` | `PanopticSegmentation` | panoptic |
 | `depth_map` | `DepthMap` | depth |
 | `normal_map` | `NormalMap` | normal |
+| `flow` | `FlowField` | flow |
 | `edges` | `EdgeMap` | edge |
 | `restored` | `RestoredImage` | restore |
 | `matte` | `Matte` | matte |
@@ -194,6 +195,16 @@ thingとstuffの区別はセグメントではなくカテゴリーのプロパ�
 OpenCVのカメラ座標系を使います：`+x`は右、`+y`は下、`+z`はシーンの奥です。法線はカメラを
 向くため、正面に平行な面は`(0, 0, -1)`です。すべてのピクセルは単位ベクトルです。
 `assert_normalized(atol=1e-4)`はこの不変条件を確認します。
+
+## FlowField
+
+密なオプティカルフローで、組の最初のフレームの元のキャンバス上のfloat32の`(H, W, 2)`です。
+`data[y, x]`は`(dx, dy)`で、次のフレームへのピクセル単位の変位です。`+x`は右、`+y`は下です。
+`dx`、`dy`、`magnitude`、`angle`、`max_magnitude`、`mean_magnitude`でこれを読み取り、`to_rgb()`はカラー
+ホイールを描画し、`warp(image)`はフィールドを使って画像を逆方向にワープします。`confidence`は`[0, 1]`の
+範囲の省略可能な`(H, W)`マップで、`next_frame`は2枚目のフレームをuint8のRGBで保持し、ワープ表示用に
+predictが付加します。`save(path)`はMiddleburyの`.flo`または`.npy`ファイルを書き出します。
+[オプティカルフロー](/docs/tasks/optical-flow)を参照してください。
 
 ## EdgeMap
 

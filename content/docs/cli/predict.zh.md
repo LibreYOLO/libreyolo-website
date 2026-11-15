@@ -41,7 +41,7 @@ snippets:
         \
           json=true quiet=true \
           source=https://raw.githubusercontent.com/LibreYOLO/libreyolo/release/libreyolo/assets/guggenheim-bilbao.jpg
-source_hash: ec6dd516d1f8cca4
+source_hash: e75eda5a939bd964
 ---
 
 ## 用法概要
@@ -61,7 +61,7 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 
 | 参数 | 默认值 | 含义 |
 |---|---|---|
-| `source` | | 图像路径、目录或 URL。必填 |
+| `source` | | 图像路径、目录、URL，或由已存在文件组成的逗号分隔 `a.jpg,b.jpg` 列表。必填 |
 | `model` | `yolox-s` | 模型名称或路径 |
 | `conf` | `0.25` | 置信度阈值 |
 | `iou` | `0.45` | NMS 的 IoU 阈值 |
@@ -71,6 +71,9 @@ libreyolo predict source=<path|url|index> [model=<name|path>] [key=value ...]
 | `agnostic_nms` | `false` | 类别无关的 NMS：在重叠超过 `iou` 的检测框中，不论类别，只保留得分最高的那个。适用于检测、分割、姿态和 OBB |
 | `half` | `false` | FP16 推理（仅限 CUDA，且需要模型支持） |
 | `save` | `false` | 保存标注后的图像 |
+| `save_flow` | `false` | 仅限光流：同时把每对帧的原始场写成 Middlebury `.flo` 文件，放在渲染输出旁边 |
+| `arrows` | `false` | 仅限光流：保存或显示箭头视图，每 16 px 一个箭头，而不是色轮。需要 `save` 或 `show` |
+| `warp` | `false` | 仅限光流：保存或显示变形检查，第 t 帧旁边是变形回它上面的第 t+1 帧。需要 `save` 或 `show` |
 | `batch` | `1` | 目录源每次前向传播处理的图像数。大于 1 时，在支持的模型上执行真正的批量推理 |
 | `stream` | `false` | 增量产出结果。摄像头和实时流会自动开启 |
 | `stream_buffer` | `false` | 缓冲实时流的每一帧，而不是只保留最新的一帧 |

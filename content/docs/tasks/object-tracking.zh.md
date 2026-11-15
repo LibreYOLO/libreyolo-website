@@ -71,7 +71,7 @@ snippets:
         for result in model.track("video.mp4", tracker="botsort",
         track_buffer=60):
             print(result.track_id)
-source_hash: 59f9dda224ff681a
+source_hash: e374bdc809893033
 ---
 
 ## 定义
@@ -108,7 +108,7 @@ LibreYOLO 还有两个模型层级同样不接受它。通过 `LibreSAM` 加载�
 一个运行时后端对象，它的 `track()` 签名与 PyTorch 模型相同，原生跟踪和 ONNX 跟踪在同一段
 视频上给出相同的跟踪 ID。后端在 `track(augment=True)` 时会抛出 `ValueError`。
 
-在 shell 里，`libreyolo track` 每帧打印一行，加 `--json` 时每帧输出一个 JSON 对象。它没有
+在 shell 里，[`libreyolo track`](/docs/cli/track) 每帧打印一行，加 `--json` 时每帧输出一个 JSON 对象。它没有
 `persist` 选项，并拒绝直播和摄像头来源。
 
 库里自带四个跟踪器，用 `tracker` 参数选择。带 `.yaml` 的写法，例如 `"bytetrack.yaml"`，

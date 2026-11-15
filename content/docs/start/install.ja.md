@@ -63,7 +63,7 @@ snippets:
         # 登録済みの各ファミリーと、タスク、サイズ、入力解像度を表示します。
         # 追加パッケージがないファミリーには、有効化するpipコマンドも表示されます。
         libreyolo models
-source_hash: 796688d39ae5fe1d
+source_hash: 7af5a461116888ab
 ---
 
 ## インストール
@@ -117,6 +117,8 @@ cloneすると、安定版ブランチ`release`がcheckoutされます。この�
 | `paddle` | `libreyolo[onnx]`に加え、`paddlepaddle` 2.6.2と`x2paddle` 1.6.0 |
 | `executorch` | `executorch` |
 | `triton` | HTTPおよびHTTPS V2推論用の`tritonclient[http]` |
+
+Axelera Metisのエクスポートには追加インストールがありません：`axelera-devkit`と`axelera-rt`はAxelera社独自のパッケージインデックスから入手し、`torch<2.15`、`typer<0.13`、`click==8.1.8`を固定するため、専用の環境に入れます。[Axelera Metis](/docs/export/axelera)を参照してください。
 
 ### 学習、評価、ロギング
 

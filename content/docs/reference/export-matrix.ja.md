@@ -53,7 +53,7 @@ snippets:
         blocked = get_support("domedetr", "detect", "onnx")
         print(blocked.tier)
         print(blocked.reason)
-source_hash: 74b25d62a1166f79
+source_hash: 9af1179faad62fed
 ---
 
 ## マトリックスの構造
@@ -62,7 +62,7 @@ source_hash: 74b25d62a1166f79
 
 `onnx`、`torchscript`、`executorch`、`tensorrt`、`openvino`、`paddle`、`mnn`、`rknn`、`axelera`、`ncnn`、`tflite`、`coreml`、`coreai`。
 
-1.8.0で追加された`axelera`は、AxeleraのMetis AIPU向けにINT8モデルをコンパイルします。
+1.8.0で追加された`axelera`は、AxeleraのMetis AIPU向けにINT8モデルをコンパイルします。対応するファミリーとサイズについては[Axelera Metis](/docs/export/axelera)を参照してください。
 
 `model.export(format=...)`はさらに2つの別名を受け付けます。`tensorrt`を表す`engine`と、TensorFlow Liteの現在の名称である`tflite`を表す`litert`です。形式と`.tflite`接尾辞は変わりません。
 
@@ -122,6 +122,7 @@ validatedの項目を追加するには一致度テストと`since`フィール�
 | `normal` | ファミリーが固定キャンバスの密な単位法線とバックエンドの再正規化契約に接続されていない |
 | `panoptic` | パノプティックエクスポートにバックエンドのランタイム契約がない |
 | `gaze` | ファミリーが共通の2ヘッドロジットとバックエンドの期待値デコード契約に接続されていない |
+| `flow` | 2入力のグラフ（`image1`、`image2`）とバックエンドのベクトル再スケール契約が、まだどのファミリーにも実装されていない |
 
 明示的な項目はこれらを上書きします。そのため、たとえば接続済みのsemanticファミリーはエクスポートできます。
 
@@ -134,15 +135,20 @@ validatedの項目を追加するには一致度テストと`since`フィール�
 | `eomt` | ランタイム解析のないインスタンスおよびパノプティックのエクスポート |
 | `l2cs` | ONNX、TorchScript、ExecuTorch、TensorRT、OpenVINO以外 |
 | `hrnet` | ONNX、TorchScript、OpenVINO、TensorRT以外 |
-| `sam`、`sam2`、`sam3`、`edgetam`、`mobilesam` | 全形式。プロンプト可能モデルのエクスポートはv1ランタイム契約の対象外 |
+| `dekr` | ONNX、TorchScript、OpenVINO、TensorRT以外。これらは生の2出力の姿勢推定グラフに対応する形式 |
+| `video_depth_anything` | 全形式。ネットワークは32フレームのウィンドウを読み込み、ウィンドウはホスト側でつなぎ合わされるが、単一画像の深度契約はこれを記述していない |
+| `speridlabs_irisz` | 全形式、両方のタスク。画像生成と深度推定は、TransformerとFLUX.2 VAEに対して多段階のサンプリングループを実行する |
+| `marigold_v2` | 全形式。量子化した拡散モデルのエクスポートは統合も検証もされていない |
+| `sam`、`sam2`、`sam3`、`sam31`、`edgetam`、`mobilesam` | 全形式。プロンプト可能モデルのエクスポートはv1ランタイム契約の対象外 |
 | `grounding_dino`、`owlv2`、`omdet_turbo`、`ov_deim` | 全形式。オープンボキャブラリーのランタイムエクスポートはv1の対象外 |
-| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything`、`northmicrovision`、`gemma4`、`moondream`、`sensenovavision`、`libremodus`、`wevisonevl` | 全形式。生成VLMのエクスポートはv1の対象外 |
+| `florence2`、`kosmos2`、`lfm2vl`、`internvl3`、`qwen3vl`、`smolvlm2`、`locateanything`、`northmicrovision`、`gemma4`、`moondream`、`sensenovavision`、`libremodus`、`wevisonevl`、`deepseekocr`、`paddleocrvl`、`glmocr`、`falconocr`、`falconperception` | 全形式。生成VLMのエクスポートはv1の対象外 |
+| `qwen3vl_embedding` | 全形式。VLMの埋め込みベクトルのエクスポートはv1の対象外 |
 
 PicoSAM3はプロンプト可能ティアの例外で、生の96px ROIネットワークをONNXへエクスポートします。
 
 ## NCNNでのブロック
 
-DETR形式のデコーダーはNCNNにないサンプリング演算を必要とするため、明示的な項目で別途指定されない限り、次のファミリーは`ncnn`でブロックされます。Deformable DETR、DETR、DINO-DETR、D-FINE、LW-DETR、DEIM、DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、ECです。拒否メッセージには代替としてONNX、OpenVINO、TorchScript、TensorRTが示されます。
+DETR形式のデコーダーはNCNNにないサンプリング演算を必要とするため、明示的な項目で別途指定されない限り、次のファミリーは`ncnn`でブロックされます。Deformable DETR、DETR、DINO-DETR、D-FINE、LW-DETR、DEIM、DEIMv2、RT-DETR、RT-DETRv2、RT-DETRv4、RF-DETR、EC、TinyFormer、RiO-DETRv2、PP-DocLayoutV3です。拒否メッセージには代替としてONNX、OpenVINO、TorchScript、TensorRTが示されます。
 
 ## 一致度のしきい値
 
@@ -165,6 +171,10 @@ DETRのクエリ行は順序のない集合なので、DETRファミリーの一
 <code-tabs name="export" />
 
 ブロックされた組み合わせは事前確認で`NotImplementedError`を送出し、メッセージに記録済みの理由が含まれます。`validated_alternatives(family, task)`はその組み合わせで検証済みの形式を返すため、拒否理由の隣に表示すると便利です。
+
+LibreYOLOが生成しないUltralyticsの形式名は、最も近い形式を示すヒントとともに拒否されます：`saved_model`と`pb`は`tflite`または`onnx`を、`tfjs`はonnxruntime-webと組み合わせた`onnx`を、`edgetpu`は`tflite`を示します。
+
+`LibreYOLO()`で読み戻したエクスポート済みの成果物は、1.8.0以降、すべての形式でPyTorchモデルと同じシグネチャの`track()`に対応します。1.8.0ではエクスポートしたMask R-CNN、Faster R-CNN、FCOS、SSD、RetinaNet、YOLOv7、YOLOv2、YOLOv3、YOLOv4、YOLO-NAS-Rモデルでの`val()`も修正されたため、エクスポート後の指標が1.7.4の報告値と異なることがあります。
 
 全エクスポーター共通の引数は[モデルAPIページ](/docs/reference/model-api)に記載されています。形式固有の引数は各形式のページを参照してください。
 

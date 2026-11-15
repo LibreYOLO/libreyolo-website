@@ -118,7 +118,7 @@ snippets:
         result = exported(SAMPLE_IMAGE)
 
         print(type(result).__name__, len(result.boxes))
-source_hash: b998a5e3d776a229
+source_hash: bdaffa93b1526d7e
 ---
 
 ## 一个对象，每种载荷一个槽位
@@ -140,6 +140,7 @@ source_hash: b998a5e3d776a229
 | `panoptic` | `PanopticSegmentation` | `(H, W)` 分段 id，外加 `segments_info` | 全景分割 |
 | `depth_map` | `DepthMap` | `(H, W)` 浮点数 | 深度估计 |
 | `normal_map` | `NormalMap` | `(H, W, 3)` 单位向量 | 表面法线 |
+| `flow` | `FlowField` | 到下一帧的 `(H, W, 2)` 像素位移 | 光流 |
 | `edges` | `EdgeMap` | `[0, 1]` 区间的 `(H, W)` 浮点数 | 边缘检测 |
 | `restored` | `RestoredImage` | `(H, W, 3)` uint8 RGB | 图像恢复与超分辨率 |
 | `matte` | `Matte` | `[0, 1]` 区间的 `(H, W)` 浮点数 | alpha 抠图与背景移除 |

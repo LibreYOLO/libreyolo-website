@@ -128,7 +128,7 @@ snippets:
       language: bash
       code: |
         libreyolo formats --family yolo9 --task detect
-source_hash: 68fad34d07aea149
+source_hash: 5bcc94515b3df0a6
 ---
 
 ## インストール
@@ -139,6 +139,12 @@ source_hash: 68fad34d07aea149
 含まれます。あわせて`mnnconvert`の実行ファイルも入り、エクスポーターはこれをまず実行中の
 Pythonインタープリターの隣で、次に`PATH`上で探します。コンバーターが見つからない場合は、
 変換の途中で失敗するのではなく、インストールコマンドを示す`ImportError`が送出されます。
+
+MNNのLinux向けwheelは実行可能スタックを要求しますが、glibc 2.41以降（Ubuntu 25.04以降、
+Fedora 42以降）はこれを拒否するため、パッケージがインストールされていても`import MNN`が
+失敗します。LibreYOLOのエラーはそのライブラリ名を示します。Pythonを
+`GLIBC_TUNABLES=glibc.rtld.execstack=2`を付けて起動するか（glibc 2.42以降）、そのライブラリに
+対して`patchelf --clear-execstack`で一度フラグを消去してください。
 
 ## エクスポート
 

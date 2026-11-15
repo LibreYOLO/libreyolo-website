@@ -109,7 +109,7 @@ snippets:
         # yamlのキーはTrainConfigフィールド名。明示的なkwargsが優先
         model = LibreYOLO("LibreYOLO9s.pt")
         model.train(data="my-dataset.yaml", cfg="my-recipe.yaml", epochs=50)
-source_hash: 3ae91092dda49658
+source_hash: 4719637513da8f99
 ---
 
 ## 引数の設定
@@ -278,6 +278,21 @@ EMAの重みと更新回数、最良指標の追跡、`GradScaler`のスケー�
 
 モデルインスタンスがすでに所有するため、`size`と`num_classes`はファイルから除去されます。
 CLIには`--cfg`フラグがなく、ファイルパスはPython引数です。
+
+## RF-DETRのオプション
+
+RF-DETRは1.8.0以降、独自のトレーナー引数をいくつか受け取ります：
+
+| 引数 | デフォルト | 意味 |
+|---|---|---|
+| `matcher_backend` | `"auto"` | `"auto"`は、計算能力8.0以降のLinux CUDAデバイスでは`libreyolo[rfdetr-train]`に含まれる`torch-hungarian`のGPUソルバーを使い、それ以外ではSciPyを使います。`"scipy"`はSciPyを強制します |
+| `early_stopping` | | `True`は、`patience`の指定がなければ`patience=10`を意味します |
+| `lr_encoder`、`lr_vit_layer_decay`、`lr_component_decay` | モデルから | バックボーンの学習率と、その層ごとおよびコンポーネントごとの減衰 |
+| `focal_alpha` | モデルから | Focal lossのalpha。マッチャーでも使われます |
+| `cls_loss_coef` | `1`、姿勢推定では`2` | 分類損失の重み。再開した実行は記録された値を保ちます |
+| `pin_memory`、`prefetch_factor`、`persistent_workers` | `None` | データローダーの設定。`None`はタスクの従来のデフォルトを保ちます |
+
+計測した高速化については[RF-DETR](/docs/models/rf-detr#train)を参照してください。
 
 ## 関連項目
 

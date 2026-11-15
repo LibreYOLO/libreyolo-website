@@ -64,7 +64,7 @@ snippets:
         # 缺少对应 extra 的家族会连同启用它们的那条 pip
         # 命令一起列出
         libreyolo models
-source_hash: 796688d39ae5fe1d
+source_hash: 7af5a461116888ab
 ---
 
 ## 安装
@@ -123,6 +123,10 @@ extra 是写在方括号里的一个名字，用来补上某个模型家族或�
 | `paddle` | `libreyolo[onnx]` 加 `paddlepaddle` 2.6.2 和 `x2paddle` 1.6.0 |
 | `executorch` | `executorch` |
 | `triton` | 用于 HTTP 和 HTTPS V2 推理的 `tritonclient[http]` |
+
+Axelera Metis 导出没有 extra：`axelera-devkit` 和 `axelera-rt` 来自 Axelera 自有的包索引，并且锁定
+`torch<2.15`、`typer<0.13` 和 `click==8.1.8`，所以要装在专用环境里。见
+[Axelera Metis](/docs/export/axelera)。
 
 ### 训练、评估与日志
 

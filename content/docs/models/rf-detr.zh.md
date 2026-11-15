@@ -75,6 +75,22 @@ snippets:
       code: |
         libreyolo train model=LibreRFDETRs.pt data=my-dataset.yaml \
           epochs=50 device=0,1 batch=-1
+    - label: 更快的训练选项
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        # 安装 pip install "libreyolo[rfdetr-train]" 以使用 GPU 匹配器
+        model = LibreYOLO("LibreRFDETRs.pt")
+        model.train(
+            data="my-dataset.yaml",
+            epochs=50,
+            matcher_backend="auto",    # Linux CUDA sm80+ 上用 torch-hungarian，否则用 SciPy
+            early_stopping=True,       # 不传 patience= 时 patience 为 10
+            pin_memory=True,
+            prefetch_factor=2,
+            persistent_workers=True,
+        )
   val:
     - label: Python
       language: python
@@ -173,7 +189,7 @@ snippets:
 
         for meta, array in zip(session.get_outputs(), outputs):
             print(meta.name, array.shape)
-source_hash: fbb992f66e66df0c
+source_hash: 8e5c6e428703d06c
 ---
 
 ## 安装
@@ -221,6 +237,21 @@ pip install "libreyolo[rfdetr]"
 训练开始前检查这一点，并给出最接近的合法尺寸。
 
 分割微调从分割检查点开始，因为 RF-DETR 没有从检测到分割的迁移。`libreyolo train model=LibreRFDETRn-seg.pt task=segment` 会加载这个检查点，而对检测检查点传 `task=segment` 则会报错中止。
+
+从 1.8.0 起，训练器带上了上游 RF-DETR 的训练优化（#1044）：批量匹配、合并的优化器参数组，以及更精简的
+proposal 和解码器执行，API、检查点格式和参数名都不变。该 pull request 在 RTX 3090 上以 BF16 测得 Nano 每步
+约快 1.7 倍，Large 约快 1.5 倍。我们自己对比 1.7.4 做的 A/B（一次 RF100 微调）每轮约快 20%，COCO mAP 相同，
+损失和匹配也完全相同。
+
+默认的 `matcher_backend="auto"` 在计算能力 8.0 或更高的 Linux 英伟达 CUDA 设备上使用 `rfdetr-train` extra
+中锁定版本的 `torch-hungarian` 求解器，其他情况下，或者缺少这个包时，回退到 SciPy。`matcher_backend="scipy"`
+强制使用原来的求解器。代价相等时，两个求解器可能选出不同但同样最优的分配。
+
+`lr_encoder`、`lr_vit_layer_decay`、`lr_component_decay`、`focal_alpha` 和 `cls_loss_coef` 现在可以传给
+`train()`；不设置时，它们从模型解析得出，并记录在这次运行的配置里。新训练的 `cls_loss_coef` 与上游一致：
+检测、分割和旋转框为 1，姿态为 2。断点续训的运行保留原来的系数，除非你显式覆盖。不传 `patience` 时，
+`early_stopping=True` 表示 patience 为 10。`pin_memory`、`prefetch_factor` 和 `persistent_workers` 都会生效；
+`None` 保持之前的任务默认值。训练器只支持 AdamW，指定其他 `optimizer` 会记录一条警告。
 
 数据集、数据增强、多卡训练和日志记录器见[训练](/docs/train)。
 
