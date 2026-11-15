@@ -93,9 +93,15 @@ Two of LibreYOLO's model tiers also decline it. Models loaded through
 are per-frame detectors; both raise from `track()` and are used with `predict()`
 per frame instead.
 
-Tracking runs on native PyTorch models. An exported artifact loaded through
-`LibreYOLO("model.onnx")` returns a runtime backend object, which carries
-`predict()` but not `track()`.
+Since 1.8.0, tracking runs on every backend. An exported artifact loaded
+through `LibreYOLO("model.onnx")` returns a runtime backend object with the same
+`track()` signature as the PyTorch model, and native and ONNX tracking give the
+same track IDs on the same clip. Backends raise a `ValueError` on
+`track(augment=True)`.
+
+From a shell, `libreyolo track` prints one line per frame, or one JSON object
+per frame with `--json`. It has no `persist` option and rejects live and webcam
+sources.
 
 Four trackers ship with the library, selected by the `tracker` argument. The
 `.yaml` spellings, such as `"bytetrack.yaml"`, select the same built-in

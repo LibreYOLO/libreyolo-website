@@ -38,7 +38,7 @@ snippets:
     - label: Install
       language: bash
       code: |
-        # Python 3.10 to 3.12. WSL2 with Ubuntu 22.04 is the validated Windows path.
+        # Python 3.10 or 3.11. WSL2 with Ubuntu 22.04 is the validated Windows path.
         pip install "libreyolo[paddle]"
     - label: Confirm the pinned versions
       language: bash
@@ -88,12 +88,13 @@ snippets:
     - label: The backend directly
       language: python
       code: |
+        from libreyolo import SAMPLE_IMAGE
         from libreyolo.backends.paddle import PaddleBackend
 
         # What LibreYOLO() constructs for a Paddle directory. Same Results
         # object, no factory routing in between.
         backend = PaddleBackend("weights/LibreYOLO9t_paddle", device="cpu")
-        result = backend.predict("guggenheim-bilbao.jpg")
+        result = backend.predict(SAMPLE_IMAGE)
         print(result.boxes.xyxy[:3])
     - label: Bare Paddle
       language: python

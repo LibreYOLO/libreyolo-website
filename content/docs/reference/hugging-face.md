@@ -36,7 +36,11 @@ pip install libreyolo
 
 The accepted forms are `owner/repo`, `hf://owner/repo` and `hf://owner/repo@revision/filename`. A local path wins over a bare repository ID. Explicit `hf://` bypasses that precedence. Revisions must be slash-free branch names or commit hashes.
 
-Without a filename, a repository must have one checkpoint. An ambiguous repository raises and lists the choices. Hub checkpoints require LibreYOLO metadata or a recognized upstream conversion. Downloads use the shared Hub cache.
+Without a filename, a repository with one checkpoint loads it. Since 1.7.3, a repository with several checkpoints loads the one named after the repository, which covers the YOLO9 and YOLOX repos that also hold a legacy lowercase file. Any other ambiguous repository raises and lists the choices.
+
+Since 1.8.0, a repository that `LibreYOLO()` cannot load, such as a VLM, SAM, open-vocabulary or LibreGen repo, raises before any download and names the call that works, for example `from libreyolo import LibreSAM; LibreSAM("sam2-tiny")`.
+
+Downloads honor `HF_ENDPOINT` since 1.8.0, so a mirror set there serves every weight and dataset download. The Hugging Face token is sent to huggingface.co only, never to a mirror. Hub checkpoints require LibreYOLO metadata or a recognized upstream conversion. Downloads use the shared Hub cache.
 
 ## Publish
 

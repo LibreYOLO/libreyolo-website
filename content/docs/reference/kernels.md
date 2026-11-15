@@ -48,7 +48,7 @@ snippets:
         from libreyolo import LibreYOLO
         from libreyolo.kernels.attention import set_fused_attention
 
-        model = LibreYOLO("LibreSwinIRs.pt")
+        model = LibreYOLO("LibreSwinIRs-restore.pt")
 
         # Returns how many attention modules switched.
         print(set_fused_attention(model))

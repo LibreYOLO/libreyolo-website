@@ -3,10 +3,10 @@ title: Troubleshooting
 seo_title: Fix common LibreYOLO errors
 description: >-
   The errors LibreYOLO raises most often, what each one means, and the fix.
-  Includes two failures that produce wrong output instead of raising.
+  Includes two former silent failures, indexing and metrics, that 1.8.0 changed.
 lead: >-
-  Errors grouped by the message you see. Two entries at the end cover the
-  opposite problem: code that runs, returns something plausible, and is wrong.
+  Errors grouped by the message you see. Two entries at the end cover code that
+  used to run and return the wrong thing, and what 1.8.0 changed.
 keywords:
   - libreyolo error
   - modulenotfounderror libreyolo
@@ -108,15 +108,18 @@ lists the exact published filenames.
 ## train() or val() was called at the top level of your script
 
 ```
-LibreYOLO: train() was called at the top level of your script. DataLoader workers re-run that script on this platform, so put the call under `if __name__ == "__main__":`, or pass workers=0.
+train() is called at the top level of your script, and DataLoader workers re-run that script on this platform, so it runs with workers=0. Put the call under `if __name__ == "__main__":` to load data in parallel.
 ```
 
 Windows has no `fork`, and Python on macOS does not use it by default, so
 dataloader workers start by re-importing your script. The `spawn` and
 `forkserver` start methods do the same on any platform. Without an
 `if __name__ == "__main__":` guard, each worker would run your `train()` or
-`val()` call again, so each one stops at that call, prints this line naming the
-call, and the script exits with an error.
+`val()` call again. Since 1.7.1, LibreYOLO detects this, runs the call with
+`workers=0` and logs this line once. The script finishes, but data loading runs
+in the main process, which is slower.
+
+Put the call under the guard to get parallel data loading back:
 
 ```python
 def main():
@@ -126,42 +129,53 @@ if __name__ == "__main__":
     main()
 ```
 
-Setting `workers=0` also avoids it, at a throughput cost. The guard is the
-better fix.
+Guarded scripts, notebooks, the CLI and Linux `fork` keep their workers.
 
-## Two failures that do not raise
+## Two silent failures that 1.8.0 changed
 
-The rest of this page is about errors. These two are worse, because the code
-runs and hands back something that looks right.
+The rest of this page is about errors. These two used to be worse: the code ran
+and handed back something that looked right. Both behave the Ultralytics way
+since 1.8.0, so check them when a script gives different numbers after an
+upgrade.
 
 ### Indexing a single result
 
-`predict()` returns one `Results` for one image, and a list for several.
-Indexing the single-image return selects a *detection*, not an image:
+`predict()` returns one `Results` for one image, and a list for several. Since
+1.8.0, an integer `0` or `-1` on a single-image `Results` returns the whole
+result, so code written for the list form works on both:
 
 ```python
 result = model.predict("image.jpg")   # a Results
-result.boxes                          # every detection, correct
-result[0].boxes                       # ONE detection, silently
+result.boxes                          # every detection
+result[0].boxes                       # every detection, the same Results
+result[2:3].boxes                     # the third detection only
+result.boxes[2]                       # the same detection
 ```
 
-Nothing raises, because indexing a `Results` is a valid operation that returns
-a subset. Code written against the list form quietly reports one box per image.
-Index only what you know is a list.
+Other integers (`result[2]`) still select one detection, with a
+`DeprecationWarning` naming `result[2:3]` or `result.boxes[2]`. Slices, boolean
+masks and index arrays select detections, as before. Before 1.8.0,
+`result[0]` silently returned the first detection only, so code that ran on
+1.7 reports more boxes on 1.8.
 
 ### Reading metrics as attributes
 
-`val()` returns a dictionary keyed by metric name. Its one attribute, `box`,
-carries per-image results and per-class thresholds, not the metric values:
+`val()` returns a dictionary keyed by metric name, and since 1.8.0 its `box`
+attribute also names the main detection metrics:
 
 ```python
 metrics = model.val(data="coco8.yaml")
-metrics["metrics/mAP50-95"]   # correct
-metrics.box.map               # AttributeError
+metrics["metrics/mAP50-95"]   # the dictionary key
+metrics.box.map               # the same value
+metrics.box.map50, metrics.box.map75
+metrics.box.mp, metrics.box.mr  # mean precision and recall
+metrics.box.maps              # AP50-95 per class index
 ```
 
-The keys are namespaced with `metrics/` and `speed/`. Print the dictionary once
-to see what your task produced, since the set differs by task.
+Segmentation adds `metrics.seg` with `map`, `map50`, `map75` and `maps` for the
+masks, and detection results carry `metrics.confusion_matrix`. The dictionary
+keys are namespaced with `metrics/` and `speed/`. Print the dictionary once to
+see what your task produced, since the set differs by task.
 
 ## Checking a dataset before you train
 

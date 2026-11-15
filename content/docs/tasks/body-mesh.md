@@ -65,8 +65,16 @@ normalize to it.
 
 ## Models
 
-[SAM 3D Body](/docs/models/sam-3d-body) is the only family serving this task,
-and it is a wrapper rather than a port: Meta's `sam-3d-body` package is
+Two families serve this task.
+
+InstantHMR, added in 1.8.0, ships in four sizes, n, t, s and m, as
+`LibreYOLO("LibreInstantHMRm-mesh.pt")`. It finds people with RF-DETR, or takes
+`person_boxes=` or `person_detector=`, and returns MHR body meshes in the same
+`Results.meshes`. Its n, t, s and m weights are CC BY-NC 4.0, and
+`LibreInstantHMRm-mesh-commercial` is Apache-2.0. It exports to ONNX and
+fine-tunes from a pretrained checkpoint, with no `val()`.
+
+[SAM 3D Body](/docs/models/sam-3d-body) is a wrapper rather than a port: Meta's `sam-3d-body` package is
 published under the SAM License, which LibreYOLO's own code may not derive
 from, so none of it is vendored. Two backbones share the same MHR body model,
 `d3` on a DINOv3 ViT-H/16+ encoder and `h` on the original ViT-H.

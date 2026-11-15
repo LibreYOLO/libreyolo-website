@@ -41,6 +41,8 @@ snippets:
 | `LIBRELABEL_ENABLE_LOCATE` | unset | Must be exactly `1`, `true`, `yes` or `on` to expose the LocateAnything assistant in the labeling tool. Any other value keeps it off |
 | `SAM_3D_BODY_PATH` | unset | Path to the SAM 3D Body package for the mesh family, when it is not passed to the constructor |
 | `HF_TOKEN` | unset | Hugging Face access token, used for gated repositories |
+| `HF_ENDPOINT` | `https://huggingface.co` | Hugging Face mirror for every weight and dataset download, since 1.8.0. Checksums still compare against the huggingface.co URL, and the token is sent to huggingface.co only |
+| `LIBREYOLO_AUTOINSTALL` | unset | `1` or `true` lets LibreYOLO install Axelera's proprietary SDK packages from Axelera's index when the `axelera` format needs them. Unset, it prints the install command instead |
 
 <code-tabs name="usage" />
 

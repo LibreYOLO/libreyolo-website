@@ -62,7 +62,7 @@ snippets:
             format="openvino",
             imgsz=640,
             batch=1,
-            dynamic=False,    # True keeps a dynamic batch axis through the IR
+            dynamic=True,     # Python default; False fixes the batch axis. The CLI is static
             half=False,       # True stores FP16 weights
             int8=False,       # True runs NNCF post-training quantization
             data=None,        # required when int8=True

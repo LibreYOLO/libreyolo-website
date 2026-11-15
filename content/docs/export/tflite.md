@@ -29,7 +29,7 @@ meta:
   - label: Precision
     value: "FP32; INT8 for YOLO9 and YOLOX detection. FP16 is rejected."
   - label: Requires
-    value: "Python 3.12 or newer, because onnx2tf 2.4.x publishes no older wheels"
+    value: "Python 3.12 or 3.13 to export, because onnx2tf publishes no wheels outside that range"
 verification: "Read from libreyolo/export/tflite.py, libreyolo/export/exporter.py, libreyolo/export/support.py, libreyolo/backends/tflite.py and pyproject.toml on the dev branch."
 snippets:
   install:
@@ -42,7 +42,7 @@ snippets:
     - label: Confirm the Python version first
       language: bash
       code: |
-        python -c "import sys; print(sys.version_info >= (3, 12))"
+        python -c "import sys; print((3, 12) <= sys.version_info[:2] <= (3, 13))"
   export:
     - label: Python
       language: python
@@ -118,10 +118,11 @@ snippets:
 
 <code-tabs name="install" />
 
-The extra pulls `onnx2tf` for the conversion and `ai-edge-litert` for running the
-result, both behind a Python 3.12 marker. On an older interpreter the export
-raises an `ImportError` that names the version requirement rather than failing
-inside the converter.
+The extra pulls `onnx2tf` for the conversion, on Python 3.12 and 3.13, and
+`ai-edge-litert` for running the result, on Python 3.12 or newer. On Python 3.14
+the converter is skipped, so `.tflite` files run there but cannot be exported.
+On an unsupported interpreter the export raises an `ImportError` that names the
+version requirement rather than failing inside the converter.
 
 `libreyolo[litert]` installs exactly the same thing. The format string `litert` is
 an alias for `tflite`, and the output file is a `.tflite` either way.

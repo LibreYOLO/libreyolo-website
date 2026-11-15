@@ -63,15 +63,29 @@ The canonical task key is `generate`. `generation`, `image-generation`,
 
 ## Models
 
-Two families serve this task, both through `LibreGen` and both loaded as
-`diffusers` pipelines at pinned revisions.
+These families serve this task, all through `LibreGen`.
+[FLUX.2 klein](/docs/models/flux2-klein) and
+[SANA-Sprint](/docs/models/sana-sprint) load as `diffusers` pipelines at pinned
+revisions.
 [FLUX.2 klein](/docs/models/flux2-klein) 4B, by Black Forest Labs, is the
 default: `LibreGen()` with no argument loads it.
 [SANA-Sprint](/docs/models/sana-sprint) 0.6B, by NVIDIA, is the smaller
 model. Both are Apache-2.0; SANA-Sprint's bundled Gemma 2 text encoder is
 under the Gemma Terms of Use.
 
-`LibreGen` also loads a local directory that holds either family's pipeline in
+1.8.0 adds four more. PRX (`prx`, `prx-512-sft-distilled` and seven other
+checkpoints) and PRXPixel (`prxpixel-7b`) are Photoroom's text-to-image models;
+PRXPixel needs `diffusers>=0.39`, and PRX's T5Gemma text encoder is under the
+Gemma Terms of Use. Speridlabs Iris-Z (`speridlabs-iris-z`, sizes `9b` and
+`32b`) is a FLUX.2 fine-tune that denoises an image and its depth together. It
+generates from a prompt, paints a prompt over the depth of a photo or of a
+depth result with `source=`, and samples an image together with its depth with
+`depth=True`. Plan for about 40 GB of GPU memory at `imgsz=512`; on a 24 GB card,
+pass `offload=True`. Open Vision Banana (`open-vision-banana`, sizes `4b` and
+`9b`) answers a perception prompt about a photo with an image. Iris-Z and Open
+Vision Banana weights are under the FLUX Non-Commercial License.
+
+`LibreGen` also loads a local directory that holds a FLUX.2 klein or SANA-Sprint pipeline in
 the diffusers layout, matched by the pipeline class recorded in its
 `model_index.json`: an offline copy, or a fine-tune made with upstream
 tooling. `LibreYOLO()` does not load these models.

@@ -1,7 +1,7 @@
 ---
 title: Promptable segmentation
 seo_title: "Promptable segmentation in LibreYOLO"
-description: "Turn a point, box or text concept into an object mask in LibreYOLO. Load SAM, SAM 2, SAM 3, EdgeTAM, MobileSAM or PicoSAM3 through LibreSAM."
+description: "Turn a point, box or text concept into an object mask in LibreYOLO. Load SAM, SAM 2, SAM 3, SAM 3.1, EdgeTAM, MobileSAM or PicoSAM3 through LibreSAM."
 lead: "Promptable segmentation turns a click into a mask: you point at an object, or draw a box around it, and the model returns its outline. In LibreYOLO it is not a separate task key but a model tier, loaded through the LibreSAM factory, whose results are ordinary segmentation Results."
 keywords: [promptable segmentation, interactive segmentation, segment anything python, point prompt, box prompt, SAM python, mask from click]
 last_verified: "1.5.0"
@@ -92,7 +92,7 @@ second prompt on the same image skips it entirely.
 
 ## Models
 
-Six families load through `LibreSAM` by alias.
+Seven families load through `LibreSAM` by alias.
 
 [SAM](/docs/models/sam) is the default, in `base`, `large` and `huge` sizes,
 also spelled `b`, `l` and `h`.
@@ -100,13 +100,18 @@ also spelled `b`, `l` and `h`.
 [SAM 2](/docs/models/sam-2), as `sam2-tiny`, `sam2-small`, `sam2-base-plus` and
 `sam2-large`. LibreYOLO supports its image path.
 
-[SAM 3](/docs/models/sam-3), as `sam3`, is the one family that accepts a text
-concept prompt: `text="yellow school bus"` returns every matching instance.
-Passing `text=` to any other family raises with a message naming SAM 3. Its
-weights come from Meta under the custom SAM License rather than LibreYOLO's MIT
-license, and the repository is gated: accept the terms on the model page and
-authenticate with `hf auth login` before the first download. Read
+[SAM 3](/docs/models/sam-3), as `sam3`, accepts a text concept prompt:
+`text="yellow school bus"` returns every matching instance. Its weights come
+from Meta under the custom SAM License rather than LibreYOLO's MIT license, and
+the repository is gated: accept the terms on the model page and authenticate
+with `hf auth login` before the first download. Read
 [SAM 3](/docs/models/sam-3) before deploying it.
+
+SAM 3.1, as `sam3.1`, runs Meta's SAM 3.1 image path on the SAM 3 pipeline and
+takes the same text prompts. Its weights come from the gated
+`LibreYOLO/LibreSAM31large` mirror under the same SAM License. SAM 3 and SAM 3.1
+are the only families that accept `text=`; passing it to any other family
+raises.
 
 [EdgeTAM](/docs/models/edgetam), as `edgetam`, is an on-device variant of SAM 2.
 LibreYOLO supports its image path.
@@ -119,7 +124,7 @@ box-prompted regions on edge sensors. Box prompts are the whole contract here:
 points, text, mask, multimask and segment-everything all raise with a message
 pointing at SAM 2 or SAM 3.
 
-The tier's extra covers the four families that load through `transformers`:
+The tier's extra covers the five families that load through `transformers`:
 
 ```bash
 pip install "libreyolo[sam]"

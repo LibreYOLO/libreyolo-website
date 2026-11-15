@@ -96,11 +96,12 @@ an extra is present.
 | `vla` | `lerobot[smolvla,diffusion,dataset]>=0.6.1`, Python 3.12 or later |
 | `marigold` | Pinned diffusion, acceleration and Transformers dependencies |
 | `molmo2` | `transformers==4.57.1`, `einops` and `accelerate` |
-| `gen` | `diffusers>=0.38.0`, `transformers>=5.1.0` and `accelerate>=1.7.0`, for LibreGen and Speridlabs Idol |
+| `gen` | `diffusers>=0.38.0`, `transformers>=5.1.0`, `accelerate>=1.7.0`, `scikit-image>=0.19` and `ftfy>=6.0`, for LibreGen. PRXPixel needs `diffusers>=0.39` and says so at load time |
 | `rfdetr` | `transformers`, which supplies the RF-DETR backbone |
+| `rfdetr-train` | `transformers` plus `torch-hungarian==0.1.0rc0`, for optional GPU matching in RF-DETR training. Without it, matching falls back to SciPy |
 | `eomt` | `transformers` |
 | `midas` | `timm` 1.0.x, which supplies MiDaS's ViT-L/16 and EfficientNet-Lite3 encoders |
-| `vlm` | `transformers`, `num2words`, `decord`, `lmdb`, `peft` |
+| `vlm` | `transformers`, `num2words`, `lmdb`, `peft`, and `decord` on Linux x86-64 and Windows |
 | `sam` | `transformers`, `timm` |
 | `openvocab` | `transformers`, `timm`, `regex`, `ftfy` |
 | `sensenova` | `transformers`, `accelerate`, and `bitsandbytes` off macOS |
@@ -115,11 +116,11 @@ an extra is present.
 | Extra | Adds |
 |---|---|
 | `onnx` | `onnx`, `onnxsim`, `onnxruntime>=1.18.0` |
-| `tensorrt` | `tensorrt-cu12` 10.16.1.11 and `pycuda`, off macOS |
+| `tensorrt` | `tensorrt-cu12` 10.16.1.11, off macOS. INT8 calibration uses `cuda.bindings`, which PyPI torch installs on Linux; elsewhere, `pip install cuda-python` |
 | `openvino` | `openvino` |
 | `coreml` | `coremltools` |
 | `coreai` | `coreai-torch`, macOS only |
-| `tflite`, alias `litert` | `libreyolo[onnx]` plus `onnx2tf`, `ai-edge-litert`, `onnx-graphsurgeon` and `onnx-simplifier` |
+| `tflite`, alias `litert` | `libreyolo[onnx]` plus `onnx2tf`, `ai-edge-litert` and `onnx-graphsurgeon` |
 | `mnn` | `libreyolo[onnx]` plus `MNN` |
 | `ncnn` | `pnnx` and `ncnn` |
 | `paddle` | `libreyolo[onnx]` plus `paddlepaddle` 2.6.2 and `x2paddle` 1.6.0 |
@@ -170,7 +171,9 @@ command. Some are deliberately outside it. `neptune` is excluded because stable
 protobuf 7. `executorch` is excluded because ExecuTorch constrains which PyTorch
 version it pairs with, and `coreai` because `coreai-torch` pins PyTorch to
 2.11.x and would drag the whole environment onto that version. `fast-eval`,
-`hub-kernels`, `clip-convert` and `siglip2-convert` are also left out. Install
+`hub-kernels`, `clip-convert` and `siglip2-convert` are also left out, and so is
+`paddle`, whose X2Paddle converter needs an older ONNX than the TFLite path in
+`all`. Install
 any of them by name. `all` includes `hf`, `llm` and `gen`; `fiftyone`, `vla`, `marigold` and `molmo2` stay separate. FiftyOne brings headless OpenCV, which overlaps the core `cv2` package.
 
 Core installation requires Python 3.10 or later and adds `cloudpickle>=3.0.0` for coordinator-managed DDP and `huggingface_hub>=0.34.0`, so `LibreYOLO("owner/repo")` loads Hub models without the `hf` extra.
@@ -185,15 +188,16 @@ succeeds everywhere and simply installs less where a wheel does not exist.
 | Extra | Constraint |
 |---|---|
 | `coreai` | macOS only. The Core AI toolchain neither converts nor runs elsewhere |
-| `tensorrt` | Skipped on macOS, which has no CUDA |
+| `tensorrt` | Skipped on macOS, which has no CUDA, on ARM Linux, where JetPack provides TensorRT, and on Python 3.14 |
 | `tflite`, `litert` | `onnx2tf` and `ai-edge-litert` require Python 3.12 or newer |
 
 `sensenova` skips `bitsandbytes` on macOS, where no wheel is published; the rest
 of the extra installs normally.
 
-`vlm` is not platform-scoped: its `decord==0.6.0` pin has wheels only for
-x86-64 Linux and Windows. On macOS and ARM Linux, `vlm`, `ground`, `vlm-train`
-and `all` fail to install.
+`vlm`, `ground`, `vlm-train` and `all` install on macOS and ARM Linux. Only
+`decord`, which publishes wheels for x86-64 Linux and Windows alone, is left
+out there, so LocateAnything is the one model unavailable on those platforms;
+loading it there says so before downloading its weights.
 
 If disk is the constraint, most of it is PyTorch, and most of PyTorch is the
 CUDA payload its default wheel bundles. A CPU-only wheel removes that without

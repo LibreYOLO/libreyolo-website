@@ -139,11 +139,12 @@ snippets:
       code: |
         from libreyolo import LibreYOLO, LibreYOLO9, SAMPLE_IMAGE
 
-        # Writes libreyolo9s.onnx, then builds libreyolo9s.engine from it.
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
+        # Writes the ONNX intermediate, then builds weights/<stem>_fp16.engine
+        # from it and returns that path.
+        engine = LibreYOLO9("libreyolo9s.pt", size="s").export(format="tensorrt", half=True)
 
         # The engine loads back through the same entry point.
-        result = LibreYOLO("libreyolo9s.engine").predict(SAMPLE_IMAGE)
+        result = LibreYOLO(engine).predict(SAMPLE_IMAGE)
     - label: CLI
       language: bash
       code: |

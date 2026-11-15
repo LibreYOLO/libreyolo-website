@@ -158,7 +158,7 @@ rectangles. `result.boxes` is filled as well, with the axis-aligned form.
 
 ## Models
 
-Four families serve this task.
+Five families serve this task.
 
 [RF-DETR](/docs/models/rf-detr) supports training. It predicts, trains,
 validates and exports oriented boxes, and it ships published oriented
@@ -187,6 +187,12 @@ Choose the checkpoint label set and training support needed for your dataset.
 which predict the 15 DOTA v1.0 classes at a fixed 1024 input. It runs on the
 base package and supports prediction, training, validation, and ONNX and
 TorchScript export.
+
+RiO-DETRv2, added in 1.8.0, is a real-time oriented-box DETR in sizes n, s, m,
+l and x, loaded as `LibreRiODETRv2`. `LibreRiODETRv2n-obb.pt` is the DOTA v1.0
+checkpoint, with 15 classes at 1024 px, and `-obb-diorr` is DIOR-R, with 20
+classes at 800 px. It exports to ONNX and TorchScript and is inference only:
+`train()` raises.
 
 ## Predict
 

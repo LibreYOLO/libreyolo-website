@@ -25,7 +25,7 @@ meta:
     value: 'LibreYOLO("weights/LibreYOLO9t.engine")'
     mono: true
   - label: Shapes
-    value: "Static by default; dynamic=True adds a batch-axis optimization profile"
+    value: "Python export defaults to dynamic=True, a batch-axis optimization profile; the CLI is static unless --dynamic"
   - label: Precision
     value: "FP32, FP16 (half=True), INT8 (int8=True with data=)"
   - label: Requires
@@ -67,7 +67,7 @@ snippets:
             half=False,
             int8=False,
             data=None,                      # required when int8=True
-            dynamic=False,
+            dynamic=True,                   # Python default; the CLI is static
             workspace=4.0,                  # GiB of build-time scratch
             min_batch=1,                    # dynamic profile bounds
             opt_batch=1,
@@ -146,8 +146,10 @@ is no CPU fallback for this format.
 
 <code-tabs name="install" />
 
-The `tensorrt` extra pins `tensorrt-cu12` and `pycuda`, and the marker drops both
-on macOS. On a Jetson, do not use that extra: it pins a CUDA 12 build against a
+The `tensorrt` extra pins `tensorrt-cu12`, and its marker skips it on macOS,
+on ARM Linux (aarch64) and on Python 3.14. There is no `pycuda`: export and
+inference use `torch.cuda`, and INT8 calibration uses `cuda.bindings`, which
+PyPI torch installs on Linux; elsewhere, `pip install cuda-python`. On a Jetson, do not use that extra: it pins a CUDA 12 build against a
 CUDA 13 platform. Use the TensorRT that JetPack installs instead, as described on
 [NVIDIA Jetson](/docs/export/jetson).
 

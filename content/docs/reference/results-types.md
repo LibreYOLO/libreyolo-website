@@ -55,7 +55,7 @@ generator that yields them.
 | `orig_shape` | `(int, int)` | Original image height and width |
 | `path` | `str` | Source path when the input came from disk |
 | `names` | `dict[int, str]` | Class index to class name |
-| `speed` | `dict[str, float]` | Per-stage milliseconds |
+| `speed` | `dict[str, float]` | Per-stage milliseconds, when the predictor records them; it can be empty, as it is for most detectors |
 | `track_id` | tensor | Track IDs when the result came from `track()` |
 | `frame_idx` | `int` | Frame index for video and stream sources |
 | `restore_scale` | `int` | Output-to-input upscale factor of a restore result; `1` everywhere else |

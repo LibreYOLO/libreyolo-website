@@ -97,10 +97,16 @@ mask has no fixed class set otherwise. `device=` moves the model and, if a
 
 ## Variants
 
-One size, large, at a fixed 1008 px input. SAM 3.1 is not supported: its
-implementation carries a custom license that cannot be vendored into this
-MIT repository, and the Transformers version LibreYOLO depends on does not
-yet load its checkpoint format.
+One size, large, at a fixed 1008 px input.
+
+SAM 3.1 is supported since 1.8.0 as `LibreSAM("sam3.1")`, or the
+`LibreSAM31` class. It runs Meta's SAM 3.1 image path on the same pipeline as
+SAM 3, with the same prompts, the same `text=` concept prompts and the same
+`Results`. Its weights download from the gated `LibreYOLO/LibreSAM31large`
+mirror, converted from Meta's original-format checkpoint, under Meta's SAM
+License rather than MIT, so accept the terms on the model page and
+authenticate before the first download. SAM 3.1 Object Multiplex video
+tracking is not supported.
 
 ## Licensing
 

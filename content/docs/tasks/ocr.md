@@ -80,7 +80,7 @@ geometry.
 
 ## Models
 
-Three families serve `ocr`.
+Seven families serve `ocr`.
 
 [PP-OCRv5](/docs/models/pp-ocrv5) is the dedicated pipeline: a
 differentiable-binarization detector finds the text quads and an SVTR/CTC
@@ -101,6 +101,15 @@ instruction asks for every word in box format, and each box comes back as an
 axis-aligned quad with its transcript. `.conf` and `.det_conf` are a constant
 1.0, since the model emits no score. It needs the `vlm` extra, and its weights
 are Apache-2.0.
+
+1.8.0 adds four document OCR families, all loaded with `LibreVLM` and the `vlm`
+extra. DeepSeek-OCR (`deepseek-ocr`, and `deepseek-ocr-2`) returns one region
+per text line, or the page as markdown with `prompt="markdown"`. PaddleOCR-VL
+(`paddleocr-vl`) and GLM-OCR (`glm-ocr`) find layout regions in reading order
+and read each one as text, a table in HTML or a formula in LaTeX. Falcon OCR
+(`falcon-ocr`) reads the whole page in one pass, or region by region with
+`layout=True`. These families fill `Results.ocr.markdown` with the page text and
+`Results.ocr.labels` with each region's layout category.
 
 ## Predict
 
@@ -148,8 +157,9 @@ returns `Results.ocr` rather than detections. See
 ## Train
 
 No OCR family has a training implementation: `train()` raises
-`NotImplementedError` on all three. Validation covers PP-OCRv5; `val()` raises
-on the two vision-language families. PP-OCRv5's page names the Apache-2.0 upstream training code and the
+`NotImplementedError` on all seven. Validation covers PP-OCRv5 and, since
+1.8.0, DeepSeek-OCR, PaddleOCR-VL, GLM-OCR and Falcon OCR, which run the same
+OCR validator; `val()` raises on SenseNova-Vision and WeVisOne-VL. PP-OCRv5's page names the Apache-2.0 upstream training code and the
 conversion script that brings a fine-tuned checkpoint back into LibreYOLO.
 
 ## Validate
@@ -175,5 +185,5 @@ a character scores near 1 where end-to-end F1 scores it 0.
 
 No export format is available for this task. PP-OCRv5 is two networks moving
 together rather than one traceable graph, and `export()` raises for every format
-on all three families. To deploy outside LibreYOLO, fine-tune upstream and use the
+on all seven families. To deploy outside LibreYOLO, fine-tune upstream and use the
 upstream deployment path.

@@ -1,22 +1,46 @@
 ---
-title: Upgrading to 1.7.0
-seo_title: Upgrade LibreYOLO 1.6.0 to 1.7.0
+title: Upgrading to 1.8.0
+seo_title: Upgrade LibreYOLO 1.7 to 1.8.0
 description: >-
-  Migration steps for YOLO9 checkpoints, module names and training recipes, CLI
-  run folders, the confusion matrix and new errors in LibreYOLO 1.7.0.
+  Migration steps for result indexing, validation metrics, Results.save(),
+  dataset paths, the sample image, RF-DETR training defaults and Ultralytics
+  names in LibreYOLO 1.8.0, plus the 1.6.0 to 1.7.0 notes.
 lead: >-
-  Version 1.7.0 keeps older YOLO9 checkpoints loading with the same float boxes.
-  It changes YOLO9-family training, the names code sees inside the network, and
-  a few validation and predict contracts.
+  Version 1.8.0 makes results, metrics and errors behave the Ultralytics way.
+  A few calls return different numbers, shapes or files than in 1.7.4, so read
+  the first section before upgrading.
 keywords:
   - libreyolo upgrade
+  - libreyolo 1.8.0 migration
   - libreyolo 1.6.0 migration
   - libreyolo breaking changes
   - yolo9 module names
   - clip_max_norm
   - confusion matrix
-last_verified: 1.7.0
+last_verified: 1.8.0
 ---
+
+## 1.7 to 1.8
+
+- `results[0]` on a single-image `Results` returns the whole result since 1.8.0, with all its detections, and so does `results[-1]`; `for r in results` yields it once. In 1.7, `results[0]` was the first detection only, and iteration stepped through detections. Code that did `results[0].boxes` now sees every box. Other integers (`results[2]`) still select one detection, with a `DeprecationWarning`: use `results[2:3]` or `results.boxes[2]`. Slices and boolean masks select detections as before, and `len(results)` still counts detections.
+
+- `val()` results name their metrics: `metrics.box.map`, `.map50`, `.map75`, `.mp`, `.mr` and `.maps`, read from the same `metrics/...` keys. Segmentation adds `metrics.seg` with the mask values. The dictionary keys are unchanged.
+
+- `Results.save()` saves the annotated image for every task instead of raising outside generation and matting. It takes `filename=` as well as a path, defaults to `results_<image name>`, and returns the path; `Results.show()` displays the same image. Generated images, 3D objects and mattes save as before.
+
+- `libreyolo.SAMPLE_IMAGE` is `guggenheim-bilbao.jpg`, and `parkour.jpg` is no longer in the package (#1034). Scripts that use `SAMPLE_IMAGE` get a different image and different detections. Code that opened `libreyolo/assets/parkour.jpg` or `parkour_result.jpg` directly must point at another file.
+
+- A relative `path` in your own dataset YAML (`.`, `./sub` or `sub`) resolves against the YAML's folder (#1040). In 1.7 it was tried under `DATASETS_DIR` first, so `path: .` became `~/datasets` whenever that folder existed and training found 0 images without saying so. Bundled YAMLs such as `coco8.yaml`, and a YAML whose folder exists only under `DATASETS_DIR` or that has a `download:` and nothing on disk yet, still resolve there. A split with no images now logs a warning.
+
+- Fresh RF-DETR training runs use upstream's classification-loss coefficient, `cls_loss_coef` 1 for detection, segmentation and oriented boxes (segmentation was 5) and 2 for pose (was 1) (#1044). Resumed runs keep their old coefficients unless you pass one. `early_stopping=True` was ignored and now means patience 10 when no `patience` is given. The new `matcher_backend` argument picks the matcher: `"auto"` uses GPU Hungarian matching when `libreyolo[rfdetr-train]` is installed on a Linux NVIDIA GPU of compute capability 8.0 or newer, and SciPy everywhere else, as does `"scipy"`. Training is not bitwise identical to 1.7.4.
+
+- `val()` on exported Mask R-CNN, Faster R-CNN, FCOS, SSD, RetinaNet, YOLOv7, YOLOv2/v3/v4 and YOLO-NAS-R models, and on PyTorch YOLOv1, returns different mAP (#1045). These validations used the wrong preprocessing and reported mAP at or near 0, or raised for RetinaNet; they now match the PyTorch model. `predict()` was not affected. INT8 exports of YOLO-NAS pose and YOLO-NAS-R models calibrate differently.
+
+- The pre-1.0 all-caps class names `LIBREYOLO`, `LIBREYOLOX`, `LIBREYOLO9`, `LIBREYOLORFDETR` and `LIBREYOLONCNN` import again, with a `DeprecationWarning`, and resolve to `LibreYOLO`, `LibreYOLOX`, `LibreYOLO9`, `LibreRFDETR` and `NcnnBackend` (#1039). Rename them when you touch the code.
+
+- Ultralytics names fail with the LibreYOLO line to type instead (#1032, #1039). `from libreyolo import YOLO` (also `RTDETR`, `NAS`, `YOLOWorld`, `YOLOE`, `SAM`, in any case) raises an `ImportError` naming the LibreYOLO class, `LibreYOLO("yolov8n.pt")` and other Ultralytics weight names name the closest LibreYOLO weights, and a checkpoint trained with Ultralytics is refused. None of these names became aliases.
+
+- Downloads honor `HF_ENDPOINT` (#1033). A mirror set there serves every weight and dataset download, not only `hf_hub_download`; the Hugging Face token is sent to huggingface.co only.
 
 ## 1.6.0 to 1.7.0
 

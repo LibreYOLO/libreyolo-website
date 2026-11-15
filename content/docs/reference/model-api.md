@@ -26,7 +26,6 @@ snippets:
         result = model(SAMPLE_IMAGE, conf=0.25, iou=0.45)
 
         print(result.boxes.xyxy)
-        print(result.speed)
   stream:
     - label: Python
       language: python

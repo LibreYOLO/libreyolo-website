@@ -13,7 +13,7 @@ keywords:
   - libreyolo 1.4.0 docs
   - check libreyolo version
   - pin libreyolo version
-last_verified: 1.7.0
+last_verified: 1.8.0
 snippets:
   version:
     - label: CLI
@@ -30,7 +30,7 @@ snippets:
 
 ## The release these pages describe
 
-These pages describe LibreYOLO 1.7.0. The version sits at the top of the docs
+These pages describe LibreYOLO 1.8.0. The version sits at the top of the docs
 sidebar, and every page ends with a line naming the release it was verified
 against.
 
@@ -52,11 +52,13 @@ and exits.
 
 Each earlier release keeps the documentation it shipped with, at its own path.
 1.6.0 and 1.5.0 keep the full tree, one page per topic at the same paths as
-these pages; 1.1.0 to 1.4.0 are single pages.
+these pages; 1.1.0 to 1.4.0 are single pages. The 1.7 releases have no frozen
+copy: these pages were revised in place from 1.7.0 to 1.8.0, and
+[upgrading](/docs/upgrade) lists what changed.
 
 | Release | Documentation |
 | --- | --- |
-| 1.7.0 | [/docs](/docs), these pages |
+| 1.8.0 | [/docs](/docs), these pages |
 | 1.6.0 | [/docs/v1.6.0](/docs/v1.6.0) |
 | 1.5.0 | [/docs/v1.5.0](/docs/v1.5.0) |
 | 1.4.0 | [/docs/v1.4.0](/docs/v1.4.0) |
@@ -76,7 +78,7 @@ versions, its page is the accurate reference and this tree is not.
 version when a result has to be reproducible:
 
 ```bash
-pip install "libreyolo==1.7.0"
+pip install "libreyolo==1.8.0"
 ```
 
 Installing from source, a plain clone checks out `release`, the stable branch

@@ -121,6 +121,19 @@ to non-commercial use; the license is on its page.
 
 [Marigold V2](/docs/models/marigold-v2) adds diffusion-based depth adapters with explicit depth encodings.
 
+1.8.0 adds four depth sources, all inference only. MoGe-3
+(`LibreYOLO("LibreMoGe3l-depth.pt")`, sizes l and g) returns metric depth in
+meters, with the camera-space point map, pixel intrinsics and validity mask
+attached as `depth_map.point_map`, `depth_map.intrinsics` and
+`depth_map.valid_mask`. Video Depth Anything (sizes s, b and l) treats a list
+of frames, a directory or a video as one sequence and returns one depth map per
+frame on a single relative scale; its b and l weights are non-commercial.
+Speridlabs Iris-Z, loaded with `LibreGen("speridlabs-iris-z", task="depth")`,
+returns relative log depth in 4 steps, and Open Vision Banana, through
+`LibreGen("open-vision-banana")`, answers a depth prompt with a grey inverse
+depth image. Iris-Z and Open Vision Banana weights are under the FLUX
+Non-Commercial License.
+
 [GTR](/docs/models/gtr) predicts metric depth and returns it as relative
 inverse depth, so `1 / result.depth_map.data` recovers meters for scenes like
 its training data. It runs on the base package, trains, and exports to ONNX and

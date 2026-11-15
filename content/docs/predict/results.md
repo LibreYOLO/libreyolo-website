@@ -227,8 +227,11 @@ axis-aligned hulls when you need rectangles.
 
 ## Slicing and moving
 
-`result[i]` returns a new `Results` holding one instance. Per-instance payloads
-are sliced; whole-image payloads are carried through unchanged, so slicing a
+`result[i:i + 1]` returns a new `Results` holding one instance, and so does
+`result.boxes[i]` for the boxes alone. An integer `0` or `-1` returns the whole
+result since 1.8.0, so `result[0]` works the same on one `Results` and on the
+list `predict()` returns for several images; other integers still select one
+instance, with a `DeprecationWarning`. Per-instance payloads are sliced; whole-image payloads are carried through unchanged, so slicing a
 classification result cannot truncate its probability vector to a single class,
 and slicing a depth result cannot corrupt the `(H, W)` layout.
 
@@ -281,12 +284,14 @@ with its segments, a matte as a transparent-background RGBA PNG, and a detector
 as boxes with masks underneath them. The written path is attached to the result
 as `result.saved_path`.
 
-`Results.save(path)` is likewise narrow: it writes a generated image or 3D
-object, picking the format from the extension, and a matte result as a
-transparent-background RGBA PNG cutout, and raises `NotImplementedError`
-otherwise. `Results.cutout()` returns that same RGBA array without writing it.
-For a matte, both need the source image, taken from `result.path` or passed as
-`image=`.
+`Results.save()` writes the annotated image for every task since 1.8.0: it
+runs `plot(save=True)`, takes the file as `path` or `filename=`, defaults to
+`results_<image name>`, and returns the path it wrote. `Results.show()` displays
+the same annotated image. Three payloads save as themselves instead and need a
+path: a generated image or 3D object, with the format picked from the
+extension, and a matte, written as a transparent-background RGBA PNG cutout.
+`Results.cutout()` returns that same RGBA array without writing it. For a matte,
+both need the source image, taken from `result.path` or passed as `image=`.
 
 Two payloads carry their own writers: `result.restored.save(path)` for a
 restored image, and `result.meshes.save_obj(path, index=0)` for a mesh.

@@ -102,6 +102,8 @@ snippets:
         import coremltools as ct
         from PIL import Image
 
+        from libreyolo import SAMPLE_IMAGE
+
         mlmodel = ct.models.MLModel("weights/LibreYOLO9t.mlpackage")
         print(mlmodel.user_defined_metadata["model_family"])
         print(mlmodel.user_defined_metadata["names"])

@@ -96,9 +96,13 @@ the data to already be on disk.
 ## Where a dataset lives on disk
 
 The YAML `path` key names the dataset root. An absolute `path` is used as
-written. A relative one is looked for under the datasets directory first, then
-beside the YAML file itself, and a dataset that is about to be downloaded goes
-under the datasets directory.
+written. Since 1.8.0, a relative one in your own YAML (`.`, `./sub` or `sub`)
+resolves against the folder the YAML is in, as in the Ultralytics format. Only
+when nothing exists there does LibreYOLO fall back to a folder of that name
+under the datasets directory, and a YAML with a `download:` key and nothing on
+disk yet downloads there. Bundled YAMLs such as `coco8.yaml` always resolve
+under the datasets directory. A split that finds no images logs a warning
+naming the resolved path, the dataset root and the YAML.
 
 That directory is `~/datasets`, overridden by the `LIBREYOLO_DATASETS_DIR`
 environment variable. There is no settings file for it.

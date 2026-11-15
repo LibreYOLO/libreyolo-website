@@ -160,7 +160,7 @@ Blocked, with the reason recorded per combination:
 | EoMT semantic segmentation | Strict capture fails with `GuardOnDataDependentSymNode`: something in the mask path reads a value off a tensor and branches on it |
 | SegFormer semantic segmentation | The capture path has not been assessed, and its published weights are non-commercial regardless of format |
 | L2CS gaze | The model itself supports ONNX, TorchScript, ExecuTorch, TensorRT and OpenVINO only, which is a model-side decision |
-| Depth Anything 3 depth | The family rejects export for every format |
+| Depth Anything 3 depth | The family exports only to ONNX, TorchScript, ExecuTorch, TensorRT and OpenVINO |
 
 RF-DETR carries one caveat worth reading before comparing artifacts. Its parity is
 recorded against the graph the Core AI exporter itself prepares, not against ONNX,

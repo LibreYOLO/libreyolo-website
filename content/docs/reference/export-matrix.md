@@ -1,7 +1,7 @@
 ---
 title: Full export matrix
 seo_title: "LibreYOLO export support matrix and its rules"
-description: "How LibreYOLO decides whether a family, task and format combination exports: the twelve formats, the three tiers, the fallback rules and the parity thresholds."
+description: "How LibreYOLO decides whether a family, task and format combination exports: the thirteen formats, the three tiers, the fallback rules and the parity thresholds."
 lead: "Export support is a lookup on the triple (family, task, format). This page describes the shape of that matrix, the rules that fill the cells no explicit entry covers, and how to query it for a combination you care about."
 keywords:
   - libreyolo export support
@@ -56,10 +56,12 @@ snippets:
 
 The matrix is keyed by `(family, task, format)`. Family keys are the canonical
 names from the model registry, task keys come from `libreyolo.tasks.TASKS`,
-and there are twelve formats:
+and there are thirteen formats:
 
 `onnx`, `torchscript`, `executorch`, `tensorrt`, `openvino`, `paddle`, `mnn`,
-`rknn`, `ncnn`, `tflite`, `coreml`, `coreai`.
+`rknn`, `axelera`, `ncnn`, `tflite`, `coreml`, `coreai`.
+
+`axelera`, added in 1.8.0, compiles an INT8 model for Axelera's Metis AIPU.
 
 `model.export(format=...)` additionally accepts two aliases: `engine` for
 `tensorrt`, and `litert` for `tflite`, which is the current name for TensorFlow
@@ -100,18 +102,19 @@ version.
 `get_support(family, task, fmt)` resolves in this order. The first rule that
 matches wins.
 
-1. An unknown task, or a format outside the twelve, returns `blocked`.
+1. An unknown task, or a format outside the thirteen, returns `blocked`.
 2. An explicit `(family, task, format)` entry returns as recorded.
 3. A family-wide block returns `blocked` with that family's reason.
 4. A task-wide block returns `blocked` with that task's reason.
 5. For `ncnn`, a family on the NCNN block list returns `blocked`.
 6. `mnn` returns `blocked`: no runtime contract for this family and task.
 7. `rknn` returns `blocked`. RKNN in this version is limited to the exact simulator-tested detection variants: YOLO9-t, YOLO9-E2E-t, YOLO-NAS-s and PicoDet-s on RK3588.
-8. `tensorrt` and `openvino` return `available`: the converter path exists but runtime parity has not been recorded for that family and task.
-9. `tflite`, `paddle`, `coreai` and `coreml` return `blocked`, each with its own reason.
-10. Everything else returns `available`: conversion is implemented, numeric runtime parity is not recorded.
+8. `axelera` returns `blocked`: only the family and size combinations compiled and measured on Axelera Metis have explicit entries.
+9. `tensorrt` and `openvino` return `available`: the converter path exists but runtime parity has not been recorded for that family and task.
+10. `tflite`, `paddle`, `coreai` and `coreml` return `blocked`, each with its own reason.
+11. Everything else returns `available`: conversion is implemented, numeric runtime parity is not recorded.
 
-The asymmetry in steps 8 through 10 is deliberate. TensorRT and OpenVINO
+The asymmetry in steps 9 through 11 is deliberate. TensorRT and OpenVINO
 convert generically from ONNX, so an unlisted combination is worth attempting.
 TFLite, Paddle, Core AI and CoreML each need a per-family path, so an unlisted
 combination is a rejection rather than an invitation.
@@ -142,7 +145,7 @@ semantic family still exports.
 
 | Family | Blocked for |
 |---|---|
-| `depth_anything3` | Every format; its depth graph is not in the exported-runtime contract |
+| `depth_anything3` | Every format except ONNX, TorchScript, ExecuTorch, TensorRT and OpenVINO, which are validated at FP32, batch 1 and a fixed square input divisible by 14 |
 | `domedetr` | Every format. PAQI sets the query count per image, so a traced graph is valid only for the image it was traced on. Use D-FINE for an exportable DETR |
 | `eomt` | Instance and panoptic export, which have no runtime parsing |
 | `l2cs` | Anything outside ONNX, TorchScript, ExecuTorch, TensorRT and OpenVINO |

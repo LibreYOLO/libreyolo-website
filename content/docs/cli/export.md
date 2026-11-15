@@ -51,7 +51,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `format=onnx` and
 | Argument | Default | Meaning |
 |---|---|---|
 | `model` | | Model weights `.pt`. Required |
-| `format` | `onnx` | Export format: `onnx`, `torchscript`, `executorch`, `tensorrt`, `openvino`, `paddle`, `mnn`, `rknn`, `ncnn`, `tflite`, `coreml`, `coreai` |
+| `format` | `onnx` | Export format: `onnx`, `torchscript`, `executorch`, `tensorrt`, `openvino`, `paddle`, `mnn`, `rknn`, `axelera`, `ncnn`, `tflite`, `coreml`, `coreai` |
 | `name` | | RKNN target platform, currently `rk3588` only. Rejected with any other format |
 | `imgsz` | | Input image size: `640` or `480x640` (HxW). `480,640` is also accepted. The model's own size when unset |
 | `batch` | `1` | Export batch size |
@@ -72,7 +72,7 @@ Arguments are `key=value` pairs, and POSIX form works too, so `format=onnx` and
 | `json` | `false` | JSON output to stdout |
 | `quiet` | `false` | Suppress stderr |
 | `verbose` | `false` | Verbose export logging |
-| `verify` | `false` | Run the RKNN Toolkit2 PC simulator and compare against ONNX Runtime. RKNN only |
+| `verify` | `false` | RKNN: run the Toolkit2 PC simulator and compare against ONNX Runtime. Axelera: compare the quantized model with FP32 and write `<stem>.parity.json`. RKNN and Axelera only |
 | `help_json` | `false` | Dump command schema as JSON and exit |
 
 `engine` is an alias for `tensorrt` and `litert` an alias for `tflite`. Both
@@ -106,8 +106,13 @@ embedded graph is fixed at batch 1, and says so on stderr. On CoreML it takes
 dropped, and a warning goes to stderr. `quantize` that disagrees with `half` or
 `int8` exits with `config_conflict`.
 
-`name` and `verify` are RKNN options today. Passing either with another format
-exits with `config_unsupported` rather than being ignored.
+`name` is an RKNN option, and `verify` works with `rknn` and `axelera`. Passing
+either with another format exits with `config_unsupported` rather than being
+ignored.
+
+`format=axelera`, added in 1.8.0, compiles an INT8 model for Axelera's Metis
+AIPU. It is INT8 only: `half=true`, or a `quantize` other than `8`, exits with
+`format_precision_unsupported`.
 
 ### Which formats a family supports
 

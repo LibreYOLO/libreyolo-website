@@ -1,11 +1,93 @@
 ---
 title: Changelog
 seo_title: "LibreYOLO changelog: recent releases"
-description: "What landed in LibreYOLO 1.7.0 and what 1.6.0 contained: image and 3D generation, WeVisOne-VL, confusion matrices and class-agnostic NMS."
-lead: "A summary of the repository changelog: what 1.7.0 adds, and what 1.6.0, 1.5.0 and 1.4.0 shipped before it."
-keywords: [libreyolo changelog, libreyolo release notes, libreyolo 1.7.0, libreyolo 1.6.0, libreyolo 1.5.0, libreyolo 1.4.0, libreyolo new models]
-last_verified: "1.7.0"
+description: "What landed in LibreYOLO 1.8.0 and the 1.7.x releases: Axelera Metis export, optical flow, document OCR, 3D and image generation, and Ultralytics-style results."
+lead: "A summary of the repository changelog: what 1.8.0 adds, and what 1.7.4 back to 1.4.0 shipped before it."
+keywords: [libreyolo changelog, libreyolo release notes, libreyolo 1.8.0, libreyolo 1.7.0, libreyolo 1.6.0, libreyolo 1.5.0, libreyolo 1.4.0, libreyolo new models]
+last_verified: "1.8.0"
 ---
+
+## 1.8.0
+
+This release adds Axelera Metis export for 23 families, a new optical flow task with eight families, document OCR and layout parsing (DeepSeek-OCR, PaddleOCR-VL, GLM-OCR, Falcon OCR, PP-DocLayoutV3), eleven LibreGen families, InstantHMR body meshes, RiO-DETRv2 oriented boxes, SAM 3.1, grayscale training, tracking on exported models and Ultralytics-style results. 47 merged pull requests. Some calls return different numbers or shapes than in 1.7.4: `results[0]` and iteration over a single-image `Results`, `val()` on several exported families, relative dataset YAML paths, `SAMPLE_IMAGE` and RF-DETR training defaults. Read **Changed** before upgrading, and see [upgrading to 1.8.0](/docs/upgrade#17-to-18) for migrations.
+
+### Highlights
+
+- **Axelera Metis export and runtime. (#1045)**
+  `export(format="axelera")` compiles an INT8 model for Axelera's Metis AIPU, and `LibreYOLO("<dir>")` runs it, for 23 families on detect, pose, obb, segment, classify, semantic, depth and super-resolution. Each size carries a measured accuracy label against FP32.
+
+- **Optical flow, a new `flow` task. (#1001)**
+  SEA-RAFT, RAFT, NeuFlow v2, WAFT, FlowSeek, DPFlow, UniMatch and MEMFOF, with colour-wheel, arrow and warp views, `.flo`/`.npy` saving and a flow validator.
+
+- **Document OCR and layout. (#995, #996, #999, #1005, #1007)**
+  DeepSeek-OCR and DeepSeek-OCR-2, PaddleOCR-VL, GLM-OCR and Falcon OCR on the `ocr` task, and PP-DocLayoutV3 layout detection with reading order. `Results.ocr` gains `markdown` and `labels`.
+
+- **3D and image generation in LibreGen. (#993 to #1047)**
+  Image to mesh (TripoSR, CRM, TRELLIS.2, Direct3D-S2), image to Gaussians (TripoSplat, TRELLIS, LGM), text to image (PRX, PRXPixel), and Speridlabs Iris-Z and Open Vision Banana for depth and perception. The 3D families run in plain PyTorch on NVIDIA GPUs, Apple silicon and CPU.
+
+- **Ultralytics-style results and errors. (#1032, #1039)**
+  `results[0]` is the whole single-image result, `metrics.box.map` and its siblings exist, `Results.save()` works for every task, and Ultralytics class names, weight names and options fail with the LibreYOLO line to use.
+
+### Added
+
+- **New model families.** RiO-DETRv2 oriented boxes (#1013), PP-DocLayoutV3 layout detection (#995), MoGe-3 metric depth and normals with point maps and intrinsics (#998), Video Depth Anything (#1004), InstantHMR body meshes in sizes n, t, s and m (#1025), SAM 3.1 through `LibreSAM("sam3.1")` (#1008), Qwen3-VL-Embedding image and text retrieval (#1006) and Falcon Perception detect and segment (#1009).
+- **Iris-Z depth to image and image plus depth. (#1049)** `LibreGen("speridlabs-iris-z")(prompt, source=...)` paints an image over the depth of a photo or a depth result, and `depth=True` samples an image together with its depth.
+- **Grayscale models. (#1015)** `channels: 1` in the dataset YAML trains, validates, predicts and exports one-channel models on 17 families.
+- **Named validation metrics. (#1039)** `metrics.box.map`, `.map50`, `.map75`, `.mp`, `.mr` and `.maps`, and `metrics.seg` for masks.
+- **`track()` on every backend and a `libreyolo track` command. (#1031)** Exported ONNX, TensorRT, OpenVINO and other models track with the same signature, and native and ONNX tracking give the same IDs.
+- **Downloads honour `HF_ENDPOINT`. (#1033)** A mirror set there serves every weight and dataset download.
+- **New `rfdetr-train` extra. (#1044)** Optional GPU Hungarian matching for RF-DETR training, with faster training steps on CUDA.
+
+### Changed
+
+- **`results[0]` and `for r in results` on a single-image `Results` give the whole result, not the first detection. (#1039)** Other integers still select one detection, with a `DeprecationWarning`.
+- **`val()` on exported Mask R-CNN, Faster R-CNN, FCOS, SSD, RetinaNet, YOLOv7, YOLOv2/v3/v4 and YOLO-NAS-R models, and on PyTorch YOLOv1, returns different mAP. (#1045)** These used the wrong preprocessing and reported mAP at or near 0; they now match the PyTorch model.
+- **A relative `path` in a local dataset YAML resolves against the YAML's folder. (#1040)** A split with no images now logs a warning.
+- **`libreyolo.SAMPLE_IMAGE` is `guggenheim-bilbao.jpg`. (#1034)** The old sample image is no longer in the package.
+- **RF-DETR training defaults for fresh runs. (#1044)** `cls_loss_coef` is 1 for detection, segmentation and oriented boxes and 2 for pose, and `early_stopping=True` now means patience 10.
+- **`Results.save()` saves the annotated image for every task, and `Results.show()` displays it. (#1039)**
+- **Clearer errors.** Ultralytics names (`from libreyolo import YOLO`, `LibreYOLO("yolov8n.pt")`, Ultralytics options and export formats) fail with the LibreYOLO call to use (#1032, #1039), and Hub repos that `LibreYOLO()` cannot load fail before any download, naming the call that works (#1036).
+
+### Deprecated
+
+- **Pre-1.0 all-caps class names import again, with a `DeprecationWarning`. (#1039)** `LIBREYOLO`, `LIBREYOLOX`, `LIBREYOLO9`, `LIBREYOLORFDETR` and `LIBREYOLONCNN`.
+- **`results[i]` with an integer other than 0 or -1 on a single-image `Results`. (#1039)** Use `results[i:i + 1]` or `results.boxes[i]`.
+
+### Fixed
+
+- Letterbox preprocessing no longer crashes on extreme aspect ratios or empty images (#1002).
+- Dataset ZIP downloads never overwrite files in the destination (#1048).
+- Exported-model validation and INT8 calibration use each family's own preprocessing (#1045).
+
+### Licensing
+
+Several new weights are non-commercial or carry use restrictions: Video Depth Anything b and l, InstantHMR n, t, s and m, FlowSeek m and l, DPFlow, Open Vision Banana and Iris-Z (non-commercial), and SAM 3.1, CRM, LGM's ImageDream, TRELLIS.2, WAFT `t` and PRX's text encoder (use restrictions). Each family's page or the library's notices name the licence. Axelera's SDK is proprietary and is never installed without your command or `LIBREYOLO_AUTOINSTALL=1`.
+
+## 1.7.4, released 2026-11-07
+
+- Extras no longer install an old LibreYOLO on Python 3.13 and 3.14. Where a pinned dependency has no wheels for that Python, the current release installs without that backend, and using it says which Python it needs.
+- Missing-extra messages quote the install command, `pip install "libreyolo[rfdetr]"`, so they work in zsh.
+- ONNX export without the `onnx` extra points at `pip install "libreyolo[onnx]"`.
+
+## 1.7.3, released 2026-11-07
+
+- `LibreYOLO("owner/repo")` works on a plain `pip install libreyolo`: `huggingface_hub` is a core dependency.
+- A Hub repo with several checkpoints loads the one named after the repo, so `LibreYOLO/LibreYOLO9t` and the other YOLO9 and YOLOX repos load by repo id.
+- A `libreyolo/` folder in the working directory no longer hides Hub repo ids on macOS and Windows.
+- TFLite INT8 export quantizes once instead of twice; `int8_backend="onnx2tf"` keeps the previous route.
+
+## 1.7.2, released 2026-11-03
+
+- `libreyolo[all]` no longer includes `paddle`, whose ONNX pin conflicts with the TFLite exporter. Install `libreyolo[paddle]` on its own, on Python 3.10 or 3.11.
+- `pip install "libreyolo[all]"` works on Python 3.12 and 3.13, Apple silicon and Linux ARM. `vlm`, `vlm-train` and `ground` install there too; only LocateAnything is unavailable.
+- Every extra installs without a compiler on Linux x86_64 and Windows, and on Apple silicon with Python 3.12+: `pycuda` and `onnx-simplifier` are gone, and `coremltools` installs on macOS and Linux x86_64 only.
+- `libreyolo[executorch]` pins a torch its runtime loads with, and MNN and ExecuTorch export work from a virtualenv that is not activated.
+
+## 1.7.1, released 2026-11-02
+
+- Unguarded `train()` and `val()` scripts run on macOS and Windows with `workers=0` and log one line, instead of stopping with an error.
+- RF-DETR PyTorch boxes are clipped to the image, as every exported backend already did.
+- YOLO9-E2E TFLite export is validated, and the `executorch` extra installs ExecuTorch 1.2.
 
 ## 1.7.0, released 2026-10-31
 

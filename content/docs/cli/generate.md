@@ -56,9 +56,10 @@ the same option.
 |---|---|---|
 | `prompt` | | Text to render. Always literal text, never a path |
 | `prompt_file` | | Text file with one prompt per line; blank lines are skipped |
-| `source` | | Image, directory of images or URL to turn into 3D objects. Image-to-3D models only |
-| `model` | | LibreGen alias or local model directory. `flux2-klein-4b` with a prompt, `speridlabs-idol` with a source |
-| `imgsz` | | Output size: `1024` (square) or `768x1024` (HxW). The model's native size when unset. Text-to-image only |
+| `source` | | Image, directory of images or URL to turn into 3D objects (image-to-3D models) or into depth (`task=depth`) |
+| `task` | `generate` | `generate`, or `depth` for Speridlabs Iris-Z, which needs `source=` |
+| `model` | | LibreGen alias or local model directory. `flux2-klein-4b` with a prompt, `speridlabs-idol` with a source, `speridlabs-iris-z` with `task=depth` |
+| `imgsz` | | Output size: `1024` (square) or `768x1024` (HxW). The model's native size when unset. Text-to-image, and `512` or `1024` with `task=depth` |
 | `seed` | | Seed. The same seed, model and settings repeat the output. A fresh seed is drawn and recorded when unset |
 | `n` | `1` | Images per prompt, or objects per source |
 | `steps` | | Sampling steps (family setting) |
@@ -97,8 +98,11 @@ seed and settings as JSON in a `libreyolo` text chunk, and a `.ply` in a header
 comment. `save=false` writes nothing and only prints the records.
 
 The input kind decides the model family. A prompt sent to an image-to-3D
-model, a `source` sent to a text-to-image model, and `imgsz` together with
-`source` all exit with code `2`. With `prompt_file`, a file holding one prompt
+model, a `source` sent to a text-to-image model, and `imgsz` together with a 3D
+`source` all exit with code `2`. `task=depth source=street.jpg` runs Iris-Z's
+image-to-depth, where `imgsz` is one side, `512` or `1024`. `prompt=` and
+`source=` stay mutually exclusive, so Iris-Z's depth-to-image, a prompt painted
+over the depth of a photo, is Python only. With `prompt_file`, a file holding one prompt
 behaves like `prompt=`.
 
 stdout carries results and nothing else; model loading, progress, warnings

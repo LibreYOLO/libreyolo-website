@@ -48,13 +48,17 @@ snippets:
       code: |
         from libreyolo import LibreYOLO9, LibreDFINE
 
-        # Writes libreyolo9s.onnx, config_infer_primary_libreyolo9s.txt
-        # and libreyolo9s_labels.txt into the working directory.
-        LibreYOLO9("libreyolo9s.pt", size="s").export(format="onnx", deepstream=True)
+        # Writes the ONNX file, its config_infer_primary_<stem>.txt and
+        # <stem>_labels.txt into weights/ by default.
+        LibreYOLO9("libreyolo9s.pt", size="s").export(
+            format="onnx", deepstream=True, output_path="yolo9/libreyolo9s.onnx"
+        )
 
-        # Keep each detection model in its own directory: every detection
-        # config names the same engine cache file. See "Known traps".
-        LibreDFINE("LibreDFINEs.pt", size="s").export(format="onnx", deepstream=True)
+        # Keep each detection model in its own directory with output_path=:
+        # every detection config names the same engine cache file. See "Known traps".
+        LibreDFINE("LibreDFINEs.pt", size="s").export(
+            format="onnx", deepstream=True, output_path="dfine/LibreDFINEs.onnx"
+        )
     - label: Arguments
       language: python
       code: |

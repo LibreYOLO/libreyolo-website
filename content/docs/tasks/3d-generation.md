@@ -55,10 +55,19 @@ The canonical task key is `generate3d`. `generation3d`, `3d-generation`,
 
 ## Models
 
-[Speridlabs Idol](/docs/models/speridlabs-idol), by Speridlabs, is the only
-family serving this task. It is ported from the Apache-2.0 Speridlabs SDK and
-runs through `LibreGen`; `LibreYOLO()` does not load it. Its settings, speed
-and memory figures are on the model page.
+[Speridlabs Idol](/docs/models/speridlabs-idol), by Speridlabs, is ported
+from the Apache-2.0 Speridlabs SDK. Its settings, speed and memory figures are
+on the model page.
+
+1.8.0 adds seven families behind the same `LibreGen` call. Three return
+Gaussian splats, like Idol: TripoSplat (`triposplat`), TRELLIS (`trellis`) and
+LGM (`lgm`). Four return a mesh in `Results.meshes`, saved as `.obj`: TripoSR
+(`triposr`), CRM (`crm`), TRELLIS.2 (`trellis2`) and Direct3D-S2
+(`direct3d-s2`). All of them run in plain PyTorch on NVIDIA GPUs, Apple silicon
+and CPU, without upstream's CUDA-only extensions, and all load through
+`LibreGen`; `LibreYOLO()` does not load them. CRM's weights carry OpenRAIL++-M
+use restrictions, LGM's ImageDream stage OpenRAIL ones, and TRELLIS.2 the DINOv3
+License.
 
 ## Predict
 
