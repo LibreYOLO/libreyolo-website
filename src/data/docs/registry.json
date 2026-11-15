@@ -3247,7 +3247,7 @@
       "registry_keys": [
         "riodetrv2"
       ],
-      "display": "RIO-DETRv2",
+      "display": "RiO-DETRv2",
       "prefix": "LibreRiODETRv2",
       "prefixes": {
         "riodetrv2": "LibreRiODETRv2"

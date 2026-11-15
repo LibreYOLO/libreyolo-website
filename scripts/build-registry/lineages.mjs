@@ -50,7 +50,7 @@ export const LINEAGES = [
   { slug: 'wevisone-vl', display: 'WeVisOne-VL', keys: ['wevisonevl'] },
 
   // Added for the 1.8.0 documentation.
-  { slug: 'riodetrv2', display: 'RIO-DETRv2', keys: ['riodetrv2'] },
+  { slug: 'riodetrv2', display: 'RiO-DETRv2', keys: ['riodetrv2'] },
   { slug: 'falcon-perception', display: 'Falcon Perception', keys: ['falconperception'] },
   { slug: 'qwen3-vl-embedding', display: 'Qwen3-VL-Embedding', keys: ['qwen3vl_embedding'] },
   { slug: 'moge-3', display: 'MoGe-3', keys: ['moge3'] },
