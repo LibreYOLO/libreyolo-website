@@ -860,6 +860,11 @@
           "built": true
         },
         {
+          "slug": "/docs/models/speridlabs-iris-z",
+          "label": "Speridlabs Iris-Z",
+          "built": true
+        },
+        {
           "slug": "/docs/models/flux2-klein",
           "label": "FLUX.2 klein",
           "built": true
