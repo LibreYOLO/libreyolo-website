@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "Referensi",
       "about": "Tentang"
-    }
+    },
+    "cliStripPython": "Di Python",
+    "cliStripCli": "Dari baris perintah"
   },
   "Tiers": {
     "g0": {

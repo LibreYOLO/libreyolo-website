@@ -24,6 +24,7 @@ import Code from '@/components/docs/Code'
 import { getModelDiagram } from '@/lib/model-diagrams'
 import ModelArchitecture from '@/components/docs/ModelArchitecture'
 import { ModelHeader, HeroMedia, PageHeader } from '@/components/docs/ModelBlocks'
+import CliPythonStrip from '@/components/docs/CliPythonStrip'
 
 /* The section indexes: /docs/models, /docs/export, and the rest. */
 export const DOCS_SECTIONS = ['models', 'tasks', 'export', 'train', 'predict', 'cli', 'reference']
@@ -613,6 +614,7 @@ export async function SectionDocView({ locale, section, slug, source = currentDo
           ) : (
             <>
               <PageHeader doc={doc} />
+              <CliPythonStrip locale={locale} section={section} slug={slug} source={source} />
 
               <DocMarkdown headingIds={doc.headingIds} snippets={doc.snippets || {}} bareTables {...archivedSource}>
                 {doc.content}

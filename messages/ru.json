@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "Справочник",
       "about": "О проекте"
-    }
+    },
+    "cliStripPython": "В Python",
+    "cliStripCli": "Из командной строки"
   },
   "Tiers": {
     "g0": {

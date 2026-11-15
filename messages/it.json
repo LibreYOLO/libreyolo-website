@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "Riferimenti",
       "about": "Informazioni"
-    }
+    },
+    "cliStripPython": "In Python",
+    "cliStripCli": "Dalla riga di comando"
   },
   "Tiers": {
     "g0": {

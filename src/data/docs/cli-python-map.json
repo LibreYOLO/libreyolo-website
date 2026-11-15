@@ -1,0 +1,37 @@
+{
+  "_comment": "Which Python pages cover the same ground as each CLI command page. A CLI page links to its `python` list; every page in `python` and `reverse` links back to the CLI page. `reverse` may end in /* for a whole section. Pages that do not exist (yet) are skipped.",
+  "cli/predict": {
+    "python": ["predict/sources", "predict/thresholds", "predict/results", "predict/performance"]
+  },
+  "cli/train": {
+    "python": ["train/hyperparameters", "train/datasets", "train/augmentations", "train/multi-gpu"]
+  },
+  "cli/val": {
+    "python": ["train/validation"]
+  },
+  "cli/export": {
+    "python": ["reference/export-matrix", "export/onnx", "export/tensorrt", "export/quantization"],
+    "reverse": ["export/*"]
+  },
+  "cli/quantize": {
+    "python": ["export/quantization"]
+  },
+  "cli/track": {
+    "python": ["tasks/object-tracking"]
+  },
+  "cli/generate": {
+    "python": ["tasks/image-generation", "tasks/3d-generation"]
+  },
+  "cli/doctor": {
+    "python": ["train/datasets"]
+  },
+  "cli/label": {
+    "python": ["reference/dataset-formats"]
+  },
+  "cli/monitor": {
+    "python": ["train/loggers"]
+  },
+  "cli/profile": {
+    "python": ["train/performance"]
+  }
+}

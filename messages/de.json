@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "Referenz",
       "about": "Über LibreYOLO"
-    }
+    },
+    "cliStripPython": "In Python",
+    "cliStripCli": "Über die Kommandozeile"
   },
   "Tiers": {
     "g0": {

@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "참조",
       "about": "소개"
-    }
+    },
+    "cliStripPython": "Python에서",
+    "cliStripCli": "명령줄에서"
   },
   "Tiers": {
     "g0": {

@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "リファレンス",
       "about": "概要"
-    }
+    },
+    "cliStripPython": "Python では",
+    "cliStripCli": "コマンドラインでは"
   },
   "Tiers": {
     "g0": {

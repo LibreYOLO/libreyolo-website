@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "参考",
       "about": "关于"
-    }
+    },
+    "cliStripPython": "Python 用法",
+    "cliStripCli": "命令行用法"
   },
   "Tiers": {
     "g0": {

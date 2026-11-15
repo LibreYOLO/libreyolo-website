@@ -287,7 +287,9 @@
       "cli": "CLI",
       "reference": "Tham khảo",
       "about": "Giới thiệu"
-    }
+    },
+    "cliStripPython": "Trong Python",
+    "cliStripCli": "Từ dòng lệnh"
   },
   "Tiers": {
     "g0": {
