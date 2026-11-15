@@ -7,9 +7,9 @@ keywords: [libreyolo changelog, libreyolo release notes, libreyolo 1.8.0, librey
 last_verified: "1.8.0"
 ---
 
-## 1.8.0
+## 1.8.0, released 2026-11-15
 
-This release adds Axelera Metis export for 23 families, a new optical flow task with eight families, document OCR and layout parsing (DeepSeek-OCR, PaddleOCR-VL, GLM-OCR, Falcon OCR, PP-DocLayoutV3), eleven LibreGen families, InstantHMR body meshes, RiO-DETRv2 oriented boxes, SAM 3.1, grayscale training, tracking on exported models and Ultralytics-style results. 47 merged pull requests. Some calls return different numbers or shapes than in 1.7.4: `results[0]` and iteration over a single-image `Results`, `val()` on several exported families, relative dataset YAML paths, `SAMPLE_IMAGE` and RF-DETR training defaults. Read **Changed** before upgrading, and see [upgrading to 1.8.0](/docs/upgrade#17-to-18) for migrations.
+This release adds Axelera Metis export for 23 families, a new optical flow task with eight families, document OCR and layout parsing (DeepSeek-OCR, PaddleOCR-VL, GLM-OCR, Falcon OCR, PP-DocLayoutV3), eleven LibreGen families, InstantHMR body meshes, RiO-DETRv2 oriented boxes, SAM 3.1, grayscale training, tracking on exported models and Ultralytics-style results. 53 merged pull requests. Some calls return different numbers or shapes than in 1.7.4: `results[0]` and iteration over a single-image `Results`, `val()` on several exported families, relative dataset YAML paths, `SAMPLE_IMAGE` and RF-DETR training defaults. Read **Changed** before upgrading, and see [upgrading to 1.8.0](/docs/upgrade#17-to-18) for migrations.
 
 ### Highlights
 
