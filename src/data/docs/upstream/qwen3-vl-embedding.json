@@ -1,0 +1,14 @@
+{
+  "name": "Qwen3-VL-Embedding",
+  "org": "Alibaba (Qwen Team)",
+  "paper_title": "Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking",
+  "paper_url": "https://arxiv.org/abs/2601.04720",
+  "code_url": "https://github.com/QwenLM/Qwen3-VL-Embedding",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the Qwen3-VL-Embedding-2B weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and attribution notices, and the license grants a patent license. LibreYOLO copies no model source: the Qwen3-VL architecture runs through the Apache-2.0 Hugging Face Transformers implementation, and libreyolo/models/vlm/qwen3vl_embedding.py (MIT) adapts only the input conventions and last-token pooling of the reference embedder in QwenLM/Qwen3-VL-Embedding at commit 393e2978d27852b0d0230d6994f37f9c15bed73c (Apache-2.0, see libreyolo/models/vlm/NOTICE). The weights are a mirrored snapshot of Qwen/Qwen3-VL-Embedding-2B at revision 9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda, hosted at LibreYOLO/LibreQwen3VLEmbedding2b with learned parameters unchanged and not gated; the upstream Hugging Face repository ships no LICENSE file, so the mirror carries the Apache-2.0 text from the GitHub repository.",
+  "bibtex": "@article{qwen3vlembedding,\n  title={Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking},\n  author={Li, Mingxin and Zhang, Yanzhao and Long, Dingkun and Chen, Keqin and Song, Sibo and Bai, Shuai and Yang, Zhibo and Xie, Pengjun and Yang, An and Liu, Dayiheng and Zhou, Jingren and Lin, Junyang},\n  journal={arXiv},\n  year={2026}\n}",
+  "bibtex_source_url": "https://github.com/QwenLM/Qwen3-VL-Embedding#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the upstream README at commit 393e2978d27852b0d0230d6994f37f9c15bed73c. The Qwen/Qwen3-VL-Embedding-2B model card at revision 9f2f7e710d6d81056aa5c0a4f04764fec6bb7bda publishes a variant that adds the arXiv number to the journal field but drops the comma in 'Chen, Keqin', so the GitHub entry is kept. Cross-checked against the arXiv API for 2601.04720: twelve authors in the same order, identical title, primary class cs.CL. Do not hand-edit; a wrong citation misattributes someone's work."
+}

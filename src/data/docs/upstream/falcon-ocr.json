@@ -1,0 +1,14 @@
+{
+  "name": "Falcon OCR",
+  "org": "Technology Innovation Institute (TII)",
+  "paper_title": "Falcon Perception",
+  "paper_url": "https://arxiv.org/abs/2603.27365",
+  "code_url": "https://github.com/tiiuae/Falcon-Perception",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the Falcon OCR weights and code can be used in commercial and closed-source products. Redistributing them means keeping the license text and TII's NOTICE, and the license grants a patent license. LibreYOLO ports the inference code of the Hugging Face release tiiuae/Falcon-OCR at revision 0bc28f89c90fbe8bdb063097fab144d4ce4c19b5 (Falcon OCR 1.5), which shares its architecture with TII's Falcon Perception repository (commit c457916c9974efbacfa91f0f6ecc2c49c6543e56, Apache-2.0, whose NOTICE covers the weights); see libreyolo/models/falconocr/NOTICE. The adapter is MIT, and the optional layout stage uses LibreYOLO's Apache-2.0 PP-DocLayoutV3 port. The weights are an unmodified, ungated mirror at LibreYOLO/LibreFalconOCR270m that ships the LICENSE and NOTICE.",
+  "bibtex": "@article{bevli2026falcon,\n  title   = {Falcon Perception},\n  author  = {Bevli, Aviraj and Chaybouti, Sofian and Dahou, Yasser and Hacid, Hakim and Huynh, Ngoc Dung and Le Khac, Phuc H. and Narayan, Sanath and Para, Wamiq Reyaz and Singh, Ankit},\n  journal = {arXiv preprint arXiv:2603.27365},\n  year    = {2026},\n  url     = {https://arxiv.org/abs/2603.27365}\n}",
+  "bibtex_source_url": "https://huggingface.co/tiiuae/Falcon-OCR#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section ('If you use Falcon OCR, please cite') of the tiiuae/Falcon-OCR model card at revision 0bc28f89c90fbe8bdb063097fab144d4ce4c19b5. Falcon OCR has no paper of its own; TII asks for the Falcon Perception tech report, and the entry is identical to the one in the Falcon Perception README at commit c457916c9974efbacfa91f0f6ecc2c49c6543e56. Cross-checked against the arXiv API for 2603.27365: nine authors in the same order, identical title, primary class cs.CV. Do not hand-edit; a wrong citation misattributes someone's work."
+}

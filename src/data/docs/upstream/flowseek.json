@@ -1,0 +1,13 @@
+{
+  "name": "FlowSeek",
+  "org": "University of Bologna",
+  "paper_title": "FlowSeek: Optical Flow Made Easier with Depth Foundation Models and Motion Bases",
+  "paper_url": "https://arxiv.org/abs/2509.05297",
+  "code_url": "https://github.com/mattpoggi/flowseek",
+  "license": "Apache-2.0 (t and s checkpoints); CC-BY-NC-4.0 (m and l checkpoints)",
+  "code_license": "Apache-2.0",
+  "license_interpretation": "The two checkpoint licenses are not interchangeable. Each FlowSeek checkpoint embeds a Depth Anything V2 encoder. The t and s checkpoints (one network, s runs 12 refinement iterations instead of 4) embed the ViT-S encoder and are Apache-2.0: they can be used in commercial and closed-source products, with the license text and attribution notices kept on redistribution. The m and l checkpoints embed the ViT-B encoder, which is CC BY-NC 4.0, so they are non-commercial and need attribution; treat them as research weights. Upstream publishes no separate checkpoint license, so the repository's Apache-2.0 license is applied as an implied grant, limited by the encoder license. The code at commit ba640737 is Apache-2.0 with BSD-3-Clause parts from SEA-RAFT, vendored under libreyolo/models/flowseek/_vendor/; LibreYOLO's wrapper code is MIT. Weights come from the upstream get_weights.sh links and are mirrored on the LibreYOLO Hugging Face org, the m and l cards with a non-commercial banner, without gating. Training is out of scope.",
+  "bibtex": "@InProceedings{Poggi_2025_ICCV,\n    author    = {Poggi, Matteo and Tosi, Fabio},\n    title     = {FlowSeek: Optical Flow Made Easier with Depth Foundation Models and Motion Bases},\n    booktitle = {Proceedings of the International Conference on Computer Vision (ICCV)},\n    year      = {2025},\n}",
+  "bibtex_source_url": "https://github.com/mattpoggi/flowseek",
+  "bibtex_verified": "2026-11-15, copied verbatim from the upstream README at commit ba6407370bceeb96244cad4d60d37489f6eb471e. Cross-checked against the arXiv API for 2509.05297: 2 authors in the same order, identical title. Do not hand-edit; a wrong citation misattributes someone's work."
+}

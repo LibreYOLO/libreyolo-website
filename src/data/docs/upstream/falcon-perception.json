@@ -1,0 +1,14 @@
+{
+  "name": "Falcon Perception",
+  "org": "Technology Innovation Institute (TII)",
+  "paper_title": "Falcon Perception",
+  "paper_url": "https://arxiv.org/abs/2603.27365",
+  "code_url": "https://github.com/tiiuae/Falcon-Perception",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the Falcon Perception code and weights can be used in commercial and closed-source products. Redistributing them means keeping the license text and TII's NOTICE, which asks public-facing work to retain it and cite the project, and the license grants a patent license. LibreYOLO vendors the inference network, preprocessing and generation loop from tiiuae/Falcon-Perception at commit c457916c9974efbacfa91f0f6ecc2c49c6543e56 under Apache-2.0 (libreyolo/models/falcon_perception/NOTICE); the adapter around it is MIT. One exception: the AnyUp feature upsampler that upstream flattened into its code, used only by the 600m segment task, is by the AnyUp authors under CC BY 4.0, which permits commercial use but requires attribution. Weights are not redistributed: they download at runtime from tiiuae/Falcon-Perception (600m, revision a3e21ada0abd533393776ffab8908a728f775509) and tiiuae/Falcon-Perception-300M (300m, detect only, revision 36993684b3ba5945b22d01e705f8ff2e048bf0b0), both declared Apache-2.0 and not gated.",
+  "bibtex": "@article{bevli2026falcon,\n  title   = {Falcon Perception},\n  author  = {Bevli, Aviraj and Chaybouti, Sofian and Dahou, Yasser and Hacid, Hakim and Huynh, Ngoc Dung and Le Khac, Phuc H. and Narayan, Sanath and Para, Wamiq Reyaz and Singh, Ankit},\n  journal = {arXiv preprint arXiv:2603.27365},\n  year    = {2026},\n  url     = {https://arxiv.org/abs/2603.27365}\n}",
+  "bibtex_source_url": "https://github.com/tiiuae/Falcon-Perception#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the upstream README at commit c457916c9974efbacfa91f0f6ecc2c49c6543e56. The upstream NOTICE file asks for an older @preprint entry crediting 'TII Falcon Perception Team'; the README's @article entry for the arXiv tech report is used instead. Cross-checked against the arXiv API for 2603.27365: nine authors in the same order, identical title, primary class cs.CV. Do not hand-edit; a wrong citation misattributes someone's work."
+}

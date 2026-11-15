@@ -1,0 +1,14 @@
+{
+  "name": "TripoSplat",
+  "org": "VAST (TripoAI)",
+  "paper_title": "Generative 3D Gaussians with Learned Density Control",
+  "paper_url": "https://arxiv.org/abs/2605.16355",
+  "code_url": "https://github.com/VAST-AI-Research/TripoSplat",
+  "license": "MIT",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so the code and weights can be used in commercial and closed-source products; the only obligation is to keep the copyright and license notice with copies. LibreYOLO's adapter is MIT; the denoiser, octree and Gaussian decoders it ports from TripoSplat keep MIT, and the preprocessing and encoder tokenization shared with Speridlabs Idol come from the Apache-2.0 Idol SDK, with notices in libreyolo/models/gen/triposplat/NOTICE. The denoiser, decoder and BiRefNet weights are redistributed by LibreYOLO as LibreYOLO/LibreTripoSplat0.6b (MIT), byte-identical to VAST-AI/TripoSplat, and the FLUX.2 VAE downloads from black-forest-labs/FLUX.2-klein-4B (Apache-2.0). The DINOv3 image encoder is the exception: it is Meta's, under the DINOv3 License, a custom agreement that is not OSI-approved. It permits redistribution with a copy of the agreement and passes through trade-control and end-use restrictions (military, weapons, espionage and nuclear uses among them). LibreYOLO mirrors that encoder in bfloat16 at LibreYOLO/LibreDINOv3vith16plus together with the agreement, so nothing is gated; read the agreement before shipping a product on it.",
+  "bibtex": "@misc{yan2026generative3dgaussianslearned,\n    title={Generative 3D Gaussians with Learned Density Control}, \n    author={Runjie Yan and Yan-Pei Cao and Peng Wang and Ding Liang and Yuan-Chen Guo},\n    year={2026},\n    eprint={2605.16355},\n    archivePrefix={arXiv},\n    primaryClass={cs.GR},\n    url={https://arxiv.org/abs/2605.16355}, \n}",
+  "bibtex_source_url": "https://github.com/VAST-AI-Research/TripoSplat#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the VAST-AI-Research/TripoSplat README at commit d8db9e018b413dd9c4a9fe22463781bf98e8e68d, the commit LibreYOLO's NOTICE names. Cross-checked against the arXiv API for 2605.16355: five authors in the same order, identical title, cs.GR primary class matches. Do not hand-edit; a wrong citation misattributes someone's work."
+}

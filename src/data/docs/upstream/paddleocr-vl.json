@@ -1,0 +1,14 @@
+{
+  "name": "PaddleOCR-VL",
+  "org": "PaddlePaddle Authors",
+  "paper_title": "PaddleOCR-VL: Boosting Multilingual Document Parsing via a 0.9B Ultra-Compact Vision-Language Model",
+  "paper_url": "https://arxiv.org/abs/2510.14528",
+  "code_url": "https://github.com/PaddlePaddle/PaddleOCR",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the PaddleOCR-VL-0.9B recognizer and the PP-DocLayoutV2 layout detector can be used in commercial and closed-source products. Redistributing them means keeping the license text and attribution notices, and the license grants a patent license. Both networks run through the Apache-2.0 Hugging Face Transformers classes; LibreYOLO ports only the document-parsing pipeline (layout post-processing, prompt routing, markdown conversion) from PaddleX at commit 4c968d30b9d0d4a693d9eaaef0881c20f8d7d0e0, also Apache-2.0 (libreyolo/models/paddleocrvl/NOTICE), and the rest of the adapter is MIT. The weights are an unmodified, ungated mirror at LibreYOLO/LibrePaddleOCRVL0.9b of PaddlePaddle/PaddleOCR-VL (revision 7fa00a8c55b735ba51ba49a9058f3f9c57a99a11) with PaddlePaddle/PP-DocLayoutV2_safetensors (revision 880e8971b88938518611c54fc0f59ad57849c9d4) under layout/, shipping LICENSE and NOTICE. The recognizer's language model is initialized from Baidu's ERNIE-4.5-0.3B, also Apache-2.0.",
+  "bibtex": "@misc{cui2025paddleocrvlboostingmultilingualdocument,\n      title={PaddleOCR-VL: Boosting Multilingual Document Parsing via a 0.9B Ultra-Compact Vision-Language Model}, \n      author={Cheng Cui and Ting Sun and Suyin Liang and Tingquan Gao and Zelun Zhang and Jiaxuan Liu and Xueqing Wang and Changda Zhou and Hongen Liu and Manhui Lin and Yue Zhang and Yubo Zhang and Handong Zheng and Jing Zhang and Jun Zhang and Yi Liu and Dianhai Yu and Yanjun Ma},\n      year={2025},\n      eprint={2510.14528},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2510.14528}, \n}",
+  "bibtex_source_url": "https://huggingface.co/PaddlePaddle/PaddleOCR-VL#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the PaddlePaddle/PaddleOCR-VL model card at revision 7fa00a8c55b735ba51ba49a9058f3f9c57a99a11. Cross-checked against the arXiv API for 2510.14528: eighteen authors in the same order, identical title, primary class cs.CV. Do not hand-edit; a wrong citation misattributes someone's work."
+}

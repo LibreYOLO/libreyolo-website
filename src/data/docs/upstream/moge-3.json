@@ -1,0 +1,14 @@
+{
+  "name": "MoGe-3",
+  "org": "Microsoft",
+  "paper_title": "MoGe-3: Fine-Detail Monocular Geometry Estimation with Self-Guided Sparse Volumetric Refinement",
+  "paper_url": "https://arxiv.org/abs/2607.17967",
+  "code_url": "https://github.com/microsoft/MoGe",
+  "license": "MIT",
+  "code_license": "MIT",
+  "weights_license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so the MoGe-3 code and weights can be used in commercial and closed-source products; the only obligation is to keep the copyright and license notice with copies. LibreYOLO ports the forward pass, sparse refinement and camera recovery from microsoft/MoGe at commit 74fbce054ebed49800de42d0ad0e83495065719a (MIT, Copyright Microsoft Corporation), re-expresses the FlexGEMM sparse kernels in plain PyTorch without vendoring them (FlexGEMM is MIT), and follows MIT utils3d helpers; the DINOv2 backbone keeps its separate Apache-2.0 attribution (libreyolo/models/moge3/NOTICE). The official checkpoints Ruicheng/moge-3-vitl (revision 184008f877d7ad1ad4c2cd2182a9bd1f63d0e5be) and Ruicheng/moge-3-vitg (revision 6ef26c5a4b4148dab5ccaacdb08b72dc66380475) declare MIT; LibreYOLO mirrors them unchanged, plus checkpoint metadata, as LibreYOLO/LibreMoGe3{l,g}-{depth,normal}, not gated.",
+  "bibtex": "@misc{kong2026finedetailmonoculargeometryestimation,\n      title={Fine-Detail Monocular Geometry Estimation with Self-Guided Sparse Volumetric Refinement},\n      author={Lingyu Kong and Ruicheng Li and Ruicheng Wang and Sicheng Xu and Chengtang Yao and Jianfeng Xiang and Jiaolong Yang},\n      year={2026},\n      eprint={2607.17967},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2607.17967},\n}",
+  "bibtex_source_url": "https://github.com/microsoft/MoGe#-citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the upstream README at commit 74fbce054ebed49800de42d0ad0e83495065719a, which lists the MoGe, MoGe-2 and MoGe-3 entries in one block; only the MoGe-3 entry (the third) is reproduced here. Cross-checked against the arXiv API for 2607.17967: seven authors in the same order, primary class cs.CV. The arXiv v2 title adds the prefix 'MoGe-3:' that the authors' entry omits; the rest of the title is identical, and the entry is kept as the authors publish it. Do not hand-edit; a wrong citation misattributes someone's work."
+}

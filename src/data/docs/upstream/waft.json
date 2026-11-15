@@ -1,0 +1,19 @@
+{
+  "name": "WAFT",
+  "org": "Princeton Vision & Learning Lab",
+  "paper_title": "WAFT: Warping-Alone Field Transforms for Optical Flow",
+  "paper_url": "https://arxiv.org/abs/2506.21526",
+  "code_url": "https://github.com/princeton-vl/WAFT",
+  "license": "BSD-3-Clause (s, m and l checkpoints); DINOv3 License (t checkpoint)",
+  "code_license": "BSD-3-Clause",
+  "checkpoint_license": {
+    "LibreWAFTm-flow.pt": "bsd-3-clause",
+    "LibreWAFTs-flow-dav2.pt": "bsd-3-clause",
+    "LibreWAFTl-flow-twins.pt": "bsd-3-clause",
+    "LibreWAFTt-flow-dinov3.pt": "DINOv3 License"
+  },
+  "license_interpretation": "The license depends on the size, because each checkpoint embeds a different encoder. The s, m and l checkpoints are BSD-3-Clause, a permissive license that allows commercial and closed-source use as long as the copyright notice, conditions and disclaimer are kept on redistribution; their encoders are Apache-2.0 (Depth Anything V2 Small for s and m, Twins-SVT-Large from timm for l), which is also permissive. The t checkpoint contains a DINOv3 ViT-S/16 fine-tuned by the WAFT authors, so Meta's DINOv3 License applies to it: a custom license, not OSI-approved, with its own use restrictions and conditions; read it before relying on t commercially. Upstream publishes no separate weight license, so LibreYOLO hosts the checkpoints under the repository's BSD-3-Clause license plus the encoder license. The code from princeton-vl/WAFT at commit b152ff1 is vendored under libreyolo/models/waft/_vendor/ (BSD-3-Clause); the encoders reuse code already in LibreYOLO (Depth Anything V2, Apache-2.0; DINOv3 from the DEIMv2 vendor, DINOv3 License) and a plain-torch Twins copy derived from timm (Apache-2.0). LibreYOLO's wrapper code is MIT. Weights come from the upstream Google Drive model zoo and are mirrored on the LibreYOLO Hugging Face org without gating. Inference only.",
+  "bibtex": "@article{wang2025waft,\n  title={WAFT: Warping-Alone Field Transforms for Optical Flow},\n  author={Wang, Yihan and Deng, Jia},\n  journal={arXiv preprint arXiv:2506.21526},\n  year={2025}\n}",
+  "bibtex_source_url": "https://github.com/princeton-vl/WAFT",
+  "bibtex_verified": "2026-11-15, copied verbatim from the upstream README at commit b152ff1cad1af8c185ee7b141997c48ff3334c87. Cross-checked against the arXiv API for 2506.21526: 2 authors in the same order, identical title. The paper appeared at ICLR 2026; the README still gives it as an arXiv @article, copied as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}

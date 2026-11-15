@@ -1,0 +1,14 @@
+{
+  "name": "DeepSeek-OCR",
+  "org": "DeepSeek",
+  "paper_title": "DeepSeek-OCR: Contexts Optical Compression",
+  "paper_url": "https://arxiv.org/abs/2510.18234",
+  "code_url": "https://github.com/deepseek-ai/DeepSeek-OCR",
+  "license": "MIT (size 1); Apache-2.0 (size 2)",
+  "code_license": "MIT (DeepSeek-OCR); Apache-2.0 (DeepSeek-OCR 2)",
+  "weights_license": "MIT (DeepSeek-OCR); Apache-2.0 (DeepSeek-OCR 2)",
+  "license_interpretation": "This family covers two releases with different permissive licences. Size \"1\" is DeepSeek-OCR (paper arXiv:2510.18234), released under MIT: commercial and closed-source use is allowed if you keep the copyright and license notice. Size \"2\" is DeepSeek-OCR 2 (paper arXiv:2601.20552, 'Visual Causal Flow'), released under Apache-2.0: commercial use is allowed if you keep the license text and notices, and it grants a patent license. LibreYOLO ports the inference path of the Hugging Face releases (deepseek-ai/DeepSeek-OCR at 9f30c71f441d010e5429c532364a86705536c53a and deepseek-ai/DeepSeek-OCR-2 at aaa02f3811945a91062062994c5c4a3f4c0af2b0) and runs none of their remote code; ported parts keep their lineage, Apache-2.0 for the DeepSeek-V2 decoder, the Transformers Llama and Qwen2 attention, the detectron2-derived SAM encoder and the FastChat template, MIT for the ConvNeXt LayerNorm (libreyolo/models/deepseekocr/NOTICE), while the adapter is MIT. Weights are byte-identical, ungated mirrors at LibreYOLO/LibreDeepSeekOCR1 and LibreYOLO/LibreDeepSeekOCR2 with no learned parameter changed.",
+  "bibtex": "@article{wei2025deepseek,\n  title={DeepSeek-OCR: Contexts Optical Compression},\n  author={Wei, Haoran and Sun, Yaofeng and Li, Yukun},\n  journal={arXiv preprint arXiv:2510.18234},\n  year={2025}\n}",
+  "bibtex_source_url": "https://huggingface.co/deepseek-ai/DeepSeek-OCR#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the deepseek-ai/DeepSeek-OCR model card at revision 9f30c71f441d010e5429c532364a86705536c53a. Cross-checked against the arXiv API for 2510.18234: three authors in the same order, identical title, primary class cs.CV. DeepSeek-OCR 2 (size \"2\") has its own separate entry, published with this one in the deepseek-ai/DeepSeek-OCR-2 model card at revision aaa02f3811945a91062062994c5c4a3f4c0af2b0: @article{wei2026deepseek, title={DeepSeek-OCR 2: Visual Causal Flow}, journal={arXiv preprint arXiv:2601.20552}, year={2026}}, same three authors; the arXiv API for 2601.20552 matches its title and three authors in order. Do not hand-edit; a wrong citation misattributes someone's work."
+}

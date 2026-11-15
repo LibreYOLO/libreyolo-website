@@ -1,0 +1,14 @@
+{
+  "name": "Speridlabs Iris-Z",
+  "org": "Speridlabs",
+  "paper_title": "Iris-Z: Scaling One Generative Model Past Specialist Geometry Models",
+  "paper_url": "https://arxiv.org/abs/2611.16010",
+  "code_url": "https://github.com/speridlabs/iris-z-sdk",
+  "license": "FLUX Non-Commercial License",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "FLUX Non-Commercial License",
+  "license_interpretation": "The Iris-Z weights are derived from FLUX.2 [dev] and FLUX.2 [klein] Base 9B and are under Black Forest Labs' FLUX Non-Commercial License, a custom agreement that is not OSI-approved: no commercial or production use, and Section 2(e) asks for content filtering or human review of generated images before they are shared. LibreYOLO's adapter is MIT; the transformer, samplers and prompt embedders it ports from the Speridlabs Iris-Z SDK keep Apache-2.0, as does the FLUX.2 code the SDK builds on, with their notices in libreyolo/models/gen/speridlabs_irisz/NOTICE. LibreYOLO does not redistribute any weights. They download at runtime, unmodified, from their publishers at pinned revisions: speridlabs/iris-z at 16239e1a5444c484b11a04b61d633eceb768574c (9b from Iris-Z-small, 32b from Iris-Z-big, not gated), the FLUX.2 VAE from black-forest-labs/FLUX.2-klein-4B (Apache-2.0), and the text encoders Qwen/Qwen3-8B-FP8 for 9b and mistralai/Mistral-Small-3.2-24B-Instruct-2506 for 32b (both Apache-2.0).",
+  "bibtex": "@article{canada2026irisz,\n  title   = {Iris-Z: Scaling One Generative Model Past\n             Specialist Geometry Models},\n  author  = {Ca{\\~n}ada, Alejandro and Garabito, Chema},\n  journal = {arXiv preprint arXiv:2611.16010},\n  year    = {2026},\n  url     = {https://arxiv.org/abs/2611.16010}\n}",
+  "bibtex_source_url": "https://speridlabs.com/research/iris-z#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the citation block (section id citation) of the Speridlabs research page for Iris-Z, line break in the title included. The iris-z-sdk README at commit 6c8925f42a2a3581127609d771aa5bfece557467 and the speridlabs/iris-z model card publish no BibTeX. Cross-checked against the arXiv API for 2611.16010: two authors in the same order (Alejandro Cañada, Chema Garabito), identical title once the line break is joined. Do not hand-edit; a wrong citation misattributes someone's work."
+}

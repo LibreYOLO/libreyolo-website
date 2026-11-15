@@ -1,0 +1,14 @@
+{
+  "name": "DPFlow",
+  "org": "Henrique Morimitsu (ptlflow)",
+  "paper_title": "DPFlow: Adaptive Optical Flow Estimation with a Dual-Pyramid Framework",
+  "paper_url": "https://arxiv.org/abs/2503.14880",
+  "code_url": "https://github.com/hmorimitsu/ptlflow",
+  "license": "CC-BY-NC-SA-4.0",
+  "code_license": "Apache-2.0",
+  "weights_license": "CC-BY-NC-SA-4.0",
+  "license_interpretation": "The code and the weights carry different licenses. The weights were trained within ptlflow and are released under CC BY-NC-SA 4.0: commercial use is not allowed, redistribution needs attribution, and anything you build from the weights and share must carry the same license; the DPFlow README adds that the weights are for academic and research purposes only, because of the training datasets' licenses. Treat all four checkpoints (things as the canonical m, and the sintel, kitti and spring fine-tunes) as research weights. The code is Apache-2.0: ptlflow's models/dpflow at commit 43cdc2b5 is vendored under libreyolo/models/dpflow/_vendor/, with timm-derived helpers (Apache-2.0) and an input padder adapted from RAFT (BSD-3-Clause); LibreYOLO's wrapper code is MIT. The weights come from the ptlflow weights1 release and are mirrored on the LibreYOLO Hugging Face org with the license text and a non-commercial banner, without gating. Training is out of scope.",
+  "bibtex": "@InProceedings{Morimitsu2025DPFlow,\n  author    = {Morimitsu, Henrique and Zhu, Xiaobin and Cesar-Jr., Roberto M. and Ji, Xiangyang and Yin, Xu-Cheng},\n  booktitle = {The IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},\n  title     = {{DPFlow}: Adaptive Optical Flow Estimation with a Dual-Pyramid Framework},\n  year      = {2025},\n}",
+  "bibtex_source_url": "https://github.com/hmorimitsu/ptlflow/tree/43cdc2b5fc7228e7090009a66e8e28e0b48e31ba/ptlflow/models/dpflow#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of ptlflow/models/dpflow/README.md at commit 43cdc2b5fc7228e7090009a66e8e28e0b48e31ba. Cross-checked against the arXiv API for 2503.14880: 5 authors in the same order, identical title (arXiv lists the third author as Roberto M. Cesar, the README as Cesar-Jr., Roberto M.). Do not hand-edit; a wrong citation misattributes someone's work."
+}

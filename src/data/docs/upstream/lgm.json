@@ -1,0 +1,14 @@
+{
+  "name": "LGM",
+  "org": "3D Topia",
+  "paper_title": "LGM: Large Multi-View Gaussian Model for High-Resolution 3D Content Creation",
+  "paper_url": "https://arxiv.org/abs/2402.05054",
+  "code_url": "https://github.com/3DTopia/LGM",
+  "license": "MIT and CreativeML OpenRAIL++-M",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "MIT and CreativeML OpenRAIL++-M",
+  "license_interpretation": "LGM runs in two stages with different licenses. The LGM Gaussian model and its code are MIT, a permissive license that allows commercial and closed-source use with the copyright notice kept. The first stage, the ImageDream multi-view diffusion model (fine-tuned from MVDream and Stable Diffusion 2.1), is declared openrail upstream and LibreYOLO carries the CreativeML OpenRAIL++-M License of its Stable Diffusion 2.1 lineage: commercial use is allowed, but its use-based restrictions (no illegal, harmful, discriminatory or deceptive uses, among others) bind you and must be passed on to anyone you share the model or derivatives with. LibreYOLO's adapter is MIT; the code it adapts from LGM is MIT, with parts following ImageDream, the DINOv2 attention module and kiuikit under Apache-2.0, noted in libreyolo/models/gen/lgm/NOTICE. LibreYOLO leaves out upstream's renderer, which needs Inria's non-commercial Gaussian Splatting rasterizer. Weights are redistributed unchanged at pinned revisions: ashawkey/LGM with the BiRefNet weights (MIT) as LibreYOLO/LibreLGM0.4b, and ashawkey/imagedream-ipmv-diffusers as LibreYOLO/LibreImageDream; neither is gated.",
+  "bibtex": "@article{tang2024lgm,\n  title={LGM: Large Multi-View Gaussian Model for High-Resolution 3D Content Creation},\n  author={Tang, Jiaxiang and Chen, Zhaoxi and Chen, Xiaokang and Wang, Tengfei and Zeng, Gang and Liu, Ziwei},\n  journal={arXiv preprint arXiv:2402.05054},\n  year={2024}\n}",
+  "bibtex_source_url": "https://github.com/3DTopia/LGM#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the 3DTopia/LGM README at commit fe8d12cff8c827df7bb77a3c8e8b37408cb6fe4c, the commit LibreYOLO's NOTICE names. Cross-checked against the arXiv API for 2402.05054: six authors in the same order, identical title. Do not hand-edit; a wrong citation misattributes someone's work."
+}

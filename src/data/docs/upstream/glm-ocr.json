@@ -1,0 +1,14 @@
+{
+  "name": "GLM-OCR",
+  "org": "Z.ai (zai-org)",
+  "paper_title": "GLM-OCR Technical Report",
+  "paper_url": "https://arxiv.org/abs/2603.10910",
+  "code_url": "https://github.com/zai-org/GLM-OCR",
+  "license": "MIT (recognizer); Apache-2.0 (layout detector)",
+  "code_license": "Apache-2.0",
+  "weights_license": "MIT (GLM-OCR recognizer); Apache-2.0 (PP-DocLayoutV3 layout detector)",
+  "license_interpretation": "Both networks are under permissive licences that allow commercial and closed-source use. The GLM-OCR recognizer is MIT, as declared by its model card (upstream ships no license file or copyright line); keep the license notice with copies. The PP-DocLayoutV3 layout detector is Apache-2.0 (Copyright PaddlePaddle Authors): keep the license text and notices, and it grants a patent license. Both networks run through the Apache-2.0 Hugging Face Transformers classes; LibreYOLO ports only the document-parsing pipeline (layout post-processing, region crops, result formatting) from the GLM-OCR SDK at commit 0288f96bb9e78cb439883eaa725eeae90bd177c5, which is Apache-2.0 (libreyolo/models/glmocr/NOTICE), and the rest of the adapter is MIT. The weights are an unmodified, ungated mirror at LibreYOLO/LibreGLMOCR0.9b of zai-org/GLM-OCR (revision 2e85a62840ccac27daa451df36c736c4636b8628) with PaddlePaddle/PP-DocLayoutV3_safetensors (revision e4f489dc536556fc1be02b973ba06756e0d4a2ac) under layout/, shipping LICENSE and NOTICE.",
+  "bibtex": "@misc{duan2026glmocrtechnicalreport,\n      title={GLM-OCR Technical Report},\n      author={Shuaiqi Duan and Yadong Xue and Weihan Wang and Zhe Su and Huan Liu and Sheng Yang and Guobing Gan and Guo Wang and Zihan Wang and Shengdong Yan and Dexin Jin and Yuxuan Zhang and Guohong Wen and Yanfeng Wang and Yutao Zhang and Xiaohan Zhang and Wenyi Hong and Yukuo Cen and Da Yin and Bin Chen and Wenmeng Yu and Xiaotao Gu and Jie Tang},\n      year={2026},\n      eprint={2603.10910},\n      archivePrefix={arXiv},\n      primaryClass={cs.CL},\n      url={https://arxiv.org/abs/2603.10910},\n}",
+  "bibtex_source_url": "https://github.com/zai-org/GLM-OCR#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the upstream README at commit 0288f96bb9e78cb439883eaa725eeae90bd177c5; the zai-org/GLM-OCR model card at revision 2e85a62840ccac27daa451df36c736c4636b8628 publishes the identical entry. Cross-checked against the arXiv API for 2603.10910: twenty-three authors in the same order, identical title, primary class cs.CL. Do not hand-edit; a wrong citation misattributes someone's work."
+}

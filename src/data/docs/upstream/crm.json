@@ -1,0 +1,14 @@
+{
+  "name": "CRM",
+  "org": "Tsinghua University (TSAIL)",
+  "paper_title": "CRM: Single Image to 3D Textured Mesh with Convolutional Reconstruction Model",
+  "paper_url": "https://arxiv.org/abs/2403.05034",
+  "code_url": "https://github.com/thu-ml/CRM",
+  "license": "CreativeML OpenRAIL++-M",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "CreativeML OpenRAIL++-M",
+  "license_interpretation": "The CRM code is MIT and its model card declares MIT for the weights, but CRM's two diffusion models are fine-tuned from ImageDream and MVDream, themselves from Stable Diffusion 2.1, so LibreYOLO treats the weights as under the CreativeML OpenRAIL++-M License of that lineage. OpenRAIL++-M allows commercial use, but its use-based restrictions (no illegal, harmful, discriminatory or deceptive uses, among others) bind you and must be passed on to anyone you share the model or derivatives with. LibreYOLO's adapter is MIT; the code it adapts from CRM is MIT, the FlexiCubes meshing comes from NVIDIA's Apache-2.0 release, and ImageDream parts are Apache-2.0, noted in libreyolo/models/gen/crm/NOTICE. CRM's own FlexiCubes copies with NVIDIA's all-rights-reserved header, nvdiffrast (non-commercial) and the GPL-3.0 mesh tools upstream calls are not used. The Zhengyi/CRM weights are redistributed unchanged as LibreYOLO/LibreCRM, whose card carries the OpenRAIL++-M terms; Background removal runs on LibreYOLO's BiRefNet port with the ZhengPeng7/BiRefNet weights (MIT), from LibreYOLO/LibreTRELLISl. Both are pinned and not gated.",
+  "bibtex": "@article{wang2024crm,\n  title={CRM: Single Image to 3D Textured Mesh with Convolutional Reconstruction Model},\n  author={Zhengyi Wang and Yikai Wang and Yifei Chen and Chendong Xiang and Shuo Chen and Dajiang Yu and Chongxuan Li and Hang Su and Jun Zhu},\n  journal={arXiv preprint arXiv:2403.05034},\n  year={2024}\n}",
+  "bibtex_source_url": "https://github.com/thu-ml/CRM#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the thu-ml/CRM README at commit 4964e36a593070a3045eb0f300935a771ff5c172, the commit LibreYOLO's NOTICE names. Cross-checked against the arXiv API for 2403.05034: nine authors in the same order, identical title. Do not hand-edit; a wrong citation misattributes someone's work."
+}

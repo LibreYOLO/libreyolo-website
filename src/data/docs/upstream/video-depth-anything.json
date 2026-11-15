@@ -1,0 +1,14 @@
+{
+  "name": "Video Depth Anything",
+  "org": "ByteDance",
+  "paper_title": "Video Depth Anything: Consistent Depth Estimation for Super-Long Videos",
+  "paper_url": "https://arxiv.org/abs/2501.12375",
+  "code_url": "https://github.com/DepthAnything/Video-Depth-Anything",
+  "license": "Apache-2.0 (Small checkpoint); CC-BY-NC-4.0 (Base and Large checkpoints)",
+  "code_license": "Apache-2.0",
+  "weights_license": "Apache-2.0 (s); CC-BY-NC-4.0 (b, l)",
+  "license_interpretation": "The licence depends on the size. The s checkpoint (Video-Depth-Anything-Small) is Apache-2.0, a permissive license that allows commercial and closed-source use if you keep the license text and notices. The b and l checkpoints (Base and Large) are CC BY-NC 4.0: attribution is required and commercial use is not allowed. The vendored code is Apache-2.0 from DepthAnything/Video-Depth-Anything at commit 4f5ae23172ba60fd7bc11ef671cca678842c7072 (Copyright ByteDance), including a motion module from AnimateDiff and attention code from Hugging Face diffusers, both Apache-2.0; the DINOv2 encoder and DPT head are shared with LibreYOLO's Depth Anything V2 family, and LibreYOLO's own adapter and streaming stitcher are MIT (libreyolo/models/video_depth_anything/NOTICE). LibreYOLO mirrors the converted checkpoints, tensors unchanged, as LibreYOLO/LibreVideoDepthAnything{s,b,l}-depth with the licence of each upstream size, not gated; metric checkpoints are not hosted.",
+  "bibtex": "@article{video_depth_anything,\n  title={Video Depth Anything: Consistent Depth Estimation for Super-Long Videos},\n  author={Chen, Sili and Guo, Hengkai and Zhu, Shengnan and Zhang, Feihu and Huang, Zilong and Feng, Jiashi and Kang, Bingyi},\n  journal={arXiv:2501.12375},\n  year={2025}\n}",
+  "bibtex_source_url": "https://github.com/DepthAnything/Video-Depth-Anything#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the upstream README at commit 4f5ae23172ba60fd7bc11ef671cca678842c7072. Cross-checked against the arXiv API for 2501.12375: seven authors in the same order, identical title, primary class cs.CV; the LibreYOLO NOTICE records the paper as CVPR 2025, while the authors' entry keeps the arXiv form. Do not hand-edit; a wrong citation misattributes someone's work."
+}

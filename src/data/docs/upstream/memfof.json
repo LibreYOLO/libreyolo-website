@@ -1,0 +1,12 @@
+{
+  "name": "MEMFOF",
+  "org": "MSU Graphics & Media Lab",
+  "paper_title": "MEMFOF: High-Resolution Training for Memory-Efficient Multi-Frame Optical Flow Estimation",
+  "paper_url": "https://arxiv.org/abs/2506.23151",
+  "code_url": "https://github.com/msu-video-group/memfof",
+  "license": "BSD-3-Clause",
+  "license_interpretation": "BSD-3-Clause is a permissive license: the code and weights can be used in commercial and closed-source products. Redistributions must keep the copyright notice, the license conditions and the disclaimer, and the authors' names may not be used to endorse derived products without permission. The upstream inference code at commit a51de9fc is vendored under libreyolo/models/memfof/_vendor/ with its BSD-3-Clause LICENSE; its gma.py attention modules come from GMA (zacjiang/GMA) under the WTFPL, shipped as LICENSE-GMA. LibreYOLO's wrapper code is MIT. The upstream checkpoints on Hugging Face (egorchistov/optical-flow-MEMFOF-*) are tagged bsd-3-clause but ship no license file, so LibreYOLO mirrors the six converted checkpoints (canonical, kitti, sintel, spring, tartan, tartan-t) under the code repository's BSD-3-Clause license. No gating; inference only.",
+  "bibtex": "@article{bargatin2025memfof,\n  title={MEMFOF: High-Resolution Training for Memory-Efficient Multi-Frame Optical Flow Estimation},\n  author={Bargatin, Vladislav and Chistov, Egor and Yakovenko, Alexander and Vatolin, Dmitriy},\n  journal={arXiv preprint arXiv:2506.23151},\n  year={2025}\n}",
+  "bibtex_source_url": "https://github.com/msu-video-group/memfof",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the upstream README at commit a51de9fc59c6fe20ba08e079372c7b583d58a712. Cross-checked against the arXiv API for 2506.23151: 4 authors in the same order, identical title. The paper appeared at ICCV 2025; the README still gives it as an arXiv @article, copied as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}

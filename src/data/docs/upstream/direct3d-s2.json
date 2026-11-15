@@ -1,0 +1,14 @@
+{
+  "name": "Direct3D-S2",
+  "org": "DreamTech",
+  "paper_title": "Direct3D-S2: Gigascale 3D Generation Made Easy with Spatial Sparse Attention",
+  "paper_url": "https://arxiv.org/abs/2505.17412",
+  "code_url": "https://github.com/DreamTechAI/Direct3D-S2",
+  "license": "MIT",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so the code and weights can be used in commercial and closed-source products; the only obligation is to keep the copyright and license notice with copies. LibreYOLO's adapter is MIT; the flow transformers, SDF VAE decoders, refiners and spatial sparse attention it adapts from Direct3D-S2 keep MIT, with the attention following native-sparse-attention-triton (Apache-2.0) and the transformer modules TRELLIS's (MIT), noted in libreyolo/models/gen/direct3d_s2/NOTICE. Upstream's hole filling and remeshing, which need GPL-licensed pymeshfix and python-igraph, are not used. The wushuang98/Direct3D-S2 v1.1 weights (MIT) are redistributed unchanged as LibreYOLO/LibreDirect3DS2v11; the BiRefNet weights (MIT) come from LibreYOLO/LibreTRELLISl and the DINOv2 encoder, facebook/dinov2-with-registers-large (Apache-2.0), from Meta. All are pinned and none is gated.",
+  "bibtex": "@article{wu2025direct3ds2gigascale3dgeneration,\n  title={Direct3D-S2: Gigascale 3D Generation Made Easy with Spatial Sparse Attention}, \n  author={Shuang Wu and Youtian Lin and Feihu Zhang and Yifei Zeng and Yikang Yang and Yajie Bao and Jiachen Qian and Siyu Zhu and Philip Torr and Xun Cao and Yao Yao},\n  journal={arXiv preprint arXiv:2505.17412},\n  year={2025}\n}",
+  "bibtex_source_url": "https://github.com/DreamTechAI/Direct3D-S2#-citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the DreamTechAI/Direct3D-S2 README at commit a1cf235b2881cff04a91900060a9546b40e7ee5d, the commit LibreYOLO's NOTICE names. Cross-checked against the arXiv API for 2505.17412: eleven authors and identical title, with one difference in order: the README lists Philip Torr before Xun Cao, while arXiv lists Xun Cao before Philip Torr. The entry is kept as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}

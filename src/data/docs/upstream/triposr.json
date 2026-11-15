@@ -1,0 +1,14 @@
+{
+  "name": "TripoSR",
+  "org": "Tripo AI and Stability AI",
+  "paper_title": "TripoSR: Fast 3D Object Reconstruction from a Single Image",
+  "paper_url": "https://arxiv.org/abs/2403.02151",
+  "code_url": "https://github.com/VAST-AI-Research/TripoSR",
+  "license": "MIT",
+  "code_license": "MIT and Apache-2.0",
+  "weights_license": "MIT",
+  "license_interpretation": "MIT is a permissive license, so the code and weights can be used in commercial and closed-source products; the only obligation is to keep the copyright and license notice with copies. LibreYOLO's adapter is MIT; the triplane, NeRF and mesh-extraction code it adapts from TripoSR keeps MIT, and the transformer and DINO ViT encoder follow HuggingFace diffusers and transformers code under Apache-2.0, with their notices in libreyolo/models/gen/triposr/NOTICE. LibreYOLO avoids upstream's torchmcubes (MPL-2.0) by running marching cubes through scikit-image (BSD-3-Clause). The stabilityai/TripoSR weights (MIT) are redistributed unchanged as LibreYOLO/LibreTripoSR; Background removal runs on LibreYOLO's BiRefNet port with the ZhengPeng7/BiRefNet weights (MIT), from LibreYOLO/LibreTRELLISl. Both are pinned and not gated.",
+  "bibtex": "@article{TripoSR2024,\n  title={TripoSR: Fast 3D Object Reconstruction from a Single Image},\n  author={Tochilkin, Dmitry and Pankratz, David and Liu, Zexiang and Huang, Zixuan and and Letts, Adam and Li, Yangguang and Liang, Ding and Laforte, Christian and Jampani, Varun and Cao, Yan-Pei},\n  journal={arXiv preprint arXiv:2403.02151},\n  year={2024}\n}",
+  "bibtex_source_url": "https://github.com/VAST-AI-Research/TripoSR#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the VAST-AI-Research/TripoSR README at commit 107cefdc244c39106fa830359024f6a2f1c78871, the commit LibreYOLO's NOTICE names. Cross-checked against the arXiv API for 2403.02151: ten authors in the same order, identical title. The upstream entry has a doubled 'and' between Huang and Letts; it is kept as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}

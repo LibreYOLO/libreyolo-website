@@ -1,0 +1,14 @@
+{
+  "name": "PP-DocLayoutV3",
+  "org": "PaddlePaddle Authors",
+  "paper_title": "RT-DocLayout: Real-Time End-to-End Document Layout Analysis with Reading Order in the Wild",
+  "paper_url": "https://arxiv.org/abs/2606.23344",
+  "code_url": "https://github.com/PaddlePaddle/PaddleOCR",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the PP-DocLayoutV3 weights and LibreYOLO's port can be used in commercial and closed-source products. Redistributing them means keeping the license text and attribution notices, and the license grants a patent license. LibreYOLO's network is an inference-only PyTorch port of the Apache-2.0 reference in Hugging Face Transformers (v5.22.1, commit 446a570e62b04a89ea001604ada7366baac2ea67, Copyright The PaddlePaddle Team and The HuggingFace Inc. team) and needs no transformers runtime (libreyolo/models/ppdoclayoutv3/NOTICE). The checkpoint is converted from PaddlePaddle/PP-DocLayoutV3_safetensors at revision e4f489dc536556fc1be02b973ba06756e0d4a2ac, declared Apache-2.0 by its model card; that repository ships no LICENSE file, so the mirror at LibreYOLO/LibrePPDocLayoutV3l carries the Apache-2.0 text of the PaddleOCR project. Conversion only strips a key prefix and adds metadata; learned parameters are unchanged, and the mirror is not gated.",
+  "bibtex": "@misc{cui2026rtdoclayoutrealtimeendtoenddocument,\n      title={RT-DocLayout: Real-Time End-to-End Document Layout Analysis with Reading Order in the Wild}, \n      author={Cheng Cui and Tingquan Gao and Xueqing Wang and Changda Zhou and Hongen Liu and Ting Sun and Yubo Zhang and Zelun Zhang and Jiaxuan Liu and Manhui Lin and Yue Zhang and Suyin Liang and Yiqing Xiang and Yi Liu},\n      year={2026},\n      eprint={2606.23344},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2606.23344}, \n}",
+  "bibtex_source_url": "https://huggingface.co/PaddlePaddle/PP-DocLayoutV3_safetensors#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section ('If you find PP-DocLayoutV3 helpful') of the PaddlePaddle/PP-DocLayoutV3_safetensors model card at revision e4f489dc536556fc1be02b973ba06756e0d4a2ac, which links the same arXiv report as its technical report. Cross-checked against the arXiv API for 2606.23344: fourteen authors in the same order, identical title, primary class cs.CV. Do not hand-edit; a wrong citation misattributes someone's work."
+}

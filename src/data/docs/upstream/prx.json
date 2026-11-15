@@ -1,0 +1,13 @@
+{
+  "name": "PRX and PRX Pixel",
+  "org": "Photoroom",
+  "paper_title": "PRX: an open-source text-to-image model",
+  "paper_url": "https://huggingface.co/blog/Photoroom/prx-open-source-t2i-model",
+  "code_url": "https://github.com/Photoroom/PRX",
+  "license": "Apache-2.0",
+  "weights_license": "Apache-2.0 (PRX's T5Gemma text encoder: Gemma Terms of Use)",
+  "license_interpretation": "Photoroom releases the PRX and PRX Pixel weights under Apache-2.0, a permissive license, so they can be used in commercial and closed-source products; redistributing them means keeping the license text and notices, and the license grants a patent license. The exception is PRX's bundled T5Gemma 2B text encoder, which stays under Google's Gemma Terms of Use and the Gemma Prohibited Use Policy: commercial use is allowed, but the prohibited uses pass on to anyone you share it with, and PRX's model cards forbid those uses for the whole model. PRX's autoencoder is the FLUX.1 [schnell] VAE (Apache-2.0) or DC-AE (MIT); PRX Pixel has no autoencoder and bundles the Qwen3-VL-Embedding-2B text encoder (Apache-2.0). LibreYOLO's adapter is its own MIT code that calls the Apache-2.0 diffusers PRXPipeline and PRXPixelPipeline; no upstream source is ported. Weights download from LibreYOLO's byte-identical mirrors of Photoroom's nine PRX repositories and prxpixel-t2i (LibreYOLO/LibrePRX<size> and LibreYOLO/LibrePRXPixel7b), each pinned to a commit and not gated.",
+  "bibtex": "@misc{photoroom2026prx,\n  title  = {PRX: an open-source text-to-image model},\n  author = {Bertoin, David and Frigg, Roman and Almazán, Jon and Andres, Eliot},\n  year   = {2026},\n  url    = {https://huggingface.co/blog/Photoroom/prx-open-source-t2i-model},\n}",
+  "bibtex_source_url": "https://github.com/Photoroom/PRX#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the Photoroom/PRX README at commit 1a052fd0eb5cb8a1113e6a9be64b57b79e5986ab (default branch; the library pins only the Hugging Face weights, not the code repository). PRX was released without a paper: the entry cites Photoroom's announcement post, and neither the PRX nor the PRX Pixel model card publishes a BibTeX of its own, so the same entry covers PRX Pixel. There is no arXiv record to cross-check against, so this entry is reproduced exactly as published rather than verified against a second source. Do not hand-edit; a wrong citation misattributes someone's work."
+}

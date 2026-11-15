@@ -1,0 +1,12 @@
+{
+  "name": "NeuFlow v2",
+  "org": "Northeastern University Field Robotics Lab",
+  "paper_title": "NeuFlow v2: Push High-Efficiency Optical Flow To the Limit",
+  "paper_url": "https://arxiv.org/abs/2408.10161",
+  "code_url": "https://github.com/neufieldrobotics/NeuFlow_v2",
+  "license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license: the code and weights can be used in commercial and closed-source products. It asks you to keep the license text and attribution notices with redistributed copies, to mark modified files, and it grants a patent license. The upstream model code at commit 204b5e37 is vendored under libreyolo/models/neuflowv2/_vendor/ with its Apache-2.0 LICENSE; LibreYOLO's wrapper code is MIT. Upstream commits its three checkpoints (neuflow_mixed.pth as the canonical s, neuflow_sintel.pth and neuflow_things.pth as variants) to the Apache-2.0 repository with no separate weight license, so LibreYOLO mirrors them on its Hugging Face org under Apache-2.0, an implied grant from the releasing project. No gating; inference only.",
+  "bibtex": "@misc{zhang2025neuflowv2pushhighefficiency,\n      title={NeuFlow v2: Push High-Efficiency Optical Flow To the Limit}, \n      author={Zhiyong Zhang and Aniket Gupta and Huaizu Jiang and Hanumant Singh},\n      year={2025},\n      eprint={2408.10161},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2408.10161}, \n}",
+  "bibtex_source_url": "https://arxiv.org/abs/2408.10161",
+  "bibtex_verified": "2026-11-15, copied verbatim from the arXiv BibTeX export for 2408.10161 (arxiv.org/bibtex/2408.10161). The upstream README at commit 204b5e3744461d90303b9ff82caa7a1bb56a2ca2 lists the authors but has no citation block. Cross-checked against the arXiv API for 2408.10161: 4 authors in the same order, identical title. Do not hand-edit; a wrong citation misattributes someone's work."
+}

@@ -1,0 +1,14 @@
+{
+  "name": "InstantHMR",
+  "org": "Naturalpad and LAAS-CNRS",
+  "paper_title": "InstantHMR: Real-Time Human Mesh Recovery on Your Phone",
+  "paper_url": "https://hal.science/hal-05854387",
+  "code_url": "https://github.com/Naturalpad-studio/InstantHMR",
+  "license": "CC-BY-NC-4.0 (n, t, s, m checkpoints); Apache-2.0 (m commercial checkpoint)",
+  "code_license": "Apache-2.0",
+  "weights_license": "CC-BY-NC-4.0 (n, t, s, m); Apache-2.0 (m-commercial)",
+  "license_interpretation": "The licence depends on the checkpoint. The n, t, s and m weights are CC BY-NC 4.0: attribution is required and commercial use is not allowed, because part of their training images (SA-1B, AI Challenger) are non-commercial. LibreInstantHMRm-mesh-commercial was trained on Harmony4D and commercially licensed COCO images only and is Apache-2.0, which allows commercial and closed-source use if you keep the license text and notices. Every checkpoint was also trained on the SAM 3D Body dataset annotations, released by Meta under the SAM License, whose terms pass through with the weights, and they embed the MHR body constants (Apache-2.0). The upstream code is Apache-2.0 (Naturalpad-studio/InstantHMR at commit 5437400d4b25c1972821e51916fac34bd96acce6; LICENSE and NOTICE in libreyolo/models/instanthmr); the mesh decode was written clean-room so that no SAM-licensed sam-3d-body code is used, and the fine-tuning trainer is original LibreYOLO MIT code. Upstream publishes ONNX only (momolesang/InstantHMR, revision 07988f51c8c8908cfc7bb44fc18f645c9551b0bf); LibreYOLO converts them to PyTorch and mirrors them as LibreYOLO/LibreInstantHMR{n,t,s,m}-mesh and -m-mesh-commercial, not gated, and prints a notice before auto-download.",
+  "bibtex": "@misc{adjel2026instanthmr,\n  title        = {InstantHMR: Real-Time Human Mesh Recovery on Your Phone},\n  author       = {Adjel, Mohamed and Chalabi, Kahina and Bonnet, Vincent},\n  year         = {2026},\n  howpublished = {HAL preprint hal-05854387},\n  url          = {https://hal.science/hal-05854387},\n  note         = {LAAS report no. 26486}\n}",
+  "bibtex_source_url": "https://github.com/Naturalpad-studio/InstantHMR#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the upstream README at commit 5437400d4b25c1972821e51916fac34bd96acce6. The paper is a HAL preprint with no arXiv record; cross-checked against the HAL API for hal-05854387: three authors in the same order (Mohamed Adjel, Kahina Chalabi, Vincent Bonnet), same title (HAL writes 'InstantHMR : Real-Time Human Mesh Recovery on Your Phone' with French spacing). Do not hand-edit; a wrong citation misattributes someone's work."
+}

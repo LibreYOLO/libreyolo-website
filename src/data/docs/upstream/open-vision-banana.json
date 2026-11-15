@@ -1,0 +1,14 @@
+{
+  "name": "Open Vision Banana",
+  "org": "FunAILab",
+  "paper_title": "Open Vision Banana: A Fully Open Recipe for Generative Visual Perception",
+  "paper_url": "https://arxiv.org/abs/2611.15844",
+  "code_url": "https://github.com/OpenVisionBanana/OpenVisionBanana",
+  "license": "FLUX Non-Commercial License",
+  "code_license": "Apache-2.0",
+  "weights_license": "FLUX Non-Commercial License",
+  "license_interpretation": "The Open Vision Banana weights are fine-tunes of FLUX.2 [klein] Base 4B and 9B and are under Black Forest Labs' FLUX Non-Commercial License, a custom agreement that is not OSI-approved: no commercial or production use. Section 2(e) of that license asks for content filtering or human review of generated images before they are shared, and the same terms apply to the outputs. FunAILab's training code on GitHub is Apache-2.0, but LibreYOLO ports none of it: its adapter is its own MIT code that calls the Apache-2.0 diffusers Flux2KleinPipeline. LibreYOLO redistributes the paper's non-zero-shot checkpoints as complete pipelines at LibreYOLO/LibreOpenVisionBanana4b and LibreYOLO/LibreOpenVisionBanana9b, with FunAILab's transformer cast from float32 to bfloat16 (from FunAILab/Open-Vision-Banana at revision be5da66250cc385ff9c75ebbe4114e13ec305848) and Black Forest Labs' scheduler, Qwen3 text encoder, tokenizer and VAE byte-identical; the mirrors carry the license and are not gated. The zero-shot checkpoints and LoRA adapters stay on FunAILab's repository, under the same license.",
+  "bibtex": "@misc{jadon2026openvisionbananafully,\n      title={Open Vision Banana: A Fully Open Recipe for Generative Visual Perception},\n      author={Arpit Jadon and Valentinos Pariza and Jona Ruthardt and Ryousuke Yamada and A. Sophia Koepke and Andrei Bursuc and Yuki M. Asano},\n      year={2026},\n      eprint={2611.15844},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2611.15844},\n}",
+  "bibtex_source_url": "https://github.com/OpenVisionBanana/OpenVisionBanana#-citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the OpenVisionBanana/OpenVisionBanana README at commit 94845cab7ffd0f7f9316a32ec38997adf9607091; the FunAILab/Open-Vision-Banana model card at revision be5da66250cc385ff9c75ebbe4114e13ec305848 publishes the same entry. Cross-checked against the arXiv API for 2611.15844: seven authors in the same order, identical title, cs.CV primary class matches. Do not hand-edit; a wrong citation misattributes someone's work."
+}

@@ -1,0 +1,12 @@
+{
+  "name": "RAFT",
+  "org": "Princeton Vision & Learning Lab",
+  "paper_title": "RAFT: Recurrent All-Pairs Field Transforms for Optical Flow",
+  "paper_url": "https://arxiv.org/abs/2003.12039",
+  "code_url": "https://github.com/princeton-vl/RAFT",
+  "license": "BSD-3-Clause",
+  "license_interpretation": "BSD-3-Clause is a permissive license: the code and weights can be used in commercial and closed-source products. Redistributions must keep the copyright notice, the license conditions and the disclaimer, and the authors' names may not be used to endorse derived products without permission. The upstream inference code from princeton-vl/RAFT at commit 2888e15 is vendored under libreyolo/models/raft/_vendor/ with its BSD-3-Clause LICENSE; LibreYOLO's own wrapper code is MIT. The four checkpoints (raft-things as l, raft-small as s, and the raft-sintel and raft-kitti fine-tunes of l) come from the upstream download script and are mirrored on the LibreYOLO Hugging Face org under the same BSD-3-Clause license, without gating. Only the tensors' wrapping changes; training is not offered for this family.",
+  "bibtex": "@misc{teed2020raftrecurrentallpairsfield,\n      title={RAFT: Recurrent All-Pairs Field Transforms for Optical Flow}, \n      author={Zachary Teed and Jia Deng},\n      year={2020},\n      eprint={2003.12039},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2003.12039}, \n}",
+  "bibtex_source_url": "https://arxiv.org/abs/2003.12039",
+  "bibtex_verified": "2026-11-15, copied verbatim from the arXiv BibTeX export for 2003.12039 (arxiv.org/bibtex/2003.12039). The upstream README at commit 2888e15a51fa41140771d3f498ed8023cff098d1 names the paper (ECCV 2020, Zachary Teed and Jia Deng) but has no citation block. Cross-checked against the arXiv API for 2003.12039: 2 authors in the same order, identical title. Do not hand-edit; a wrong citation misattributes someone's work."
+}

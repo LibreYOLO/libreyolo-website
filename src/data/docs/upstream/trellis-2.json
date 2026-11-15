@@ -1,0 +1,14 @@
+{
+  "name": "TRELLIS.2",
+  "org": "Microsoft Research",
+  "paper_title": "Native and Compact Structured Latents for 3D Generation",
+  "paper_url": "https://arxiv.org/abs/2512.14692",
+  "code_url": "https://github.com/microsoft/TRELLIS.2",
+  "license": "DINOv3 License",
+  "code_license": "MIT",
+  "weights_license": "MIT and DINOv3 License",
+  "license_interpretation": "The TRELLIS.2 code and its microsoft/TRELLIS.2-4B weights are MIT, a permissive license that allows commercial and closed-source use with the copyright notice kept. The image encoder it needs is not: facebook/dinov3-vitl16-pretrain-lvd1689m is Meta's, under the DINOv3 License, a custom agreement that is not OSI-approved. It permits redistribution with a copy of the agreement and passes through trade-control and end-use restrictions (military, weapons, espionage and nuclear uses among them), so it sets the terms for the pipeline as a whole; read it before shipping a product on it. LibreYOLO's adapter is MIT, and the flow models, VAE decoder and dual-grid meshing it adapts from TRELLIS.2 keep MIT, noted in libreyolo/models/gen/trellis2/NOTICE. Upstream's nvdiffrast and nvdiffrec (NVIDIA, non-commercial) and BRIA's RMBG-2.0 (non-commercial) are not used, and the texture stage is not ported. Weights are redistributed unchanged at pinned revisions and none is gated: the geometry networks as LibreYOLO/LibreTRELLIS2-4b, TRELLIS's structure decoder and the BiRefNet weights (MIT) from LibreYOLO/LibreTRELLISl, and the DINOv3 encoder as LibreYOLO/LibreDINOv3vitl16 with the agreement.",
+  "bibtex": "@article{\n    xiang2025trellis2,\n    title={Native and Compact Structured Latents for 3D Generation},\n    author={Xiang, Jianfeng and Chen, Xiaoxue and Xu, Sicheng and Wang, Ruicheng and Lv, Zelong and Deng, Yu and Zhu, Hongyuan and Dong, Yue and Zhao, Hao and Yuan, Nicholas Jing and Yang, Jiaolong},\n    journal={Tech report},\n    year={2025}\n}",
+  "bibtex_source_url": "https://github.com/microsoft/TRELLIS.2#-citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the Citation section of the microsoft/TRELLIS.2 README at commit 75fbf0183001ed9876c8dbb35de6b68552ee08bd, the commit LibreYOLO's NOTICE names. Cross-checked against the arXiv API for 2512.14692: eleven authors in the same order, identical title. The README entry predates the preprint and gives journal 'Tech report'; it is kept as published. Do not hand-edit; a wrong citation misattributes someone's work."
+}

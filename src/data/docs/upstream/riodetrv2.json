@@ -1,0 +1,14 @@
+{
+  "name": "RiO-DETRv2",
+  "org": "RiO-DETRv2 authors (RicePasteM)",
+  "paper_title": "RiO-DETRv2: Geometry-Aware Uncertainty Modeling Meets Real-Time Oriented Object Detection Transformer",
+  "paper_url": "https://arxiv.org/abs/2610.29159",
+  "code_url": "https://github.com/RicePasteM/RiO-DETRv2",
+  "license": "Apache-2.0",
+  "code_license": "Apache-2.0",
+  "weights_license": "Apache-2.0",
+  "license_interpretation": "Apache-2.0 is a permissive license, so the RiO-DETRv2 code and checkpoints can be used in commercial and closed-source products. Redistributing them means keeping the license text and notices, and the license grants a patent license. About 33 minutes after its initial commit (ab8b22df5d800a927774c8c67e77fd29c0fe6967), upstream changed its LICENSE file to AGPL-3.0; later commits change only the README and LICENSE, not the code. LibreYOLO's port relies on the Apache-2.0 grant of that initial release, uses nothing from later commits, and preserves the Apache-2.0 snapshot at LibreYOLO/RiO-DETRv2 (tag apache-2.0-ab8b22d). The adapted decoder keeps Apache-2.0 with its RT-DETR, D-FINE, DEIM and RT-DETRv4 copyright lines (libreyolo/models/riodetrv2/LICENSE and NOTICE); the HGNetv2 backbone, encoder and decoder blocks reuse LibreYOLO's dfine and rtdetrv2 families, and the wiring around them is LibreYOLO's MIT code. The official checkpoints (Hugging Face RicePasteM/RiO-DETRv2 at revision 5f578f57929aded1962ebf8c5584a4771461124f, tagged apache-2.0) are mirrored as LibreYOLO/LibreRiODETRv2{n,s,m,l,x}-obb (DOTA-v1.0) and -obb-diorr (DIOR-R) with the upstream LICENSE and NOTICE; conversion renames keys and drops a training-only projector, learned tensors are unchanged. The DOTA-v1.0 and DIOR-R training sets carry their own terms.",
+  "bibtex": "@misc{hu2026riodetrv2geometryawareuncertaintymodeling,\n      title={RiO-DETRv2: Geometry-Aware Uncertainty Modeling Meets Real-Time Oriented Object Detection Transformer}, \n      author={Zhangchi Hu and Zilong He and Yifan Zhao and Xiangyu Yu and Jie Chen and Peixi Wu and Yansong Peng and Hebei Li and Xiaoyan Sun},\n      year={2026},\n      eprint={2610.29159},\n      archivePrefix={arXiv},\n      primaryClass={cs.CV},\n      url={https://arxiv.org/abs/2610.29159}, \n}",
+  "bibtex_source_url": "https://arxiv.org/bibtex/2610.29159",
+  "bibtex_verified": "2026-11-15, copied verbatim from arXiv's BibTeX export for 2610.29159. The upstream README at the pinned commit ab8b22df5d800a927774c8c67e77fd29c0fe6967 and at HEAD (a49bd0ae65f729e624d75f5b84193ecdce0c8435) has no Citation section and the Hugging Face model card has none either; the README at HEAD links this arXiv paper, and the paper's abstract names https://github.com/RicePasteM/RiO-DETRv2 as its code. Cross-checked against the arXiv API for 2610.29159: nine authors in the same order, identical title, primary class cs.CV. Do not hand-edit; a wrong citation misattributes someone's work."
+}
