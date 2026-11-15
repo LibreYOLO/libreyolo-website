@@ -1,0 +1,14 @@
+{
+  "name": "Speridlabs Iris-Z",
+  "org": "Speridlabs",
+  "paper_title": "Iris-Z: Scaling One Generative Model Past Specialist Geometry Models",
+  "paper_url": "https://speridlabs.com/research/iris-z",
+  "code_url": "https://github.com/speridlabs/iris-z-sdk",
+  "license": "FLUX Non-Commercial",
+  "code_license": "Apache-2.0",
+  "weights_license": "FLUX Non-Commercial License",
+  "license_interpretation": "The Iris-Z SDK code is Apache-2.0, and LibreYOLO's port of its transformer, samplers and prompt embedders keeps that license, with notices in libreyolo/models/gen/speridlabs_irisz/NOTICE; LibreYOLO's adapter is MIT. The Iris-Z weights are a fine-tune of FLUX.2 and are published by Speridlabs at speridlabs/iris-z under the FLUX Non-Commercial License: they may be used for non-commercial purposes, and section 2(e) asks for generated images to be filtered or reviewed before they are shared. LibreYOLO does not redistribute them; they download from speridlabs/iris-z at a pinned revision. The FLUX.2 VAE downloads from black-forest-labs/FLUX.2-klein-4B and the Mistral Small 3.2 and Qwen3 8B text encoders from their publishers, all Apache-2.0. Nothing is gated.",
+  "bibtex": "@article{canada2026irisz,\n  title   = {Iris-Z: Scaling One Generative Model Past\n             Specialist Geometry Models},\n  author  = {Ca{\\~n}ada, Alejandro and Garabito, Chema},\n  journal = {arXiv preprint arXiv:2611.16010},\n  year    = {2026},\n  url     = {https://arxiv.org/abs/2611.16010}\n}",
+  "bibtex_source_url": "https://speridlabs.com/research/iris-z#citation",
+  "bibtex_verified": "2026-11-15, copied verbatim from the citation block (section id citation) of the Speridlabs research page. The arXiv API returned no record for arXiv:2611.16010 when checked, so it could not be cross-checked there. Do not hand-edit; a wrong citation misattributes someone's work."
+}
