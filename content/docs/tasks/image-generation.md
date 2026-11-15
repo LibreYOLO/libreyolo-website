@@ -80,8 +80,8 @@ Gemma Terms of Use. Speridlabs Iris-Z (`speridlabs-iris-z`, sizes `9b` and
 `32b`) is a FLUX.2 fine-tune that denoises an image and its depth together. It
 generates from a prompt, paints a prompt over the depth of a photo or of a
 depth result with `source=`, and samples an image together with its depth with
-`depth=True`. Plan for about 40 GB of GPU memory at `imgsz=512`; on a 24 GB card,
-pass `offload=True`. Open Vision Banana (`open-vision-banana`, sizes `4b` and
+`depth=True`. The 9B model needs about 18 GB of GPU memory plus 9 GB for its text
+encoder; on a smaller card, pass `offload=True`. Open Vision Banana (`open-vision-banana`, sizes `4b` and
 `9b`) answers a perception prompt about a photo with an image. Iris-Z and Open
 Vision Banana weights are under the FLUX Non-Commercial License.
 
