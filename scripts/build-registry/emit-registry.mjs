@@ -28,7 +28,7 @@ const TASK_LABELS = {
   edge: { label: 'Edges', slug: 'edge-detection' },
   generate: { label: 'Image generation', slug: 'image-generation' },
   generate3d: { label: '3D generation', slug: '3d-generation' },
-
+  flow: { label: 'Optical flow', slug: 'optical-flow' },
 }
 const EXTRAS = { rfdetr: 'rfdetr', rtdetr: 'rtdetr' } // families needing a pip extra
 /*

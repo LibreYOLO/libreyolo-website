@@ -103,19 +103,32 @@ for (const file of (() => { try { return fs.readdirSync(path.join(SRC, 'models')
   try { text = read(path.join('models', file)) } catch { continue }
   for (const m of text.matchAll(/^class\s+(\w+)(?:\(([^)]*)\))?:/gm)) {
     const [, cls, bases] = m
-    CLASS_BASE[cls] ??= ((bases || '').split(',')[0] || '').trim().split('.').pop()
+    // Every base, in MRO order: LibrePRX lists a mixin before its tier base.
+    CLASS_BASE[cls] ??= (bases || '').split(',').map((b) => b.trim().split('.').pop()).filter(Boolean)
     const after = text.slice(m.index, text.indexOf('\nclass ', m.index + 1) === -1 ? undefined : text.indexOf('\nclass ', m.index + 1))
     const t = after.match(/SUPPORTED_TASKS[^=]*=\s*\(([^)]*)\)/)?.[1]
     if (t) CLASS_TASKS[cls] ??= [...t.matchAll(/"([a-z0-9]+)"/g)].map((x) => x[1])
   }
 }
 
-function inheritedTasks(baseName, seen = new Set()) {
+function resolveTasks(baseName, seen) {
   const key = String(baseName).split('.').pop()
-  if (!key || seen.has(key)) return ['detect']
+  if (!key || seen.has(key)) return null
   seen.add(key)
   if (CLASS_TASKS[key]) return CLASS_TASKS[key]
-  if (CLASS_BASE[key]) return inheritedTasks(CLASS_BASE[key], seen)
+  for (const base of CLASS_BASE[key] ?? []) {
+    const tasks = resolveTasks(base, seen)
+    if (tasks) return tasks
+  }
+  return null
+}
+
+function inheritedTasks(bases) {
+  const seen = new Set()
+  for (const base of bases) {
+    const tasks = resolveTasks(base, seen)
+    if (tasks) return tasks
+  }
   return ['detect']
 }
 
@@ -146,8 +159,8 @@ function parseFamily(key) {
   if (tasksRaw !== undefined) {
     tasks = [...tasksRaw.matchAll(/"([a-z0-9]+)"/g)].map((m) => m[1])
   } else {
-    const base = text.match(/^class\s+\w+\(([\w.]+)/m)?.[1] ?? ''
-    tasks = inheritedTasks(base)
+    const bases = (text.match(/^class\s+\w+\(([^)]*)\)/m)?.[1] ?? '').split(',').map((b) => b.trim()).filter(Boolean)
+    tasks = inheritedTasks(bases)
   }
   /*
    * Size tables. Every `NAME = {"code": px}` constant in the class is collected

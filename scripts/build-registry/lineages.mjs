@@ -3,7 +3,7 @@
  *
  * Families are merged onto one page only where they are versions of the same
  * upstream work (YOLOv9 and its E2E and P2 variants; RT-DETR v1/v2/v4; DEIM and
- * DEIMv2). Everything else gets its own page, because a reader searching a
+ * DEIMv2; SAM 3 and SAM 3.1; PRX and its pixel-space PRX Pixel). Everything else gets its own page, because a reader searching a
  * model name expects to land on a page about that model.
  *
  * Slugs are the term someone types into a search box: recognizable upstream
@@ -48,6 +48,37 @@ export const LINEAGES = [
   { slug: 'flux2-klein', display: 'FLUX.2 klein', keys: ['flux2_klein'] },
   { slug: 'sana-sprint', display: 'SANA-Sprint', keys: ['sana_sprint'] },
   { slug: 'wevisone-vl', display: 'WeVisOne-VL', keys: ['wevisonevl'] },
+
+  // Added for the 1.8.0 documentation.
+  { slug: 'riodetrv2', display: 'RIO-DETRv2', keys: ['riodetrv2'] },
+  { slug: 'falcon-perception', display: 'Falcon Perception', keys: ['falconperception'] },
+  { slug: 'qwen3-vl-embedding', display: 'Qwen3-VL-Embedding', keys: ['qwen3vl_embedding'] },
+  { slug: 'moge-3', display: 'MoGe-3', keys: ['moge3'] },
+  { slug: 'video-depth-anything', display: 'Video Depth Anything', keys: ['video_depth_anything'] },
+  { slug: 'instanthmr', display: 'InstantHMR', keys: ['instanthmr'] },
+  { slug: 'deepseek-ocr', display: 'DeepSeek-OCR', keys: ['deepseekocr'] },
+  { slug: 'falcon-ocr', display: 'Falcon OCR', keys: ['falconocr'] },
+  { slug: 'glm-ocr', display: 'GLM-OCR', keys: ['glmocr'] },
+  { slug: 'paddleocr-vl', display: 'PaddleOCR-VL', keys: ['paddleocrvl'] },
+  { slug: 'pp-doclayoutv3', display: 'PP-DocLayoutV3', keys: ['ppdoclayoutv3'] },
+  { slug: 'raft', display: 'RAFT', keys: ['raft'] },
+  { slug: 'sea-raft', display: 'SEA-RAFT', keys: ['searaft'] },
+  { slug: 'unimatch', display: 'UniMatch', keys: ['unimatch'] },
+  { slug: 'neuflow-v2', display: 'NeuFlow v2', keys: ['neuflowv2'] },
+  { slug: 'memfof', display: 'MEMFOF', keys: ['memfof'] },
+  { slug: 'dpflow', display: 'DPFlow', keys: ['dpflow'] },
+  { slug: 'flowseek', display: 'FlowSeek', keys: ['flowseek'] },
+  { slug: 'waft', display: 'WAFT', keys: ['waft'] },
+  { slug: 'open-vision-banana', display: 'Open Vision Banana', keys: ['open_vision_banana'] },
+  { slug: 'speridlabs-iris-z', display: 'Speridlabs Iris-Z', keys: ['speridlabs_irisz'] },
+  { slug: 'prx', display: 'PRX', keys: ['prx', 'prxpixel'] },
+  { slug: 'triposr', display: 'TripoSR', keys: ['triposr'] },
+  { slug: 'triposplat', display: 'TripoSplat', keys: ['triposplat'] },
+  { slug: 'lgm', display: 'LGM', keys: ['lgm'] },
+  { slug: 'crm', display: 'CRM', keys: ['crm'] },
+  { slug: 'trellis', display: 'TRELLIS', keys: ['trellis'] },
+  { slug: 'trellis-2', display: 'TRELLIS.2', keys: ['trellis2'] },
+  { slug: 'direct3d-s2', display: 'Direct3D-S2', keys: ['direct3d_s2'] },
 
   // g0, flagships
   { slug: 'yolov9', display: 'YOLOv9', keys: ['yolo9', 'yolo9_e2e', 'yolo9_p2'] },
@@ -122,7 +153,7 @@ export const LINEAGES = [
   // s, sibling tiers
   { slug: 'sam', display: 'SAM', keys: ['sam'] },
   { slug: 'sam-2', display: 'SAM 2', keys: ['sam2'] },
-  { slug: 'sam-3', display: 'SAM 3', keys: ['sam3'] },
+  { slug: 'sam-3', display: 'SAM 3', keys: ['sam3', 'sam31'] },
   { slug: 'mobilesam', display: 'MobileSAM', keys: ['mobilesam'] },
   { slug: 'edgetam', display: 'EdgeTAM', keys: ['edgetam'] },
   { slug: 'picosam3', display: 'PicoSAM3', keys: ['picosam3'] },

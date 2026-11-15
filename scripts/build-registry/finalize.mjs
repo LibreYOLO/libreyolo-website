@@ -9,17 +9,29 @@ const extras = JSON.parse(fs.readFileSync(path.join(collected, 'extras.json')))
 const repos = JSON.parse(fs.readFileSync(path.join(collected, 'hf_all.json')))
 const source = JSON.parse(fs.readFileSync(path.join(collected, 'source.json')))
 next._comment = 'GENERATED FILE. Rebuild with scripts/build-registry/rebuild.sh; reviewed provenance lives in upstream/*.json.'
-next.libreyolo_version = '1.7.0'
+next.libreyolo_version = '1.8.0'
 next.source = { ...next.source, ...source }
+if (!next.export_formats.some(f => f.key === 'axelera')) {
+  next.export_formats.splice(next.export_formats.findIndex(f => f.key === 'ncnn'), 0, { key: 'axelera', label: 'Axelera', ext: '_axelera_model' })
+}
+const prefixes = Object.values(next.families).map(f => f.prefix).filter(Boolean)
 for (const [key, family] of Object.entries(next.families)) {
   const prev = old.families[key]
   family.extra = extras[key] ?? null
-  family.weights_hosted = family.weights_hosted || repos.some(r => family.prefix && r.id.split('/')[1].startsWith(family.prefix) && r.siblings?.some(f => /\.(pt|pth|safetensors|ckpt)$/.test(f.rfilename)))
+  // A repo belongs to the family with the longest matching prefix, so
+  // LibreQwen3VLEmbedding2b does not count as a Qwen3-VL weight.
+  const owns = name => family.prefix && name.startsWith(family.prefix) && !prefixes.some(p => p.length > family.prefix.length && name.startsWith(p))
+  family.weights_hosted = family.weights_hosted || repos.some(r => owns(r.id.split('/')[1]) && r.siblings?.some(f => /\.(pt|pth|safetensors|ckpt)$/.test(f.rfilename)))
   family.trainable_per_key = Object.fromEntries(family.registry_keys.map(k => [k, capabilities[k]?.train ?? null]))
   family.trainable = Object.values(family.trainable_per_key).some(v => v === true)
   family.capabilities = { train: family.trainable, val: family.registry_keys.some(k => capabilities[k]?.val === true) }
-  family.added_in = prev?.added_in ?? '1.7.0'
-  family.task_added_in = prev?.task_added_in ?? Object.fromEntries(family.registry_keys.map(k => [k, '1.7.0']))
+  family.added_in = prev?.added_in ?? '1.8.0'
+  // Keys new to an existing page (sam31 on SAM 3) get the current release.
+  // RF-DETR keeps its per-task map, which is not keyed by registry key.
+  const prevAdded = prev?.task_added_in
+  family.task_added_in = prevAdded && !family.registry_keys.some(k => k in prevAdded)
+    ? prevAdded
+    : Object.fromEntries(family.registry_keys.map(k => [k, prevAdded && k in prevAdded ? prevAdded[k] : '1.8.0']))
   const upstream = path.join('src/data/docs/upstream', family.slug + '.json')
   if (fs.existsSync(upstream)) family.upstream = JSON.parse(fs.readFileSync(upstream))
   else if (prev?.upstream) family.upstream = prev.upstream
@@ -28,8 +40,13 @@ for (const [key, family] of Object.entries(next.families)) {
   // read from each checkpoint's HF repo tag. Use it only when the HF tag
   // disagrees with what the upstream weights publisher declared (weights keep
   // the upstream-declared license; LibreYOLO adds no dataset-derived terms).
-  if (family.upstream.checkpoint_license) {
-    for (const c of family.checkpoints) c.license = family.upstream.checkpoint_license
+  // A string applies to every checkpoint; an object maps checkpoint file names
+  // to licenses where they differ (WAFT ships one backbone licence per file).
+  const override = family.upstream.checkpoint_license
+  if (typeof override === 'string') {
+    for (const c of family.checkpoints) c.license = override
+  } else if (override) {
+    for (const c of family.checkpoints) if (override[c.name]) c.license = override[c.name]
   }
 }
 // Published weights the released library cannot load. They are on the Hub, so
