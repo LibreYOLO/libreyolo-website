@@ -19,6 +19,7 @@ import {
 } from '@/components/docs/ModelBlocks'
 import { externalRel } from '@/lib/links'
 import IdolGallery from '@/components/idol/IdolGallery'
+import { AugFigure, AugKnobTable, AugMatrix, AugDefaults } from '@/components/docs/AugmentationBlocks'
 
 function textOf(children) {
   if (typeof children === 'string') return children
@@ -62,7 +63,8 @@ export default function DocMarkdown({ children, family, snippets = {}, source, h
       // block elements, which cannot sit inside a p without hydration repair.
       const hasBlock = node?.children?.some(child => child.type === 'element' &&
         ['code-tabs', 'benchmark-table', 'checkpoint-table', 'export-matrix', 'onnx-io',
-          'citation-block', 'provenance-box', 'va-embed', 'task-support', 'idol-gallery'].includes(child.tagName))
+          'citation-block', 'provenance-box', 'va-embed', 'task-support', 'idol-gallery',
+          'aug-figure', 'aug-knobs', 'aug-matrix', 'aug-defaults'].includes(child.tagName))
       const Tag = hasBlock ? 'div' : 'p'
       return <Tag className={hasBlock ? "mb-5" : "mb-5 max-w-[68ch] text-[15px] leading-[1.6] text-surface-600 dark:text-surface-400"} {...dom(props)} />
     },
@@ -129,6 +131,11 @@ export default function DocMarkdown({ children, family, snippets = {}, source, h
     'code-tabs': ({ name }) => <CodeTabs tabs={snippets[name] || []} />,
     'provenance-box': ({ children: kids }) => <Provenance family={family}>{kids}</Provenance>,
     'citation-block': () => <Citation family={family} />,
+    // Augmentation pages. Not family-scoped: the data is the whole library's.
+    'aug-figure': ({ name }) => <AugFigure name={name} />,
+    'aug-knobs': () => <AugKnobTable />,
+    'aug-matrix': () => <AugMatrix />,
+    'aug-defaults': () => <AugDefaults />,
   }
 
   return (

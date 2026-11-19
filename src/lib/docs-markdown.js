@@ -2,6 +2,10 @@ import { getModelDiagram } from '@/lib/model-diagrams'
 import { getOnnxIo, scalingOf, normalizationOf } from '@/lib/onnx-io'
 import messages from '../../messages/en.json'
 import registry, { currentDocs, expandSelfClosingTags } from '@/lib/docs'
+import { SITE_URL } from '@/i18n/metadata'
+import {
+  augFigureMarkdown, augKnobsMarkdown, augMatrixMarkdown, augDefaultsMarkdown,
+} from '@/components/docs/AugmentationBlocks'
 
 /*
  * Render a docs page as plain markdown, for the `.md` twin and for
@@ -152,6 +156,14 @@ export function docToMarkdown(doc, source = currentDocs) {
   replace('citation-block', () => citation(family))
   replace('code-tabs', (a) => codeTabs(snippets, /name="([\w-]+)"/.exec(a)?.[1]))
   replace('task-support', () => '')
+  // Augmentation pages: figures become image lists, the tables real tables.
+  if (!source.archived) {
+    const aug = messages.AugmentationBlocks
+    replace('aug-figure', (a) => augFigureMarkdown(/name="([\w-]+)"/.exec(a)?.[1], SITE_URL, aug))
+    replace('aug-knobs', () => augKnobsMarkdown(aug))
+    replace('aug-matrix', () => augMatrixMarkdown(aug))
+    replace('aug-defaults', () => augDefaultsMarkdown(aug))
+  }
   // The chart is an iframe; a twin gets the link, since the numbers it plots
   // are already in the benchmark table above it.
   replace('va-embed', () => (family?.va_embed?.scatter ? `Interactive chart: ${family.va_embed.scatter}` : ''))

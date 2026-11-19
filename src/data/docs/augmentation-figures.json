@@ -1,0 +1,592 @@
+{
+  "libreyolo_version": "1.8.0",
+  "image": "guggenheim-bilbao.jpg",
+  "box": {
+    "model": "LibreYOLO9t.pt",
+    "class": "person",
+    "xyxy": [
+      829.4,
+      81.9,
+      1526.9,
+      602.8
+    ],
+    "conf": 0.908
+  },
+  "panel_px": 480,
+  "figures": {
+    "mosaic": [
+      {
+        "src": "/augmentation/mosaic-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mosaic_prob=0",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/mosaic-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mosaic_prob=1",
+        "note": "0.5×",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/mosaic-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mosaic_prob=1",
+        "note": "0.58×",
+        "boxes": 4,
+        "largest_box": [
+          169,
+          126
+        ]
+      },
+      {
+        "src": "/augmentation/mosaic-4.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mosaic_prob=1",
+        "note": "1.30×",
+        "boxes": 2,
+        "largest_box": [
+          9,
+          218
+        ]
+      }
+    ],
+    "mosaic_scale": [
+      {
+        "src": "/augmentation/mosaic-scale-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "0.1×",
+        "boxes": 4,
+        "largest_box": [
+          29,
+          22
+        ]
+      },
+      {
+        "src": "/augmentation/mosaic-scale-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "0.5×",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/mosaic-scale-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "1×",
+        "boxes": 2,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/mosaic-scale-4.webp",
+        "width": 480,
+        "height": 480,
+        "label": "1.5×",
+        "boxes": 1,
+        "largest_box": [
+          436,
+          326
+        ]
+      }
+    ],
+    "degrees": [
+      {
+        "src": "/augmentation/degrees-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "0°",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/degrees-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "+10°",
+        "boxes": 3,
+        "largest_box": [
+          162,
+          132
+        ]
+      },
+      {
+        "src": "/augmentation/degrees-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "+45°",
+        "boxes": 1,
+        "largest_box": [
+          179,
+          80
+        ]
+      }
+    ],
+    "translate": [
+      {
+        "src": "/augmentation/translate-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "0 px",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/translate-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "+64 px",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/translate-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "+160 px",
+        "boxes": 2,
+        "largest_box": [
+          145,
+          109
+        ]
+      }
+    ],
+    "shear": [
+      {
+        "src": "/augmentation/shear-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "0°",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/shear-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "+2°",
+        "boxes": 4,
+        "largest_box": [
+          149,
+          114
+        ]
+      },
+      {
+        "src": "/augmentation/shear-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "+10°",
+        "boxes": 4,
+        "largest_box": [
+          164,
+          134
+        ]
+      }
+    ],
+    "perspective": [
+      {
+        "src": "/augmentation/perspective-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "perspective=0",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/perspective-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "perspective=0.0005",
+        "boxes": 4,
+        "largest_box": [
+          143,
+          107
+        ]
+      },
+      {
+        "src": "/augmentation/perspective-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "perspective=0.001",
+        "boxes": 4,
+        "largest_box": [
+          141,
+          106
+        ]
+      },
+      {
+        "src": "/augmentation/perspective-4.webp",
+        "width": 480,
+        "height": 480,
+        "label": "perspective=0.002",
+        "boxes": 4,
+        "largest_box": [
+          138,
+          103
+        ]
+      }
+    ],
+    "hsv": [
+      {
+        "src": "/augmentation/hsv-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "hsv_prob=0",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/hsv-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "hsv_prob=1",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/hsv-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "hsv_prob=1",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/hsv-4.webp",
+        "width": 480,
+        "height": 480,
+        "label": "hsv_prob=1",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      }
+    ],
+    "flip": [
+      {
+        "src": "/augmentation/flip-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "flip_prob=0",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/flip-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "flip_prob=1",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/flip-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "flipud=1",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          217
+        ]
+      }
+    ],
+    "mixup": [
+      {
+        "src": "/augmentation/mixup-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mixup_prob=0",
+        "boxes": 4,
+        "largest_box": [
+          145,
+          109
+        ]
+      },
+      {
+        "src": "/augmentation/mixup-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mixup_prob=1",
+        "note": "λ=0.50",
+        "boxes": 5,
+        "largest_box": [
+          291,
+          217
+        ]
+      },
+      {
+        "src": "/augmentation/mixup-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mixup_prob=1",
+        "note": "λ=0.78",
+        "boxes": 5,
+        "largest_box": [
+          291,
+          217
+        ]
+      }
+    ],
+    "detr_ops": [
+      {
+        "src": "/augmentation/detr-ops-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "Resize",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          279
+        ]
+      },
+      {
+        "src": "/augmentation/detr-ops-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "RandomPhotometricDistort",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          279
+        ]
+      },
+      {
+        "src": "/augmentation/detr-ops-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "RandomZoomOut",
+        "boxes": 1,
+        "largest_box": [
+          221,
+          212
+        ]
+      },
+      {
+        "src": "/augmentation/detr-ops-4.webp",
+        "width": 480,
+        "height": 480,
+        "label": "RandomIoUCrop",
+        "boxes": 1,
+        "largest_box": [
+          489,
+          594
+        ]
+      }
+    ],
+    "detr_samples": [
+      {
+        "src": "/augmentation/detr-samples-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "D-FINE",
+        "boxes": 1,
+        "largest_box": [
+          110,
+          106
+        ]
+      },
+      {
+        "src": "/augmentation/detr-samples-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "D-FINE",
+        "boxes": 1,
+        "largest_box": [
+          87,
+          84
+        ]
+      },
+      {
+        "src": "/augmentation/detr-samples-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "D-FINE",
+        "boxes": 1,
+        "largest_box": [
+          592,
+          289
+        ]
+      }
+    ],
+    "rfdetr_crop": [
+      {
+        "src": "/augmentation/rfdetr-crop-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "crop_resize_prob=0",
+        "boxes": 1,
+        "largest_box": [
+          291,
+          279
+        ]
+      },
+      {
+        "src": "/augmentation/rfdetr-crop-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "crop_resize_prob=1",
+        "boxes": 1,
+        "largest_box": [
+          409,
+          423
+        ]
+      },
+      {
+        "src": "/augmentation/rfdetr-crop-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "crop_resize_prob=1",
+        "boxes": 1,
+        "largest_box": [
+          281,
+          409
+        ]
+      }
+    ],
+    "cls_crop": [
+      {
+        "src": "/augmentation/cls-crop-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "scale=(0.5, 1.0)"
+      },
+      {
+        "src": "/augmentation/cls-crop-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "scale=(0.5, 1.0)"
+      },
+      {
+        "src": "/augmentation/cls-crop-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "scale=0.08"
+      }
+    ],
+    "auto_augment": [
+      {
+        "src": "/augmentation/auto-augment-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "auto_augment=None"
+      },
+      {
+        "src": "/augmentation/auto-augment-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "auto_augment=\"randaugment\""
+      },
+      {
+        "src": "/augmentation/auto-augment-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "auto_augment=\"autoaugment\""
+      },
+      {
+        "src": "/augmentation/auto-augment-4.webp",
+        "width": 480,
+        "height": 480,
+        "label": "auto_augment=\"augmix\""
+      }
+    ],
+    "erasing": [
+      {
+        "src": "/augmentation/erasing-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "erasing=0"
+      },
+      {
+        "src": "/augmentation/erasing-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "erasing=0.5"
+      },
+      {
+        "src": "/augmentation/erasing-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "erasing=0.5"
+      }
+    ],
+    "batch_mix": [
+      {
+        "src": "/augmentation/batch-mix-1.webp",
+        "width": 480,
+        "height": 480,
+        "label": "A"
+      },
+      {
+        "src": "/augmentation/batch-mix-2.webp",
+        "width": 480,
+        "height": 480,
+        "label": "B"
+      },
+      {
+        "src": "/augmentation/batch-mix-3.webp",
+        "width": 480,
+        "height": 480,
+        "label": "mixup=1",
+        "note": "0.41 A + 0.59 B"
+      },
+      {
+        "src": "/augmentation/batch-mix-4.webp",
+        "width": 480,
+        "height": 480,
+        "label": "cutmix=1",
+        "note": "0.51 A + 0.49 B"
+      }
+    ]
+  }
+}

@@ -1,20 +1,24 @@
 ---
 title: データ拡張
-seo_title: LibreYOLOの学習用データ拡張
-description: TrainConfigのデータ拡張設定、その背後にある4種類のパイプライン形状、各設定が使用・制限・無視されるかを示すファミリー別表について説明します。
+seo_title: LibreYOLOの学習用データ拡張（例付き）
+description: >-
+  LibreYOLOの各データ拡張設定値が何をするかを、ライブラリ自身の学習コードで実際の画像に適用して示し、範囲、デフォルト値、その設定値を読み取るファミリーも記載します。
 lead: >-
-  データ拡張はTrainConfigの設定で構成しますが、各モデルファミリーは独自の学習パイプラインを実行します。mosaic分岐がないパイプラインは、mosaic_probを近似せず無視します。
+  学習用データ拡張は、すべての学習サンプルに適用されるランダムな変換です。TrainConfigの設定値で構成し、各モデルファミリーは独自のパイプラインを実行するため、設定値がサンプルを変えるのは、そのパイプラインが設定値を読み取る場合だけです。
 keywords:
   - yolo データ拡張
   - mosaic データ拡張
   - mixup
   - hsv jitter
   - random affine
+  - random erasing
+  - 小物体検出
+  - データ拡張 例
   - copy paste データ拡張
   - randaugment
   - cutmix
   - no_aug_epochs
-last_verified: 1.6.0
+last_verified: 1.8.0
 snippets:
   train:
     - label: Python
@@ -39,6 +43,26 @@ snippets:
         libreyolo train model=LibreYOLO9s.pt data=my-dataset.yaml \
           epochs=100 mosaic=1.0 mixup=0.15 hsv_prob=1.0 \
           flip_prob=0.5 no_aug_epochs=15
+  small:
+    - label: Python
+      language: python
+      code: |
+        from libreyolo import LibreYOLO
+
+        # YOLOXの初期値mosaic_scale=(0.1, 2.0)では物体が元の10分の1まで縮小しうる
+        # (0.5, 1.5)なら縮小は半分まで
+        model = LibreYOLO("LibreYOLOXs.pt")
+        model.train(
+            data="my-dataset.yaml",
+            epochs=100,
+            mosaic_scale=(0.5, 1.5),
+        )
+    - label: CLI
+      language: bash
+      code: |
+        # CLIでは、ペアをカンマ区切りの2つの数値で指定
+        libreyolo train model=LibreYOLOXs.pt data=my-dataset.yaml \
+          epochs=100 mosaic_scale=0.5,1.5
   support:
     - label: ファミリーの対応表を確認
       language: python
@@ -48,14 +72,14 @@ snippets:
         for knob, description in AUG_KNOBS.items():
             support = aug_support("yolo9")[knob]
             print(f"{knob:16} {support.status:16} {support.note or description}")
-    - label: 無視される項目のみ
+    - label: 無視される設定値のみ
       language: python
       code: |
         from libreyolo.data.augment.spec import ignored_aug_params
 
         print(sorted(ignored_aug_params("rfdetr")))
   classify:
-    - label: 分類用設定
+    - label: 分類パック
       language: python
       code: |
         from libreyolo import LibreYOLO
@@ -69,156 +93,195 @@ snippets:
             mixup=0.2,
             cutmix=0.2,
         )
-source_hash: 54faadc6bb2c5d80
+source_hash: 72d22a38d647de0a
 ---
 
 ## 設定値の指定
 
-データ拡張の設定値は通常の`train()`引数です。
+データ拡張の設定値は、通常の`train()`引数です。
 
 <code-tabs name="train" />
 
-このうち3つには短い綴りがあり、`train()`とCLIのどちらでも使えます。`mosaic`は`mosaic_prob`に、
-`fliplr`は`flip_prob`に、物体検出では`mixup`は`mixup_prob`に対応します。短い綴りとその
-フィールドを異なる値で渡すと例外を送出します。他の設定値はすべて両方で同じ綴りです。
+このうち3つには短い綴りがあり、`train()`とCLIのどちらでも使えます。`mosaic`は`mosaic_prob`に、`fliplr`は`flip_prob`に対応し、物体検出では`mixup`が`mixup_prob`に対応します。短い綴りとそのフィールドを異なる値で両方渡すと、例外が送出されます。1.8.0では`perspective`にCLIフラグがないため、Pythonから設定します。
+
+分類用の設定値はパイプラインの構築時に検証され、CLIはさらに`flip_prob`、`flipud`、`cutmix`、`erasing`も検査します。`TrainConfig`は検出用の設定値の範囲を検査しないため、`degrees=100`では最大100度の回転で学習します。各設定値の範囲は[データ拡張マトリックス](/docs/reference/augmentation-matrix)に記載しています。
 
 ## 2つではなく3つの状態
 
-設定値が機能するかどうかはファミリーによって異なります。ライブラリはその宣言的な表を保持し、
-各項目は3つの状態のいずれかになります。
+設定値が効果を持つかどうかは、ファミリーによって異なります。ライブラリはこれを宣言的な表として保持しており、各項目は3つの状態のいずれかです。
 
-`used`は設定値がパイプラインに到達してサンプルを変更することを意味します。`ignored`は
-パイプラインに到達せず、設定しても何も起きないことを意味します。`gated_by_mosaic`はmosaic
-分岐を通ったサンプルだけに適用されることを意味します。そのため、配線されていても
-`mosaic_prob=0`では一度も作動しません。
+`used`は、設定値がパイプラインに届いてサンプルを変えることを意味します。`ignored`は、設定値がパイプラインに届かないため、設定しても何も起きないことを意味します。`gated_by_mosaic`は、mosaic分岐を通ったサンプルにだけ適用されることを意味し、配線されていても`mosaic_prob=0`では一度も作動しません。
 
-3つ目の状態が予想外になりやすいものです。YOLOX方式のパイプラインではアフィン変形がmosaic
-キャンバス上で実行され、MixUpがmosaicサンプルを混合します。そのため、`mosaic_prob=0`は
-`degrees`、`translate`、`shear`、`perspective`、`mosaic_scale`、`mixup_prob`、
-`mixup_scale`をすべて通知なく無効にします。学習器はMixUpの場合に限り、次の警告を記録します。
+意外に思われやすいのは、3つ目の状態です。YOLOX方式のパイプラインではアフィン変換がmosaicキャンバス上で実行され、MixUpはmosaicサンプルを混合するため、`mosaic_prob=0`にすると`degrees`、`translate`、`shear`、`perspective`、`mosaic_scale`、`mixup_prob`、`mixup_scale`がまとめて通知なく無効になります。トレーナーは、MixUpの場合に限って次の警告をログに記録します。
 
 ```text
 mixup_prob=0.15 has no effect for YOLOv9: mixup only applies to mosaic samples
 and mosaic_prob=0. Set mosaic_prob > 0 to enable mixup.
 ```
 
-CLIは無視される設定値についても警告し、実際に入力したものだけを一覧化します。
+CLIも無視される設定値について警告し、実際に入力したものだけを一覧にします。
 
 ```text
 Warning: RF-DETR ignores these parameters: degrees, mosaic
 ```
 
-## 4種類のパイプライン形状
-
-ファミリーは4つの学習パイプラインに分類され、パイプラインによってほぼすべての結果が決まります。
-
-YOLOX方式のmosaicパイプラインはサンプルごとにHSVジッターと反転を適用し、mosaic分岐内で
-アフィン変換とMixUpを実行します。YOLOX、YOLOv7、YOLOv9とそのE2EおよびP2バリアント、
-RTMDet、PicoDet、RT-DETR、RT-DETRv2、FOMOが対象です。
-
-DETR方式のパススルーパイプラインにはmosaicもアフィン変形もありません。測光歪み、ズームアウト、
-IoU切り抜きは設定値ではなくレシピ定数なので、有効なのは`flip_prob`と`no_aug_epochs`だけです。
-D-FINE、Dome-DETR、DEIM、DEIMv2、RT-DETRv4、ECが対象で、RF-DETRでは1点異なります。
-
-分類用のImageFolderパイプラインには専用のデータ拡張設定があります。`flip_prob`は水平方向の反転を制御し、デフォルトは0.5です。`fliplr`はそのエイリアスです。
-
-YOLO-NASは独自の形状です。mosaicは一切なく、サンプルごとのアフィン変換が常に有効で、MixUpは
-制限されず独立して適用されます。`mosaic_scale`の値はアフィン変換のスケール範囲として再利用
-されます。
-
-SegFormer、LingBot-Vision、NAFNetは、それぞれタスク固有のパイプラインを実行します。そのランダム性は
-設定可能ではなくファミリー内で固定されています。SegFormerとLingBot-Visionで有効な設定値は、
-`mosaic_scale`と`hsv_prob`ではなくクラス属性`semantic_scale_jitter`と`semantic_hsv_prob`です。NAFNetの
-切り抜きと反転は、入力とターゲットを組み合わせた処理として固定確率0.5で行われます。
-
-## 各ファミリーが尊重する設定値
-
-次の表は`libreyolo/data/augment/spec.py`に同梱された仕様で、ライブラリ自身のテストにより実際の
-パイプライン配線と照合されています。アーキテクチャから推測せず、ここを参照してください。
+Pythonから呼び出した場合、`train()`は無視される設定値について警告しません。[データ拡張マトリックス](/docs/reference/augmentation-matrix)には、すべてのファミリーにおける各設定値の状態と、各ファミリーの初期値を記載しています。この表はライブラリに同梱された`libreyolo/data/augment/spec.py`の仕様そのもので、ライブラリ自身のテストがパイプラインと照合しており、次のように直接読み取ることもできます。
 
 <code-tabs name="support" />
 
-基本設定値をパイプラインごとに要約すると次のようになります。
+## 各設定値の働き
 
-| 設定値 | YOLOX方式 | YOLO-NAS | DETR方式 | 分類 |
-|---|---|---|---|---|
-| `mosaic_prob` | 使用 | 無視 | 無視 | 無視 |
-| `mixup_prob` | mosaicにより制限 | 使用 | 無視 | 無視 |
-| `hsv_prob` | 使用 | 使用 | 無視 | 無視 |
-| `flip_prob` | 使用 | 使用 | 使用 | 使用 |
-| `flipud` | 使用 | 使用 | 無視 | 使用 |
-| `degrees` | mosaicにより制限 | 使用 | 無視 | 無視 |
-| `translate` | mosaicにより制限 | 使用 | 無視 | 無視 |
-| `shear` | mosaicにより制限 | 使用 | 無視 | 無視 |
-| `perspective` | mosaicにより制限 | 使用 | 無視 | 無視 |
-| `mosaic_scale` | mosaicにより制限 | 使用 | 無視 | 無視 |
-| `mixup_scale` | mosaicにより制限 | 使用 | 無視 | 無視 |
-| `no_aug_epochs` | 使用 | 使用 | 使用 | 使用 |
+以下の図は、LibreYOLO 1.8.0自身の学習用変換を、1枚の画像だけのデータセットを通してサンプル画像に適用して生成したもので、mosaicの各タイルもMixUpの各相手もすべて同じ写真です。ボックスは、LibreYOLO9tがこの画像で検出した人物です。各パネルの下には、設定と最大ボックスのサイズを、640ピクセルの学習解像度でのピクセル数で示しています。データ拡張なしでは、人物のサイズは291 × 217 pxです。
 
-各列内の例外は次のとおりで、すべて範囲を狭めるものです。
+幾何系の設定値のいくつかは範囲で、`degrees=10`は-10〜+10度のどこかから抽出した角度を意味します。これらのパネルでは抽出値をキャプションの値に固定しているため、典型的なサンプルではなく、その設定で起こりうる最も強い効果を示しています。検出の図はYOLOv9のパイプラインによるものです。YOLOv7はこのパイプラインでそのまま学習し、RT-DETRとRT-DETRv2はそのmosaicラッパーを独自のサンプルごとの変換と組み合わせて使います。YOLOX、RTMDet、PicoDet、FOMOは、別のラッパーでmosaicとアフィン変換を同じ方法で構築しますが、そのラッパーのMixUpは異なります。
 
-- RTMDet、PicoDet、RT-DETR、RT-DETRv2、FOMOには垂直反転がないため、`flipud`は無視されます。FOMOのmosaicラッパーもperspectiveなしで構築されています。
-- RF-DETR固有のパイプラインにはHSVジッターがないため、DETR方式の列に加えて`hsv_prob`も無視されます。
-- ECは`hsv_prob`、`degrees`、`translate`を尊重しますが、それらを読み取るキーポイント対応変換を使う`task="pose"`の場合だけです。detectとsegmentの経路は固定の測光レシピを使います。
-- DINOv2はdetectおよびsemanticタスクでDETR方式の列に従い、`task="classify"`では分類用設定を追加します。
+### mosaic_prob
 
-`no_aug_epochs`はすべてのパイプラインで`used`ですが、効果は異なります。モザイク系では最後のエポックでモザイクとMixUpを無効にします。DETR系では測光的な拡張、ズームアウト、クロップを停止し、スケジュールの終盤も制御します。分類では自動拡張、erasing、MixUp、CutMixを無効にしますが、クロップと反転は残ります。
+サンプルがmosaicになる確率：mosaicは入力サイズの2倍のキャンバスに4枚の画像を配置したもので、これをアフィン変換が入力サイズまで縮小して写します。YOLOX方式のパイプラインでは、アフィン変換とMixUpはmosaicサンプルでのみ実行されるため、この値が0だと両方とも停止します。RT-DETR、RT-DETRv2、PicoDet、FOMOのデフォルトは0です。
 
-`perspective`は、回転、スケール、せん断、平行移動に加えて射影変形を追加します。キャンバスの各隅は
-軸ごとに、キャンバスの辺の半分の最大`min(perspective * 100, 0.2)`倍のランダムな量だけ内側へ
-移動します。そのため、`perspective=0.001`はどの解像度でも隅を辺の最大5パーセントだけ移動させ、
-`0.002`以上の値はすべて同じ最大値に達します。デフォルトの`0`は変形をアフィンのまま保ち、負の値は
-最初のサンプルを変形するときに`ValueError`を送出します。YOLOv9とそのE2EおよびP2バリアント、
-YOLOX、YOLOv7、YOLO-NAS、PP-YOLOE、RTMDet、PicoDet、RT-DETR、RT-DETRv2がこれを適用します。
+<aug-figure name="mosaic" />
 
-YOLOv9とそのバリアント、YOLOv7、RT-DETR、RT-DETRv2が学習に使うYOLOv9のmosaicパイプラインでは、
-MixUpは混合比率を[0, 1]上の一様分布であるBeta(1, 1)から抽出します。YOLOX、RTMDet、PicoDetが使う
-YOLOXのmosaicラッパーは、固定の0.5で混合します。
+2枚目のパネルでは、アフィン変換のスケールを、キャンバス全体が収まる0.5×に固定しています。最後の2枚はYOLOv9のデフォルト値による通常の抽出で、キャプションにはそれぞれが抽出したスケールを示しています。
 
-## 分類用設定
+### mosaic_scale
 
-4つの設定値が分類パイプラインだけを制御します。検出ファミリーは4つすべてを無視します。
+アフィン変換の拡大縮小率を抽出する範囲。1×では物体は推論時と同じサイズのままで、0.5×ではその半分になります。基本デフォルト値は`(0.1, 2.0)`で、YOLOX、YOLOv7、RTMDet、PicoDet、RT-DETR、RT-DETRv2、FOMOはこれをそのまま使うため、物体が元の10分の1のサイズまで縮小することがあります。YOLOv9のデフォルトは`(0.5, 1.5)`です。YOLO-NASとPP-YOLOEにはmosaicがなく、この範囲をサンプルごとのアフィン変換のスケールとして再利用します。
+
+<aug-figure name="mosaic_scale" />
+
+1×を超えると出力にはキャンバスの左上部分しか映らないため、物体は端で切れるか、フレームの外に出ます。
+
+### degrees
+
+回転の範囲：アフィン変換される各サンプルは、`-degrees`から`+degrees`までの範囲で抽出した角度だけ回転します。回転の中心はキャンバスの左上隅なので、角度が大きいと画像の大部分がフレームの外に出ます。YOLOXとYOLOv7は基本デフォルト値の10をそのまま使い、YOLOv9のデフォルトは0です。
+
+<aug-figure name="degrees" />
+
+### translate
+
+入力の辺に対する割合で表した平行移動の範囲：`imgsz=640`では、アフィン変換される各サンプルが各軸で最大`translate`×640 px移動します。基本デフォルト値は0.1です。YOLO-NASとPP-YOLOEのデフォルトは0.25、RTMDet、PicoDet、FOMOのデフォルトは0です。
+
+<aug-figure name="translate" />
+
+### shear
+
+軸ごとに個別に抽出される、度単位のせん断範囲。YOLOXとYOLOv7は基本デフォルト値の2をそのまま使い、これを読み取る他のすべてのファミリーのデフォルトは0です。
+
+<aug-figure name="shear" />
+
+### perspective
+
+回転、スケール、せん断、平行移動に重ねる射影変換。キャンバスの各隅は軸ごとに、最大でキャンバスの辺の半分の`min(perspective * 100, 0.2)`倍のランダムな量だけ内側へ移動するため、`perspective=0.001`はどの解像度でも隅を最大で辺の5パーセントだけ動かし、`0.002`以上の値はすべて同じ最大値に達します。デフォルトの`0`では変換はアフィンのままで、負の値を指定すると、最初のサンプルを変換するときに`ValueError`が送出されます。パネルは1回のランダムな抽出を共有し、値に応じてスケールしています。YOLOv9とそのE2EおよびP2バリアント、YOLOX、YOLOv7、YOLO-NAS、PP-YOLOE、RTMDet、PicoDet、RT-DETR、RT-DETRv2がこれを適用します。
+
+<aug-figure name="perspective" />
+
+### hsv_prob
+
+HSVカラージッターの確率。設定値になっているのは確率だけです。ジッターは、OpenCVの0〜179の色相スケールで色相を最大5、0〜255のスケールで彩度と明度を最大30ずらし、3つのずらしはそれぞれ確率2分の1でスキップされます。`hsv_prob`を読み取る検出パイプラインはすべて、これらの量を使います。最後の3枚のパネルは、119回の抽出のうち最も変化がわかりやすいものです。
+
+<aug-figure name="hsv" />
+
+### flip_probとflipud
+
+水平反転と垂直反転の確率。`flip_prob`はFOMOを除くすべてのファミリーで0.5から始まり、FOMOのデフォルトは0です。`flipud`は0から始まります。RTMDet、PicoDet、RT-DETR、RT-DETRv2、FOMO、PP-YOLOE、およびDETR方式のファミリーには垂直反転がなく、これを無視します。PP-YOLOEのレシピでは、代わりにランダムな90度回転を使います。
+
+<aug-figure name="flip" />
+
+### mixup_probとmixup_scale
+
+MixUpは、2つ目のサンプルを現在のサンプルに混ぜ合わせ、両方のボックスを保持します。YOLOv9のパイプラインでは、相手はmosaicなしのサンプル全体で、混合比率は0〜1の間で一様に抽出され、`mixup_scale`は、ライブラリの仕様ではmosaicに依存すると記載されているものの、一度も読み取られません。YOLOX、RTMDet、PicoDet、FOMOが使うYOLOXラッパーと、YOLO-NASのラッパーでは、相手をまず`mixup_scale`から抽出した倍率でリスケールし、2枚の画像を固定の0.5で平均します。`mixup_prob`の基本デフォルト値は1.0で、YOLOv9のデフォルトは0です。
+
+<aug-figure name="mixup" />
+
+最後の2枚のパネルは、2つ目のサンプルを0.5×のmosaicに混合しています。そのキャプションには、mosaicサンプルの重みである混合比率λを示しています。
+
+### no_aug_epochs
+
+`no_aug_epochs`はどこでも`used`ですが、どこでも同じ意味というわけではありません。mosaicパイプラインでは、最後のエポックでmosaicとMixUpを無効にします。DETR方式のパイプラインでは、測光、ズームアウト、クロップのデータ拡張を停止し、スケジュールの終盤も形作ります。分類パイプラインでは、自動データ拡張、消去、MixUp、CutMixを無効にし、クロップと反転は残ります。
+
+## DETR方式のレシピ
+
+D-FINE、Dome-DETR、DEIM、DEIMv2、RT-DETRv4、TinyFormerは、mosaicもアフィン変換もない1つのtorchvision変換で学習し、EdgeCrafter（EC）も検出では同様です。その3つの強い操作は、設定値ではなくレシピの定数です。
+
+- `RandomPhotometricDistort`は、各色変化（明るさ0.875〜1.125、コントラストと彩度0.5〜1.5、色相±0.05、チャネルのシャッフル）をそれぞれ確率0.5で適用します。
+- `RandomZoomOut`は確率0.5で、画像を最大で辺の4倍の黒いキャンバスに配置するため、物体が元の4分の1のサイズまで縮小することがあります。
+- `RandomIoUCrop`は確率0.8で適用され、各辺の0.3〜1.0倍の領域を、ボックスの少なくとも一部が残るように選んでクロップします。
+
+これらの処理の後、いずれかの辺が1 px以下のボックスは破棄されます。3つの操作はいずれもファミリーの停止エポックで停止し、遅くとも最後の`no_aug_epochs`が始まる時点で停止します。このパイプラインが読み取る設定値は`flip_prob`と`no_aug_epochs`だけです。
+
+<aug-figure name="detr_ops" />
+
+3つの操作がすべて有効な状態での、D-FINE学習の開始直後の3サンプル：
+
+<aug-figure name="detr_samples" />
+
+RF-DETRのパイプラインは独自のもので、水平反転を行い、次に確率`crop_resize_prob`で短辺を400、500、600 pxのいずれかにリサイズして384〜600 pxの正方形をランダムにクロップし、最後に正方形の学習解像度へ直接リサイズして、レターボックスではなく引き伸ばします。`crop_resize_prob`のデフォルトは0.5で、Pythonから設定します。
+
+<aug-figure name="rfdetr_crop" />
+
+## 小さな物体
+
+`erasing`は物体検出には適用されません。Random Erasingは分類パックに属し、消去の処理を持つ検出パイプラインはないため、どの値でも検出器の学習はまったく同じで、無効にするものもありません。小さな物体を縮小または除去するのは、次の処理です。
+
+- `mosaic_scale`。mosaicパイプラインでは物体のサイズに抽出されたスケールが掛かるため、下限で最小サイズが決まります。基本デフォルト値`(0.1, 2.0)`では、20 pxの物体が2 pxになることがあります。その後、YOLOv9のパイプラインはいずれかの辺が2 px以下のボックスを破棄し、その最終変換もYOLOXと同様に、いずれかの辺が1 px以下のボックスを破棄します。物体のピクセルはラベルのないまま画像に残ります。YOLOv9の`(0.5, 1.5)`のように下限を0.5にすると、すべての物体が推論時のサイズの半分以上に保たれます。
+- `degrees`、`translate`、`shear`、`perspective`は物体を端へ押し出し、そこでボックスがクリップされて同じサイズフィルターを通ります。
+- DETR方式のレシピでは、`RandomZoomOut`が物体を元の4分の1のサイズまで縮小し、`RandomIoUCrop`が物体を切り取ってしまうことがあります。どちらも設定値ではなく、どちらも停止エポックで停止します。
+- RF-DETRのクロップは、その端で物体を切ることがあります。`crop_resize_prob=0`で無効になります。
+- 学習解像度はすべての物体の大きさに影響し、レターボックスは`imgsz`を画像の長辺で割った倍率で画像をリサイズするため、`imgsz=1280`ではすべての物体の幅と高さが640のときの2倍になります。[YOLOv9](/docs/models/yolov9)には、小さな物体向けにストライド4のヘッドを持つP2バリアントもあります。
+
+<code-tabs name="small" />
+
+## 分類パック
+
+6つの設定値は分類パイプラインにだけ作用します。検出ファミリーは6つすべてを無視します。
 
 <code-tabs name="classify" />
 
-`auto_augment`は`"randaugment"`、`"autoaugment"`、`"augmix"`、または`None`を受け取ります。
-`erasing`はRandomErasingの確率です。`mixup`と`cutmix`はソフトラベルを生成するバッチごとの確率で、
-バッチごとに最大1つだけが実行されます。MixUpが先なので、2つは加算され、合計を最大1にする
-必要があります。
+`scale`はランダムクロップの面積範囲です。`scale=0.5`は`(0.5, 1.0)`を意味し、ペアを明示すると両方の境界を設定します。3枚目のパネルのように、下限が小さいと物体が完全に切り取られることがあります。
 
-4つともデフォルトで無効なので、明示的に要求しない限り分類学習は変わりません。
+<aug-figure name="cls_crop" />
 
-`train()`とCLIはタスクに応じて`mixup`を振り分けます。分類ではバッチの混合、物体検出では`mixup_prob`を使います。
+`auto_augment`は`"randaugment"`、`"autoaugment"`、`"augmix"`、`None`のいずれかを受け取り、各サンプルにそのポリシーから1回抽出した変換を適用します。
 
-`scale=0.5`は、ランダムクロップの面積範囲`(0.5, 1.0)`を意味します。ペアを明示すると両端を設定します。`crop_pct=None`は、ファミリーの評価用リサイズ比率を維持します。上書きは学習時と検証時の評価に適用されますが、エクスポートではファミリー本来の前処理を維持します。
+<aug-figure name="auto_augment" />
 
-CLIは`auto_augment`、`erasing`、`cutmix`、`fliplr`、`flipud`を公開します。分類の`mixup`はバッチの混合を意味し、デフォルトは0.0です。水平反転のデフォルトは0.5、垂直反転は0.0です。`mixup + cutmix`は1を超えてはいけません。
+`erasing`はRandom Erasingの確率で、範囲は`[0, 1)`です。正規化の後に実行され、画像の2〜33パーセントを覆う矩形を、正規化後にはImageNetの平均色にあたるゼロで埋めます。
 
-`no_aug_epochs`は、最後のエポックで自動データ拡張、ランダム消去、MixUp、CutMixを無効にし、クロップと反転は維持します。分類レシピでは、この末尾の期間のデフォルトは0です。
+<aug-figure name="erasing" />
+
+`mixup`と`cutmix`は、ソフトラベルを生成するバッチごとの確率です。1つのバッチで実行されるのは多くとも1つで、MixUpが先に判定されるため、2つの確率は加算され、合計は1以下でなければなりません。パネルのAとBは同じ写真の2つのクロップで、各キャプションには、混合した画像の学習に使うソフトラベルを示しています。
+
+<aug-figure name="batch_mix" />
+
+`auto_augment`、`erasing`、`mixup`、`cutmix`はデフォルトで無効なので、明示的に指定しない限り分類の学習は変わりません。`train()`とCLIはタスクに応じて`mixup`を振り分け、分類ではバッチの混合、検出では`mixup_prob`を使います。
+
+`crop_pct=None`は、ファミリーの評価用リサイズ比率を維持します。上書きすると、学習中に実行される検証の評価用クロップが変わりますが、エクスポートではファミリー本来の前処理が維持されます。
+
+CLIは`auto_augment`、`erasing`、`cutmix`、`scale`、`crop_pct`、`fliplr`、`flipud`を公開しています。分類の`mixup`はバッチの混合を意味し、デフォルトは0.0です。水平反転のデフォルトは0.5、垂直反転は0.0です。
+
+`no_aug_epochs`は最後のエポックで自動データ拡張、消去、MixUp、CutMixを無効にし、クロップと反転は維持します。分類レシピでは、この末尾期間のデフォルトは0です。
 
 ## ファミリー固有の設定値
 
-一部の設定値は基底クラスではなくファミリーの設定サブクラスにあるため、そのファミリーだけに
-存在し、CLIフラグはありません。
+一部の設定値は基底クラスではなくファミリーの設定サブクラスにあるため、そのファミリーにだけ存在し、CLIフラグはありません。
 
 | ファミリー | 設定値 | 効果 |
 |---|---|---|
-| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `copy_paste` | Copy-pasteインスタンス拡張の確率。`task="segment"`のみ |
-| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `copy_paste_mode` | `"flip"`は同じサンプルを反転して再利用し、`"mixup"`は2つ目のサンプルを取得 |
-| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `rot90` | 90度ランダム回転の確率 |
-| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `max_labels` | 学習変換での画像ごとの正解データ上限。デフォルトは300 |
-| RF-DETR | `copy_paste`、`copy_paste_mode` | `task="segment"`用のCopy-paste。`"flip"`モードのみ |
-| RF-DETR、D-FINE、EC | `crop_resize_prob` | ランダムな切り抜きとサイズ変更の確率 |
-| EC、YOLO-NAS | `brightness_contrast_prob`、`affine_prob` | 姿勢経路のジッターとキーポイント対応アフィン変換の確率 |
+| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `copy_paste` | copy-pasteインスタンス拡張の確率。`task="segment"`のみ |
+| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `copy_paste_mode` | `"flip"`は同じサンプルを鏡像にして再利用し、`"mixup"`は2つ目のサンプルを取得 |
+| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `rot90` | ランダムな90度回転の確率 |
+| YOLOv9、YOLOv9-E2E、YOLOv9-P2 | `max_labels` | 学習用変換における画像ごとの正解データ（ground truth）の上限。デフォルトは300 |
+| RF-DETR | `copy_paste`、`copy_paste_mode` | `task="segment"`用のcopy-paste。`"flip"`モードのみ |
+| RF-DETR | `crop_resize_prob` | ネイティブパイプラインでのランダムなクロップ・リサイズの確率。デフォルトは0.5 |
+| D-FINE、EdgeCrafter | `crop_resize_prob` | ランダムなクロップ・リサイズの確率。`task="segment"`のみ |
+| EdgeCrafter、YOLO-NAS | `brightness_contrast_prob`、`affine_prob` | 姿勢推定経路のジッターと、キーポイント対応アフィン変換の確率 |
 
-`max_labels`は、データを失う設定値です。上限を超えたボックスはエラーではなく一度だけの警告とともに
-破棄されるため、航空写真など検出対象が密な画像では値を増やす必要があります。ラベル割り当てのメモリは
-上限ではなく、バッチ内で最も検出対象が密な画像に従います。
+データを失うのは`max_labels`です。上限を超えたボックスはエラーではなく1回だけの警告とともに破棄されるため、航空写真のような密な画像では値を上げる必要があります。ラベル割り当てのメモリは、上限ではなくバッチ内で最も密な画像に従います。
 
-回転ボックスに対応した隅座標のデータ拡張は実装されていないため、設定値にかかわらず回転ボックス
-学習ではMosaicとMixUpが無効になります。
+回転バウンディングボックスの学習では、回転したボックスの隅を考慮するデータ拡張が実装されていないため、設定値にかかわらずmosaicとMixUpが無効になります。
 
 ## 関連項目
 
-- `no_aug_epochs`をスケジュール引数として扱う方法と、その他の`train()`設定については[ハイパーパラメータ](/docs/train/hyperparameters)を参照してください。
-- これらの変換が使用するラベル形式については[データセット](/docs/train/datasets)を参照してください。
+- 各ファミリーにおける全設定値の状態、範囲、各ファミリーのデフォルト値については[データ拡張マトリックス](/docs/reference/augmentation-matrix)を参照してください。
+- スケジュール引数としての`no_aug_epochs`と、`train()`のその他の引数については[ハイパーパラメータ](/docs/train/hyperparameters)を参照してください。
+- これらの変換が使うラベル形式については[データセット](/docs/train/datasets)を参照してください。

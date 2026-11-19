@@ -1,28 +1,35 @@
 ---
 title: Matrice di data augmentation
-seo_title: Quale famiglia LibreYOLO rispetta quale parametro di data augmentation
+seo_title: Quale famiglia LibreYOLO rispetta quale augmentation
 description: >-
-  Supporto dei parametri di data augmentation per famiglia: i sedici parametri
-  di TrainConfig, i tre stati, i sei archetipi di pipeline e i parametri che una
-  famiglia ignora in silenzio.
+  Ogni parametro di augmentation con il suo intervallo e la sua grafia sulla
+  CLI, lo stato di ogni parametro in ciascuna delle 31 famiglie addestrabili e i
+  valori predefiniti con cui parte ogni famiglia.
 lead: >-
-  Impostare un parametro di data augmentation non garantisce che arrivi alla
+  Impostare un parametro di augmentation non garantisce che arrivi alla
   pipeline. Questa pagina registra come ogni famiglia addestrabile tratta ogni
-  parametro di TrainConfig, a partire dalla tabella dichiarativa che la libreria
-  include come unica fonte di verità.
+  parametro di TrainConfig e il valore da cui parte ogni famiglia, dati generati
+  dalla libreria alla release che documenta.
 keywords:
   - data augmentation libreyolo
+  - parametri data augmentation
+  - default data augmentation
   - mosaic_prob
   - mixup_prob
   - hsv_prob
+  - mosaic_scale
   - no_aug_epochs
   - matrice supporto augmentation
   - parametri TrainConfig
-last_verified: 1.6.0
+last_verified: 1.8.0
 verification: >-
-  Elenco dei parametri, stati, archetipi, deviazioni per famiglia e funzioni
-  helper letti da libreyolo/data/augment/spec.py alla v1.6.0. Quella tabella è
-  ancorata alle pipeline reali da tests/unit/test_augment_spec.py.
+  Generato da scripts/build-augmentation/collect.py a partire da LibreYOLO
+  1.8.0: l'elenco dei parametri, gli stati e le note da
+  libreyolo/data/augment/spec.py, che i test della libreria ancorano alle
+  pipeline reali, i valori predefiniti dalla sottoclasse di TrainConfig di ogni
+  famiglia e le grafie della CLI dal comando libreyolo train. Gli intervalli e
+  l'unico punto in cui la spec e una pipeline non concordano sono verificati
+  sulla libreria dallo stesso script.
 snippets:
   usage:
     - label: Interrogare direttamente la spec
@@ -42,34 +49,39 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: beeb351c2f97e3d0
+    - label: I valori predefiniti di una famiglia
+      language: python
+      code: |
+        from libreyolo.training.config import YOLO9Config
+
+        config = YOLO9Config()
+        print(config.mosaic_scale, config.degrees, config.mixup_prob)
+source_hash: a88efd1537732e6c
 ---
 
 ## I parametri
 
-Questi sono i nomi dei campi di `TrainConfig`, non le grafie della CLI. `train()`
-e la CLI mappano le grafie brevi su di essi, quindi `mosaic` imposta `mosaic_prob`.
+Questi sono nomi di campi di `TrainConfig`. `train()` e la CLI accettano anche
+le grafie brevi della colonna CLI, quindi `mosaic` imposta `mosaic_prob`. Sulla
+CLI `mixup` viene instradato in base al task: mixing a livello di batch della
+classificazione per i classificatori, `mixup_prob` per i rilevatori.
+`perspective` non ha un flag sulla CLI e si imposta da Python.
 
-| Parametro | Significato |
-|---|---|
-| `mosaic_prob` | Probabilità di costruire un campione a mosaico da 4 immagini |
-| `mixup_prob` | Probabilità di fondere un secondo campione |
-| `hsv_prob` | Probabilità di jitter di colore HSV |
-| `flip_prob` | Probabilità di flip orizzontale |
-| `degrees` | Intervallo di rotazione casuale per la trasformazione affine, in gradi |
-| `translate` | Frazione di traslazione casuale per la trasformazione affine |
-| `mosaic_scale` | Intervallo di scala casuale per la trasformazione affine |
-| `mixup_scale` | Intervallo di scala del jitter applicato all'immagine partner del MixUp |
-| `shear` | Intervallo di shear casuale per la trasformazione affine, in gradi |
-| `perspective` | Intensità della deformazione proiettiva aggiunta alla trasformazione affine: gli angoli del canvas si spostano verso l'interno fino a `min(perspective * 100, 0.2)` volte metà lato del canvas, per asse; `0` la disattiva |
-| `flipud` | Probabilità di flip verticale |
-| `no_aug_epochs` | Epoche finali addestrate con la data augmentation forte disattivata |
-| `auto_augment` | Policy AutoAugment per la classificazione: randaugment, autoaugment o augmix |
-| `erasing` | Probabilità di RandomErasing per la classificazione |
-| `mixup` | Probabilità di MixUp a livello di batch per la classificazione, con etichette soft |
-| `cutmix` | Probabilità di CutMix a livello di batch per la classificazione, con etichette soft |
+<aug-knobs />
 
-Gli ultimi quattro costituiscono i controlli di classificazione. Le famiglie di rilevamento li ignorano. `train()` e la CLI indirizzano `mixup` al mescolamento dei batch per i classificatori e a `mixup_prob` per i rilevatori.
+Il valore predefinito di base è il valore definito su `TrainConfig` stesso. La
+maggior parte delle famiglie ne sovrascrive alcuni, e [Valori predefiniti per
+famiglia](#defaults-by-family) riporta i valori da cui parte effettivamente un
+addestramento. Per vedere in immagini cosa fa ogni parametro, consulta [Data
+augmentation](/docs/train/augmentations).
+
+Gli intervalli tra parentesi quadre seguono la notazione degli intervalli,
+quindi `[0, 1)` include 0 ed esclude 1. I parametri di classificazione vengono
+controllati quando si costruisce la loro pipeline e sollevano `ValueError` fuori
+dal loro intervallo. I parametri di rilevamento non vengono controllati da
+`TrainConfig`, quindi un valore fuori intervallo addestra senza segnalazioni. Le
+eccezioni sono una scala estratta di 0 o meno e un `perspective` negativo, che
+sollevano `ValueError` quando un campione viene trasformato.
 
 <code-tabs name="usage" />
 
@@ -78,7 +90,7 @@ Gli ultimi quattro costituiscono i controlli di classificazione. Le famiglie di 
 | Stato | Significato |
 |---|---|
 | `used` | Il parametro arriva alla pipeline di addestramento della famiglia e modifica i campioni |
-| `gated_by_mosaic` | Il parametro si applica solo ai campioni che hanno preso il ramo mosaico, quindi con `mosaic_prob == 0` non si attiva mai |
+| `gated_by_mosaic` | Il parametro si applica solo ai campioni che hanno preso il ramo del mosaico, quindi con `mosaic_prob == 0` non si attiva mai |
 | `ignored` | Il parametro non arriva mai alla pipeline; impostarlo non fa nulla |
 
 `ignored` è quello che conviene controllare prima di un addestramento, perché
@@ -87,66 +99,43 @@ esplicitamente è uno di quelli che la famiglia selezionata ignora, e il trainer
 avvisa quando `mixup_prob > 0` non può attivarsi perché la famiglia condiziona
 MixUp al mosaico e `mosaic_prob` è zero.
 
-## Archetipi di pipeline
+## Quale famiglia rispetta quale parametro
 
-Ogni famiglia coperta segue una di sei pipeline, con una manciata di deviazioni
-per famiglia elencate più sotto.
+<aug-matrix />
 
-| Parametro | Stile YOLOX | YOLO-NAS | Stile DETR | Classificazione | Semantica | Restauro |
-|---|---|---|---|---|---|---|
-| `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
-| `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
-| `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | used | used | used | used | ignored | ignored |
-| `degrees` | gated | used | ignored | ignored | ignored | ignored |
-| `translate` | gated | used | ignored | ignored | ignored | ignored |
-| `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
-| `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
-| `shear` | gated | used | ignored | ignored | ignored | ignored |
-| `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | used | used | ignored | used | ignored | ignored |
-| `no_aug_epochs` | used | used | used | used | used | used |
-| `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
-| `erasing` | ignored | ignored | ignored | used | ignored | ignored |
-| `mixup` | ignored | ignored | ignored | used | ignored | ignored |
-| `cutmix` | ignored | ignored | ignored | used | ignored | ignored |
-
-Nella pipeline in stile YOLOX il preprocessing per campione applica il jitter
-HSV e i flip, mentre la trasformazione affine e MixUp girano solo dentro il ramo
-mosaico. YOLO-NAS invece esegue un'affine per campione sempre attiva, ignora il
+Ogni famiglia coperta segue una di sei pipeline. Nella pipeline in stile YOLOX
+il preprocessing per campione applica il jitter HSV e i flip, mentre la
+trasformazione affine e MixUp girano solo dentro il ramo del mosaico. YOLO-NAS
+invece esegue una trasformazione affine per campione sempre attiva, ignora il
 mosaico e applica MixUp in modo indipendente, riusando `mosaic_scale` come
-intervallo di scala dell'affine.
+intervallo di scala della trasformazione affine.
 
-La pipeline di tipo DETR usa una trasformazione senza mosaic. Distorsione fotometrica, zoom-out e ritaglio IoU sono costanti della ricetta, non parametri configurabili: per questo `hsv_prob` e i controlli geometrici non li modificano. La classificazione usa `flip_prob` per i ribaltamenti orizzontali e `flipud` per quelli verticali. La variazione di scala e HSV nella segmentazione semantica deriva dagli attributi della classe del modello; nel restauro, ingresso e obiettivo vengono ribaltati insieme con probabilità fissa di 0.5.
+La pipeline in stile DETR è una trasformazione pass-through senza mosaico. La
+sua distorsione fotometrica, lo zoom-out e il ritaglio IoU sono costanti della
+ricetta e non parametri configurabili, ed è per questo che `hsv_prob` e i
+parametri geometrici non la raggiungono mai. La classificazione usa `flip_prob`
+per i flip orizzontali e `flipud` per quelli verticali. Il jitter di scala e
+l'HSV delle famiglie semantiche vengono da attributi di classe della famiglia e
+non da parametri di configurazione, e i flip del restauro sono operazioni
+accoppiate su input e target con una probabilità fissa di 0.5.
 
-`no_aug_epochs` viene rispettato ovunque, ma disattiva operazioni diverse: mosaic e MixUp nelle pipeline di tipo YOLOX; trasformazione affine e MixUp in YOLO-NAS; aumenti fotometrici forti e ritagli, insieme alla parte finale del piano del tasso di apprendimento, in DETR; aumento automatico, erasing, MixUp e CutMix nella classificazione. Ritagli e ribaltamenti della classificazione restano attivi.
+`no_aug_epochs` è rispettato ovunque, anche se ciò che disattiva cambia: mosaico
+e MixUp per lo stile YOLOX, la trasformazione affine e MixUp per YOLO-NAS, le
+augmentation forti fotometriche e di ritaglio più la coda del learning rate per
+lo stile DETR, e auto-augmentation, erasing, MixUp e CutMix per la
+classificazione. Il ritaglio e i flip della classificazione restano attivi.
 
-## Famiglie per archetipo
+Dove una famiglia si discosta dal resto della sua pipeline, il motivo è uno di
+questi:
 
-| Archetipo | Famiglie |
+| Famiglia | Differenza |
 |---|---|
-| Stile YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas`, `ppyoloe` |
-| Stile DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Classificazione | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
-| Semantica | `segformer`, `unet`, `lingbotvision` |
-| Restauro | `nafnet` |
-
-Sono coperte trentuno famiglie. Una famiglia fuori da questo elenco
-restituisce un insieme di parametri ignorati vuoto, quindi per essa non viene
-emesso alcun avviso.
-
-## Deviazioni
-
-| Famiglia | Differenza rispetto al suo archetipo |
-|---|---|
-| `rtmdet` | `flipud` ignorato: la sua trasformazione non ha il flip verticale |
-| `picodet` | `flipud` ignorato |
-| `rtdetr` | `flipud` ignorato |
-| `rtdetrv2` | `flipud` ignorato |
+| `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2` | `flipud` ignorato: le loro trasformazioni non hanno il flip verticale |
 | `fomo` | `perspective` e `flipud` ignorati |
 | `ppyoloe` | `flipud` ignorato: la ricetta originale usa invece una rotazione casuale di 90 gradi |
-| `gtr` | `mosaic_prob` e `mixup_prob` usati, per le prime `mosaic_epochs` epoche; `degrees`, `translate` e `mosaic_scale` determinano l'affine che segue il mosaic |
+| `yolo9`, `yolo9_e2e`, `yolo9_p2`, `yolo7`, `rtdetr`, `rtdetrv2` | `mixup_scale` ignorato: il loro MixUp fonde immagini intere con un rapporto casuale senza riscalare nessuna delle due |
+| `gtr` | `mosaic_prob` e `mixup_prob` usati, per le prime `mosaic_epochs` epoche; `degrees`, `translate` e `mosaic_scale` determinano la trasformazione affine che segue il mosaico |
+| `rfdetr` | `hsv_prob` ignorato: la pipeline nativa non ha il jitter HSV |
 | `ec` | `hsv_prob`, `degrees` e `translate` usati, solo per `task="pose"`; detect e segment usano ricette fotometriche fisse |
 | `dinov2` | Il pacchetto di classificazione è usato, solo per `task="classify"` |
 
@@ -156,14 +145,40 @@ l'avviso della CLI non può mai essere sbagliato per un task e giusto per un
 altro.
 
 Dome-DETR eredita le trasformazioni di D-FINE senza modifiche. L'unica cosa che
-non regge è l'addestramento multi-scala, disabilitato dalla sua config e non
-dalla spec di augmentation.
+non supporta è l'addestramento multi-scala, che viene disabilitato dalla sua
+config e non dalla spec di augmentation.
+
+Sono coperte trentuno famiglie. Per una famiglia fuori da questo elenco,
+`ignored_aug_params` restituisce un insieme vuoto, quindi per essa non viene
+emesso alcun avviso.
+
+## Valori predefiniti per famiglia
+
+Il valore da cui parte la config di ogni famiglia di rilevamento. Una cella
+vuota significa che la famiglia ignora quel parametro, quindi il suo valore
+predefinito non cambia nulla.
+
+<aug-defaults />
+
+Due schemi contano più di qualsiasi singolo valore. RT-DETR, RT-DETRv2, PicoDet
+e FOMO partono da `mosaic_prob=0`, quindi in quelle famiglie i parametri marcati
+come condizionati nella matrice non fanno nulla finché non si attiva il mosaico.
+YOLOv9 parte con rotazione, shear e MixUp disattivati e con
+`mosaic_scale=(0.5, 1.5)`, mentre il valore predefinito di base è `(0.1, 2.0)`.
+
+EdgeCrafter legge `hsv_prob`, `degrees` e `translate` solo per `task="pose"`,
+quindi la sua riga mostra i valori predefiniti del task pose per questi tre
+parametri.
+
+Le famiglie di classificazione partono dai valori predefiniti di base:
+`flip_prob=0.5`, `flipud=0.0`, `scale=(0.5, 1.0)`, il `crop_pct` proprio della
+famiglia, e `auto_augment`, `erasing`, `mixup` e `cutmix` disattivati.
 
 ## Parametri specifici per famiglia
 
-Alcune famiglie portano i parametri di data augmentation sulla propria
-sottoclasse di `TrainConfig` invece che sulla base. La CLI non li espone;
-impostali tramite l'API Python.
+Alcune famiglie portano parametri di augmentation sulla propria sottoclasse di
+`TrainConfig` invece che sulla base. La CLI non li espone; impostali tramite
+l'API Python.
 
 | Famiglia | Parametro | Significato |
 |---|---|---|
@@ -176,7 +191,7 @@ impostali tramite l'API Python.
 | `dfine` | `crop_resize_prob` | Probabilità di crop-resize casuale, `task="segment"` |
 | `ec` | `crop_resize_prob` | Probabilità di crop-resize casuale, `task="segment"` |
 | `ec`, `yolonas` | `brightness_contrast_prob` | Probabilità di jitter di luminosità e contrasto, `task="pose"` |
-| `ec`, `yolonas` | `affine_prob` | Probabilità dell'affine consapevole dei keypoint, `task="pose"` |
+| `ec`, `yolonas` | `affine_prob` | Probabilità della trasformazione affine che tiene conto dei keypoint, `task="pose"` |
 
 `rot90` si applica a detect e OBB su `yolo9`.
 
@@ -184,14 +199,18 @@ impostali tramite l'API Python.
 
 | Helper | Restituisce |
 |---|---|
-| `aug_support(family)` | La tabella parametro-`Support`, oppure `None` per una famiglia sconosciuta |
+| `aug_support(family)` | La tabella da parametro a `Support`, oppure `None` per una famiglia sconosciuta |
 | `ignored_aug_params(family)` | L'insieme dei nomi dei parametri che la famiglia ignora; vuoto per una famiglia sconosciuta |
 | `uses_mosaic_gating(family)` | Se il MixUp della famiglia si attiva solo sui campioni a mosaico |
 | `display_name(family)` | Il nome della famiglia mostrato agli utenti negli avvisi |
 | `mixup_gating_warning(family, mosaic_prob, mixup_prob)` | Il testo dell'avviso quando MixUp non può mai attivarsi, altrimenti `None` |
 
 Un `Support` è una named tuple di `status` e `note`, dove la nota spiega perché
-un parametro è ignorato o gated per quella famiglia.
+un parametro è ignorato o condizionato per quella famiglia. Nella 1.8.0 la spec
+elenca ancora `mixup_scale` come condizionato per le famiglie che si addestrano
+attraverso il wrapper del mosaico di YOLOv9, quindi `aug_support` lo riporta
+come condizionato per loro anche se la matrice qui sopra, che è verificata sulla
+pipeline, lo marca come ignorato.
 
 ## Il gate del mosaico
 

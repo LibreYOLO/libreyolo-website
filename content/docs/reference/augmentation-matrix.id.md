@@ -2,26 +2,33 @@
 title: Matriks augmentasi
 seo_title: Augmentasi yang dipatuhi setiap family LibreYOLO
 description: >-
-  Dukungan knob augmentasi per family: enam belas knob TrainConfig, tiga status,
-  enam arketipe pipeline, dan knob yang diam-diam diabaikan suatu family.
+  Setiap knob augmentasi beserta rentang dan ejaan CLI, status setiap knob pada
+  masing-masing dari 31 family yang dapat dilatih, dan nilai default bawaan
+  setiap family.
 lead: >-
-  Menetapkan knob augmentasi tidak menjamin nilainya mencapai pipeline. Halaman
-  ini mencatat cara setiap family yang dapat dilatih memperlakukan setiap knob
-  pada TrainConfig, menggunakan tabel deklaratif bawaan library sebagai
-  satu-satunya sumber kebenaran.
+  Menetapkan knob augmentasi tidak menjamin knob tersebut mencapai pipeline.
+  Halaman ini mencatat cara setiap family yang dapat dilatih memperlakukan
+  setiap knob pada TrainConfig, serta nilai awal setiap family, yang dihasilkan
+  dari library pada rilis yang didokumentasikan halaman ini.
 keywords:
   - augmentasi libreyolo
+  - parameter augmentasi
+  - default augmentasi
   - mosaic_prob
   - mixup_prob
   - hsv_prob
+  - mosaic_scale
   - no_aug_epochs
   - matriks dukungan augmentasi
   - knob TrainConfig
-last_verified: 1.6.0
+last_verified: 1.8.0
 verification: >-
-  Daftar pengaturan, status, arketipe, perbedaan per family, dan fungsi helper
-  dibaca dari libreyolo/data/augment/spec.py pada v1.6.0. Tabel itu dikunci ke
-  pipeline aktual oleh tests/unit/test_augment_spec.py.
+  Dihasilkan oleh scripts/build-augmentation/collect.py dari LibreYOLO 1.8.0:
+  daftar knob, status, dan catatan dari libreyolo/data/augment/spec.py, yang
+  dikunci ke pipeline sebenarnya oleh test library, nilai default dari subclass
+  TrainConfig setiap family, dan ejaan CLI dari perintah libreyolo train.
+  Rentang dan satu-satunya titik tempat spec dan sebuah pipeline tidak sesuai
+  diperiksa terhadap library oleh skrip yang sama.
 snippets:
   usage:
     - label: Tanyakan langsung kepada spec
@@ -41,34 +48,38 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: beeb351c2f97e3d0
+    - label: Default suatu family
+      language: python
+      code: |
+        from libreyolo.training.config import YOLO9Config
+
+        config = YOLO9Config()
+        print(config.mosaic_scale, config.degrees, config.mixup_prob)
+source_hash: a88efd1537732e6c
 ---
 
 ## Knob
 
-Berikut adalah nama field `TrainConfig`, bukan ejaan CLI. `train()` dan CLI
-memetakan ejaan pendek ke field tersebut, sehingga `mosaic` menetapkan `mosaic_prob`.
+Berikut adalah nama field `TrainConfig`. `train()` dan CLI juga menerima ejaan
+pendek di kolom CLI, sehingga `mosaic` menetapkan `mosaic_prob`. Di CLI, `mixup`
+diarahkan berdasarkan task: pencampuran batch klasifikasi untuk pengklasifikasi,
+`mixup_prob` untuk detektor. `perspective` tidak memiliki flag CLI dan
+ditetapkan dari Python.
 
-| Knob | Arti |
-|---|---|
-| `mosaic_prob` | Probabilitas membangun sampel mosaic 4 gambar |
-| `mixup_prob` | Probabilitas memadukan sampel kedua |
-| `hsv_prob` | Probabilitas jitter warna HSV |
-| `flip_prob` | Probabilitas pembalikan horizontal |
-| `degrees` | Rentang rotasi acak untuk affine warp, dalam derajat |
-| `translate` | Fraksi translasi acak untuk affine warp |
-| `mosaic_scale` | Rentang skala acak untuk affine warp |
-| `mixup_scale` | Rentang skala jitter yang diterapkan pada gambar pasangan MixUp |
-| `shear` | Rentang shear acak untuk affine warp, dalam derajat |
-| `perspective` | Kekuatan projective warp yang ditambahkan ke affine warp: sudut kanvas bergeser ke dalam hingga `min(perspective * 100, 0.2)` kali setengah sisi kanvas, per sumbu; `0` menonaktifkan |
-| `flipud` | Probabilitas pembalikan vertikal |
-| `no_aug_epochs` | Epoch terakhir yang dilatih dengan augmentasi kuat dinonaktifkan |
-| `auto_augment` | Kebijakan AutoAugment classification: randaugment, autoaugment, atau augmix |
-| `erasing` | Probabilitas RandomErasing classification |
-| `mixup` | Probabilitas batch-MixUp classification, dengan soft label |
-| `cutmix` | Probabilitas batch-CutMix classification, dengan soft label |
+<aug-knobs />
 
-Empat yang terakhir adalah paket klasifikasi. Family deteksi mengabaikannya. `train()` dan CLI mengarahkan `mixup` ke pencampuran batch klasifikasi untuk pengklasifikasi dan ke `mixup_prob` untuk detektor.
+Default dasar adalah nilai pada `TrainConfig` itu sendiri. Sebagian besar family
+mengganti sebagian di antaranya, dan [Default per family](#defaults-by-family)
+memberikan nilai yang benar-benar menjadi titik awal sebuah run. Untuk ilustrasi
+fungsi setiap knob, lihat [Augmentasi](/docs/train/augmentations).
+
+Rentang dalam tanda kurung adalah interval, sehingga `[0, 1)` mencakup 0 dan
+tidak mencakup 1. Knob klasifikasi diperiksa saat pipeline klasifikasi dibangun
+dan memunculkan `ValueError` di luar rentangnya. Knob deteksi tidak diperiksa
+oleh `TrainConfig`, sehingga pelatihan dengan nilai di luar rentang tetap
+berjalan tanpa peringatan. Pengecualiannya adalah skala hasil pengambilan acak
+sebesar 0 atau kurang dan `perspective` bernilai negatif, yang memunculkan
+`ValueError` saat sebuah sampel melewati warp.
 
 <code-tabs name="usage" />
 
@@ -77,100 +88,107 @@ Empat yang terakhir adalah paket klasifikasi. Family deteksi mengabaikannya. `tr
 | Status | Arti |
 |---|---|
 | `used` | Knob mencapai pipeline pelatihan family dan mengubah sampel |
-| `gated_by_mosaic` | Knob hanya berlaku pada sampel yang melewati cabang mosaic, sehingga tidak pernah aktif ketika `mosaic_prob == 0` |
-| `ignored` | Knob tidak pernah mencapai pipeline; menetapkannya tidak berpengaruh |
+| `gated_by_mosaic` | Knob hanya berlaku pada sampel yang mengambil cabang mosaic, sehingga dengan `mosaic_prob == 0` knob tersebut tidak pernah aktif |
+| `ignored` | Knob tidak pernah mencapai pipeline; menetapkannya tidak berpengaruh apa pun |
 
-`ignored` adalah status yang perlu diperiksa sebelum run karena tidak ada proses
-yang gagal. CLI memperingatkan jika parameter pelatihan yang ditetapkan secara
-eksplisit diabaikan oleh family terpilih, dan trainer memperingatkan ketika
-`mixup_prob > 0` tidak dapat aktif karena family membatasi MixUp pada mosaic
-sementara `mosaic_prob` bernilai nol.
+`ignored` adalah status yang perlu diperiksa sebelum run, karena tidak ada yang
+gagal. CLI memperingatkan jika parameter pelatihan yang ditetapkan secara
+eksplisit termasuk yang diabaikan oleh family terpilih, dan trainer
+memperingatkan jika `mixup_prob > 0` tidak dapat aktif karena family tersebut
+membatasi MixUp pada mosaic dan `mosaic_prob` bernilai nol.
 
-## Arketipe pipeline
+## Family mana yang mematuhi knob mana
 
-Setiap family yang dicakup mengikuti salah satu dari enam pipeline, dengan
-beberapa deviasi per family yang tercantum di bawah.
+<aug-matrix />
 
-| Knob | Gaya YOLOX | YOLO-NAS | Gaya DETR | Classification | Semantic | Restore |
-|---|---|---|---|---|---|---|
-| `mosaic_prob` | used | ignored | ignored | ignored | ignored | ignored |
-| `mixup_prob` | gated | used | ignored | ignored | ignored | ignored |
-| `hsv_prob` | used | used | ignored | ignored | ignored | ignored |
-| `flip_prob` | dipakai | dipakai | dipakai | dipakai | diabaikan | diabaikan |
-| `degrees` | gated | used | ignored | ignored | ignored | ignored |
-| `translate` | gated | used | ignored | ignored | ignored | ignored |
-| `mosaic_scale` | gated | used | ignored | ignored | ignored | ignored |
-| `mixup_scale` | gated | used | ignored | ignored | ignored | ignored |
-| `shear` | gated | used | ignored | ignored | ignored | ignored |
-| `perspective` | gated | used | ignored | ignored | ignored | ignored |
-| `flipud` | dipakai | dipakai | diabaikan | dipakai | diabaikan | diabaikan |
-| `no_aug_epochs` | used | used | used | used | used | used |
-| `auto_augment` | ignored | ignored | ignored | used | ignored | ignored |
-| `erasing` | ignored | ignored | ignored | used | ignored | ignored |
-| `mixup` | ignored | ignored | ignored | used | ignored | ignored |
-| `cutmix` | ignored | ignored | ignored | used | ignored | ignored |
-
-Dalam pipeline bergaya YOLOX, preprocessing per sampel menerapkan jitter HSV dan
-flip, sedangkan affine warp dan MixUp hanya berjalan dalam cabang mosaic.
-YOLO-NAS menjalankan affine per sampel yang selalu aktif, mengabaikan mosaic,
-dan menerapkan MixUp secara independen dengan menggunakan kembali
+Setiap family yang dicakup mengikuti salah satu dari enam pipeline. Pada
+pipeline bergaya YOLOX, prapemrosesan per sampel menerapkan jitter HSV dan
+pembalikan, sedangkan affine warp dan MixUp hanya berjalan di dalam cabang
+mosaic. Sebaliknya, YOLO-NAS menjalankan affine per sampel yang selalu aktif,
+mengabaikan mosaic, dan menerapkan MixUp secara independen, dengan memakai ulang
 `mosaic_scale` sebagai rentang skala affine.
 
-Pipeline gaya DETR adalah transformasi pass-through tanpa mosaic. Distorsi fotometrik, zoom-out, dan crop IoU merupakan konstanta resep, bukan pengaturan yang dapat dikonfigurasi, sehingga `hsv_prob` dan pengaturan geometri tidak memengaruhinya. Klasifikasi memakai `flip_prob` untuk pembalikan horizontal dan `flipud` untuk pembalikan vertikal. Jitter skala semantik dan HSV berasal dari atribut kelas family, bukan pengaturan konfigurasi, sedangkan pembalikan restorasi memasangkan operasi input dan target dengan probabilitas tetap 0.5.
+Pipeline gaya DETR adalah transform pass-through tanpa mosaic. Distorsi
+fotometrik, zoom-out, dan IoU-crop pada pipeline ini adalah konstanta resep,
+bukan knob yang dapat dikonfigurasi, itulah sebabnya `hsv_prob` dan knob
+geometri tidak pernah mencapainya. Klasifikasi memakai `flip_prob` untuk
+pembalikan horizontal dan `flipud` untuk pembalikan vertikal. Pada segmentasi
+semantik, jitter skala dan HSV berasal dari atribut kelas family, bukan dari
+knob konfigurasi, dan pembalikan pada pemulihan gambar adalah operasi berpasangan
+pada input dan target dengan probabilitas tetap 0.5.
 
-`no_aug_epochs` dipatuhi di semua pipeline, tetapi yang dinonaktifkan berbeda: mosaic dan MixUp untuk gaya YOLOX, affine dan MixUp untuk YOLO-NAS, augmentasi fotometrik kuat dan crop serta bagian akhir learning rate untuk gaya DETR, dan augmentasi otomatis, erasing, MixUp, serta CutMix untuk klasifikasi. Crop dan pembalikan klasifikasi tetap aktif.
+`no_aug_epochs` dipatuhi di mana-mana, meskipun yang dimatikannya berbeda: mosaic
+dan MixUp untuk gaya YOLOX, affine dan MixUp untuk YOLO-NAS, augmentasi
+fotometrik kuat dan crop beserta bagian akhir learning rate untuk gaya DETR,
+serta auto-augmentation, erasing, MixUp, dan CutMix untuk klasifikasi. Crop dan
+pembalikan pada klasifikasi tetap aktif.
 
-## Family menurut arketipe
+Jika sebuah family berbeda dari family lain yang memakai pipeline yang sama,
+alasannya adalah salah satu dari berikut:
 
-| Arketipe | Family |
+| Family | Perbedaan |
 |---|---|
-| Gaya YOLOX | `yolox`, `yolo7`, `yolo9`, `yolo9_e2e`, `yolo9_p2`, `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2`, `fomo` |
-| YOLO-NAS | `yolonas`, `ppyoloe` |
-| Gaya DETR | `dfine`, `gtr`, `domedetr`, `deim`, `deimv2`, `tinyformer`, `rtdetrv4`, `rfdetr`, `ec`, `dinov2` |
-| Classification | `resnet`, `convnext`, `convnextv2`, `mobilenetv4`, `efficientnetv2` |
-| Semantic | `segformer`, `unet`, `lingbotvision` |
-| Restore | `nafnet` |
-
-Tiga puluh satu family dicakup. Family di luar list ini mengembalikan kumpulan
-ignored kosong, sehingga tidak ada peringatan yang dikeluarkan.
-
-## Deviasi
-
-| Family | Perbedaan dari arketipe |
-|---|---|
-| `rtmdet` | `flipud` diabaikan: transform-nya tidak memiliki flip vertikal |
-| `picodet` | `flipud` diabaikan |
-| `rtdetr` | `flipud` diabaikan |
-| `rtdetrv2` | `flipud` diabaikan |
+| `rtmdet`, `picodet`, `rtdetr`, `rtdetrv2` | `flipud` diabaikan: transform pada family ini tidak memiliki pembalikan vertikal |
 | `fomo` | `perspective` dan `flipud` diabaikan |
-| `ppyoloe` | `flipud` diabaikan: resep sumbernya memakai rotasi 90 derajat acak sebagai gantinya |
+| `ppyoloe` | `flipud` diabaikan: resep sumbernya memakai rotasi acak 90 derajat sebagai gantinya |
+| `yolo9`, `yolo9_e2e`, `yolo9_p2`, `yolo7`, `rtdetr`, `rtdetrv2` | `mixup_scale` diabaikan: MixUp pada family ini memadukan frame utuh dengan rasio acak tanpa menskalakan ulang frame mana pun |
 | `gtr` | `mosaic_prob` dan `mixup_prob` digunakan, selama `mosaic_epochs` epoch pertama; `degrees`, `translate`, dan `mosaic_scale` membentuk affine yang mengikuti mosaic |
-| `ec` | `hsv_prob`, `degrees`, dan `translate` digunakan, hanya untuk `task="pose"`; detect dan segment menggunakan resep fotometrik tetap |
-| `dinov2` | Paket classification digunakan, hanya untuk `task="classify"` |
+| `rfdetr` | `hsv_prob` diabaikan: pipeline native tidak memiliki jitter HSV |
+| `ec` | `hsv_prob`, `degrees`, dan `translate` digunakan, hanya untuk `task="pose"`; detect dan segment memakai resep fotometrik tetap |
+| `dinov2` | Paket klasifikasi digunakan, hanya untuk `task="classify"` |
 
 `ec` dan `dinov2` adalah family multi-task, sehingga sebuah knob ditandai
-ignored hanya ketika semua task family yang dapat dilatih mengabaikannya. Hal
-ini mencegah peringatan CLI keliru untuk satu task meski benar bagi task lain.
+diabaikan hanya jika setiap task yang dapat dilatih pada family tersebut
+mengabaikannya. Dengan begitu, peringatan CLI tidak pernah salah untuk satu task
+sementara benar untuk task lain.
 
-Dome-DETR mewarisi transform D-FINE tanpa perubahan. Satu hal yang tidak dapat
-diterimanya adalah pelatihan multi-scale, yang dinonaktifkan konfigurasinya,
-bukan spec augmentasinya.
+Dome-DETR mewarisi transform D-FINE tanpa perubahan. Satu-satunya hal yang tidak
+dapat diterimanya adalah pelatihan multi-scale, yang dinonaktifkan oleh
+konfigurasinya, bukan oleh spec augmentasi.
+
+Tiga puluh satu family dicakup. Untuk family di luar daftar ini,
+`ignored_aug_params` mengembalikan himpunan kosong, sehingga tidak ada peringatan
+yang dikeluarkan untuknya.
+
+## Default per family
+
+Nilai awal pada konfigurasi setiap family deteksi. Sel kosong berarti family
+tersebut mengabaikan knob itu, sehingga nilai default knob tersebut tidak
+mengubah apa pun.
+
+<aug-defaults />
+
+Dua pola lebih penting daripada nilai tunggal mana pun. RT-DETR, RT-DETRv2,
+PicoDet, dan FOMO dimulai dengan `mosaic_prob=0`, sehingga pada family tersebut
+knob yang ditandai dibatasi oleh mosaic di matriks tidak berpengaruh apa pun
+sampai mosaic diaktifkan. YOLOv9 dimulai dengan rotasi, shear, dan MixUp dalam
+keadaan mati serta dengan `mosaic_scale=(0.5, 1.5)`, sedangkan default dasar
+adalah `(0.1, 2.0)`.
+
+EdgeCrafter membaca `hsv_prob`, `degrees`, dan `translate` hanya untuk
+`task="pose"`, sehingga barisnya menampilkan default pose untuk ketiga knob
+tersebut.
+
+Family klasifikasi dimulai dari default dasar: `flip_prob=0.5`, `flipud=0.0`,
+`scale=(0.5, 1.0)`, `crop_pct` milik family itu sendiri, serta `auto_augment`,
+`erasing`, `mixup`, dan `cutmix` dalam keadaan nonaktif.
 
 ## Knob khusus family
 
-Beberapa family memiliki knob augmentasi pada subclass `TrainConfig` sendiri,
-bukan pada base. CLI tidak menyediakannya; tetapkan melalui API Python.
+Sebagian family membawa knob augmentasi pada subclass `TrainConfig` miliknya
+sendiri, bukan pada class dasar. CLI tidak menyediakan knob ini; tetapkan
+melalui API Python.
 
 | Family | Knob | Arti |
 |---|---|---|
-| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste` | Probabilitas augmentasi instance copy-paste, khusus `task="segment"` |
-| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste_mode` | Sumber copy-paste: `flip` mencerminkan sampel yang sama, `mixup` menggunakan sampel kedua |
+| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste` | Probabilitas augmentasi instance copy-paste, hanya `task="segment"` |
+| `yolo9`, `yolo9_e2e`, `yolo9_p2` | `copy_paste_mode` | Sumber copy-paste: `flip` mencerminkan sampel yang sama, `mixup` memakai sampel kedua |
 | `yolo9`, `yolo9_e2e`, `yolo9_p2` | `rot90` | Probabilitas rotasi acak 90 derajat |
 | `rfdetr` | `copy_paste` | Probabilitas copy-paste untuk `task="segment"`, hanya mode `flip` |
 | `rfdetr` | `copy_paste_mode` | Mode sumber copy-paste untuk `task="segment"` |
-| `rfdetr` | `crop_resize_prob` | Probabilitas crop-resize acak dalam pipeline native |
-| `dfine` | `crop_resize_prob` | Probabilitas crop-resize acak, `task="segment"` |
-| `ec` | `crop_resize_prob` | Probabilitas crop-resize acak, `task="segment"` |
+| `rfdetr` | `crop_resize_prob` | Probabilitas random crop-resize dalam pipeline native |
+| `dfine` | `crop_resize_prob` | Probabilitas random crop-resize, `task="segment"` |
+| `ec` | `crop_resize_prob` | Probabilitas random crop-resize, `task="segment"` |
 | `ec`, `yolonas` | `brightness_contrast_prob` | Probabilitas jitter kecerahan dan kontras, `task="pose"` |
 | `ec`, `yolonas` | `affine_prob` | Probabilitas affine yang memperhitungkan keypoint, `task="pose"` |
 
@@ -180,19 +198,23 @@ bukan pada base. CLI tidak menyediakannya; tetapkan melalui API Python.
 
 | Helper | Mengembalikan |
 |---|---|
-| `aug_support(family)` | Tabel knob-ke-`Support`, atau `None` untuk family tidak dikenal |
-| `ignored_aug_params(family)` | Kumpulan nama knob yang diabaikan family; kosong untuk family tidak dikenal |
-| `uses_mosaic_gating(family)` | Apakah MixUp family hanya aktif pada sampel mosaic |
-| `display_name(family)` | Nama family yang ditampilkan kepada pengguna dalam peringatan |
-| `mixup_gating_warning(family, mosaic_prob, mixup_prob)` | Teks peringatan ketika MixUp tidak mungkin aktif, atau `None` |
+| `aug_support(family)` | Tabel knob-ke-`Support`, atau `None` untuk family yang tidak dikenal |
+| `ignored_aug_params(family)` | Himpunan nama knob yang diabaikan family; kosong untuk family yang tidak dikenal |
+| `uses_mosaic_gating(family)` | Apakah MixUp pada family hanya aktif pada sampel mosaic |
+| `display_name(family)` | Nama family yang ditampilkan kepada pengguna, dipakai dalam peringatan |
+| `mixup_gating_warning(family, mosaic_prob, mixup_prob)` | Teks peringatan ketika MixUp tidak pernah dapat aktif, selain itu `None` |
 
-`Support` adalah named tuple berisi `status` dan `note`, dengan catatan yang
-menjelaskan alasan sebuah knob diabaikan atau dibatasi untuk family tersebut.
+`Support` adalah named tuple berisi `status` dan `note`, dengan note yang
+menjelaskan alasan sebuah knob diabaikan atau dibatasi oleh mosaic untuk family
+tersebut. Di 1.8.0, spec masih mencantumkan `mixup_scale` sebagai dibatasi oleh
+mosaic untuk family yang dilatih melalui wrapper mosaic YOLOv9, sehingga
+`aug_support` melaporkannya sebagai dibatasi di sana, meskipun matriks di atas,
+yang diperiksa terhadap pipeline, menandainya sebagai diabaikan.
 
-## Gate mosaic
+## Pembatasan oleh mosaic
 
-Untuk family bergaya YOLOX, `mixup_prob=0.5` dengan `mosaic_prob=0`
-menonaktifkan MixUp sepenuhnya karena MixUp hanya berlaku pada sampel mosaic.
-Kombinasi ini mudah terjadi ketika mosaic dinonaktifkan menjelang akhir
-pelatihan. Trainer mencatat peringatan yang menyebutkan family, dan
-`mixup_gating_warning` adalah fungsi murni di baliknya.
+Untuk family bergaya YOLOX, `mixup_prob=0.5` dengan `mosaic_prob=0` menonaktifkan
+MixUp sepenuhnya, karena MixUp hanya berlaku pada sampel mosaic. Kombinasi ini
+mudah terjadi saat mosaic dimatikan menjelang akhir pelatihan. Trainer mencatat
+peringatan yang menyebutkan nama family, dan `mixup_gating_warning` adalah fungsi
+murni di baliknya.

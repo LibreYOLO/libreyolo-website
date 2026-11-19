@@ -1,21 +1,25 @@
 ---
-title: データ拡張マトリクス
+title: データ拡張マトリックス
 seo_title: LibreYOLOの各ファミリーが反映するデータ拡張
-description: >-
-  ファミリーごとのデータ拡張ノブ対応状況を示します。16個のTrainConfigノブ、3つの状態、6つのパイプライン構成、およびファミリーが暗黙に無視するノブを扱います。
+description: すべてのデータ拡張設定値の範囲とCLIでの綴り、学習可能な31のファミリーそれぞれにおける各設定値の状態、各ファミリーのデフォルト値。
 lead: >-
-  データ拡張ノブを設定しても、必ずパイプラインに届くとは限りません。このページでは、ライブラリが唯一の信頼できる情報源として提供する宣言的な表を使い、学習可能な各ファミリーがTrainConfig上の各ノブをどのように扱うかを記録します。
+  データ拡張の設定値を指定しても、それがパイプラインに届くとは限りません。このページでは、学習可能な各ファミリーがTrainConfigの各設定値をどう扱うかと各ファミリーの初期値を、記載対象のリリースのライブラリから生成して記録しています。
 keywords:
   - libreyolo データ拡張
+  - データ拡張 パラメータ
+  - データ拡張 デフォルト値
   - mosaic_prob
   - mixup_prob
   - hsv_prob
+  - mosaic_scale
   - no_aug_epochs
-  - データ拡張 対応マトリクス
-  - TrainConfig ノブ
-last_verified: 1.6.0
+  - データ拡張 対応マトリックス
+  - TrainConfig 設定値
+last_verified: 1.8.0
 verification: >-
-  ノブ一覧、状態、構成、ファミリーごとの差異、ヘルパー関数はv1.6.0のlibreyolo/data/augment/spec.pyで確認しました。この表と実際のパイプラインとの一致はtests/unit/test_augment_spec.pyで固定されています。
+  scripts/build-augmentation/collect.pyでLibreYOLO
+  1.8.0から生成しました。設定値の一覧、状態、注記はlibreyolo/data/augment/spec.py（ライブラリのテストが実際のパイプラインに固定しています）から、デフォルト値は各ファミリーのTrainConfigサブクラスから、CLIでの綴りはlibreyolo
+  trainコマンドから取得しています。範囲と、仕様とパイプラインが食い違う唯一の箇所は、同じスクリプトがライブラリと照合して確認しています。
 snippets:
   usage:
     - label: 仕様を直接照会
@@ -35,33 +39,25 @@ snippets:
 
         print(sorted(ignored_aug_params("dfine")))
         print(uses_mosaic_gating("yolo9"), uses_mosaic_gating("yolonas"))
-source_hash: beeb351c2f97e3d0
+    - label: ファミリーのデフォルト値
+      language: python
+      code: |
+        from libreyolo.training.config import YOLO9Config
+
+        config = YOLO9Config()
+        print(config.mosaic_scale, config.degrees, config.mixup_prob)
+source_hash: a88efd1537732e6c
 ---
 
-## ノブ
+## 設定値一覧
 
-これらはCLIでの表記ではなく、`TrainConfig`のフィールド名です。`train()`とCLIは短い表記をこれらにマッピングするため、`mosaic`は`mosaic_prob`を設定します。
+これらは`TrainConfig`のフィールド名です。`train()`とCLIはCLI列の短い綴りも受け付けるため、`mosaic`で`mosaic_prob`を設定できます。CLIでは`mixup`はタスクに応じて振り分けられ、分類モデルでは分類のバッチ混合、検出モデルでは`mixup_prob`になります。`perspective`にはCLIフラグがないため、Pythonから設定します。
 
-| ノブ | 意味 |
-|---|---|
-| `mosaic_prob` | 4画像のmosaicサンプルを構築する確率 |
-| `mixup_prob` | 2つ目のサンプルを混ぜる確率 |
-| `hsv_prob` | HSVカラージッターを行う確率 |
-| `flip_prob` | 水平反転の確率 |
-| `degrees` | アフィン変換におけるランダム回転範囲（度） |
-| `translate` | アフィン変換におけるランダム平行移動の割合 |
-| `mosaic_scale` | アフィン変換におけるランダムスケール範囲 |
-| `mixup_scale` | MixUp相手の画像に適用するジッタースケール範囲 |
-| `shear` | アフィン変換におけるランダムせん断範囲（度） |
-| `perspective` | アフィン変換に加える射影変換の強さ：キャンバスの角が、軸ごとにキャンバス辺長の半分の`min(perspective * 100, 0.2)`倍まで内側に動く。`0`で無効 |
-| `flipud` | 垂直反転の確率 |
-| `no_aug_epochs` | 強いデータ拡張を無効にして学習する最後のエポック数 |
-| `auto_augment` | 分類用AutoAugmentポリシー：randaugment、autoaugment、augmix |
-| `erasing` | 分類用RandomErasingの確率 |
-| `mixup` | ソフトラベルを使う分類用バッチMixUpの確率 |
-| `cutmix` | ソフトラベルを使う分類用バッチCutMixの確率 |
+<aug-knobs />
 
-最後の4つは分類専用の設定です。物体検出のファミリーはこれらを無視します。`train()`とCLIは分類モデルの`mixup`をバッチの混合に、検出モデルでは`mixup_prob`に振り分けます。
+基本デフォルト値は、`TrainConfig`自体に設定されている値です。ほとんどのファミリーはその一部を上書きしており、学習が実際に使う初期値は[ファミリー別のデフォルト値](#defaults-by-family)に示しています。各設定値の働きを図で確認するには、[データ拡張](/docs/train/augmentations)を参照してください。
+
+角括弧で示す範囲は区間で、`[0, 1)`は0を含み1を含みません。分類用の設定値はパイプラインの構築時に検査され、範囲外では`ValueError`が送出されます。検出用の設定値は`TrainConfig`では検査されないため、範囲外の値でも何の通知もなく学習が進みます。例外は、抽出されたスケールが0以下の場合と`perspective`が負の場合で、サンプルを変換するときに`ValueError`が送出されます。
 
 <code-tabs name="usage" />
 
@@ -69,103 +65,84 @@ source_hash: beeb351c2f97e3d0
 
 | 状態 | 意味 |
 |---|---|
-| `used` | ノブがファミリーの学習パイプラインに届き、サンプルを変更 |
-| `gated_by_mosaic` | mosaic分岐に入ったサンプルだけにノブを適用。`mosaic_prob == 0`なら一切発動しない |
-| `ignored` | ノブはパイプラインに届かず、設定しても何も変わらない |
+| `used` | 設定値がファミリーの学習パイプラインに届き、サンプルを変える |
+| `gated_by_mosaic` | 設定値はmosaic分岐を通ったサンプルにのみ適用されるため、`mosaic_prob == 0`では一度も作動しない |
+| `ignored` | 設定値はパイプラインに届かず、設定しても何も起きない |
 
-実行前に確認する価値があるのは`ignored`です。何も失敗しないためです。明示的に設定した学習パラメータを選択したファミリーが無視する場合、CLIは警告します。ファミリーがMixUpをmosaicに依存させ、`mosaic_prob`がゼロのため`mixup_prob > 0`が発動できない場合も、トレーナーが警告します。
+何も失敗しないため、実行前に確認する価値があるのは`ignored`です。明示的に設定した学習パラメータが選択したファミリーで無視されるものである場合はCLIが警告し、ファミリーがMixUpをmosaicに依存させていて`mosaic_prob`が0のために`mixup_prob > 0`が作動できない場合はトレーナーが警告します。
 
-## パイプライン構成
+## ファミリーごとの反映状況
 
-対象となるすべてのファミリーは、以下に示す少数のファミリー固有差を除き、6つのパイプラインのいずれかに従います。
+<aug-matrix />
 
-| ノブ | YOLOX形式 | YOLO-NAS | DETR形式 | 分類 | セマンティック | 復元 |
-|---|---|---|---|---|---|---|
-| `mosaic_prob` | 使用 | 無視 | 無視 | 無視 | 無視 | 無視 |
-| `mixup_prob` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `hsv_prob` | 使用 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `flip_prob` | 使用 | 使用 | 使用 | 使用 | 無視 | 無視 |
-| `degrees` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `translate` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `mosaic_scale` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `mixup_scale` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `shear` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `perspective` | mosaic依存 | 使用 | 無視 | 無視 | 無視 | 無視 |
-| `flipud` | 使用 | 使用 | 無視 | 使用 | 無視 | 無視 |
-| `no_aug_epochs` | 使用 | 使用 | 使用 | 使用 | 使用 | 使用 |
-| `auto_augment` | 無視 | 無視 | 無視 | 使用 | 無視 | 無視 |
-| `erasing` | 無視 | 無視 | 無視 | 使用 | 無視 | 無視 |
-| `mixup` | 無視 | 無視 | 無視 | 使用 | 無視 | 無視 |
-| `cutmix` | 無視 | 無視 | 無視 | 使用 | 無視 | 無視 |
+対象となるすべてのファミリーは、6つのパイプラインのいずれかに従います。YOLOX方式のパイプラインでは、サンプルごとの前処理がHSVジッターと反転を適用し、アフィン変換とMixUpはmosaic分岐の中でのみ実行されます。一方、YOLO-NASは常に有効なサンプルごとのアフィン変換を実行し、mosaicを無視し、MixUpを独立して適用し、`mosaic_scale`をアフィン変換のスケール範囲として再利用します。
 
-YOLOX形式のパイプラインでは、サンプルごとの前処理がHSVジッターと反転を適用し、アフィン変換とMixUpはmosaic分岐の中だけで実行されます。一方、YOLO-NASは常に有効なサンプルごとのアフィン変換を実行し、mosaicを無視し、MixUpを独立して適用します。`mosaic_scale`はアフィン変換のスケール範囲として再利用されます。
+DETR方式のパイプラインは、mosaicのないパススルー変換です。その測光歪み、ズームアウト、IoUクロップは設定値ではなくレシピの定数であるため、`hsv_prob`と幾何系の設定値はこのパイプラインに届きません。分類は、水平反転に`flip_prob`、垂直反転に`flipud`を使います。セマンティックセグメンテーションのスケールジッターとHSVは設定値ではなくファミリーのクラス属性から決まり、復元の反転は入力とターゲットを組にした操作で、確率は0.5に固定されています。
 
-DETR系パイプラインはモザイクを使わない変換です。測光的な歪み、ズームアウト、IoUクロップは変更可能な設定ではなくレシピの定数なので、`hsv_prob`と幾何変換の設定は作用しません。分類は水平反転に`flip_prob`、垂直反転に`flipud`を使います。セマンティックセグメンテーションのスケール変動とHSVはモデルクラスの属性から決まり、復元では入力と正解を固定確率0.5で一緒に反転します。
+`no_aug_epochs`はすべてのパイプラインで反映されますが、無効にする対象は、YOLOX方式ではmosaicとMixUp、YOLO-NASではアフィン変換とMixUp、DETR方式では強い測光とクロップのデータ拡張に加えて学習率の終盤、分類では自動データ拡張、消去、MixUp、CutMixと異なります。分類のクロップと反転は有効なままです。
 
-`no_aug_epochs`はすべてのパイプラインで反映されますが、無効にする処理は異なります。YOLOX系ではモザイクとMixUp、YOLO-NASではアフィン変換とMixUp、DETR系では強い測光的な拡張とクロップに加えて学習率スケジュールの終盤、分類では自動拡張、erasing、MixUp、CutMixが対象です。分類のクロップと反転は有効なままです。
+ファミリーが同じパイプラインの他のファミリーと異なる場合、その理由は次のいずれかです。
 
-## 構成別のファミリー
-
-| 構成 | ファミリー |
+| ファミリー | 差異 |
 |---|---|
-| YOLOX形式 | `yolox`、`yolo7`、`yolo9`、`yolo9_e2e`、`yolo9_p2`、`rtmdet`、`picodet`、`rtdetr`、`rtdetrv2`、`fomo` |
-| YOLO-NAS | `yolonas`、`ppyoloe` |
-| DETR形式 | `dfine`、`gtr`、`domedetr`、`deim`、`deimv2`、`tinyformer`、`rtdetrv4`、`rfdetr`、`ec`、`dinov2` |
-| 分類 | `resnet`、`convnext`、`convnextv2`、`mobilenetv4`、`efficientnetv2` |
-| セマンティック | `segformer`、`unet`、`lingbotvision` |
-| 復元 | `nafnet` |
-
-31のファミリーが対象です。この一覧にないファミリーでは無視される集合が空で返されるため、警告は表示されません。
-
-## 差異
-
-| ファミリー | 構成との差異 |
-|---|---|
-| `rtmdet` | `flipud`を無視。変換に垂直反転がない |
-| `picodet` | `flipud`を無視 |
-| `rtdetr` | `flipud`を無視 |
-| `rtdetrv2` | `flipud`を無視 |
+| `rtmdet`、`picodet`、`rtdetr`、`rtdetrv2` | `flipud`を無視：変換に垂直反転がない |
 | `fomo` | `perspective`と`flipud`を無視 |
-| `ppyoloe` | `flipud`を無視。元のレシピはランダムな90度回転を代わりに使う |
-| `gtr` | `mosaic_prob`と`mixup_prob`を、最初の`mosaic_epochs`エポックの間使用。`degrees`、`translate`、`mosaic_scale`は、モザイクの後に続くアフィン変換の形を決める |
-| `ec` | `task="pose"`の場合だけ`hsv_prob`、`degrees`、`translate`を使用。detectとsegmentでは固定の測光レシピを使用 |
-| `dinov2` | `task="classify"`の場合だけ分類パックを使用 |
+| `ppyoloe` | `flipud`を無視：元のレシピでは代わりにランダムな90度回転を使う |
+| `yolo9`、`yolo9_e2e`、`yolo9_p2`、`yolo7`、`rtdetr`、`rtdetrv2` | `mixup_scale`を無視：MixUpはフレーム全体をランダムな比率で混合し、どちらもリスケールしない |
+| `gtr` | `mosaic_prob`と`mixup_prob`を最初の`mosaic_epochs`エポックの間使用。`degrees`、`translate`、`mosaic_scale`はmosaicに続くアフィン変換を決める |
+| `rfdetr` | `hsv_prob`を無視：ネイティブパイプラインにHSVジッターがない |
+| `ec` | `hsv_prob`、`degrees`、`translate`を`task="pose"`の場合のみ使用。detectとsegmentは固定の測光レシピを使う |
+| `dinov2` | `task="classify"`の場合のみ分類パックを使用 |
 
-`ec`と`dinov2`はマルチタスクファミリーなので、ファミリーの学習可能なすべてのタスクが無視する場合だけノブを無視とマークします。これにより、あるタスクでは誤りで別のタスクでは正しいCLI警告が出ることはありません。
+`ec`と`dinov2`はマルチタスクのファミリーなので、設定値が無視とマークされるのは、そのファミリーの学習可能なすべてのタスクがそれを無視する場合だけです。これにより、CLIの警告が、あるタスクでは誤りで別のタスクでは正しい、ということが起こりません。
 
-Dome-DETRはD-FINEの変換を変更せずに継承します。利用できないのはマルチスケール学習だけで、データ拡張仕様ではなく設定によって無効にされます。
+Dome-DETRはD-FINEの変換をそのまま継承します。利用できない唯一のものはマルチスケール学習で、これはデータ拡張の仕様ではなく、自身の設定で無効にされています。
 
-## ファミリー固有のノブ
+対象は31のファミリーです。この一覧にないファミリーでは`ignored_aug_params`が空の集合を返すため、警告は出ません。
 
-一部のファミリーは、基本クラスではなく固有の`TrainConfig`サブクラスにデータ拡張ノブを持ちます。CLIはこれらを公開しないため、Python APIから設定してください。
+## ファミリー別のデフォルト値
 
-| ファミリー | ノブ | 意味 |
+各検出ファミリーの設定の初期値。空欄は、そのファミリーがその設定値を無視するため、デフォルト値が何も変えないことを示します。
+
+<aug-defaults />
+
+個々の値よりも重要なパターンが2つあります。RT-DETR、RT-DETRv2、PicoDet、FOMOは`mosaic_prob=0`から始まるため、これらのファミリーでは、マトリックスでmosaic依存とされている設定値は、mosaicを有効にするまで何もしません。YOLOv9は、回転、せん断、MixUpを無効にし、基本デフォルト値の`(0.1, 2.0)`に対して`mosaic_scale=(0.5, 1.5)`で始まります。
+
+EdgeCrafterは`task="pose"`の場合にだけ`hsv_prob`、`degrees`、`translate`を読み取るため、その行にはこの3つについて姿勢推定のデフォルト値を示しています。
+
+分類ファミリーは基本デフォルト値から始まり、`flip_prob=0.5`、`flipud=0.0`、`scale=(0.5, 1.0)`、ファミリー独自の`crop_pct`で、`auto_augment`、`erasing`、`mixup`、`cutmix`は無効です。
+
+## ファミリー固有の設定値
+
+一部のファミリーは、基底クラスではなく独自の`TrainConfig`サブクラスにデータ拡張の設定値を持ちます。CLIはこれらを公開していないため、Python APIから設定してください。
+
+| ファミリー | 設定値 | 意味 |
 |---|---|---|
-| `yolo9`、`yolo9_e2e`、`yolo9_p2` | `copy_paste` | `task="segment"`だけで使うcopy-pasteインスタンス拡張の確率 |
-| `yolo9`、`yolo9_e2e`、`yolo9_p2` | `copy_paste_mode` | copy-pasteのソース。`flip`は同じサンプルを鏡像化し、`mixup`は2つ目のサンプルを使用 |
+| `yolo9`、`yolo9_e2e`、`yolo9_p2` | `copy_paste` | copy-pasteインスタンス拡張の確率。`task="segment"`のみ |
+| `yolo9`、`yolo9_e2e`、`yolo9_p2` | `copy_paste_mode` | copy-pasteのソース：`flip`は同じサンプルを鏡像化し、`mixup`は2つ目のサンプルを使う |
 | `yolo9`、`yolo9_e2e`、`yolo9_p2` | `rot90` | ランダムな90度回転の確率 |
-| `rfdetr` | `copy_paste` | `task="segment"`向けcopy-pasteの確率。`flip`モードだけ |
-| `rfdetr` | `copy_paste_mode` | `task="segment"`向けcopy-pasteソースモード |
-| `rfdetr` | `crop_resize_prob` | ネイティブパイプライン内のランダムcrop-resize確率 |
-| `dfine` | `crop_resize_prob` | `task="segment"`向けランダムcrop-resize確率 |
-| `ec` | `crop_resize_prob` | `task="segment"`向けランダムcrop-resize確率 |
-| `ec`、`yolonas` | `brightness_contrast_prob` | `task="pose"`向け明るさとコントラストのジッター確率 |
-| `ec`、`yolonas` | `affine_prob` | `task="pose"`向けキーポイント対応アフィン変換の確率 |
+| `rfdetr` | `copy_paste` | `task="segment"`用のcopy-pasteの確率。`flip`モードのみ |
+| `rfdetr` | `copy_paste_mode` | `task="segment"`用のcopy-pasteのソースモード |
+| `rfdetr` | `crop_resize_prob` | ネイティブパイプラインでのランダムなクロップ・リサイズの確率 |
+| `dfine` | `crop_resize_prob` | ランダムなクロップ・リサイズの確率。`task="segment"` |
+| `ec` | `crop_resize_prob` | ランダムなクロップ・リサイズの確率。`task="segment"` |
+| `ec`、`yolonas` | `brightness_contrast_prob` | 明るさとコントラストのジッターの確率。`task="pose"` |
+| `ec`、`yolonas` | `affine_prob` | キーポイント対応アフィン変換の確率。`task="pose"` |
 
 `rot90`は`yolo9`のdetectとOBBに適用されます。
 
 ## 仕様の照会
 
-| ヘルパー | 返り値 |
+| ヘルパー | 戻り値 |
 |---|---|
-| `aug_support(family)` | ノブから`Support`への表。不明なファミリーでは`None` |
-| `ignored_aug_params(family)` | ファミリーが無視するノブ名の集合。不明なファミリーでは空 |
-| `uses_mosaic_gating(family)` | ファミリーのMixUpがmosaicサンプルだけで発動するか |
-| `display_name(family)` | 警告で使うユーザー向けファミリー名 |
-| `mixup_gating_warning(family, mosaic_prob, mixup_prob)` | MixUpが一切発動できない場合の警告テキスト。それ以外は`None` |
+| `aug_support(family)` | 設定値から`Support`への表。不明なファミリーでは`None` |
+| `ignored_aug_params(family)` | ファミリーが無視する設定値名の集合。不明なファミリーでは空 |
+| `uses_mosaic_gating(family)` | ファミリーのMixUpがmosaicサンプルでのみ作動するかどうか |
+| `display_name(family)` | 警告で使う、人が読むためのファミリー名 |
+| `mixup_gating_warning(family, mosaic_prob, mixup_prob)` | MixUpが一切作動できない場合の警告テキスト。それ以外は`None` |
 
-`Support`は`status`と`note`からなる名前付きタプルで、noteはそのファミリーでノブが無視される、またはmosaicに依存する理由を説明します。
+`Support`は`status`と`note`からなる名前付きタプルで、noteはそのファミリーで設定値が無視される、またはmosaicに依存する理由を説明します。1.8.0の仕様はYOLOv9のmosaicラッパーで学習するファミリーについて`mixup_scale`をまだmosaic依存として記載しているため、パイプラインと照合した上のマトリックスでは無視とされているにもかかわらず、`aug_support`はそれらのファミリーでmosaic依存と報告します。
 
 ## mosaicゲート
 
-YOLOX形式のファミリーでは、`mosaic_prob=0`で`mixup_prob=0.5`を指定するとMixUpが完全に無効になります。MixUpはmosaicサンプルだけに適用されるためです。この組み合わせは学習後半でmosaicを無効にすると簡単に発生します。トレーナーはファミリー名を示す警告をログに記録し、その背後にある純粋関数が`mixup_gating_warning`です。
+YOLOX方式のファミリーでは、`mosaic_prob=0`とともに`mixup_prob=0.5`を指定すると、MixUpはmosaicサンプルにしか適用されないため、MixUpが完全に無効になります。この組み合わせは、学習の後半でmosaicを無効にするときに簡単に生じます。トレーナーはファミリー名を示す警告をログに記録し、`mixup_gating_warning`はその背後にある純粋関数です。
